@@ -39,8 +39,6 @@ public class ImmersionBar {
     private ViewGroup mContentView;
 
     private BarConfig mConfig;
-    private boolean mStatusBarAvailable;
-    private boolean mNavBarAvailable;
 
 
     private ImmersionBar() {
@@ -51,34 +49,7 @@ public class ImmersionBar {
         mWindow = activity.getWindow();
         mViewGroup = (ViewGroup) mWindow.getDecorView();
         mContentView = (ViewGroup) mActivity.findViewById(android.R.id.content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // check theme attrs
-            int[] attrs = {android.R.attr.windowTranslucentStatus,
-                    android.R.attr.windowTranslucentNavigation};
-            TypedArray a = activity.obtainStyledAttributes(attrs);
-            try {
-                mStatusBarAvailable = a.getBoolean(0, false);
-                mNavBarAvailable = a.getBoolean(1, false);
-            } finally {
-                a.recycle();
-            }
-
-            // check window flags
-            WindowManager.LayoutParams winParams = mWindow.getAttributes();
-            int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-            if ((winParams.flags & bits) != 0) {
-                mStatusBarAvailable = true;
-            }
-            bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-            if ((winParams.flags & bits) != 0) {
-                mNavBarAvailable = true;
-            }
-        }
-        mConfig = new BarConfig(activity, mStatusBarAvailable, mNavBarAvailable);
-        // device might not have virtual navigation keys
-        if (!mConfig.hasNavigtionBar()) {
-            mNavBarAvailable = false;
-        }
+        mConfig = new BarConfig(activity);
 
         if (!mMap.isEmpty()) {
             if (mMap.get(mActivity.getClass().getName()) == null) {
@@ -100,7 +71,6 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public static ImmersionBar with(Activity activity) {
-
         return new ImmersionBar(activity);
     }
 
@@ -453,14 +423,11 @@ public class ImmersionBar {
             } else {
                 mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                if (mStatusBarAvailable) {
-                    setupStatusBarView();
-                }
-                if (mNavBarAvailable) {
-                    setupNavBarView();
-                }
-                // 解决android4.4有导航栏的情况下，activity底部被状态栏遮挡的问题
-                if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
+                setupStatusBarView();
+                setupNavBarView();
+                // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
+                if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp
+                        && !mBarParams.fullScreen && mConfig.isNavigationAtBottom()) {
                     mContentView.setPadding(0, 0, 0, getNavigationBarHeight(mActivity));
                 } else {
                     mContentView.setPadding(0, 0, 0, 0);
@@ -468,7 +435,6 @@ public class ImmersionBar {
             }
         }
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
-
     }
 
     /**
@@ -499,7 +465,6 @@ public class ImmersionBar {
             }
         }
         return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        //activity.getWindow().getDecorView().setSystemUiVisibility(uiFlags);
     }
 
     /**
@@ -634,16 +599,16 @@ public class ImmersionBar {
         if (mBarParams.statusBarView == null) {
             mBarParams.statusBarView = new View(mActivity);
         }
+        mViewGroup.removeView(mBarParams.statusBarView);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight(mActivity));
         params.gravity = Gravity.TOP;
-        if (mNavBarAvailable && !isNavigationAtBottom(mActivity)) {
+        if (!isNavigationAtBottom(mActivity)) {
             params.rightMargin = getNavigationBarWidth(mActivity);
         }
         mBarParams.statusBarView.setLayoutParams(params);
         mBarParams.statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                 mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));
         mBarParams.statusBarView.setVisibility(View.VISIBLE);
-        mViewGroup.removeView(mBarParams.statusBarView);
         mViewGroup.addView(mBarParams.statusBarView);
     }
 
@@ -654,6 +619,7 @@ public class ImmersionBar {
         if (mBarParams.navigationBarView == null) {
             mBarParams.navigationBarView = new View(mActivity);
         }
+        mViewGroup.removeView(mBarParams.navigationBarView);
         FrameLayout.LayoutParams params;
         if (isNavigationAtBottom(mActivity)) {
             params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getNavigationBarHeight(mActivity));
@@ -671,7 +637,6 @@ public class ImmersionBar {
                     mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));
         }
         mBarParams.navigationBarView.setVisibility(View.VISIBLE);
-        mViewGroup.removeView(mBarParams.navigationBarView);
         mViewGroup.addView(mBarParams.navigationBarView);
     }
 
@@ -684,7 +649,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static boolean hasNavigationBar(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.hasNavigtionBar();
     }
 
@@ -697,7 +662,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static int getNavigationBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.getNavigationBarHeight();
     }
 
@@ -710,7 +675,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static int getNavigationBarWidth(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.getNavigationBarWidth();
     }
 
@@ -723,7 +688,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static boolean isNavigationAtBottom(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.isNavigationAtBottom();
     }
 
@@ -736,7 +701,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static int getStatusBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.getStatusBarHeight();
     }
 
@@ -749,7 +714,7 @@ public class ImmersionBar {
      */
     @TargetApi(14)
     public static int getActionBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity, true, true);
+        BarConfig config = new BarConfig(activity);
         return config.getActionBarHeight();
     }
 

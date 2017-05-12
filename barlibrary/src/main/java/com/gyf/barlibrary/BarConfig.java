@@ -26,8 +26,6 @@ class BarConfig {
     private static final String SHOW_NAV_BAR_RES_NAME = "config_showNavigationBar";
 
     private static String sNavBarOverride;
-    private final boolean mTranslucentStatusBar;
-    private final boolean mTranslucentNavBar;
     private final int mStatusBarHeight;
     private final int mActionBarHeight;
     private final boolean mHasNavigationBar;
@@ -50,7 +48,7 @@ class BarConfig {
     }
 
 
-    public BarConfig(Activity activity, boolean translucentStatusBar, boolean traslucentNavBar) {
+    public BarConfig(Activity activity) {
         Resources res = activity.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         mSmallestWidthDp = getSmallestWidthDp(activity);
@@ -59,8 +57,6 @@ class BarConfig {
         mNavigationBarHeight = getNavigationBarHeight(activity);
         mNavigationBarWidth = getNavigationBarWidth(activity);
         mHasNavigationBar = (mNavigationBarHeight > 0);
-        mTranslucentStatusBar = translucentStatusBar;
-        mTranslucentNavBar = traslucentNavBar;
     }
 
     @TargetApi(14)
@@ -201,42 +197,6 @@ class BarConfig {
      */
     public int getNavigationBarWidth() {
         return mNavigationBarWidth;
-    }
-
-    /**
-     * Get the layout inset for any system UI that appears at the top of the screen.
-     *
-     * @param withActionBar True to include the height of the action bar, False otherwise.
-     * @return The layout inset (in pixels).
-     */
-    public int getPixelInsetTop(boolean withActionBar) {
-        return (mTranslucentStatusBar ? mStatusBarHeight : 0) + (withActionBar ? mActionBarHeight : 0);
-    }
-
-    /**
-     * Get the layout inset for any system UI that appears at the bottom of the screen.
-     *
-     * @return The layout inset (in pixels).
-     */
-    public int getPixelInsetBottom() {
-        if (mTranslucentNavBar && isNavigationAtBottom()) {
-            return mNavigationBarHeight;
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * Get the layout inset for any system UI that appears at the right of the screen.
-     *
-     * @return The layout inset (in pixels).
-     */
-    public int getPixelInsetRight() {
-        if (mTranslucentNavBar && !isNavigationAtBottom()) {
-            return mNavigationBarWidth;
-        } else {
-            return 0;
-        }
     }
 
 }

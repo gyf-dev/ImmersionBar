@@ -33,7 +33,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("沉浸式");
         toolbar.setTitleTextColor(Color.WHITE);
-        ImmersionBar.with(this).init();
 //        ImmersionBar.with(this)
 //                .transparentStatusBar()  //透明状态栏，不写默认透明色
 //                .transparentNavigationBar()  //透明导航栏，不写默认黑色(设置此方法，fullScreen()方法自动为true)

@@ -3,17 +3,18 @@
 ## 使用 
 android studio用户用法如下，2.x.x版本全新的Api，调用更方便
 
-	compile 'com.gyf.barlibrary:barlibrary:2.1.0'
+	compile 'com.gyf.barlibrary:barlibrary:2.1.1'
 eclipse用户直接下载jar包
 
-[barlibrary-2.1.0.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.0.jar) 
+[barlibrary-2.1.1.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.1.jar) 
 
 版本说明
 
->2.1.0
+>2.1.1
 - 全新的链式调用，更方便，删除了1.x.x版本Api
 - 修复了4.4不能时刻改变颜色的bug
 - 修复了4.4 activity全屏时底部被导航栏遮挡的bug
+- 修复4.4旋转屏幕为横屏时底部出现多余的导航栏
 - 修复状态栏和布局重叠的问题，调用fitsSystemWindows(true)即可，必须指定状态栏的颜色statusBarColor()
 - 增加了View支持变色功能
 - 删除[SystemBarTint](https://github.com/jgilfelt/SystemBarTint)的库的依赖
@@ -21,7 +22,7 @@ eclipse用户直接下载jar包
 ### [1.x.x 用户请点击](https://github.com/gyf-dev/ImmersionBar/blob/master/README_1.x.md)
  
 ## 下载demo 
-###[点我](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-debug.apk) 
+### [点我](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-debug.apk) 
   
 ## 用法 
 ### 初始化
@@ -159,8 +160,10 @@ eclipse用户直接下载jar包
 #### 动态图 ####
 - android 6.0 有导航栏效果
 <img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_6.0.gif"/>
+
 - android 4.4 有导航栏效果
 <img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_4.4.gif"/>
+
 - android 4.4 没有导航栏效果
 <img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_4.4_no.gif"/>
 
