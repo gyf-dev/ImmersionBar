@@ -1,20 +1,30 @@
 # ImmersionBar -- android 4.4以上沉浸式实现 
 
+## 直接看效果图，最下面有各个版本的效果图
+<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_6.0.gif"/>
+
 ## 使用 
 android studio用户用法如下，2.x.x版本全新的Api，调用更方便
 
-	compile 'com.gyf.barlibrary:barlibrary:2.1.1'
+	compile 'com.gyf.barlibrary:barlibrary:2.1.2'
 eclipse用户直接下载jar包
 
-[barlibrary-2.1.1.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.1.jar) 
+[barlibrary-2.1.2.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.2.jar) 
 
 版本说明
 
+>2.1.2
+- 修复4.4旋转屏幕为横屏时右边布局被导航栏挡住的问题
+- 删除调试信息
+
 >2.1.1
+- 修复4.4旋转屏幕为横屏时底部出现多余的导航栏
+- 修复4.4初始化沉浸式有时候不能实现效果的问题
+
+>2.1.0
 - 全新的链式调用，更方便，删除了1.x.x版本Api
 - 修复了4.4不能时刻改变颜色的bug
 - 修复了4.4 activity全屏时底部被导航栏遮挡的bug
-- 修复4.4旋转屏幕为横屏时底部出现多余的导航栏
 - 修复状态栏和布局重叠的问题，调用fitsSystemWindows(true)即可，必须指定状态栏的颜色statusBarColor()
 - 增加了View支持变色功能
 - 删除[SystemBarTint](https://github.com/jgilfelt/SystemBarTint)的库的依赖

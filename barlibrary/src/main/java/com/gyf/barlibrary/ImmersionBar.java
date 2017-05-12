@@ -387,7 +387,6 @@ public class ImmersionBar {
         setBarColor();
         transformView();
         fitsSystemWindows();
-        LogUtils.d(mMap);
     }
 
     /**
@@ -426,9 +425,11 @@ public class ImmersionBar {
                 setupStatusBarView();
                 setupNavBarView();
                 // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
-                if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp
-                        && !mBarParams.fullScreen && mConfig.isNavigationAtBottom()) {
-                    mContentView.setPadding(0, 0, 0, getNavigationBarHeight(mActivity));
+                if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
+                    if (mConfig.isNavigationAtBottom())
+                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+                    else
+                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
                 } else {
                     mContentView.setPadding(0, 0, 0, 0);
                 }
