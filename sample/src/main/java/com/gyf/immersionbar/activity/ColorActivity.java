@@ -1,11 +1,9 @@
-package com.gyf.immersionbar;
+package com.gyf.immersionbar.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,47 +11,51 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by geyifeng on 2017/5/8.
  */
 
-public class Test3Activity extends BaseActivity {
+public class ColorActivity extends BaseActivity {
 
-    private TextView textView;
-    private Toolbar mToolbar;
-    private Button btn1;
-    private Button btn2;
-    private Button btn3;
-    private LinearLayout linearLayout;
+    @BindView(R.id.text_view)
+    TextView textView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.btn1)
+    Button btn1;
+    @BindView(R.id.btn2)
+    Button btn2;
+    @BindView(R.id.btn3)
+    Button btn3;
+    @BindView(R.id.line1)
+    LinearLayout linearLayout;
+    @BindView(R.id.seek_bar)
+    SeekBar seekBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_color);
+        ButterKnife.bind(this);
         ImmersionBar.with(this)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.btn8)
                 .fullScreen(true)
                 .init();
-        setContentView(R.layout.activity_test3);
-        linearLayout = (LinearLayout) findViewById(R.id.line1);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitleTextColor(Color.WHITE);
-        mToolbar.setTitle("通过透明度设置状态栏");
-        textView = (TextView) findViewById(R.id.text_view);
-        btn1 = (Button) findViewById(R.id.btn1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn3 = (Button) findViewById(R.id.btn3);
-        SeekBar seekBar = (SeekBar) findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
                 linearLayout.setBackgroundColor(ColorUtils.blendARGB(
-                        ContextCompat.getColor(Test3Activity.this,R.color.darker_gray),
-                        ContextCompat.getColor(Test3Activity.this,R.color.btn5),alpha));
-                ImmersionBar.with(Test3Activity.this)
+                        ContextCompat.getColor(ColorActivity.this, R.color.darker_gray),
+                        ContextCompat.getColor(ColorActivity.this, R.color.btn5), alpha));
+                ImmersionBar.with(ColorActivity.this)
                         .barAlpha(alpha)
                         .statusBarColorTransform(R.color.btn14)
                         .navigationBarColorTransform(R.color.btn3)

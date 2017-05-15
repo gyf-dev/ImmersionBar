@@ -30,7 +30,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:title="图片状态栏 + 彩色导航栏"
+                app:titleTextColor="@android:color/white"/>
         </LinearLayout>
     </FrameLayout>
 

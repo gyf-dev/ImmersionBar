@@ -3,25 +3,34 @@
     package="com.gyf.immersionbar">
 
     <application
-        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestActivity"/>
-        <activity android:name=".Test2Activity"/>
-        <activity android:name=".Test3Activity"/>
-        <activity android:name=".Test4Activity"
+        <activity android:name=".activity.PicAndColorActivity" />
+        <activity android:name=".activity.PicActivity" />
+        <activity android:name=".activity.ColorActivity" />
+        <activity
+            android:name=".activity.BackActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".activity.FragmentActivity" />
+        <activity android:name=".activity.OverActivity" />
+        <activity android:name=".activity.Over1Activity"
             android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".Test5Activity"/>
+        <activity android:name=".activity.Over2Activity"
+            android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".activity.Over3Activity"
+            android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".activity.Over4Activity"
+            android:theme="@style/AppTheme.Transparent"/>
     </application>
 
 </manifest>

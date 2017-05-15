@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,7 +22,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            app:title="沉浸式（ImmersionBar）"
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,42 +41,50 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
-                <Button
-                    android:id="@+id/btn_skip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="状态栏图片，导航栏彩色" />
 
                 <Button
-                    android:id="@+id/btn_skip2"
+                    android:id="@+id/btn_pic_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="图片状态栏 + 彩色导航栏" />
+
+                <Button
+                    android:id="@+id/btn_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="全屏图片" />
 
                 <Button
-                    android:id="@+id/btn_skip3"
+                    android:id="@+id/btn_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="状态栏和导航栏都是彩色" />
+                    android:text="彩色状态栏 + 彩色导航栏" />
 
                 <Button
                     android:id="@+id/btn_swipe_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="配合滑动返回使用" />
+                    android:text="结合侧滑返回使用" />
 
                 <Button
-                    android:id="@+id/btn_fits"
+                    android:id="@+id/btn_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="状态栏配合fitsSystemWindows（非系统的方法）方法使用"
+                    android:text="结合fragment使用"
                     android:textAllCaps="false" />
 
                 <Button
-                    android:id="@+id/btn_left"
+                    android:id="@+id/btn_drawer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="侧边栏" />
+                    android:text="结合侧边栏使用" />
+
+                <Button
+                    android:id="@+id/btn_over"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="解决布局顶部和状态栏重叠问题"
+                    android:textAllCaps="false" />
 
                 <Button
                     android:id="@+id/btn_status_hide"

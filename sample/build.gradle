@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.gyf.immersionbar"
         minSdkVersion 18
@@ -30,9 +30,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
     compile project(':barlibrary')
-    compile 'cn.bingoogolapple:bga-swipebacklayout:1.0.8@aar'
-    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.lzy.widget:view-core:0.1.5'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    compile 'com.apkfuns.logutils:library:1.4.2.2'
 }

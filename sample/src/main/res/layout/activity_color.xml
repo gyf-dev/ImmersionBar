@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/line1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/line1"
-    android:background="@android:color/darker_gray">
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical">
 
     <View
         android:id="@+id/top_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/status_bar_height"
-        android:background="@color/colorPrimary" />
+        android:layout_height="@dimen/status_bar_height"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"
+        app:title="彩色状态栏 + 彩色导航栏"
+        app:titleTextColor="@android:color/white" />
 
     <TextView
         android:id="@+id/text_view"

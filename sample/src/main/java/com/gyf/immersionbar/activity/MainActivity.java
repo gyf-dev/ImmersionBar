@@ -1,38 +1,30 @@
-package com.gyf.immersionbar;
+package com.gyf.immersionbar.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.BarParams;
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.R;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    private Button btn_skip, btn_skip2, btn_skip3, btn_swipe_back, btn_fits, btn_left, btn_status_hide, btn_navigation_hide, btn_bar_hide,
-            btn_bar_show, btn_full, btn_bar_font_dark, btn_bar_font_light;
-    private DrawerLayout drawer;
-    private LinearLayout news;
-    private Toolbar toolbar;
+public class MainActivity extends BaseActivity {
 
+    @BindView(R.id.drawer)
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("沉浸式");
-        toolbar.setTitleTextColor(Color.WHITE);
+        ButterKnife.bind(this);
 //        ImmersionBar.with(this)
 //                .transparentStatusBar()  //透明状态栏，不写默认透明色
 //                .transparentNavigationBar()  //透明导航栏，不写默认黑色(设置此方法，fullScreen()方法自动为true)
@@ -48,6 +40,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
 //                .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法
 //                .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
+//                .statusBarView(view)  //解决状态栏和布局重叠问题
 //                .fitsSystemWindows(false)    //解决状态栏和布局重叠问题，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
 //                .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
 //                .navigationBarColorTransform(R.color.orange) //导航栏变色后的颜色
@@ -56,69 +49,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                .removeSupportView(toolbar)  //移除指定view支持
 //                .removeSupportAllView() //移除全部view支持
 //                .init();  //必须调用方可沉浸式
-        btn_skip = (Button) findViewById(R.id.btn_skip);
-        btn_skip2 = (Button) findViewById(R.id.btn_skip2);
-        btn_skip3 = (Button) findViewById(R.id.btn_skip3);
-        btn_swipe_back = (Button) findViewById(R.id.btn_swipe_back);
-        btn_fits = (Button) findViewById(R.id.btn_fits);
-        btn_left = (Button) findViewById(R.id.btn_left);
-        btn_status_hide = (Button) findViewById(R.id.btn_status_hide);
-        btn_navigation_hide = (Button) findViewById(R.id.btn_navigation_hide);
-        btn_bar_hide = (Button) findViewById(R.id.btn_bar_hide);
-        btn_bar_show = (Button) findViewById(R.id.btn_bar_show);
-        btn_full = (Button) findViewById(R.id.btn_full);
-        btn_bar_font_dark = (Button) findViewById(R.id.btn_bar_font_dark);
-        btn_bar_font_light = (Button) findViewById(R.id.btn_bar_font_light);
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        news = (LinearLayout) findViewById(R.id.news);
-
-        btn_skip.setOnClickListener(this);
-        btn_skip2.setOnClickListener(this);
-        btn_skip3.setOnClickListener(this);
-        btn_swipe_back.setOnClickListener(this);
-        btn_fits.setOnClickListener(this);
-        btn_left.setOnClickListener(this);
-        btn_status_hide.setOnClickListener(this);
-        btn_navigation_hide.setOnClickListener(this);
-        btn_bar_hide.setOnClickListener(this);
-        btn_bar_show.setOnClickListener(this);
-        btn_full.setOnClickListener(this);
-        btn_bar_font_dark.setOnClickListener(this);
-        btn_bar_font_light.setOnClickListener(this);
-        news.setOnClickListener(this);
-
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
-    @Override
+    @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_swipe_back, R.id.btn_fragment, R.id.btn_drawer,
+            R.id.btn_over, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
+            R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_skip:
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
-                MainActivity.this.startActivity(intent);
+            case R.id.btn_pic_color:
+                startActivity(new Intent(MainActivity.this, PicAndColorActivity.class));
                 break;
-            case R.id.btn_skip2:
-                Intent intent2 = new Intent(MainActivity.this, Test2Activity.class);
-                MainActivity.this.startActivity(intent2);
+            case R.id.btn_pic:
+                startActivity(new Intent(MainActivity.this, PicActivity.class));
                 break;
-            case R.id.btn_skip3:
-                Intent intent3 = new Intent(MainActivity.this, Test3Activity.class);
-                MainActivity.this.startActivity(intent3);
+            case R.id.btn_color:
+                startActivity(new Intent(MainActivity.this, ColorActivity.class));
                 break;
             case R.id.btn_swipe_back:
-                Intent intent4 = new Intent(MainActivity.this, Test4Activity.class);
-                MainActivity.this.startActivity(intent4);
+                startActivity(new Intent(MainActivity.this, BackActivity.class));
                 break;
-            case R.id.btn_fits:
-                Intent intent5 = new Intent(MainActivity.this, Test5Activity.class);
-                MainActivity.this.startActivity(intent5);
+            case R.id.btn_fragment:
+                startActivity(new Intent(MainActivity.this, FragmentActivity.class));
                 break;
-            case R.id.btn_left:
+            case R.id.btn_drawer:
                 drawer.openDrawer(Gravity.START);
+                break;
+            case R.id.btn_over:
+                startActivity(new Intent(MainActivity.this, OverActivity.class));
                 break;
             case R.id.btn_status_hide:
                 ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
@@ -145,12 +103,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.btn_bar_font_light:
                 ImmersionBar.with(this).statusBarDarkFont(false).init();
                 break;
-            case R.id.news:
-                Intent intent0 = new Intent(MainActivity.this, Test2Activity.class);
-                MainActivity.this.startActivity(intent0);
-
-                break;
         }
+
     }
 
     @Override

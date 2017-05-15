@@ -1,43 +1,38 @@
-package com.gyf.immersionbar;
+package com.gyf.immersionbar.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by gyf on 2016/10/24.
  */
-public class TestActivity extends BaseActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
-    private Toolbar toolbar;
-    private View topView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.seek_bar)
+    SeekBar seekBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ImmersionBar.with(this).transparentStatusBar().navigationBarColor(R.color.colorPrimary).fullScreen(true).init();
-        setContentView(R.layout.activity_test);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("图片状态栏");
-        toolbar.setTitleTextColor(Color.WHITE);
-        topView = findViewById(R.id.top_view);
-        Button btn_status_color = (Button) findViewById(R.id.btn_status_color);
-        Button btn_navigation_color = (Button) findViewById(R.id.btn_navigation_color);
-        Button btn_color = (Button) findViewById(R.id.btn_color);
-        SeekBar seekBar = (SeekBar) findViewById(R.id.seek_bar);
-        btn_status_color.setOnClickListener(this);
-        btn_navigation_color.setOnClickListener(this);
-        btn_color.setOnClickListener(this);
+        setContentView(R.layout.activity_pic_color);
+        ButterKnife.bind(this);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
-    @Override
+    @OnClick({R.id.btn_status_color, R.id.btn_navigation_color, R.id.btn_color})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status_color:
@@ -64,9 +59,6 @@ public class TestActivity extends BaseActivity implements View.OnClickListener, 
                 .addViewSupportTransformColor(toolbar)
                 .barAlpha(alpha)
                 .init();
-//        topView.setBackgroundColor(ColorUtils.blendARGB(ContextCompat.getColor(this, R.color.tans), ContextCompat.getColor(this, R.color.colorPrimary), alpha));
-//        toolbar.setBackgroundColor(ColorUtils.blendARGB(ContextCompat.getColor(this, R.color.tans), ContextCompat.getColor(this, R.color.colorPrimary), alpha));
-
     }
 
     @Override

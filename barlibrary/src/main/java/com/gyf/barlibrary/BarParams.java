@@ -3,6 +3,7 @@ package com.gyf.barlibrary;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,4 +40,5 @@ public class BarParams {
     public int navigationBarColorTem = navigationBarColor;
     public View statusBarView;
     public View navigationBarView;
+    public View statusBarViewByHeight;
 }

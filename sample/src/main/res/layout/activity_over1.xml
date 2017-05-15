@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/darker_gray"
     android:orientation="vertical">
 
     <View
-        android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/status_bar_height"
         android:background="@color/colorPrimary" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"
+        app:title="方法一"
+        app:titleTextColor="@android:color/white" />
 
-    <ImageView
+    <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/swipe"
-        android:layout_marginTop="100dp"/>
-
+        android:layout_margin="20dp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
 </LinearLayout>
