@@ -1,7 +1,7 @@
 # ImmersionBar -- android 4.4以上沉浸式实现 
 
 ## 直接看效果图，最下面有各个版本的效果图
-<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_6.0.gif"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
 
 ## 使用 
 android studio用户用法如下，2.x.x版本全新的Api，调用更方便  
@@ -245,20 +245,20 @@ eclipse用户直接下载jar包
 ## 效果图 ##
 #### 说明 ####
 - 这是状态栏
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/StatusBar.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/StatusBar.png)
 - 这是导航栏（有些手机没有导航栏）
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/NavigationBar.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/NavigationBar.png)
 #### 动态图 ####
 - android 6.0 有导航栏效果
-<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_6.0.gif"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
 
 - android 4.4 有导航栏效果
-<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_4.4.gif"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_4.4.gif"/>
 
 - android 4.4 没有导航栏效果
-<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_4.4_no.gif"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_4.4_no.gif"/>
 
 ## 联系我 ##
 - QQ 969565471
 - WeChat(微信)
-<img width="300"  src="https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/wechat.JPG"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/wechat.JPG"/>
