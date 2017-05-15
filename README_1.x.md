@@ -25,7 +25,7 @@ eclipse用户直接下载jar包
 ## 用法 BarManager.xxx()方法 ##
 #### ① 以下方法是自定义状态栏和导航栏颜色，任选其一使用，style风格使用NoActionBar效果更佳 ####
 
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot3.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot3.png)
 
 - public static void setBarColor(Activity activity)
  
@@ -90,15 +90,15 @@ true--Activity全屏显示，但导航栏不会被隐藏，导航栏依然可见
 ## 效果图 ##
 #### 说明 ####
 - 这是状态栏
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/StatusBar.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/StatusBar.png)
 - 这是导航栏（有些手机没有导航栏）
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/NavigationBar.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/NavigationBar.png)
 #### 动态图 ####
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot_gif.gif)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_gif.gif)
 #### 静态图 ####
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot0.png)
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot1.png)
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/Screenshot2.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot0.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot1.png)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot2.png)
 ## 参考 ##
 - Android 4.4使用的是github上第三方库实现，参考地址：https://github.com/jgilfelt/SystemBarTint
 - Android 5.0以上使用自带Api实现
@@ -107,4 +107,4 @@ true--Activity全屏显示，但导航栏不会被隐藏，导航栏依然可见
 - QQ 969565471
 - WeChat(微信)
  
-![image](https://github.com/gyf-dev/ImmersionBar/blob/master/screenshots/wechat.JPG)
+![image](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/wechat.JPG)
