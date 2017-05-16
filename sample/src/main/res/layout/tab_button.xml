@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="40dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="3dip">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dip"
+        android:duplicateParentState="true" />
+
+    <TextView
+        android:id="@+id/tab_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="2dip"
+        android:duplicateParentState="true"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</LinearLayout>  

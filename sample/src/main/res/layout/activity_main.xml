@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bar_height"
             android:background="@color/colorPrimary" />

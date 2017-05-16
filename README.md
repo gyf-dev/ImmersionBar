@@ -104,8 +104,53 @@ eclipse用户直接下载jar包
      }
     ```
 
-## 在Fragment中的用法
--  继承ImmersionFragment类，在immersionInit中初始化沉浸式，代码如下：
+## 在Fragment中的用法（fragment+viewpager）
+为了使每个fragment都可以设置不同的沉浸式样式，这里给出两种解决方式，这两种实现效果都一样的
+
+-  ①使用viewpager的addOnPageChangeListener方法，代码如下
+
+   ```java
+    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    
+            }
+    
+            @Override
+            public void onPageSelected(int position) {
+                ImmersionBar immersionBar = ImmersionBar.with(FragmentActivity.this);
+                switch (position) {
+                    case 0:
+                        immersionBar.statusBarDarkFont(false)
+                                .navigationBarColor(R.color.btn4)
+                                .init();
+                        break;
+                    case 1:
+                        immersionBar.statusBarDarkFont(true)
+                                .navigationBarColor(R.color.btn3)
+                                .init();
+                        break;
+                    case 2:
+                        immersionBar.statusBarDarkFont(false)
+                                .navigationBarColor(R.color.btn13)
+                                .init();
+                        break;
+                    case 3:
+                        immersionBar.statusBarDarkFont(true)
+                                .navigationBarColor(R.color.btn1)
+                                .init();
+                        break;
+                }
+            }
+    
+            @Override
+            public void onPageScrollStateChanged(int state) {
+    
+            }
+        });
+    ```
+    
+-  ②继承ImmersionFragment类，在immersionInit中初始化沉浸式，代码如下：
 
     ```java
     public class OneFragment extends ImmersionFragment {
@@ -205,7 +250,7 @@ eclipse用户直接下载jar包
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:background="@color/colorPrimary"
-                   app:title="方法一"
+                   app:title="方法四"
                    app:titleTextColor="@android:color/white" />
         </LinearLayout>
      ```

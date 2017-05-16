@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.fragment.FourFragment;
 import com.gyf.immersionbar.fragment.OneFragment;
@@ -29,11 +30,52 @@ public class FragmentActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
+        ImmersionBar.with(this).statusBarDarkFont(false)
+                .navigationBarColor(R.color.btn4)
+                .init();
         initData();
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
         AlphaIndicator alphaIndicator = (AlphaIndicator) findViewById(R.id.alphaIndicator);
         alphaIndicator.setViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                ImmersionBar immersionBar = ImmersionBar.with(FragmentActivity.this);
+//                switch (position) {
+//                    case 0:
+//                        immersionBar.statusBarDarkFont(false)
+//                                .navigationBarColor(R.color.btn4)
+//                                .init();
+//                        break;
+//                    case 1:
+//                        immersionBar.statusBarDarkFont(true)
+//                                .navigationBarColor(R.color.btn3)
+//                                .init();
+//                        break;
+//                    case 2:
+//                        immersionBar.statusBarDarkFont(false)
+//                                .navigationBarColor(R.color.btn13)
+//                                .init();
+//                        break;
+//                    case 3:
+//                        immersionBar.statusBarDarkFont(true)
+//                                .navigationBarColor(R.color.btn1)
+//                                .init();
+//                        break;
+//                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initData() {

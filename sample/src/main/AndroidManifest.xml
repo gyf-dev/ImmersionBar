@@ -23,14 +23,10 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".activity.FragmentActivity" />
         <activity android:name=".activity.OverActivity" />
-        <activity android:name=".activity.Over1Activity"
-            android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".activity.Over2Activity"
-            android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".activity.Over3Activity"
-            android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".activity.Over4Activity"
-            android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".activity.Over1Activity"/>
+        <activity android:name=".activity.Over2Activity"/>
+        <activity android:name=".activity.Over3Activity"/>
+        <activity android:name=".activity.Over4Activity"/>
     </application>
 
 </manifest>

@@ -561,19 +561,20 @@ public class ImmersionBar {
                 mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                         mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
             } else {
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                setupStatusBarView();
-                if (mConfig.hasNavigtionBar())
-                    setupNavBarView();
+                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
+                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//透明导航栏，设置这个，如果有导航栏，底部布局会被导航栏遮住
+                setupStatusBarView(); //创建一个假的状态栏
+                if (mConfig.hasNavigtionBar())  //判断是否存在导航栏
+                    setupNavBarView();   //创建一个假的导航栏
+
                 // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
                 if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
-                    if (mConfig.isNavigationAtBottom())
-                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+                    if (mConfig.isNavigationAtBottom()) //判断导航栏是否在底部
+                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
                     else
-                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
                 } else {
-                    mContentView.setPadding(0, 0, 0, 0);
+                    mContentView.setPadding(0, 0, 0, 0); //没有导航栏，什么都不做
                 }
             }
         }

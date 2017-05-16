@@ -26,7 +26,11 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ImmersionBar.with(this).transparentStatusBar().navigationBarColor(R.color.colorPrimary).fullScreen(true).init();
+        ImmersionBar.with(this)
+                .transparentStatusBar()
+                .navigationBarColor(R.color.colorPrimary)
+                .fullScreen(true)
+                .init();
         setContentView(R.layout.activity_pic_color);
         ButterKnife.bind(this);
         seekBar.setOnSeekBarChangeListener(this);
