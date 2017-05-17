@@ -13,4 +13,11 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="Panel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:background">#fffefefe</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>

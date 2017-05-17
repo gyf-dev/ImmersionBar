@@ -27,6 +27,7 @@
         <activity android:name=".activity.Over2Activity"/>
         <activity android:name=".activity.Over3Activity"/>
         <activity android:name=".activity.Over4Activity"/>
+        <activity android:name=".activity.KeyBoardActivity"/>
     </application>
 
 </manifest>

@@ -7,14 +7,17 @@
 android studio用户用法如下，2.x.x版本全新的Api，调用更方便  
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.1.3'
+   compile 'com.gyf.barlibrary:barlibrary:2.1.4'
    ```
 
 eclipse用户直接下载jar包
 
-[barlibrary-2.1.3.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.3.jar) 
+[barlibrary-2.1.4.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.4.jar) 
 
 版本说明
+
+>2.1.4
+- 增加KeyboardPatch类，解决底部EditText和软键盘的问题
 
 >2.1.3
 - 增加ImmersionFragment类，使沉浸式在fragment里使用更方便

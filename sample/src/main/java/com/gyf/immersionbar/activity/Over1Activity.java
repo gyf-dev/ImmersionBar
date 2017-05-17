@@ -2,9 +2,11 @@ package com.gyf.immersionbar.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.barlibrary.KeyboardPatch;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
@@ -29,4 +31,5 @@ public class Over1Activity extends BaseActivity {
                 "在values-v19/dimens.xml文件里指定高度为25dp（20~25dp最佳，根据需求定），" +
                 "在values/dimens.xml文件里，指定高度为0dp，详情参看此页面的实现");
     }
+
 }
