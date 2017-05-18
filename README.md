@@ -264,6 +264,14 @@ eclipse用户直接下载jar包
                .statusBarView(view)
                .init();
      ```   
+
+## 解决EditText和软键盘的问题
+   ```java
+         KeyboardPatch.patch(this, linearLayout).enable(); //解决底部EditText和软键盘的问题，linearLayout指的是当前布局的根节点
+   ```
+ 
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_edit.gif"/>
+
 ## 状态栏和导航栏其它方法
 	
 - public static boolean hasNavigationBar(Activity activity)

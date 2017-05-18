@@ -3,12 +3,13 @@ package com.gyf.barlibrary;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 /**
- * 解决
+ * 解决EditText和软键盘的问题
  * Created by geyifeng on 2017/5/17.
  */
 
@@ -45,7 +46,7 @@ public class KeyboardPatch {
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+            mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);//当在一个视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变时，所要调用的回调函数的接口类
         }
     }
 
@@ -64,12 +65,10 @@ public class KeyboardPatch {
         @Override
         public void onGlobalLayout() {
             Rect r = new Rect();
-
-            mDecorView.getWindowVisibleDisplayFrame(r);
-            int height = mDecorView.getContext().getResources().getDisplayMetrics().heightPixels;
+            mDecorView.getWindowVisibleDisplayFrame(r); //获取当前窗口可视区域大小的
+            int height = mDecorView.getContext().getResources().getDisplayMetrics().heightPixels; //获取屏幕密度，不包含导航栏
             int diff = height - r.bottom;
-
-            if (diff != 0) {
+            if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
                     mContentView.setPadding(0, 0, 0, diff);
                 }

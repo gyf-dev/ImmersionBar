@@ -90,7 +90,7 @@
                     android:id="@+id/btn_key_board"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="解决底部EditText和软键盘的问题 "
+                    android:text="解决EditText和软键盘的问题 "
                     android:textAllCaps="false" />
 
                 <Button

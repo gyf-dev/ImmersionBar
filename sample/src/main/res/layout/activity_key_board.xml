@@ -16,15 +16,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:title="解决底部EditText和软键盘的问题"
+        app:title="解决EditText和软键盘的问题"
         app:titleTextColor="@android:color/white" />
 
-    <View
+    <ListView
+        android:background="@android:color/white"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp"
+        android:hint="我是输入框" />
 </LinearLayout>
