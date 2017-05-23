@@ -1,8 +1,14 @@
 package com.gyf.barlibrary;
 
+import android.os.Build;
+import android.os.Environment;
 import android.text.TextUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
  * Created by geyifeng on 2017/4/18.
@@ -14,13 +20,13 @@ public class OSUtils {
     private static final String KEY_EMUI_VERSION_NAME = "ro.build.version.emui";
     private static final String KEY_DISPLAY = "ro.build.display.id";
 
-    public static String MIUIVersion() {
-        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, null) : "";
-    }
-
     public static boolean isMIUI() {
         String property = getSystemProperty(KEY_MIUI_VERSION_NAME, null);
         return !TextUtils.isEmpty(property);
+    }
+
+    public static String MIUIVersion() {
+        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, null) : "";
     }
 
     public static boolean isFlymeOS() {
@@ -32,8 +38,13 @@ public class OSUtils {
         return !TextUtils.isEmpty(property);
     }
 
+    public static String EMUIVersion() {
+        return getSystemProperty(KEY_EMUI_VERSION_NAME, null);
+    }
+
     public static boolean isEMUI3_1() {
-        if ("EmotionUI_3.1".equals(getSystemProperty(KEY_EMUI_VERSION_NAME, null))) {
+        String property = getSystemProperty(KEY_EMUI_VERSION_NAME, null);
+        if ("EmotionUI 3".equals(property) || "EmotionUI_3.1".equals(property)) {
             return true;
         }
         return false;
@@ -53,18 +64,4 @@ public class OSUtils {
         }
         return defaultValue;
     }
-
-
-    private static String getEmuiVersion() {
-        Class<?> classType = null;
-        try {
-            classType = Class.forName("android.os.SystemProperties");
-            Method getMethod = classType.getDeclaredMethod("get", String.class);
-            return (String) getMethod.invoke(classType, "ro.build.version.emui");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
 }

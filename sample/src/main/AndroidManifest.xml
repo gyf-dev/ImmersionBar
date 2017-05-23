@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.PicAndColorActivity" />
-        <activity android:name=".activity.PicActivity" />
+        <activity android:name=".activity.PicActivity"
+            android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".activity.ColorActivity" />
         <activity
             android:name=".activity.BackActivity"

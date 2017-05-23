@@ -52,4 +52,9 @@ public class PicActivity extends SwipeBackActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

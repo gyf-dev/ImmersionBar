@@ -1,14 +1,18 @@
 package com.gyf.immersionbar.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
+import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.BarParams;
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.barlibrary.OSUtils;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
@@ -25,6 +29,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //Toast.makeText(this, Build.VERSION.SDK_INT, Toast.LENGTH_SHORT).show();
 //        ImmersionBar.with(this)
 //                .transparentStatusBar()  //透明状态栏，不写默认透明色
 //                .transparentNavigationBar()  //透明导航栏，不写默认黑色(设置此方法，fullScreen()方法自动为true)

@@ -6,7 +6,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
-import android.support.annotation.IntegerRes;
+import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.view.Gravity;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * android 4.4以上bar 管理
+ * android 4.4以上沉浸式以及bar的管理
  * Created by gyf on 2017/05/09.
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -473,7 +474,7 @@ public class ImmersionBar {
      */
     public ImmersionBar hideBar(BarHide barHide) {
         mBarParams.barHide = barHide;
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_1()) {
             if ((mBarParams.barHide == BarHide.FLAG_HIDE_NAVIGATION_BAR) ||
                     (mBarParams.barHide == BarHide.FLAG_HIDE_BAR)) {
                 mBarParams.navigationBarColor = Color.TRANSPARENT;
@@ -514,7 +515,7 @@ public class ImmersionBar {
      * @param viewId the view id
      * @return the immersion bar
      */
-    public ImmersionBar statusBarView(@IntegerRes int viewId) {
+    public ImmersionBar statusBarView(@IdRes int viewId) {
         mBarParams.statusBarViewByHeight = mActivity.findViewById(viewId);
         return this;
     }
@@ -526,7 +527,6 @@ public class ImmersionBar {
         mMap.put(mActivity.getClass().getName(), mBarParams);
         initBar();   //初始化沉浸式
         setStatusBarView();  //通过状态栏高度动态设置状态栏布局
-        fitsSystemWindows();  //解决状态栏和布局重叠问题
         transformView();  //变色view
     }
 
@@ -543,42 +543,76 @@ public class ImmersionBar {
         }
     }
 
+    /**
+     * 初始化状态栏和导航栏
+     */
     private void initBar() {
         int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;  //防止系统栏隐藏时内容区域大小发生变化
         uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;  //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态栏遮住。
-                if (mBarParams.fullScreen) {
-                    uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION; //Activity全屏显示，但导航栏不会被隐藏覆盖，导航栏依然可见，Activity底部布局部分会被导航栏遮住。
-                }
-                mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                        | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);  //取消设置透明状态栏和导航栏
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);  //需要设置这个才能设置状态栏颜色
-                mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
-                        mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));  //设置状态栏颜色
-                mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
-                        mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
+                uiFlags = initBarAboveLOLLIPOP(uiFlags); //初始化5.0以上，包含5.0
+                fitsSystemWindows();  //android 5.0以上解决状态栏和布局重叠问题
             } else {
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//透明导航栏，设置这个，如果有导航栏，底部布局会被导航栏遮住
-                setupStatusBarView(); //创建一个假的状态栏
-                if (mConfig.hasNavigtionBar())  //判断是否存在导航栏
-                    setupNavBarView();   //创建一个假的导航栏
-
-                // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
-                if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
-                    if (mConfig.isNavigationAtBottom()) //判断导航栏是否在底部
-                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
-                    else
-                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
-                } else {
-                    mContentView.setPadding(0, 0, 0, 0); //没有导航栏，什么都不做
-                }
+                initBarBelowLOLLIPOP(); //初始化5.0以下，4.4以上沉浸式
+                solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
             }
         }
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
+    }
+
+    /**
+     * 初始化android 5.0以上状态栏和导航栏
+     *
+     * @param uiFlags the ui flags
+     * @return the int
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private int initBarAboveLOLLIPOP(int uiFlags) {
+        uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;  //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态栏遮住。
+        if (mBarParams.fullScreen) {
+            uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION; //Activity全屏显示，但导航栏不会被隐藏覆盖，导航栏依然可见，Activity底部布局部分会被导航栏遮住。
+        }
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);  //需要设置这个才能设置状态栏颜色
+        mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
+                mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));  //设置状态栏颜色
+        mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
+                mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
+        return uiFlags;
+    }
+
+    /**
+     * 初始化android 4.4和emui3.1状态栏和导航栏
+     */
+    private void initBarBelowLOLLIPOP() {
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//透明导航栏，设置这个，如果有导航栏，底部布局会被导航栏遮住
+        setupStatusBarView(); //创建一个假的状态栏
+        if (mConfig.hasNavigtionBar())  //判断是否存在导航栏
+            setupNavBarView();   //创建一个假的导航栏
+    }
+
+    /**
+     * 解决安卓4.4余EMUI3.1导航栏与状态栏的问题
+     */
+    private void solveNavigation() {
+        // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
+        if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
+            if (mConfig.isNavigationAtBottom()) { //判断导航栏是否在底部
+                if (mBarParams.fits)
+                    mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
+                else
+                    mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+            } else {
+                if (mBarParams.fits)
+                    mContentView.setPadding(0, getStatusBarHeight(mActivity), mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
+                else
+                    mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+            }
+        } else {
+            mContentView.setPadding(0, 0, 0, 0); //没有导航栏，什么都不做
+        }
     }
 
     /**
@@ -742,12 +776,11 @@ public class ImmersionBar {
      * Fits system windows.
      */
     private void fitsSystemWindows() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
             if (mBarParams.fits) {
                 mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, 0);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    mContentView.setPadding(0, 0, 0, 0);
+                mContentView.setPadding(0, 0, 0, 0);
             }
         }
     }
