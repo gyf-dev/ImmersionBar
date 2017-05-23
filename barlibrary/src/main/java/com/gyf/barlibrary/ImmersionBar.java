@@ -594,7 +594,7 @@ public class ImmersionBar {
     }
 
     /**
-     * 解决安卓4.4余EMUI3.1导航栏与状态栏的问题
+     * 解决安卓4.4和EMUI3.1导航栏与状态栏的问题
      */
     private void solveNavigation() {
         // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
@@ -651,10 +651,8 @@ public class ImmersionBar {
      */
     private int setStatusBarDarkFont(int uiFlags) {
         String MIUIVersion = OSUtils.MIUIVersion();
-        if (!MIUIVersion.isEmpty()) {
-            if (Integer.valueOf(MIUIVersion.substring(1)) >= 6) {
-                MIUISetStatusBarLightMode();
-            }
+        if (!MIUIVersion.isEmpty() && Integer.valueOf(MIUIVersion.substring(1)) >= 6) {
+            MIUISetStatusBarLightMode();
             return uiFlags;
         }
         if (OSUtils.isFlymeOS()) {
@@ -913,6 +911,22 @@ public class ImmersionBar {
     public static int getActionBarHeight(Activity activity) {
         BarConfig config = new BarConfig(activity);
         return config.getActionBarHeight();
+    }
+
+    /**
+     * 判断手机支不支持状态栏变色
+     * Is support status bar dark font boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isSupportStatusBarDarkFont() {
+        String MIUIVersion = OSUtils.MIUIVersion();
+        if ((!MIUIVersion.isEmpty() && Integer.valueOf(MIUIVersion.substring(1)) >= 6)
+                || OSUtils.isFlymeOS()
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
+            return true;
+        } else
+            return false;
     }
 
     /**

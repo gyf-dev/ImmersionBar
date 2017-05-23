@@ -1,16 +1,11 @@
 package com.gyf.barlibrary;
 
-import android.os.Build;
-import android.os.Environment;
 import android.text.TextUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 /**
+ * 手机系统判断
  * Created by geyifeng on 2017/4/18.
  */
 
@@ -21,33 +16,33 @@ public class OSUtils {
     private static final String KEY_DISPLAY = "ro.build.display.id";
 
     public static boolean isMIUI() {
-        String property = getSystemProperty(KEY_MIUI_VERSION_NAME, null);
+        String property = getSystemProperty(KEY_MIUI_VERSION_NAME, "");
         return !TextUtils.isEmpty(property);
     }
 
     public static String MIUIVersion() {
-        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, null) : "";
-    }
-
-    public static boolean isFlymeOS() {
-        return getMeizuFlymeOSFlag().toLowerCase().contains("flyme");
+        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, "") : "";
     }
 
     public static boolean isEMUI() {
-        String property = getSystemProperty(KEY_EMUI_VERSION_NAME, null);
+        String property = getSystemProperty(KEY_EMUI_VERSION_NAME, "");
         return !TextUtils.isEmpty(property);
     }
 
     public static String EMUIVersion() {
-        return getSystemProperty(KEY_EMUI_VERSION_NAME, null);
+        return isEMUI() ? getSystemProperty(KEY_EMUI_VERSION_NAME, "") : "";
     }
 
     public static boolean isEMUI3_1() {
-        String property = getSystemProperty(KEY_EMUI_VERSION_NAME, null);
-        if ("EmotionUI 3".equals(property) || "EmotionUI_3.1".equals(property)) {
+        String property = EMUIVersion();
+        if ("EmotionUI 3".equals(property) || property.contains("EmotionUI_3.1")) {
             return true;
         }
         return false;
+    }
+
+    public static boolean isFlymeOS() {
+        return getMeizuFlymeOSFlag().toLowerCase().contains("flyme");
     }
 
     public static String getMeizuFlymeOSFlag() {
