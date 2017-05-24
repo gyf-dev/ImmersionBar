@@ -7,19 +7,19 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.1.6'
+   compile 'com.gyf.barlibrary:barlibrary:2.1.7'
    ```
 
 >eclipse
 
-[barlibrary-2.1.6.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.6.jar) 
+[barlibrary-2.1.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.7.jar) 
 
-### [版本说明，请点我](https://github.com/gyf-dev/ImmersionBar/wiki)
+### [版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
-### [1.x.x版本说明，请点击](https://github.com/gyf-dev/ImmersionBar/blob/master/README_1.x.md)
+### [1.x.x版本说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_1.x.md)
  
 ## 下载demo 
-### [下载，请点我](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-debug.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.7.apk) 
   
 ## 用法 
 ### 初始化
@@ -289,6 +289,9 @@
 
 - android 4.4 没有导航栏效果
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_4.4_no.gif"/>
+
+## 特别鸣谢 ##
+* 感谢[zhangzhen92](https://github.com/zhangzhen92)远程协助测试
 
 ## 联系我 ##
 - QQ 969565471

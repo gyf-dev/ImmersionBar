@@ -548,9 +548,7 @@ public class ImmersionBar {
      */
     private void initBar() {
         int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;  //防止系统栏隐藏时内容区域大小发生变化
-        uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
                 uiFlags = initBarAboveLOLLIPOP(uiFlags); //初始化5.0以上，包含5.0
                 fitsSystemWindows();  //android 5.0以上解决状态栏和布局重叠问题
@@ -559,6 +557,8 @@ public class ImmersionBar {
                 solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
             }
         }
+        uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
+        uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
     }
 
@@ -650,19 +650,18 @@ public class ImmersionBar {
      * 设置状态栏字体颜色，android6.0以上或者miuiv6以上或者flymeOS
      */
     private int setStatusBarDarkFont(int uiFlags) {
-        String MIUIVersion = OSUtils.MIUIVersion();
-        if (!MIUIVersion.isEmpty() && Integer.valueOf(MIUIVersion.substring(1)) >= 6) {
+        if (OSUtils.isMIUI6More()) {
             MIUISetStatusBarLightMode();
             return uiFlags;
         }
-        if (OSUtils.isFlymeOS()) {
+        if (OSUtils.isFlymeOS4More()) {
             FlymeSetStatusBarLightMode();
             return uiFlags;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBarParams.darkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         } else {
-            return uiFlags | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            return uiFlags;
         }
     }
 
@@ -672,8 +671,7 @@ public class ImmersionBar {
      *
      * @return boolean 成功执行返回true
      */
-    private boolean FlymeSetStatusBarLightMode() {
-        boolean result = false;
+    private void FlymeSetStatusBarLightMode() {
         if (mWindow != null) {
             try {
                 WindowManager.LayoutParams lp = mWindow.getAttributes();
@@ -692,12 +690,10 @@ public class ImmersionBar {
                 }
                 meizuFlags.setInt(lp, value);
                 mWindow.setAttributes(lp);
-                result = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return result;
     }
 
     /**
@@ -705,8 +701,7 @@ public class ImmersionBar {
      *
      * @return boolean 成功执行返回true
      */
-    private boolean MIUISetStatusBarLightMode() {
-        boolean result = false;
+    private void MIUISetStatusBarLightMode() {
         if (mWindow != null) {
             Class clazz = mWindow.getClass();
             try {
@@ -720,12 +715,10 @@ public class ImmersionBar {
                 } else {
                     extraFlagField.invoke(mWindow, 0, darkModeFlag);//清除黑色字体
                 }
-                result = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return result;
     }
 
     /**
@@ -920,9 +913,7 @@ public class ImmersionBar {
      * @return the boolean
      */
     public static boolean isSupportStatusBarDarkFont() {
-        String MIUIVersion = OSUtils.MIUIVersion();
-        if ((!MIUIVersion.isEmpty() && Integer.valueOf(MIUIVersion.substring(1)) >= 6)
-                || OSUtils.isFlymeOS()
+        if (OSUtils.isMIUI6More() || OSUtils.isFlymeOS4More()
                 || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
             return true;
         } else
