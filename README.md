@@ -7,19 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.1.7'
+   compile 'com.gyf.barlibrary:barlibrary:2.1.8'
    ```
 
 >eclipse
 
-[barlibrary-2.1.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.7.jar) 
+[barlibrary-2.1.8.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.8.jar) 
 
-### [版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
+## 版本说明
+### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
-### [1.x.x版本说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_1.x.md)
- 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.7.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.8.apk) 
   
 ## 用法 
 ### 初始化

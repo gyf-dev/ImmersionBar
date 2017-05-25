@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IdRes;
@@ -116,8 +117,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar statusBarColor(@ColorRes int statusBarColor) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, statusBarColor);
-        return this;
+        return this.statusBarColorInt(ContextCompat.getColor(mActivity, statusBarColor));
     }
 
     /**
@@ -129,9 +129,7 @@ public class ImmersionBar {
      */
     public ImmersionBar statusBarColor(@ColorRes int statusBarColor,
                                        @FloatRange(from = 0f, to = 1f) float alpha) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, statusBarColor);
-        mBarParams.statusBarAlpha = alpha;
-        return this;
+        return this.statusBarColorInt(ContextCompat.getColor(mActivity, statusBarColor), alpha);
     }
 
     /**
@@ -145,8 +143,88 @@ public class ImmersionBar {
     public ImmersionBar statusBarColor(@ColorRes int statusBarColor,
                                        @ColorRes int statusBarColorTransform,
                                        @FloatRange(from = 0f, to = 1f) float alpha) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, statusBarColor);
-        mBarParams.statusBarColorTransform = ContextCompat.getColor(mActivity, statusBarColorTransform);
+        return this.statusBarColorInt(ContextCompat.getColor(mActivity, statusBarColor),
+                ContextCompat.getColor(mActivity, statusBarColorTransform),
+                alpha);
+    }
+
+    /**
+     * 状态栏颜色
+     * Status bar color int immersion bar.
+     *
+     * @param statusBarColor the status bar color
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColor(String statusBarColor) {
+        return this.statusBarColorInt(Color.parseColor(statusBarColor));
+    }
+
+    /**
+     * 状态栏颜色
+     *
+     * @param statusBarColor 状态栏颜色
+     * @param alpha          the alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColor(String statusBarColor,
+                                       @FloatRange(from = 0f, to = 1f) float alpha) {
+        return this.statusBarColorInt(Color.parseColor(statusBarColor), alpha);
+    }
+
+    /**
+     * 状态栏颜色
+     *
+     * @param statusBarColor          状态栏颜色
+     * @param statusBarColorTransform the status bar color transform 状态栏变换后的颜色
+     * @param alpha                   the alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColor(String statusBarColor,
+                                       String statusBarColorTransform,
+                                       @FloatRange(from = 0f, to = 1f) float alpha) {
+        return this.statusBarColorInt(Color.parseColor(statusBarColor),
+                Color.parseColor(statusBarColorTransform),
+                alpha);
+    }
+
+    /**
+     * 状态栏颜色
+     *
+     * @param statusBarColor 状态栏颜色，资源文件（R.color.xxx）
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColorInt(@ColorInt int statusBarColor) {
+        mBarParams.statusBarColor = statusBarColor;
+        return this;
+    }
+
+    /**
+     * 状态栏颜色
+     *
+     * @param statusBarColor 状态栏颜色，资源文件（R.color.xxx）
+     * @param alpha          the alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColorInt(@ColorInt int statusBarColor,
+                                          @FloatRange(from = 0f, to = 1f) float alpha) {
+        mBarParams.statusBarColor = statusBarColor;
+        mBarParams.statusBarAlpha = alpha;
+        return this;
+    }
+
+    /**
+     * 状态栏颜色
+     *
+     * @param statusBarColor          状态栏颜色，资源文件（R.color.xxx）
+     * @param statusBarColorTransform the status bar color transform 状态栏变换后的颜色
+     * @param alpha                   the alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColorInt(@ColorInt int statusBarColor,
+                                          @ColorInt int statusBarColorTransform,
+                                          @FloatRange(from = 0f, to = 1f) float alpha) {
+        mBarParams.statusBarColor = statusBarColor;
+        mBarParams.statusBarColorTransform = statusBarColorTransform;
         mBarParams.statusBarAlpha = alpha;
         return this;
     }
@@ -158,9 +236,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarColor(@ColorRes int navigationBarColor) {
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, navigationBarColor);
-        mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
-        return this;
+        return this.navigationBarColorInt(ContextCompat.getColor(mActivity, navigationBarColor));
     }
 
     /**
@@ -172,10 +248,7 @@ public class ImmersionBar {
      */
     public ImmersionBar navigationBarColor(@ColorRes int navigationBarColor,
                                            @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, navigationBarColor);
-        mBarParams.navigationBarAlpha = navigationAlpha;
-        mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
-        return this;
+        return this.navigationBarColorInt(ContextCompat.getColor(mActivity, navigationBarColor), navigationAlpha);
     }
 
     /**
@@ -189,8 +262,87 @@ public class ImmersionBar {
     public ImmersionBar navigationBarColor(@ColorRes int navigationBarColor,
                                            @ColorRes int navigationBarColorTransform,
                                            @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, navigationBarColor);
-        mBarParams.navigationBarColorTransform = ContextCompat.getColor(mActivity, navigationBarColorTransform);
+        return this.navigationBarColorInt(ContextCompat.getColor(mActivity, navigationBarColor),
+                ContextCompat.getColor(mActivity, navigationBarColorTransform), navigationAlpha);
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor the navigation bar color 导航栏颜色
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColor(String navigationBarColor) {
+        return this.navigationBarColorInt(Color.parseColor(navigationBarColor));
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor the navigation bar color 导航栏颜色
+     * @param navigationAlpha    the navigation alpha 透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColor(String navigationBarColor,
+                                           @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        return this.navigationBarColorInt(Color.parseColor(navigationBarColor), navigationAlpha);
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor          the navigation bar color 导航栏颜色
+     * @param navigationBarColorTransform the navigation bar color transform  导航栏变色后的颜色
+     * @param navigationAlpha             the navigation alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColor(String navigationBarColor,
+                                           String navigationBarColorTransform,
+                                           @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        return this.navigationBarColorInt(Color.parseColor(navigationBarColor),
+                Color.parseColor(navigationBarColorTransform), navigationAlpha);
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor the navigation bar color 导航栏颜色
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor) {
+        mBarParams.navigationBarColor = navigationBarColor;
+        mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
+        return this;
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor the navigation bar color 导航栏颜色
+     * @param navigationAlpha    the navigation alpha 透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor,
+                                              @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        mBarParams.navigationBarColor = navigationBarColor;
+        mBarParams.navigationBarAlpha = navigationAlpha;
+        mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
+        return this;
+    }
+
+    /**
+     * 导航栏颜色
+     *
+     * @param navigationBarColor          the navigation bar color 导航栏颜色
+     * @param navigationBarColorTransform the navigation bar color transform  导航栏变色后的颜色
+     * @param navigationAlpha             the navigation alpha  透明度
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor,
+                                              @ColorInt int navigationBarColorTransform,
+                                              @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        mBarParams.navigationBarColor = navigationBarColor;
+        mBarParams.navigationBarColorTransform = navigationBarColorTransform;
         mBarParams.navigationBarAlpha = navigationAlpha;
         mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
         return this;
@@ -203,8 +355,79 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar barColor(@ColorRes int barColor) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, barColor);
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, barColor);
+        return this.barColorInt(ContextCompat.getColor(mActivity, barColor));
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor the bar color
+     * @param barAlpha the bar alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar barColor(@ColorRes int barColor, @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        return this.barColorInt(ContextCompat.getColor(mActivity, barColor), barColor);
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor          the bar color
+     * @param barColorTransform the bar color transform
+     * @param barAlpha          the bar alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar barColor(@ColorRes int barColor,
+                                 @ColorRes int barColorTransform,
+                                 @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        return this.barColorInt(ContextCompat.getColor(mActivity, barColor),
+                ContextCompat.getColor(mActivity, barColorTransform), barAlpha);
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor the bar color
+     * @return the immersion bar
+     */
+    public ImmersionBar barColor(String barColor) {
+        return this.barColorInt(Color.parseColor(barColor));
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor the bar color
+     * @param barAlpha the bar alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar barColor(String barColor, @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        return this.barColorInt(Color.parseColor(barColor), barAlpha);
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor          the bar color
+     * @param barColorTransform the bar color transform
+     * @param barAlpha          the bar alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar barColor(String barColor,
+                                 String barColorTransform,
+                                 @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        return this.barColorInt(Color.parseColor(barColor), Color.parseColor(barColorTransform), barAlpha);
+    }
+
+    /**
+     * 状态栏和导航栏颜色
+     *
+     * @param barColor the bar color
+     * @return the immersion bar
+     */
+    public ImmersionBar barColorInt(@ColorInt int barColor) {
+        mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColor = barColor;
         mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
         return this;
     }
@@ -216,9 +439,9 @@ public class ImmersionBar {
      * @param barAlpha the bar alpha
      * @return the immersion bar
      */
-    public ImmersionBar barColor(@ColorRes int barColor, @FloatRange(from = 0f, to = 1f) float barAlpha) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, barColor);
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, barColor);
+    public ImmersionBar barColorInt(@ColorInt int barColor, @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColor = barColor;
         mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
         mBarParams.statusBarAlpha = barAlpha;
         mBarParams.navigationBarAlpha = barAlpha;
@@ -233,15 +456,15 @@ public class ImmersionBar {
      * @param barAlpha          the bar alpha
      * @return the immersion bar
      */
-    public ImmersionBar barColor(@ColorRes int barColor,
-                                 @ColorRes int barColorTransform,
-                                 @FloatRange(from = 0f, to = 1f) float barAlpha) {
-        mBarParams.statusBarColor = ContextCompat.getColor(mActivity, barColor);
-        mBarParams.navigationBarColor = ContextCompat.getColor(mActivity, barColor);
+    public ImmersionBar barColorInt(@ColorInt int barColor,
+                                    @ColorInt int barColorTransform,
+                                    @FloatRange(from = 0f, to = 1f) float barAlpha) {
+        mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColor = barColor;
         mBarParams.navigationBarColorTem = mBarParams.navigationBarColor;
 
-        mBarParams.statusBarColorTransform = ContextCompat.getColor(mActivity, barColorTransform);
-        mBarParams.navigationBarColorTransform = ContextCompat.getColor(mActivity, barColorTransform);
+        mBarParams.statusBarColorTransform = barColorTransform;
+        mBarParams.navigationBarColorTransform = barColorTransform;
 
         mBarParams.statusBarAlpha = barAlpha;
         mBarParams.navigationBarAlpha = barAlpha;
@@ -256,7 +479,27 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar statusBarColorTransform(@ColorRes int statusBarColorTransform) {
-        mBarParams.statusBarColorTransform = ContextCompat.getColor(mActivity, statusBarColorTransform);
+        return this.statusBarColorTransformInt(ContextCompat.getColor(mActivity, statusBarColorTransform));
+    }
+
+    /**
+     * 状态栏根据透明度最后变换成的颜色
+     *
+     * @param statusBarColorTransform the status bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColorTransform(String statusBarColorTransform) {
+        return this.statusBarColorTransformInt(Color.parseColor(statusBarColorTransform));
+    }
+
+    /**
+     * 状态栏根据透明度最后变换成的颜色
+     *
+     * @param statusBarColorTransform the status bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarColorTransformInt(@ColorInt int statusBarColorTransform) {
+        mBarParams.statusBarColorTransform = statusBarColorTransform;
         return this;
     }
 
@@ -267,7 +510,27 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarColorTransform(@ColorRes int navigationBarColorTransform) {
-        mBarParams.navigationBarColorTransform = ContextCompat.getColor(mActivity, navigationBarColorTransform);
+        return this.navigationBarColorTransformInt(ContextCompat.getColor(mActivity, navigationBarColorTransform));
+    }
+
+    /**
+     * 导航栏根据透明度最后变换成的颜色
+     *
+     * @param navigationBarColorTransform the m navigation bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColorTransform(String navigationBarColorTransform) {
+        return this.navigationBarColorTransformInt(Color.parseColor(navigationBarColorTransform));
+    }
+
+    /**
+     * 导航栏根据透明度最后变换成的颜色
+     *
+     * @param navigationBarColorTransform the m navigation bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarColorTransformInt(@ColorInt int navigationBarColorTransform) {
+        mBarParams.navigationBarColorTransform = navigationBarColorTransform;
         return this;
     }
 
@@ -278,8 +541,28 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar barColorTransform(@ColorRes int barColorTransform) {
-        mBarParams.statusBarColorTransform = ContextCompat.getColor(mActivity, barColorTransform);
-        mBarParams.navigationBarColorTransform = ContextCompat.getColor(mActivity, barColorTransform);
+        return this.barColorTransformInt(ContextCompat.getColor(mActivity, barColorTransform));
+    }
+
+    /**
+     * 状态栏和导航栏根据透明度最后变换成的颜色
+     *
+     * @param barColorTransform the bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar barColorTransform(String barColorTransform) {
+        return this.barColorTransformInt(Color.parseColor(barColorTransform));
+    }
+
+    /**
+     * 状态栏和导航栏根据透明度最后变换成的颜色
+     *
+     * @param barColorTransform the bar color transform
+     * @return the immersion bar
+     */
+    public ImmersionBar barColorTransformInt(@ColorInt int barColorTransform) {
+        mBarParams.statusBarColorTransform = barColorTransform;
+        mBarParams.navigationBarColorTransform = barColorTransform;
         return this;
     }
 
@@ -290,10 +573,7 @@ public class ImmersionBar {
      * @return the view transform color
      */
     public ImmersionBar setViewSupportTransformColor(View view) {
-        mBarParams.view = view;
-        mBarParams.viewColorBeforeTransform = mBarParams.statusBarColor;
-        mBarParams.viewColorAfterTransform = mBarParams.statusBarColorTransform;
-        return this;
+        return this.setViewSupportTransformColorInt(view, mBarParams.statusBarColorTransform);
     }
 
     /**
@@ -304,10 +584,7 @@ public class ImmersionBar {
      * @return the view transform color
      */
     public ImmersionBar setViewSupportTransformColor(View view, @ColorRes int viewColorAfterTransform) {
-        mBarParams.view = view;
-        mBarParams.viewColorBeforeTransform = mBarParams.statusBarColor;
-        mBarParams.viewColorAfterTransform = ContextCompat.getColor(mActivity, viewColorAfterTransform);
-        return this;
+        return this.setViewSupportTransformColorInt(view, ContextCompat.getColor(mActivity, viewColorAfterTransform));
     }
 
     /**
@@ -320,9 +597,64 @@ public class ImmersionBar {
      */
     public ImmersionBar setViewSupportTransformColor(View view, @ColorRes int viewColorBeforeTransform,
                                                      @ColorRes int viewColorAfterTransform) {
+        return this.setViewSupportTransformColorInt(view,
+                ContextCompat.getColor(mActivity, viewColorBeforeTransform),
+                ContextCompat.getColor(mActivity, viewColorAfterTransform));
+    }
+
+    /**
+     * 颜色变换支持View
+     *
+     * @param view                    the view
+     * @param viewColorAfterTransform 变换后的颜色
+     * @return the view transform color
+     */
+    public ImmersionBar setViewSupportTransformColor(View view, String viewColorAfterTransform) {
+        return this.setViewSupportTransformColorInt(view, Color.parseColor(viewColorAfterTransform));
+    }
+
+    /**
+     * 颜色变换支持View
+     *
+     * @param view                     the view
+     * @param viewColorBeforeTransform 变换前的颜色
+     * @param viewColorAfterTransform  变换后的颜色
+     * @return the immersion bar
+     */
+    public ImmersionBar setViewSupportTransformColor(View view, String viewColorBeforeTransform,
+                                                     String viewColorAfterTransform) {
+        return this.setViewSupportTransformColorInt(view,
+                Color.parseColor(viewColorBeforeTransform),
+                Color.parseColor(viewColorAfterTransform));
+    }
+
+    /**
+     * 颜色变换支持View
+     *
+     * @param view                    the view
+     * @param viewColorAfterTransform 变换后的颜色
+     * @return the view transform color
+     */
+    public ImmersionBar setViewSupportTransformColorInt(View view, @ColorInt int viewColorAfterTransform) {
         mBarParams.view = view;
-        mBarParams.viewColorBeforeTransform = ContextCompat.getColor(mActivity, viewColorBeforeTransform);
-        mBarParams.viewColorAfterTransform = ContextCompat.getColor(mActivity, viewColorAfterTransform);
+        mBarParams.viewColorBeforeTransform = mBarParams.statusBarColor;
+        mBarParams.viewColorAfterTransform = viewColorAfterTransform;
+        return this;
+    }
+
+    /**
+     * 颜色变换支持View
+     *
+     * @param view                     the view
+     * @param viewColorBeforeTransform 变换前的颜色
+     * @param viewColorAfterTransform  变换后的颜色
+     * @return the immersion bar
+     */
+    public ImmersionBar setViewSupportTransformColorInt(View view, @ColorInt int viewColorBeforeTransform,
+                                                        @ColorInt int viewColorAfterTransform) {
+        mBarParams.view = view;
+        mBarParams.viewColorBeforeTransform = viewColorBeforeTransform;
+        mBarParams.viewColorAfterTransform = viewColorAfterTransform;
         return this;
     }
 
@@ -333,10 +665,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar addViewSupportTransformColor(View view) {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(mBarParams.statusBarColor, mBarParams.statusBarColorTransform);
-        mBarParams.viewMap.put(view, map);
-        return this;
+        return this.addViewSupportTransformColorInt(view, mBarParams.statusBarColorTransform);
     }
 
     /**
@@ -347,10 +676,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar addViewSupportTransformColor(View view, @ColorRes int viewColorAfterTransform) {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(mBarParams.statusBarColor, ContextCompat.getColor(mActivity, viewColorAfterTransform));
-        mBarParams.viewMap.put(view, map);
-        return this;
+        return this.addViewSupportTransformColorInt(view, ContextCompat.getColor(mActivity, viewColorAfterTransform));
     }
 
     /**
@@ -363,9 +689,63 @@ public class ImmersionBar {
      */
     public ImmersionBar addViewSupportTransformColor(View view, @ColorRes int viewColorBeforeTransform,
                                                      @ColorRes int viewColorAfterTransform) {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(ContextCompat.getColor(mActivity, viewColorBeforeTransform),
+        return this.addViewSupportTransformColorInt(view,
+                ContextCompat.getColor(mActivity, viewColorBeforeTransform),
                 ContextCompat.getColor(mActivity, viewColorAfterTransform));
+    }
+
+    /**
+     * Add 颜色变换支持View
+     *
+     * @param view                    the view
+     * @param viewColorAfterTransform the view color after transform
+     * @return the immersion bar
+     */
+    public ImmersionBar addViewSupportTransformColor(View view, String viewColorAfterTransform) {
+        return this.addViewSupportTransformColorInt(view, Color.parseColor(viewColorAfterTransform));
+    }
+
+    /**
+     * Add 颜色变换支持View
+     *
+     * @param view                     the view
+     * @param viewColorBeforeTransform the view color before transform
+     * @param viewColorAfterTransform  the view color after transform
+     * @return the immersion bar
+     */
+    public ImmersionBar addViewSupportTransformColor(View view, String viewColorBeforeTransform,
+                                                     String viewColorAfterTransform) {
+        return this.addViewSupportTransformColorInt(view,
+                Color.parseColor(viewColorBeforeTransform),
+                Color.parseColor(viewColorAfterTransform));
+    }
+
+    /**
+     * Add 颜色变换支持View
+     *
+     * @param view                    the view
+     * @param viewColorAfterTransform the view color after transform
+     * @return the immersion bar
+     */
+    public ImmersionBar addViewSupportTransformColorInt(View view, @ColorInt int viewColorAfterTransform) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(mBarParams.statusBarColor, viewColorAfterTransform);
+        mBarParams.viewMap.put(view, map);
+        return this;
+    }
+
+    /**
+     * Add 颜色变换支持View
+     *
+     * @param view                     the view
+     * @param viewColorBeforeTransform the view color before transform
+     * @param viewColorAfterTransform  the view color after transform
+     * @return the immersion bar
+     */
+    public ImmersionBar addViewSupportTransformColorInt(View view, @ColorInt int viewColorBeforeTransform,
+                                                        @ColorInt int viewColorAfterTransform) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(viewColorBeforeTransform, viewColorAfterTransform);
         mBarParams.viewMap.put(view, map);
         return this;
     }
@@ -556,9 +936,9 @@ public class ImmersionBar {
                 initBarBelowLOLLIPOP(); //初始化5.0以下，4.4以上沉浸式
                 solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
             }
+            uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
         }
         uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
-        uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
     }
 
