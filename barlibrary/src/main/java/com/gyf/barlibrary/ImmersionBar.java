@@ -937,8 +937,8 @@ public class ImmersionBar {
                 solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
             }
             uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
+            uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
         }
-        uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
     }
 
@@ -1287,7 +1287,7 @@ public class ImmersionBar {
     }
 
     /**
-     * 判断手机支不支持状态栏变色
+     * 判断手机支不支持状态栏字体变色
      * Is support status bar dark font boolean.
      *
      * @return the boolean

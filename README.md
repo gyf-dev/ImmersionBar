@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.1.8'
+   compile 'com.gyf.barlibrary:barlibrary:2.1.9'
    ```
 
 >eclipse
 
-[barlibrary-2.1.8.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.8.jar) 
+[barlibrary-2.1.9.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.9.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.8.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.9.apk) 
   
 ## 用法 
 ### 初始化
@@ -246,6 +246,16 @@
    ```
  
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_edit.gif"/>
+
+## 当白色背景状态栏遇到不能改变状态栏字体为深色的设备时，解决方案
+   ```java
+         if(ImmersionBar.isSupportStatusBarDarkFont()){ //判断当前设备支不支持状态栏字体变色
+             //处理状态栏字体为黑色
+         }else {
+             //处理状态栏有透明度
+         }
+   ```
+<img width="200"  src="https://cloud.githubusercontent.com/assets/23047875/26274357/bc92f83a-3d7a-11e7-94f7-f75052e91c42.png"/>
 
 ## 状态栏和导航栏其它方法
 	
