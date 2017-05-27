@@ -11,6 +11,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -974,24 +975,37 @@ public class ImmersionBar {
     }
 
     /**
-     * 解决安卓4.4和EMUI3.1导航栏与状态栏的问题
+     * 解决安卓4.4和EMUI3.1导航栏与状态栏的问题，以及系统属性fitsSystemWindows的坑
      */
     private void solveNavigation() {
-        // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
-        if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
-            if (mConfig.isNavigationAtBottom()) { //判断导航栏是否在底部
-                if (mBarParams.fits)
-                    mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
-                else
-                    mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+        boolean systemWindows = false;
+        if (mContentView.getChildCount() != 0) {
+            //判断当前布局根节点是否使用android:fitsSystemWindows="true"属性
+            //但是目前发现如果根节点是DrawerLayout不起作用，所以系统fitsSystemWindows属性还是慎用吧
+            systemWindows = mContentView.getChildAt(0).getFitsSystemWindows();
+        }
+        if (systemWindows)
+            mContentView.setPadding(0, 0, 0, 0);
+        else {
+            // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
+            if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
+                if (mConfig.isNavigationAtBottom()) { //判断导航栏是否在底部
+                    if (mBarParams.fits)
+                        mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
+                    else
+                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+                } else {
+                    if (mBarParams.fits)
+                        mContentView.setPadding(0, getStatusBarHeight(mActivity), mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
+                    else
+                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+                }
             } else {
                 if (mBarParams.fits)
-                    mContentView.setPadding(0, getStatusBarHeight(mActivity), mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
+                    mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, 0);
                 else
-                    mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+                    mContentView.setPadding(0, 0, 0, 0);
             }
-        } else {
-            mContentView.setPadding(0, 0, 0, 0); //没有导航栏，什么都不做
         }
     }
 
@@ -1002,6 +1016,7 @@ public class ImmersionBar {
      * @param uiFlags the ui flags
      * @return the int
      */
+
     private int hideBar(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             switch (mBarParams.barHide) {

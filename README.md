@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.1.9'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.0'
    ```
 
 >eclipse
 
-[barlibrary-2.1.9.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.1.9.jar) 
+[barlibrary-2.2.0.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.0.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.1.9.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.0.apk) 
   
 ## 用法 
 ### 初始化
@@ -183,7 +183,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性
+- ② 使用系统的fitsSystemWindows属性，要慎用，会有意想不到的坑
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -255,7 +255,7 @@
              //处理状态栏有透明度
          }
    ```
-<img width="200"  src="https://cloud.githubusercontent.com/assets/23047875/26274357/bc92f83a-3d7a-11e7-94f7-f75052e91c42.png"/>
+<img width="300"  src="https://cloud.githubusercontent.com/assets/23047875/26274357/bc92f83a-3d7a-11e7-94f7-f75052e91c42.png"/>
 
 ## 状态栏和导航栏其它方法
 	
