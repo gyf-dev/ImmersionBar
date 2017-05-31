@@ -29,5 +29,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
         android:text="fitsSystemWindows动态演示:true"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:padding="5dp"/>
 </LinearLayout>

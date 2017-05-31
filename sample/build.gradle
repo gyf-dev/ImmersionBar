@@ -38,4 +38,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'me.imid.swipebacklayout.lib:library:1.0.0'
     compile 'com.apkfuns.logutils:library:1.4.2.2'
+    compile 'com.android.support:design:25.3.1'
 }

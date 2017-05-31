@@ -17,7 +17,6 @@ public class OSUtils {
     /**
      * 判断是否为miui
      * Is miui boolean.
-     *
      * @return the boolean
      */
     public static boolean isMIUI() {
@@ -91,7 +90,7 @@ public class OSUtils {
      * @return the boolean
      */
     public static boolean isFlymeOS() {
-        return getMeizuFlymeOSFlag().toLowerCase().contains("flyme");
+        return getFlymeOSFlag().toLowerCase().contains("flyme");
     }
 
     /**
@@ -118,7 +117,7 @@ public class OSUtils {
         return isFlymeOS() ? getSystemProperty(KEY_DISPLAY, "") : "";
     }
 
-    private static String getMeizuFlymeOSFlag() {
+    private static String getFlymeOSFlag() {
         return getSystemProperty(KEY_DISPLAY, "");
     }
 

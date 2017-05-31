@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
@@ -26,12 +27,12 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pic_color);
         ImmersionBar.with(this)
-                .transparentStatusBar()
+                .statusBarView(R.id.top_view)
                 .navigationBarColor(R.color.colorPrimary)
                 .fullScreen(true)
                 .init();
-        setContentView(R.layout.activity_pic_color);
         ButterKnife.bind(this);
         seekBar.setOnSeekBarChangeListener(this);
     }
@@ -43,7 +44,10 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
                 ImmersionBar.with(this).statusBarColor(R.color.colorAccent).removeSupportView().init();
                 break;
             case R.id.btn_navigation_color:
-                ImmersionBar.with(this).navigationBarColor(R.color.colorAccent).init();
+                if (ImmersionBar.hasNavigationBar(this))
+                    ImmersionBar.with(this).navigationBarColor(R.color.colorAccent).init();
+                else
+                    Toast.makeText(this, "当前设备没有导航栏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_color:
                 ImmersionBar.with(this)

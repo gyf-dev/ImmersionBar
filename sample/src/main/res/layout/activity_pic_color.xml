@@ -25,7 +25,7 @@
             <View
                 android:id="@+id/top_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/status_bar_height" />
+                android:layout_height="0dp" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -49,19 +49,16 @@
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/btn_status_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/btn"
             android:text="修改状态栏颜色" />
 
         <Button
             android:id="@+id/btn_navigation_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/btn"
             android:text="修改导航栏颜色" />
         <Button
             android:id="@+id/btn_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/btn"
             android:text="恢复初始值" />
     </LinearLayout>
 

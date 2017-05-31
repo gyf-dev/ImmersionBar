@@ -39,108 +39,100 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/btn_pic_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="图片状态栏 + 彩色导航栏" />
 
                 <Button
                     android:id="@+id/btn_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="全屏图片" />
 
                 <Button
                     android:id="@+id/btn_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="彩色状态栏 + 彩色导航栏" />
 
                 <Button
                     android:id="@+id/btn_swipe_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="结合侧滑返回使用" />
 
                 <Button
                     android:id="@+id/btn_fragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="结合fragment使用"
-                    android:textAllCaps="false" />
+                    style="@style/btn"
+                    android:text="结合fragment使用" />
 
                 <Button
                     android:id="@+id/btn_drawer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="结合侧边栏使用" />
 
                 <Button
-                    android:id="@+id/btn_over"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="解决布局顶部和状态栏重叠问题"
-                    android:textAllCaps="false" />
+                    android:id="@+id/btn_coordinator"
+                    style="@style/btn"
+                    android:text="结合CoordinatorLayout使用" />
+
                 <Button
-                    android:id="@+id/btn_key_board"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="解决EditText和软键盘的问题 "
+                    android:id="@+id/btn_flyme"
+                    style="@style/btn"
+                    android:text="修改Flyme OS状态栏字体颜色" />
+
+                <Button
+                    android:id="@+id/btn_over"
+                    style="@style/btn"
+                    android:text="解决布局顶部和状态栏重叠问题"
                     android:textAllCaps="false" />
 
                 <Button
+                    android:id="@+id/btn_key_board"
+                    style="@style/btn"
+                    android:text="解决EditText和软键盘的问题 " />
+
+                <Button
                     android:id="@+id/btn_status_hide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="隐藏状态栏" />
 
                 <Button
                     android:id="@+id/btn_navigation_hide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="隐藏导航栏" />
 
                 <Button
                     android:id="@+id/btn_bar_hide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="隐藏全部" />
 
                 <Button
                     android:id="@+id/btn_bar_show"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="恢复显示" />
 
                 <Button
                     android:id="@+id/btn_full"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="有导航栏的情况，Activity全屏显示（仔细看'我是底部'四个字）"
-                    android:textAllCaps="false" />
+                    style="@style/btn"
+                    android:text="有导航栏的情况，Activity全屏显示（仔细看'我是底部'四个字）" />
 
                 <Button
                     android:id="@+id/btn_bar_font_dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="状态栏字体颜色为深色(android6.0以上或者miuiv6以上或者flymeOS)" />
+                    style="@style/btn"
+                    android:text="状态栏字体颜色为深色(android6.0以上或者miuiv6以上或者flymeOS4+)" />
 
                 <Button
                     android:id="@+id/btn_bar_font_light"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/btn"
                     android:text="状态栏字体颜色为亮色（默认就是亮色）" />
             </LinearLayout>
         </ScrollView>
 
 
         <TextView
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我是底部" />

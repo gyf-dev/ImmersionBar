@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.0'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.1'
    ```
 
 >eclipse
 
-[barlibrary-2.2.0.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.0.jar) 
+[barlibrary-2.2.1.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.1.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.0.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.1.apk) 
   
 ## 用法 
 ### 初始化
@@ -41,6 +41,7 @@
                  .navigationBarAlpha(0.4f)  //导航栏透明度，不写默认0.0F
                  .barAlpha(0.3f)  //状态栏和导航栏透明度，不写默认0.0f
                  .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
+                 .flymeOSStatusBarFontColor(R.color.btn3)  //修改flyme OS状态栏字体颜色
                  .fullScreen(true)      //有导航栏的情况下，activity全屏显示，也就是activity最下面被导航栏覆盖，不写默认非全屏
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
                  .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法

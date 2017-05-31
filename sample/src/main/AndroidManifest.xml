@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.PicAndColorActivity" />
-        <activity android:name=".activity.PicActivity"
+        <activity
+            android:name=".activity.PicActivity"
             android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".activity.ColorActivity" />
         <activity
@@ -24,11 +25,13 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".activity.FragmentActivity" />
         <activity android:name=".activity.OverActivity" />
-        <activity android:name=".activity.Over1Activity"/>
-        <activity android:name=".activity.Over2Activity"/>
-        <activity android:name=".activity.Over3Activity"/>
-        <activity android:name=".activity.Over4Activity"/>
-        <activity android:name=".activity.KeyBoardActivity"/>
+        <activity android:name=".activity.Over1Activity" />
+        <activity android:name=".activity.Over2Activity" />
+        <activity android:name=".activity.Over3Activity" />
+        <activity android:name=".activity.Over4Activity" />
+        <activity android:name=".activity.KeyBoardActivity" />
+        <activity android:name=".activity.CoordinatorActivity" />
+        <activity android:name=".activity.FlymeActivity" />
     </application>
 
 </manifest>

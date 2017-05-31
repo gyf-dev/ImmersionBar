@@ -19,39 +19,38 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:lineSpacingExtra="3dp"
-        android:textSize="15sp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="方法一" />
+            <Button
+                android:id="@+id/btn_one"
+                style="@style/btn"
+                android:text="方法一" />
 
-        <Button
-            android:id="@+id/btn_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="方法二" />
+            <Button
+                android:id="@+id/btn_two"
+                style="@style/btn"
+                android:text="方法二" />
 
-        <Button
-            android:id="@+id/btn_three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="方法三" />
+            <Button
+                android:id="@+id/btn_three"
+                style="@style/btn"
+                android:text="方法三" />
 
-        <Button
-            android:id="@+id/btn_four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="方法四" />
-    </LinearLayout>
-
+            <Button
+                android:id="@+id/btn_four"
+                style="@style/btn"
+                android:text="方法四" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

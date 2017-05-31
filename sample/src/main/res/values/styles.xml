@@ -21,4 +21,11 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
 </resources>

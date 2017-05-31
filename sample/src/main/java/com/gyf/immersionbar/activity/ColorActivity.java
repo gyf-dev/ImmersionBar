@@ -43,6 +43,7 @@ public class ColorActivity extends BaseActivity {
         setContentView(R.layout.activity_color);
         ButterKnife.bind(this);
         ImmersionBar.with(this)
+                .statusBarView(R.id.top_view)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.btn8)
                 .fullScreen(true)

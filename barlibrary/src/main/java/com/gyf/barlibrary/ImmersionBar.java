@@ -11,7 +11,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -844,6 +843,44 @@ public class ImmersionBar {
      */
     public ImmersionBar statusBarDarkFont(boolean isDarkFont) {
         mBarParams.darkFont = isDarkFont;
+        if (!isDarkFont)
+            mBarParams.flymeOSStatusBarFontColor = 0;
+        return this;
+    }
+
+    /**
+     * 修改 Flyme OS系统手机状态栏字体颜色，优先级高于statusBarDarkFont(boolean isDarkFont)方法
+     * Flyme os status bar font color immersion bar.
+     *
+     * @param flymeOSStatusBarFontColor the flyme os status bar font color
+     * @return the immersion bar
+     */
+    public ImmersionBar flymeOSStatusBarFontColor(@ColorRes int flymeOSStatusBarFontColor) {
+        mBarParams.flymeOSStatusBarFontColor = ContextCompat.getColor(mActivity, flymeOSStatusBarFontColor);
+        return this;
+    }
+
+    /**
+     * 修改 Flyme OS系统手机状态栏字体颜色，优先级高于statusBarDarkFont(boolean isDarkFont)方法
+     * Flyme os status bar font color immersion bar.
+     *
+     * @param flymeOSStatusBarFontColor the flyme os status bar font color
+     * @return the immersion bar
+     */
+    public ImmersionBar flymeOSStatusBarFontColor(String flymeOSStatusBarFontColor) {
+        mBarParams.flymeOSStatusBarFontColor = Color.parseColor(flymeOSStatusBarFontColor);
+        return this;
+    }
+
+    /**
+     * 修改 Flyme OS系统手机状态栏字体颜色，优先级高于statusBarDarkFont(boolean isDarkFont)方法
+     * Flyme os status bar font color immersion bar.
+     *
+     * @param flymeOSStatusBarFontColor the flyme os status bar font color
+     * @return the immersion bar
+     */
+    public ImmersionBar flymeOSStatusBarFontColorInt(@ColorInt int flymeOSStatusBarFontColor) {
+        mBarParams.flymeOSStatusBarFontColor = flymeOSStatusBarFontColor;
         return this;
     }
 
@@ -937,10 +974,19 @@ public class ImmersionBar {
                 initBarBelowLOLLIPOP(); //初始化5.0以下，4.4以上沉浸式
                 solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
             }
-            uiFlags = setStatusBarDarkFont(uiFlags); //设置状态栏字体为暗色
+            uiFlags = setStatusBarDarkFont(uiFlags); //android 6.0以上设置状态栏字体为暗色
             uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
         }
         mWindow.getDecorView().setSystemUiVisibility(uiFlags);
+        if (OSUtils.isMIUI6More())
+            MIUISetStatusBarLightMode();         //修改miui状态栏字体颜色
+        if (OSUtils.isFlymeOS4More()) {          // 修改Flyme OS状态栏字体颜色
+            if (mBarParams.flymeOSStatusBarFontColor != 0) {
+                FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mWindow, mBarParams.flymeOSStatusBarFontColor);
+            } else {
+                FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mWindow, mBarParams.darkFont);
+            }
+        }
     }
 
     /**
@@ -1042,52 +1088,13 @@ public class ImmersionBar {
 
     /**
      * Sets status bar dark font.
-     * 设置状态栏字体颜色，android6.0以上或者miuiv6以上或者flymeOS
+     * 设置状态栏字体颜色，android6.0以上
      */
     private int setStatusBarDarkFont(int uiFlags) {
-        if (OSUtils.isMIUI6More()) {
-            MIUISetStatusBarLightMode();
-            return uiFlags;
-        }
-        if (OSUtils.isFlymeOS4More()) {
-            FlymeSetStatusBarLightMode();
-            return uiFlags;
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBarParams.darkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         } else {
             return uiFlags;
-        }
-    }
-
-    /**
-     * 设置状态栏图标为深色和魅族特定的文字风格
-     * 可以用来判断是否为Flyme用户
-     *
-     * @return boolean 成功执行返回true
-     */
-    private void FlymeSetStatusBarLightMode() {
-        if (mWindow != null) {
-            try {
-                WindowManager.LayoutParams lp = mWindow.getAttributes();
-                Field darkFlag = WindowManager.LayoutParams.class
-                        .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-                Field meizuFlags = WindowManager.LayoutParams.class
-                        .getDeclaredField("meizuFlags");
-                darkFlag.setAccessible(true);
-                meizuFlags.setAccessible(true);
-                int bit = darkFlag.getInt(null);
-                int value = meizuFlags.getInt(lp);
-                if (mBarParams.darkFont) {
-                    value |= bit;
-                } else {
-                    value &= ~bit;
-                }
-                meizuFlags.setInt(lp, value);
-                mWindow.setAttributes(lp);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
