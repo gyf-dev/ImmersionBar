@@ -44,9 +44,10 @@ public class MainActivity extends BaseActivity {
 //                .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
 //                .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法
 //                .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
-//                .titleBar(view)    //解决状态栏和布局重叠问题
-//                .statusBarView(view)  //解决状态栏和布局重叠问题
-//                .fitsSystemWindows(false)    //解决状态栏和布局重叠问题，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
+//                .titleBar(view)    //解决状态栏和布局重叠问题，任选其一
+//                .statusBarView(view)  //解决状态栏和布局重叠问题，任选其一
+//                .fitsSystemWindows(false)    //解决状态栏和布局重叠问题，任选其一，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
+//                .supportActionBar(true) //支持ActionBar使用
 //                .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
 //                .navigationBarColorTransform(R.color.orange) //导航栏变色后的颜色
 //                .barColorTransform(R.color.orange)  //状态栏和导航栏变色后的颜色
