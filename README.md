@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.1'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.2'
    ```
 
 >eclipse
 
-[barlibrary-2.2.1.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.1.jar) 
+[barlibrary-2.2.2.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.2.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.1.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.2.apk) 
   
 ## 用法 
 ### 初始化
@@ -46,6 +46,7 @@
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
                  .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法
                  .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
+                 .titleBar(toolBar)    //解决状态栏和布局重叠问题  
                  .statusBarView(view)  //解决状态栏和布局重叠问题
                  .fitsSystemWindows(false)    //解决状态栏和布局重叠问题，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
                  .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
@@ -140,7 +141,7 @@
             }
             @Override
             protected void immersionInit() {
-                ImmersionBar.with(getActivity())
+                ImmersionBar.with(this)
                         .statusBarDarkFont(false)
                         .navigationBarColor(R.color.btn4)
                         .init();
@@ -148,7 +149,7 @@
         }
     ```
 
-## 状态栏与布局顶部重叠解决方案，四种方案任选其一
+## 状态栏与布局顶部重叠解决方案，五种方案任选其一
 - ① 使用dimen自定义状态栏高度
 
     在values-v19/dimens.xml文件下
@@ -240,7 +241,13 @@
                .statusBarView(view)
                .init();
      ```   
-
+- ⑤ 使用ImmersionBar的titleBar(View view)方法
+    ```java
+             ImmersionBar.with(this)
+                   .titleBar(view) //指定标题栏view
+                   .init();
+     ```
+       
 ## 解决EditText和软键盘的问题
    ```java
          KeyboardPatch.patch(this, linearLayout).enable(); //解决底部EditText和软键盘的问题，linearLayout指的是当前布局的根节点
@@ -250,13 +257,11 @@
 
 ## 当白色背景状态栏遇到不能改变状态栏字体为深色的设备时，解决方案
    ```java
-         if(ImmersionBar.isSupportStatusBarDarkFont()){ //判断当前设备支不支持状态栏字体变色
-             //处理状态栏字体为黑色
-         }else {
-             //处理状态栏有透明度
-         }
+         ImmersionBar.with(this)
+                     .statusBarDarkFont(true, 0.2f)
+                     .init();
    ```
-<img width="300"  src="https://cloud.githubusercontent.com/assets/23047875/26274357/bc92f83a-3d7a-11e7-94f7-f75052e91c42.png"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
 
 ## 状态栏和导航栏其它方法
 	
@@ -304,6 +309,6 @@
 * 感谢[zhangzhen92](https://github.com/zhangzhen92)远程协助测试
 
 ## 联系我 ##
-- QQ 969565471
+- QQ群 314360549（沉浸式交流）
 - WeChat(微信)
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/wechat.JPG"/>

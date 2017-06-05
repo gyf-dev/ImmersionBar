@@ -50,6 +50,10 @@
                 android:id="@+id/btn_four"
                 style="@style/btn"
                 android:text="方法四" />
+            <Button
+                android:id="@+id/btn_five"
+                style="@style/btn"
+                android:text="方法五" />
         </LinearLayout>
     </ScrollView>
 

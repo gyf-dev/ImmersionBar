@@ -2,6 +2,7 @@ package com.gyf.immersionbar.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -20,23 +21,27 @@ public class PicActivity extends SwipeBackActivity {
     TextView textView;
     @BindView(R.id.seek_bar)
     SeekBar seekBar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic);
         ButterKnife.bind(this);
-        ImmersionBar.with(this).transparentBar().init();
-
+        ImmersionBar.with(this)
+                .titleBar(toolbar)
+                .transparentBar()
+                .init();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
                 ImmersionBar.with(PicActivity.this)
-                        .barAlpha(alpha)
-                        .statusBarColorTransform(R.color.colorPrimary)
+                        .addViewSupportTransformColor(toolbar,R.color.colorPrimary)
                         .navigationBarColorTransform(R.color.orange)
+                        .barAlpha(alpha)
                         .init();
             }
 

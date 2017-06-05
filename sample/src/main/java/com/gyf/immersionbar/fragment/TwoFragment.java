@@ -1,31 +1,36 @@
 package com.gyf.immersionbar.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.widget.Toolbar;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.gyf.barlibrary.ImmersionFragment;
 import com.gyf.immersionbar.R;
+
+import butterknife.BindView;
 
 /**
  * Created by geyifeng on 2017/5/12.
  */
 
-public class TwoFragment extends ImmersionFragment {
+public class TwoFragment extends BaseFragment {
 
-    @Nullable
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_two, container, false);
+    protected int setLayoutId() {
+        return R.layout.fragment_two;
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @Override
     protected void immersionInit() {
-        ImmersionBar.with(getActivity())
-                .statusBarDarkFont(true)
+        ImmersionBar.with(this)
+                .titleBar(toolbar, true)
+                .statusBarDarkFont(true, 0.2f)
                 .navigationBarColor(R.color.btn3)
                 .init();
     }

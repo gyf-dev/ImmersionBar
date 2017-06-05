@@ -13,6 +13,7 @@ import com.gyf.immersionbar.fragment.FourFragment;
 import com.gyf.immersionbar.fragment.OneFragment;
 import com.gyf.immersionbar.fragment.ThreeFragment;
 import com.gyf.immersionbar.fragment.TwoFragment;
+import com.gyf.immersionbar.view.CustomViewPager;
 import com.lzy.widget.AlphaIndicator;
 
 import java.util.ArrayList;
@@ -25,46 +26,43 @@ public class FragmentActivity extends BaseActivity {
 
 
     private ArrayList<Fragment> mFragments;
+    private OneFragment oneFragment;
+    private TwoFragment twoFragment;
+    private ThreeFragment threeFragment;
+    private FourFragment fourFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-        ImmersionBar.with(this).statusBarDarkFont(false)
-                .navigationBarColor(R.color.btn4)
-                .init();
         initData();
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
         AlphaIndicator alphaIndicator = (AlphaIndicator) findViewById(R.id.alphaIndicator);
         alphaIndicator.setViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                ImmersionBar immersionBar = ImmersionBar.with(FragmentActivity.this);
 //                switch (position) {
 //                    case 0:
-//                        immersionBar.statusBarDarkFont(false)
+//                        ImmersionBar.with(oneFragment)
 //                                .navigationBarColor(R.color.btn4)
 //                                .init();
 //                        break;
 //                    case 1:
-//                        immersionBar.statusBarDarkFont(true)
+//                        ImmersionBar.with(twoFragment)
+//                                .statusBarDarkFont(true)
 //                                .navigationBarColor(R.color.btn3)
 //                                .init();
 //                        break;
 //                    case 2:
-//                        immersionBar.statusBarDarkFont(false)
+//                        ImmersionBar.with(threeFragment)
 //                                .navigationBarColor(R.color.btn13)
 //                                .init();
 //                        break;
 //                    case 3:
-//                        immersionBar.statusBarDarkFont(true)
+//                        ImmersionBar.with(fourFragment)
+//                                .statusBarDarkFont(true)
 //                                .navigationBarColor(R.color.btn1)
 //                                .init();
 //                        break;
@@ -72,18 +70,25 @@ public class FragmentActivity extends BaseActivity {
             }
 
             @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setScroll(false);
     }
 
     private void initData() {
         mFragments = new ArrayList<>();
-        OneFragment oneFragment = new OneFragment();
-        TwoFragment twoFragment = new TwoFragment();
-        ThreeFragment threeFragment = new ThreeFragment();
-        FourFragment fourFragment = new FourFragment();
+        oneFragment = new OneFragment();
+        twoFragment = new TwoFragment();
+        threeFragment = new ThreeFragment();
+        fourFragment = new FourFragment();
         mFragments.add(oneFragment);
         mFragments.add(twoFragment);
         mFragments.add(threeFragment);

@@ -39,4 +39,9 @@ dependencies {
     compile 'me.imid.swipebacklayout.lib:library:1.0.0'
     compile 'com.apkfuns.logutils:library:1.4.2.2'
     compile 'com.android.support:design:25.3.1'
+    compile 'com.youth.banner:banner:1.4.9'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.blankj:utilcode:1.6.4'
+    compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }

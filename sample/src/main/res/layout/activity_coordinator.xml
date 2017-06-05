@@ -25,17 +25,11 @@
                 android:scaleType="centerCrop"
                 android:src="@mipmap/test" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/status_bar_height" />
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?actionBarSize"
                 android:layout_below="@+id/view"
-                android:layout_marginTop="@dimen/status_bar_height"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="结合CoordinatorLayout使用" />

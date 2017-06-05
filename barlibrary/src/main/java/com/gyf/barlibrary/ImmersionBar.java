@@ -9,6 +9,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.view.Gravity;
@@ -20,7 +21,9 @@ import android.widget.FrameLayout;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +35,9 @@ import java.util.Set;
 public class ImmersionBar {
 
     private static Map<String, BarParams> mMap = new HashMap<>();
+    private static Map<String, BarParams> mTagMap = new HashMap<>();
+    private static Map<String, ArrayList<String>> mTagKeyMap = new HashMap<>();
+    private static List<String> mFragmentList = new ArrayList<>();
     private Activity mActivity;
     private Window mWindow;
     private ViewGroup mViewGroup;
@@ -39,29 +45,66 @@ public class ImmersionBar {
     private ViewGroup mContentView;
 
     private BarConfig mConfig;
-
+    private String mActivityName;
+    private String mFragmentName;
 
     private ImmersionBar() {
     }
 
-    private ImmersionBar(Activity activity) {
+    /**
+     * Instantiates a new Immersion bar.
+     *
+     * @param fragment the fragment
+     */
+    private ImmersionBar(Fragment fragment) {
+        mActivityName = fragment.getActivity().getClass().getName();
+        mFragmentName = mActivityName + "_and_" + fragment.getClass().getName();
+        if (!mFragmentList.contains(mFragmentName))
+            mFragmentList.add(mFragmentName);
+        initParams(fragment.getActivity(), mFragmentName);
+    }
 
+    /**
+     * Instantiates a new Immersion bar.
+     *
+     * @param activity the activity
+     */
+    private ImmersionBar(Activity activity) {
+        mActivityName = activity.getClass().getName();
+        initParams(activity, mActivityName);
+    }
+
+    /**
+     * 初始化沉浸式默认参数
+     * Init params.
+     *
+     * @param activity the activity
+     * @param name     the name
+     */
+    private void initParams(Activity activity, String name) {
         mActivity = activity;
-        mWindow = activity.getWindow();
+        mWindow = mActivity.getWindow();
         mViewGroup = (ViewGroup) mWindow.getDecorView();
         mContentView = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mConfig = new BarConfig(activity);
-
-        if (!mMap.isEmpty()) {
-            if (mMap.get(mActivity.getClass().getName()) == null) {
+        if (!mMap.isEmpty() && !name.isEmpty()) {
+            if (mMap.get(name) == null) {
                 mBarParams = new BarParams();
-                mMap.put(mActivity.getClass().getName(), mBarParams);
+                if (mFragmentName != null) { //保证一个activity页面有同一个状态栏view和导航栏view
+                    mBarParams.statusBarView = mMap.get(mActivityName).statusBarView;
+                    mBarParams.navigationBarView = mMap.get(mActivityName).navigationBarView;
+                }
+                mMap.put(name, mBarParams);
             } else {
-                mBarParams = mMap.get(mActivity.getClass().getName());
+                mBarParams = mMap.get(name);
             }
         } else {
             mBarParams = new BarParams();
-            mMap.put(mActivity.getClass().getName(), mBarParams);
+            if (mFragmentName != null) {  //保证一个activity页面有同一个状态栏view和导航栏view
+                mBarParams.statusBarView = mMap.get(mActivityName).statusBarView;
+                mBarParams.navigationBarView = mMap.get(mActivityName).navigationBarView;
+            }
+            mMap.put(name, mBarParams);
         }
     }
 
@@ -73,6 +116,16 @@ public class ImmersionBar {
      */
     public static ImmersionBar with(Activity activity) {
         return new ImmersionBar(activity);
+    }
+
+    /**
+     * With immersion bar.
+     *
+     * @param fragment the fragment
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(Fragment fragment) {
+        return new ImmersionBar(fragment);
     }
 
     /**
@@ -750,6 +803,11 @@ public class ImmersionBar {
         return this;
     }
 
+    public ImmersionBar viewAlpha(@FloatRange(from = 0f, to = 1f) float viewAlpha) {
+        mBarParams.viewAlpha = viewAlpha;
+        return this;
+    }
+
     /**
      * 移除view支持变身
      *
@@ -845,6 +903,27 @@ public class ImmersionBar {
         mBarParams.darkFont = isDarkFont;
         if (!isDarkFont)
             mBarParams.flymeOSStatusBarFontColor = 0;
+        mBarParams.statusBarAlpha = 0;
+        return this;
+    }
+
+    /**
+     * 状态栏字体深色或亮色，判断设备支不支持状态栏变色来设置状态栏透明度
+     * Status bar dark font immersion bar.
+     *
+     * @param isDarkFont  the is dark font
+     * @param statusAlpha the status alpha 如果不支持状态栏字体变色可以使用statusAlpha来指定状态栏透明度，比如白色状态栏的时候可以用到
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarDarkFont(boolean isDarkFont, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
+        mBarParams.darkFont = isDarkFont;
+        if (!isDarkFont)
+            mBarParams.flymeOSStatusBarFontColor = 0;
+        if (!isSupportStatusBarDarkFont()) {
+            mBarParams.statusBarAlpha = statusAlpha;
+        } else {
+            mBarParams.statusBarAlpha = 0;
+        }
         return this;
     }
 
@@ -928,13 +1007,147 @@ public class ImmersionBar {
     }
 
     /**
-     * 通过状态栏高度动态设置状态栏布局,只支持在activity里设置
+     * 通过状态栏高度动态设置状态栏布局
      *
      * @param viewId the view id
      * @return the immersion bar
      */
     public ImmersionBar statusBarView(@IdRes int viewId) {
-        mBarParams.statusBarViewByHeight = mActivity.findViewById(viewId);
+        return statusBarView(mActivity.findViewById(viewId));
+    }
+
+    /**
+     * 通过状态栏高度动态设置状态栏布局
+     * Status bar view immersion bar.
+     *
+     * @param viewId   the view id
+     * @param rootView the root view
+     * @return the immersion bar
+     */
+    public ImmersionBar statusBarView(@IdRes int viewId, View rootView) {
+        return statusBarView(rootView.findViewById(viewId));
+    }
+
+    /**
+     * 支持有actionBar的界面,调用该方法，布局讲从actionBar下面开始绘制
+     * Support action bar immersion bar.
+     *
+     * @param isSupportActionBar the is support action bar
+     * @return the immersion bar
+     */
+    public ImmersionBar supportActionBar(boolean isSupportActionBar) {
+        mBarParams.isSupportActionBar = isSupportActionBar;
+        return this;
+    }
+
+    /**
+     * 解决状态栏与布局顶部重叠又多了种方法
+     * Title bar immersion bar.
+     *
+     * @param view the view
+     * @return the immersion bar
+     */
+    public ImmersionBar titleBar(View view) {
+        return titleBar(view, false);
+    }
+
+    /**
+     * 解决状态栏与布局顶部重叠又多了种方法
+     * Title bar immersion bar.
+     *
+     * @param view          the view
+     * @param statusBarFlag the status bar flag  false表示状态栏不支持变色，true表示状态栏支持变色
+     * @return the immersion bar
+     */
+    public ImmersionBar titleBar(View view, boolean statusBarFlag) {
+        mBarParams.titleBarView = view;
+        mBarParams.statusBarFlag = statusBarFlag;
+        setTitleBar();
+        return this;
+    }
+
+    /**
+     * 解决状态栏与布局顶部重叠又多了种方法，只支持Activity
+     * Title bar immersion bar.
+     *
+     * @param viewId the view id
+     * @return the immersion bar
+     */
+    public ImmersionBar titleBar(@IdRes int viewId) {
+        View view = mActivity.findViewById(viewId);
+        return titleBar(view, false);
+    }
+
+    /**
+     * 解决状态栏与布局顶部重叠又多了种方法，支持任何view
+     * Title bar immersion bar.
+     *
+     * @param viewId        the view id
+     * @param rootView      the root view
+     * @param statusBarFlag the status bar flag false表示状态栏不支持变色，true表示状态栏支持变色
+     * @return the immersion bar
+     */
+    public ImmersionBar titleBar(@IdRes int viewId, View rootView, boolean statusBarFlag) {
+        View view = rootView.findViewById(viewId);
+        return titleBar(view, statusBarFlag);
+    }
+
+    /**
+     * 一键重置所有参数
+     * Reset immersion bar.
+     *
+     * @return the immersion bar
+     */
+    public ImmersionBar reset() {
+        BarParams barParamsTemp = mBarParams;
+        mBarParams = new BarParams();
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_1()) {
+            mBarParams.statusBarView = barParamsTemp.statusBarView;
+            mBarParams.navigationBarView = barParamsTemp.navigationBarView;
+        }
+        mMap.put(mActivityName, mBarParams);
+        return this;
+    }
+
+    /**
+     * 给某个页面设置tag来标识这页bar的属性.
+     * Add tag bar tag.
+     *
+     * @param tag the tag
+     * @return the bar tag
+     */
+    public ImmersionBar addTag(String tag) {
+        tag = mActivityName + "_TAG_" + tag;
+        if (!isEmpty(tag)) {
+            BarParams barParams = mBarParams.clone();
+            mTagMap.put(tag, barParams);
+            ArrayList<String> tagList = mTagKeyMap.get(mActivityName);
+            if (tagList != null) {
+                if (!tagList.contains(tag))
+                    tagList.add(tag);
+            } else {
+                tagList = new ArrayList<>();
+                tagList.add(tag);
+            }
+            mTagKeyMap.put(mActivityName, tagList);
+        }
+        return this;
+    }
+
+    /**
+     * 根据tag恢复到某次调用时的参数
+     * Recover immersion bar.
+     *
+     * @param tag the tag
+     * @return the immersion bar
+     */
+    public ImmersionBar getTag(String tag) {
+        if (!isEmpty(tag)) {
+            BarParams barParams = mTagMap.get(mActivityName + "_TAG_" + tag);
+            if (barParams != null) {
+                mBarParams = barParams.clone();
+            }
+        }
         return this;
     }
 
@@ -942,9 +1155,11 @@ public class ImmersionBar {
      * 通过上面配置后初始化后方可成功调用
      */
     public void init() {
-        mMap.put(mActivity.getClass().getName(), mBarParams);
-        initBar();   //初始化沉浸式
-        setStatusBarView();  //通过状态栏高度动态设置状态栏布局
+        mMap.put(mActivityName, mBarParams);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            initBar();   //初始化沉浸式
+            setStatusBarView();  //通过状态栏高度动态设置状态栏布局
+        }
         transformView();  //变色view
     }
 
@@ -952,12 +1167,24 @@ public class ImmersionBar {
      * 当Activity关闭的时候，在onDestroy方法中调用
      */
     public void destroy() {
-        String key = mActivity.getClass().getName();
-        if (key != null) {
+        if (mActivityName != null) {
             if (mBarParams != null) {
                 mBarParams = null;
             }
-            mMap.remove(key);
+            ArrayList<String> tagList = mTagKeyMap.get(mActivityName);
+            if (tagList != null && tagList.size() > 0) {
+                for (String tag : tagList) {
+                    mTagMap.remove(tag);
+                }
+                mTagKeyMap.remove(mActivityName);
+            }
+            if (mFragmentList.size() > 0) {
+                for (String name : mFragmentList) {
+                    if (name.contains(mActivityName))
+                        mMap.remove(name);
+                }
+            }
+            mMap.remove(mActivityName);
         }
     }
 
@@ -969,7 +1196,8 @@ public class ImmersionBar {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
                 uiFlags = initBarAboveLOLLIPOP(uiFlags); //初始化5.0以上，包含5.0
-                fitsSystemWindows();  //android 5.0以上解决状态栏和布局重叠问题
+                supportActionBar();
+                //fitsSystemWindows();  //android 5.0以上解决状态栏和布局重叠问题
             } else {
                 initBarBelowLOLLIPOP(); //初始化5.0以下，4.4以上沉浸式
                 solveNavigation();  //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
@@ -1002,8 +1230,12 @@ public class ImmersionBar {
             uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION; //Activity全屏显示，但导航栏不会被隐藏覆盖，导航栏依然可见，Activity底部布局部分会被导航栏遮住。
         }
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);  //需要设置这个才能设置状态栏颜色
-        mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
-                mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));  //设置状态栏颜色
+        if (mBarParams.titleBarView == null)
+            mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
+                    mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));  //设置状态栏颜色
+        else
+            mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
+                    Color.TRANSPARENT, mBarParams.statusBarAlpha));  //设置状态栏颜色
         mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                 mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
         return uiFlags;
@@ -1036,21 +1268,40 @@ public class ImmersionBar {
             // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
             if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
                 if (mConfig.isNavigationAtBottom()) { //判断导航栏是否在底部
-                    if (mBarParams.fits)
-                        mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
-                    else
-                        mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+                    if (!mBarParams.isSupportActionBar) { //判断是否支持actionBar
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, mConfig.getStatusBarHeight(),
+                                    0, mConfig.getNavigationBarHeight()); //有导航栏，获得rootView的根节点，然后设置距离底部的padding值为导航栏的高度值
+                        else
+                            mContentView.setPadding(0, 0, 0, mConfig.getNavigationBarHeight());
+                    } else {
+                        //支持有actionBar的界面
+                        mContentView.setPadding(0, mConfig.getStatusBarHeight() +
+                                mConfig.getActionBarHeight() + 10, 0, mConfig.getNavigationBarHeight());
+                    }
                 } else {
-                    if (mBarParams.fits)
-                        mContentView.setPadding(0, getStatusBarHeight(mActivity), mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
-                    else
-                        mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+                    if (!mBarParams.isSupportActionBar) {
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, mConfig.getStatusBarHeight(),
+                                    mConfig.getNavigationBarWidth(), 0); //不在底部，设置距离右边的padding值为导航栏的宽度值
+                        else
+                            mContentView.setPadding(0, 0, mConfig.getNavigationBarWidth(), 0);
+                    } else {
+                        //支持有actionBar的界面
+                        mContentView.setPadding(0, mConfig.getStatusBarHeight() +
+                                mConfig.getActionBarHeight() + 10, mConfig.getNavigationBarWidth(), 0);
+                    }
                 }
             } else {
-                if (mBarParams.fits)
-                    mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, 0);
-                else
-                    mContentView.setPadding(0, 0, 0, 0);
+                if (!mBarParams.isSupportActionBar) {
+                    if (mBarParams.fits)
+                        mContentView.setPadding(0, mConfig.getStatusBarHeight(), 0, 0);
+                    else
+                        mContentView.setPadding(0, 0, 0, 0);
+                } else {
+                    //支持有actionBar的界面
+                    mContentView.setPadding(0, mConfig.getStatusBarHeight() + mConfig.getActionBarHeight() + 10, 0, 0);
+                }
             }
         }
     }
@@ -1130,8 +1381,12 @@ public class ImmersionBar {
      */
     private void transformView() {
         if (mBarParams.view != null) {
-            mBarParams.view.setBackgroundColor(ColorUtils.blendARGB(mBarParams.viewColorBeforeTransform,
-                    mBarParams.viewColorAfterTransform, mBarParams.statusBarAlpha));
+            if (Math.abs(mBarParams.viewAlpha - 0.0f) == 0)
+                mBarParams.view.setBackgroundColor(ColorUtils.blendARGB(mBarParams.viewColorBeforeTransform,
+                        mBarParams.viewColorAfterTransform, mBarParams.statusBarAlpha));
+            else
+                mBarParams.view.setBackgroundColor(ColorUtils.blendARGB(mBarParams.viewColorBeforeTransform,
+                        mBarParams.viewColorAfterTransform, mBarParams.viewAlpha));
         }
         if (mBarParams.viewMap.size() != 0) {
             Set<Map.Entry<View, Map<Integer, Integer>>> entrySet = mBarParams.viewMap.entrySet();
@@ -1144,8 +1399,13 @@ public class ImmersionBar {
                     colorBefore = integerEntry.getKey();
                     colorAfter = integerEntry.getValue();
                 }
-                if (view != null)
-                    view.setBackgroundColor(ColorUtils.blendARGB(colorBefore, colorAfter, mBarParams.statusBarAlpha));
+                if (view != null) {
+                    if (Math.abs(mBarParams.viewAlpha - 0.0f) == 0)
+                        view.setBackgroundColor(ColorUtils.blendARGB(colorBefore, colorAfter, mBarParams.statusBarAlpha));
+                    else
+                        view.setBackgroundColor(ColorUtils.blendARGB(colorBefore, colorAfter, mBarParams.viewAlpha));
+                }
+
 
             }
         }
@@ -1161,19 +1421,55 @@ public class ImmersionBar {
             params.height = mConfig.getStatusBarHeight();
             mBarParams.statusBarViewByHeight.setLayoutParams(params);
         }
+    }
+
+    /**
+     * 重新绘制标题栏高度，解决状态栏与顶部重叠问题
+     * Sets title bar.
+     */
+    private void setTitleBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mBarParams.titleBarView != null) {
+            ViewGroup.LayoutParams layoutParams = mBarParams.titleBarView.getLayoutParams();
+            if (mBarParams.titleBarHeight == 0)
+                mBarParams.titleBarHeight = layoutParams.height + mConfig.getStatusBarHeight();
+            layoutParams.height = mBarParams.titleBarHeight;
+            mBarParams.titleBarView.setPadding(0, mConfig.getStatusBarHeight(), 0, 0);
+            mBarParams.titleBarView.setLayoutParams(layoutParams);
+        }
+    }
+
+    /**
+     * 有actionBar的界面，通过状态栏高度和actionBAr的高度动态设置view的高度，使得布局在actionBar下面
+     */
+    private void setStatusBarViewWithActionBar() {
+        if (mBarParams.statusBarViewByHeight != null) {
+            ViewGroup.LayoutParams params = mBarParams.statusBarViewByHeight.getLayoutParams();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_1())
+                    params.height = mConfig.getStatusBarHeight() + mConfig.getActionBarHeight() + 10;
+                else
+                    params.height = mConfig.getStatusBarHeight() + mConfig.getActionBarHeight();
+            } else {
+                params.height = mConfig.getActionBarHeight() + 10;
+            }
+            mBarParams.statusBarViewByHeight.setLayoutParams(params);
+        }
         mBarParams.statusBarViewByHeight = null;
     }
 
     /**
-     * 解决状态栏和布局重叠问题
-     * Fits system windows.
+     * 支持actionBar的界面
+     * Support action bar.
      */
-    private void fitsSystemWindows() {
+    private void supportActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
-            if (mBarParams.fits) {
-                mContentView.setPadding(0, getStatusBarHeight(mActivity), 0, 0);
+            if (mBarParams.isSupportActionBar) {
+                mContentView.setPadding(0, mConfig.getStatusBarHeight() + mConfig.getActionBarHeight(), 0, 0);
             } else {
-                mContentView.setPadding(0, 0, 0, 0);
+                if (mBarParams.fits)
+                    mContentView.setPadding(0, mConfig.getStatusBarHeight(), 0, 0);
+                else
+                    mContentView.setPadding(0, 0, 0, 0);
             }
         }
     }
@@ -1185,14 +1481,18 @@ public class ImmersionBar {
         if (mBarParams.statusBarView == null) {
             mBarParams.statusBarView = new View(mActivity);
         }
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight(mActivity));
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, mConfig.getStatusBarHeight());
         params.gravity = Gravity.TOP;
-        if (!isNavigationAtBottom(mActivity)) {
-            params.rightMargin = getNavigationBarWidth(mActivity);
+        if (!mConfig.isNavigationAtBottom()) {
+            params.rightMargin = mConfig.getNavigationBarWidth();
         }
         mBarParams.statusBarView.setLayoutParams(params);
-        mBarParams.statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
-                mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));
+        if (mBarParams.titleBarView == null || mBarParams.statusBarFlag)
+            mBarParams.statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
+                    mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));
+        else
+            mBarParams.statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
+                    Color.TRANSPARENT, mBarParams.statusBarAlpha));
         mBarParams.statusBarView.setVisibility(View.VISIBLE);
         ViewGroup viewGroup = (ViewGroup) mBarParams.statusBarView.getParent();
         if (viewGroup != null)
@@ -1208,11 +1508,11 @@ public class ImmersionBar {
             mBarParams.navigationBarView = new View(mActivity);
         }
         FrameLayout.LayoutParams params;
-        if (isNavigationAtBottom(mActivity)) {
-            params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getNavigationBarHeight(mActivity));
+        if (mConfig.isNavigationAtBottom()) {
+            params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, mConfig.getNavigationBarHeight());
             params.gravity = Gravity.BOTTOM;
         } else {
-            params = new FrameLayout.LayoutParams(getNavigationBarWidth(mActivity), FrameLayout.LayoutParams.MATCH_PARENT);
+            params = new FrameLayout.LayoutParams(mConfig.getNavigationBarWidth(), FrameLayout.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.END;
         }
         mBarParams.navigationBarView.setLayoutParams(params);
@@ -1329,5 +1629,9 @@ public class ImmersionBar {
      */
     public BarParams getBarParams() {
         return mBarParams;
+    }
+
+    private static boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
     }
 }

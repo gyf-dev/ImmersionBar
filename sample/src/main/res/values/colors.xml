@@ -6,6 +6,7 @@
     <color name="tans">#00000000</color>
     <color name="orange">#EE6413</color>
     <color name="black">#ff000000</color>
+    <color name="colorBarText">#F0F5E5</color>
 
     <color name="orderTextColor">#c0787f</color>
     <!-- 绿色 -->

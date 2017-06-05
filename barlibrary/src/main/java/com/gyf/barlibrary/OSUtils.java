@@ -17,6 +17,7 @@ public class OSUtils {
     /**
      * 判断是否为miui
      * Is miui boolean.
+     *
      * @return the boolean
      */
     public static boolean isMIUI() {
@@ -101,8 +102,16 @@ public class OSUtils {
      */
     public static boolean isFlymeOS4More() {
         String version = getFlymeOSVersion();
-        if (!version.isEmpty() && (Integer.valueOf(version.substring(6, 7)) >= 4)) {
-            return true;
+        int num;
+        if (!version.isEmpty()) {
+            if (version.toLowerCase().contains("os")) {
+                num = Integer.valueOf(version.substring(9, 10));
+            } else {
+                num = Integer.valueOf(version.substring(6, 7));
+            }
+            if (num >= 4) {
+                return true;
+            }
         }
         return false;
     }

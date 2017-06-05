@@ -23,15 +23,21 @@
         <activity
             android:name=".activity.BackActivity"
             android:theme="@style/AppTheme.Transparent" />
-        <activity android:name=".activity.FragmentActivity" />
+        <activity android:name=".activity.FragmentActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.OverActivity" />
         <activity android:name=".activity.Over1Activity" />
         <activity android:name=".activity.Over2Activity" />
         <activity android:name=".activity.Over3Activity" />
         <activity android:name=".activity.Over4Activity" />
+        <activity android:name=".activity.Over5Activity" />
         <activity android:name=".activity.KeyBoardActivity" />
         <activity android:name=".activity.CoordinatorActivity" />
         <activity android:name=".activity.FlymeActivity" />
+        <activity
+            android:name=".activity.ActionBarActivity"
+            android:theme="@style/ActionBar" />
+        <activity android:name=".activity.WhiteStatusBarActivity" />
     </application>
 
 </manifest>

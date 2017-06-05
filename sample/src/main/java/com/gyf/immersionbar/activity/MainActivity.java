@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity {
 //                .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
 //                .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法
 //                .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
+//                .titleBar(view)    //解决状态栏和布局重叠问题
 //                .statusBarView(view)  //解决状态栏和布局重叠问题
 //                .fitsSystemWindows(false)    //解决状态栏和布局重叠问题，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
 //                .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
@@ -57,9 +58,9 @@ public class MainActivity extends BaseActivity {
 
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_swipe_back, R.id.btn_fragment,
-            R.id.btn_drawer, R.id.btn_coordinator, R.id.btn_flyme, R.id.btn_over, R.id.btn_key_board, R.id.btn_status_hide,
-            R.id.btn_navigation_hide, R.id.btn_bar_hide, R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark,
-            R.id.btn_bar_font_light})
+            R.id.btn_drawer, R.id.btn_coordinator, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
+            R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
+            R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_pic_color:
@@ -86,11 +87,17 @@ public class MainActivity extends BaseActivity {
             case R.id.btn_coordinator:
                 startActivity(new Intent(this, CoordinatorActivity.class));
                 break;
+            case R.id.btn_action_bar:
+                startActivity(new Intent(this, ActionBarActivity.class));
+                break;
             case R.id.btn_over:
                 startActivity(new Intent(this, OverActivity.class));
                 break;
             case R.id.btn_key_board:
                 startActivity(new Intent(this, KeyBoardActivity.class));
+                break;
+            case R.id.btn_white_status_bar:
+                startActivity(new Intent(this, WhiteStatusBarActivity.class));
                 break;
             case R.id.btn_status_hide:
                 ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();

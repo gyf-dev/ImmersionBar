@@ -79,6 +79,11 @@
                     android:text="结合CoordinatorLayout使用" />
 
                 <Button
+                    android:id="@+id/btn_action_bar"
+                    style="@style/btn"
+                    android:text="结合ActionBar使用" />
+
+                <Button
                     android:id="@+id/btn_flyme"
                     style="@style/btn"
                     android:text="修改Flyme OS状态栏字体颜色" />
@@ -93,6 +98,11 @@
                     android:id="@+id/btn_key_board"
                     style="@style/btn"
                     android:text="解决EditText和软键盘的问题 " />
+
+                <Button
+                    android:id="@+id/btn_white_status_bar"
+                    style="@style/btn"
+                    android:text="解决白色状态栏问题" />
 
                 <Button
                     android:id="@+id/btn_status_hide"

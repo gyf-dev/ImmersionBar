@@ -38,11 +38,11 @@ dependencies {
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/barlibrary-2.2.0.jar'
-    from('build/intermediates/bundles/release/')
+    delete 'build/libs/barlibrary-2.2.1.jar'
+    from('build/intermediates/bundles/default/')
     into('build/libs/')
     include('classes.jar')
-    rename('classes.jar', 'barlibrary-2.2.1.jar')
+    rename('classes.jar', 'barlibrary-2.2.2.jar')
 }
 
 makeJar.dependsOn(build)
@@ -51,7 +51,7 @@ publish {
     userOrg = 'magic-dev'
     groupId = 'com.gyf.barlibrary'
     artifactId = 'barlibrary'
-    publishVersion = '2.2.1'
+    publishVersion = '2.2.2'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }

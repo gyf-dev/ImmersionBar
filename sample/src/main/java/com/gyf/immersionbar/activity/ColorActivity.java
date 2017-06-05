@@ -46,16 +46,12 @@ public class ColorActivity extends BaseActivity {
                 .statusBarView(R.id.top_view)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.btn8)
-                .fullScreen(true)
                 .init();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
-                linearLayout.setBackgroundColor(ColorUtils.blendARGB(
-                        ContextCompat.getColor(ColorActivity.this, R.color.darker_gray),
-                        ContextCompat.getColor(ColorActivity.this, R.color.btn5), alpha));
                 ImmersionBar.with(ColorActivity.this)
                         .barAlpha(alpha)
                         .statusBarColorTransform(R.color.btn14)
@@ -64,6 +60,7 @@ public class ColorActivity extends BaseActivity {
                         .addViewSupportTransformColor(btn1, R.color.btn1, R.color.btn4)
                         .addViewSupportTransformColor(btn2, R.color.btn3, R.color.btn12)
                         .addViewSupportTransformColor(btn3, R.color.btn5, R.color.btn10)
+                        .addViewSupportTransformColor(linearLayout, R.color.darker_gray, R.color.btn5)
                         .init();
             }
 

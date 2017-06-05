@@ -11,9 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 沉浸式参数信息
  * Created by geyifeng on 2017/5/9.
  */
-public class BarParams {
+public class BarParams implements Cloneable {
     @ColorInt
     public int statusBarColor = Color.TRANSPARENT; //状态栏颜色
     @ColorInt
@@ -26,6 +27,7 @@ public class BarParams {
     public boolean fullScreenTemp = fullScreen;
     public BarHide barHide = BarHide.FLAG_SHOW_BAR;  //隐藏Bar
     public boolean darkFont = false;                 //状态栏字体深色与亮色标志位
+    public boolean statusBarFlag = false;            //是否可以修改状态栏颜色
     @ColorInt
     public int statusBarColorTransform = Color.BLACK;  //状态栏变换后的颜色
     @ColorInt
@@ -36,6 +38,8 @@ public class BarParams {
     public int viewColorBeforeTransform = statusBarColor;     //view变色前的颜色
     @ColorInt
     public int viewColorAfterTransform = statusBarColorTransform;  //view变色后的颜色
+    @FloatRange(from = 0f, to = 1f)
+    public float viewAlpha = 0.0f;
     public boolean fits = false;                                   //解决标题栏与状态栏重叠问题
     public int navigationBarColorTem = navigationBarColor;
     public View statusBarView;                       //4.4自定义一个状态栏
@@ -43,4 +47,18 @@ public class BarParams {
     public View statusBarViewByHeight;            //解决标题栏与状态栏重叠问题
     @ColorInt
     public int flymeOSStatusBarFontColor;          //flymeOS状态栏字体变色
+    public boolean isSupportActionBar = false;    //结合actionBar使用
+    public View titleBarView;                     //标题栏view
+    public int titleBarHeight;                    //标题栏的高度
+
+    @Override
+    protected BarParams clone() {
+        BarParams barParams = null;
+        try {
+            barParams = (BarParams) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return barParams;
+    }
 }

@@ -28,12 +28,13 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_color);
+        ButterKnife.bind(this);
         ImmersionBar.with(this)
                 .statusBarView(R.id.top_view)
                 .navigationBarColor(R.color.colorPrimary)
                 .fullScreen(true)
+                .addTag("PicAndColor")  //给上面参数打标记，以后可以通过标记恢复
                 .init();
-        ButterKnife.bind(this);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
@@ -50,10 +51,7 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
                     Toast.makeText(this, "当前设备没有导航栏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_color:
-                ImmersionBar.with(this)
-                        .transparentStatusBar()
-                        .navigationBarColor(R.color.colorPrimary)
-                        .init();
+                ImmersionBar.with(this).getTag("PicAndColor").init(); //根据tag标记来恢复
                 break;
         }
     }
@@ -62,7 +60,7 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float alpha = (float) progress / 100;
         ImmersionBar.with(this)
-                .barColorTransform(R.color.orange)
+                .statusBarColorTransform(R.color.orange)
                 .navigationBarColorTransform(R.color.tans)
                 .addViewSupportTransformColor(toolbar)
                 .barAlpha(alpha)
