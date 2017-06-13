@@ -36,4 +36,7 @@
     <color name="btn12">#F6C150</color>
     <color name="btn13">#4681F4</color>
     <color name="btn14">#5EA379</color>
+    <color name="shape1">#5d8df7</color>
+    <color name="shape2">#5EB9F8</color>
+    <color name="shape3">#5CC2F8</color>
 </resources>

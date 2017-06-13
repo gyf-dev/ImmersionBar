@@ -176,7 +176,7 @@ public class OneFragment extends BaseFragment {
     @Override
     protected void immersionInit() {
         ImmersionBar.with(this)
-                .titleBar(mToolbar)
+                .titleBar(mToolbar,false)
                 .navigationBarColor(R.color.colorPrimary)
                 .init();
     }

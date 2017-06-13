@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.2'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.3'
    ```
 
 >eclipse
 
-[barlibrary-2.2.2.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.2.jar) 
+[barlibrary-2.2.3.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.3.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.2.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.3.apk) 
   
 ## 用法 
 ### 初始化
@@ -44,7 +44,6 @@
                  .flymeOSStatusBarFontColor(R.color.btn3)  //修改flyme OS状态栏字体颜色
                  .fullScreen(true)      //有导航栏的情况下，activity全屏显示，也就是activity最下面被导航栏覆盖，不写默认非全屏
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
-                 .setViewSupportTransformColor(toolbar) //设置支持view变色，支持一个view，不指定颜色，默认和状态栏同色，还有两个重载方法
                  .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
                  .titleBar(view)    //解决状态栏和布局重叠问题，任选其一
                  .statusBarView(view)  //解决状态栏和布局重叠问题，任选其一
@@ -53,12 +52,19 @@
                  .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
                  .navigationBarColorTransform(R.color.orange) //导航栏变色后的颜色
                  .barColorTransform(R.color.orange)  //状态栏和导航栏变色后的颜色
-                 .removeSupportView()  //移除通过setViewSupportTransformColor()方法指定的view
                  .removeSupportView(toolbar)  //移除指定view支持
                  .removeSupportAllView() //移除全部view支持
+                 .addTag("tag")  //给以上设置的参数打标记
+                 .getTag("tag")  //根据tag获得沉浸式参数
+                 .reset()  //重置所以沉浸式参数
                  .init();  //必须调用方可沉浸式
     ```
+- 取消沉浸式
 
+     ```java
+       ImmersionBar.with(FourFragment.this).cancel();
+    ```
+    
 ### 关闭销毁
 - 在activity的onDestroy方法中执行
 
@@ -74,7 +80,7 @@
          @Override
          protected void onCreate(@Nullable Bundle savedInstanceState) {
              super.onCreate(savedInstanceState);
-             ImmersionBar.with(this).init();
+             ImmersionBar.with(this).init();   //所有子类都将继承这些相同的属性
          }
      
          @Override
@@ -132,7 +138,7 @@
         });
     ```
     
--  ②继承ImmersionFragment类，在immersionInit中初始化沉浸式，代码如下：
+-  ②继承ImmersionFragment类，在immersionInit中初始化沉浸式，调用该方法必须保证加载Fragment的Activity先初始化,代码如下：
 
     ```java
     public class OneFragment extends ImmersionFragment {
@@ -143,13 +149,21 @@
             }
             @Override
             protected void immersionInit() {
-                ImmersionBar.with(this)
+                ImmersionBar.with(this) 
                         .statusBarDarkFont(false)
                         .navigationBarColor(R.color.btn4)
                         .init();
             }
         }
     ```
+- 如果想使当前Fragment不走immersionInit()方法，请子类重写immersionEnabled()方法，返回值设为false
+   ```java
+        @Override
+        protected boolean immersionEnabled() {
+            return false;
+        }
+   ```
+- 如果你的Fragment页面沉浸式都一样的话，你完全可以把它放在activity里的onCreate方法中初始化
 
 ## 状态栏与布局顶部重叠解决方案，五种方案任选其一
 - ① 使用dimen自定义状态栏高度
@@ -187,7 +201,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性，要慎用，会有意想不到的坑
+- ② 使用系统的fitsSystemWindows属性，要慎用，会有意想不到的坑，比如界面会发生错位
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -246,7 +260,7 @@
 - ⑤ 使用ImmersionBar的titleBar(View view)方法
     ```java
              ImmersionBar.with(this)
-                   .titleBar(view) //指定标题栏view
+                   .titleBar(view) //指定标题栏view,xml里的标题的高度不能指定为warp_content
                    .init();
      ```
        
@@ -260,7 +274,7 @@
 ## 当白色背景状态栏遇到不能改变状态栏字体为深色的设备时，解决方案
    ```java
          ImmersionBar.with(this)
-                     .statusBarDarkFont(true, 0.2f)
+                     .statusBarDarkFont(true, 0.2f) //原理：如果当前设备支持状态栏字体变色，会设置状态栏字体为黑色，如果当前设备不支持状态栏字体变色，会使当前状态栏加上透明度，否则不执行透明度
                      .init();
    ```
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
@@ -290,6 +304,10 @@
 - public static int getActionBarHeight(Activity activity)
  
     或得ActionBar得高度
+    
+- public static boolean isSupportStatusBarDarkFont()
+ 
+    判断当前设备支不支持状态栏字体设置为黑色
 
 ## 效果图 ##
 #### 说明 ####

@@ -42,7 +42,7 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status_color:
-                ImmersionBar.with(this).statusBarColor(R.color.colorAccent).removeSupportView().init();
+                ImmersionBar.with(this).statusBarColor(R.color.colorAccent).init();
                 break;
             case R.id.btn_navigation_color:
                 if (ImmersionBar.hasNavigationBar(this))

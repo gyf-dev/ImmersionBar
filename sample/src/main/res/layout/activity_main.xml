@@ -13,11 +13,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/status_bar_height"
-            android:background="@color/colorPrimary" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -57,6 +52,10 @@
                     android:id="@+id/btn_color"
                     style="@style/btn"
                     android:text="彩色状态栏 + 彩色导航栏" />
+                <Button
+                    android:id="@+id/btn_shape"
+                    style="@style/btn"
+                    android:text="仿QQ状态栏和标题栏渐变色" />
 
                 <Button
                     android:id="@+id/btn_swipe_back"

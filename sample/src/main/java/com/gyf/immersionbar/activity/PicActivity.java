@@ -30,7 +30,7 @@ public class PicActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_pic);
         ButterKnife.bind(this);
         ImmersionBar.with(this)
-                .titleBar(toolbar)
+                .titleBar(toolbar,false)
                 .transparentBar()
                 .init();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

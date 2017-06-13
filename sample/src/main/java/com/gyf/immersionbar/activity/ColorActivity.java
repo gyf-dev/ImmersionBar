@@ -56,7 +56,7 @@ public class ColorActivity extends BaseActivity {
                         .barAlpha(alpha)
                         .statusBarColorTransform(R.color.btn14)
                         .navigationBarColorTransform(R.color.btn3)
-                        .setViewSupportTransformColor(mToolbar)
+                        .addViewSupportTransformColor(mToolbar)
                         .addViewSupportTransformColor(btn1, R.color.btn1, R.color.btn4)
                         .addViewSupportTransformColor(btn2, R.color.btn3, R.color.btn12)
                         .addViewSupportTransformColor(btn3, R.color.btn5, R.color.btn10)
