@@ -59,11 +59,6 @@
                  .reset()  //重置所以沉浸式参数
                  .init();  //必须调用方可沉浸式
     ```
-- 取消沉浸式
-
-     ```java
-       ImmersionBar.with(FourFragment.this).cancel();
-    ```
     
 ### 关闭销毁
 - 在activity的onDestroy方法中执行
