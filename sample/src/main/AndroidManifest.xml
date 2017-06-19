@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gyf.immersionbar">
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
     <application
@@ -25,8 +26,9 @@
         <activity
             android:name=".activity.BackActivity"
             android:theme="@style/AppTheme.Transparent" />
-        <activity android:name=".activity.FragmentActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.FragmentActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.OverActivity" />
         <activity android:name=".activity.Over1Activity" />
         <activity android:name=".activity.Over2Activity" />
@@ -36,11 +38,12 @@
         <activity android:name=".activity.KeyBoardActivity" />
         <activity android:name=".activity.CoordinatorActivity" />
         <activity android:name=".activity.FlymeActivity" />
-        <activity android:name=".activity.ShapeActivity"/>
+        <activity android:name=".activity.ShapeActivity" />
         <activity
             android:name=".activity.ActionBarActivity"
             android:theme="@style/ActionBar" />
         <activity android:name=".activity.WhiteStatusBarActivity" />
+        <activity android:name=".activity.WebActivity" />
     </application>
 
 </manifest>

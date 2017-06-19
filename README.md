@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.3'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.4'
    ```
 
 >eclipse
 
-[barlibrary-2.2.3.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.3.jar) 
+[barlibrary-2.2.4.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.4.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.3.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.4.apk) 
   
 ## 用法 
 ### 初始化
@@ -261,7 +261,13 @@
        
 ## 解决EditText和软键盘的问题
    ```java
-         KeyboardPatch.patch(this, linearLayout).enable(); //解决底部EditText和软键盘的问题，linearLayout指的是当前布局的根节点
+       ImmersionBar.with(this)
+                   .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
+                   .init();
+       或者
+       // KeyboardPatch.patch(this).enable();
+       或者,layout指的是当前布局的根节点
+       // KeyboardPatch.patch(this, layout).enable();
    ```
  
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_edit.gif"/>

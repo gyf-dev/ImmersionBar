@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
@@ -69,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
-            R.id.btn_drawer, R.id.btn_coordinator, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
+            R.id.btn_drawer, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
             R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
             R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light})
     public void onClick(View view) {
@@ -100,6 +101,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.btn_coordinator:
                 startActivity(new Intent(this, CoordinatorActivity.class));
+                break;
+            case R.id.btn_web:
+                startActivity(new Intent(this, WebActivity.class));
                 break;
             case R.id.btn_action_bar:
                 startActivity(new Intent(this, ActionBarActivity.class));
@@ -150,6 +154,7 @@ public class MainActivity extends BaseActivity {
         }
 
     }
+
     private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {

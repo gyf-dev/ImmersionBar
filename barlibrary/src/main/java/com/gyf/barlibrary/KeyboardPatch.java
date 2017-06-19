@@ -9,32 +9,47 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 /**
- * 解决EditText和软键盘的问题
+ * 解决底部输入框和软键盘的问题
  * Created by geyifeng on 2017/5/17.
  */
-
 public class KeyboardPatch {
     private Activity mActivity;
     private View mDecorView;
     private View mContentView;
+    private boolean flag = false;
 
-
-    private KeyboardPatch() {
+    private KeyboardPatch(Activity activity) {
+        this(activity, activity.findViewById(android.R.id.content));
     }
 
-    /**
-     * 构造函数
-     *
-     * @param activity    需要解决bug的activity
-     * @param contentView 界面容器，如果使用ImmersionBar这个库，对于android 5.0来说，在activity中一般是R.id.content
-     *                    ，也可能是Fragment的容器，根据个人需要传递，为了方便指定布局的根节点就行
-     */
     private KeyboardPatch(Activity activity, View contentView) {
         this.mActivity = activity;
         this.mDecorView = activity.getWindow().getDecorView();
         this.mContentView = contentView;
+        if (contentView.equals(activity.findViewById(android.R.id.content))) {
+            this.flag = false;
+        } else {
+            this.flag = true;
+        }
     }
 
+    /**
+     * Patch keyboard patch.
+     *
+     * @param activity the activity
+     * @return the keyboard patch
+     */
+    public static KeyboardPatch patch(Activity activity) {
+        return new KeyboardPatch(activity);
+    }
+
+    /**
+     * Patch keyboard patch.
+     *
+     * @param activity    the activity
+     * @param contentView 界面容器，指定布局的根节点
+     * @return the keyboard patch
+     */
     public static KeyboardPatch patch(Activity activity, View contentView) {
         return new KeyboardPatch(activity, contentView);
     }
@@ -70,11 +85,19 @@ public class KeyboardPatch {
             int diff = height - r.bottom;
             if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
-                    mContentView.setPadding(0, 0, 0, diff);
+                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())) {
+                        mContentView.setPadding(0, 0, 0, diff);
+                    } else {
+                        mContentView.setPadding(0, 0, 0, diff + ImmersionBar.getNavigationBarHeight(mActivity));
+                    }
                 }
             } else {
                 if (mContentView.getPaddingBottom() != 0) {
-                    mContentView.setPadding(0, 0, 0, 0);
+                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())) {
+                        mContentView.setPadding(0, 0, 0, 0);
+                    } else {
+                        mContentView.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(mActivity));
+                    }
                 }
             }
         }

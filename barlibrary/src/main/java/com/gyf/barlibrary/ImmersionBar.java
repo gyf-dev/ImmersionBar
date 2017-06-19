@@ -1051,6 +1051,18 @@ public class ImmersionBar {
     }
 
     /**
+     * 解决软键盘与底部输入框冲突问题 ，默认是false
+     * Keyboard enable immersion bar.
+     *
+     * @param enable the enable
+     * @return the immersion bar
+     */
+    public ImmersionBar keyboardEnable(boolean enable) {
+        mBarParams.keyboardEnable = enable;
+        return this;
+    }
+
+    /**
      * 通过上面配置后初始化后方可成功调用
      */
     public void init() {
@@ -1058,6 +1070,7 @@ public class ImmersionBar {
         initBar();   //初始化沉浸式
         setStatusBarView();  //通过状态栏高度动态设置状态栏布局
         transformView();  //变色view
+        keyboardEnable();  //解决软键盘与底部输入框冲突问题
     }
 
     /**
@@ -1375,6 +1388,20 @@ public class ImmersionBar {
                     mContentView.setPadding(0, mConfig.getStatusBarHeight(), 0, 0);
                 else
                     mContentView.setPadding(0, 0, 0, 0);
+            }
+        }
+    }
+
+    /**
+     * 解决底部输入框与软键盘问题
+     * Keyboard enable.
+     */
+    private void keyboardEnable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (mBarParams.keyboardEnable) {  //解决软键盘与底部输入框冲突问题
+                KeyboardPatch.patch(mActivity).enable();
+            } else {
+                KeyboardPatch.patch(mActivity).disable();
             }
         }
     }

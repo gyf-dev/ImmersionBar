@@ -46,6 +46,7 @@ public class BarParams implements Cloneable {
     public View titleBarView;                     //标题栏view
     public int titleBarHeight;                    //标题栏的高度
     public int titleBarPaddingTopHeight;                    //标题栏的paddingTop高度
+    public boolean keyboardEnable = false;   //解决软键盘与输入框冲突问题
 
     @Override
     protected BarParams clone() {

@@ -78,6 +78,11 @@
                     android:text="结合CoordinatorLayout使用" />
 
                 <Button
+                    android:id="@+id/btn_web"
+                    style="@style/btn"
+                    android:text="结合WebView使用" />
+
+                <Button
                     android:id="@+id/btn_action_bar"
                     style="@style/btn"
                     android:text="结合ActionBar使用" />

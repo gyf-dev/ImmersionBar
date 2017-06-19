@@ -6,6 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.gyf.barlibrary.BarHide;
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.KeyboardPatch;
 import com.gyf.immersionbar.R;
 
@@ -26,7 +28,7 @@ import static android.R.attr.name;
 public class KeyBoardActivity extends BaseActivity {
 
     @BindView(R.id.line)
-    LinearLayout linearLayout;
+    LinearLayout layout;
     @BindView(R.id.list_view)
     ListView listView;
     private List<Map<String, Object>> mapList;
@@ -36,8 +38,12 @@ public class KeyBoardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_key_board);
         ButterKnife.bind(this);
-        KeyboardPatch.patch(this, linearLayout).enable(); //解决底部EditText和软键盘的问题
-
+        ImmersionBar.with(this)
+                .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
+                .init();
+        //或者使用以下方法，任选其一
+//        KeyboardPatch.patch(this).enable();
+//        KeyboardPatch.patch(this,layout).enable();  //layout指的是当前布局的根节点
         mapList = new ArrayList<>();
         for (int i = 1; i <= 20; i++) {
             Map<String, Object> map = new HashMap<>();
