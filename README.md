@@ -57,6 +57,7 @@
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
+                 .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false
                  .init();  //必须调用方可沉浸式
     ```
     
