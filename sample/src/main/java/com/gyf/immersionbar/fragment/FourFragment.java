@@ -28,6 +28,7 @@ public class FourFragment extends BaseFragment {
 
     @Override
     protected void immersionInit() {
+        super.immersionInit();
         ImmersionBar.with(this)
                 .titleBar(toolbar)
                 .statusBarDarkFont(true)

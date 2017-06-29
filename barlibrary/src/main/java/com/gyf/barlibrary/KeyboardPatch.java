@@ -58,8 +58,12 @@ public class KeyboardPatch {
      * 监听layout变化
      */
     public void enable() {
-        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+        enable(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    public void enable(int mode) {
+        mActivity.getWindow().setSoftInputMode(mode);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);//当在一个视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变时，所要调用的回调函数的接口类
         }
@@ -69,6 +73,11 @@ public class KeyboardPatch {
      * 取消监听
      */
     public void disable() {
+        disable(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    public void disable(int mode) {
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -85,7 +94,8 @@ public class KeyboardPatch {
             int diff = height - r.bottom;
             if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
-                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())) {
+                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
+                            || !ImmersionBar.with(mActivity).getBarParams().navigationBarEnable) {
                         mContentView.setPadding(0, 0, 0, diff);
                     } else {
                         mContentView.setPadding(0, 0, 0, diff + ImmersionBar.getNavigationBarHeight(mActivity));
@@ -93,7 +103,8 @@ public class KeyboardPatch {
                 }
             } else {
                 if (mContentView.getPaddingBottom() != 0) {
-                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())) {
+                    if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
+                            || !ImmersionBar.with(mActivity).getBarParams().navigationBarEnable) {
                         mContentView.setPadding(0, 0, 0, 0);
                     } else {
                         mContentView.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(mActivity));

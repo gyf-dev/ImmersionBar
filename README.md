@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.4'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.5'
    ```
 
 >eclipse
 
-[barlibrary-2.2.4.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.4.jar) 
+[barlibrary-2.2.5.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.5.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.4.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.5.apk) 
   
 ## 用法 
 ### 初始化
@@ -54,10 +54,12 @@
                  .barColorTransform(R.color.orange)  //状态栏和导航栏变色后的颜色
                  .removeSupportView(toolbar)  //移除指定view支持
                  .removeSupportAllView() //移除全部view支持
+                 .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为false
+                 .fixMarginAtBottom(true)   //当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
-                 .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false
+                 .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false，还有一个重载方法，可以指定软键盘mode
                  .init();  //必须调用方可沉浸式
     ```
     

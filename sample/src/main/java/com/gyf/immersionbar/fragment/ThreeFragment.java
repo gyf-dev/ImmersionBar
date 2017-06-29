@@ -27,6 +27,7 @@ public class ThreeFragment extends BaseFragment {
 
     @Override
     protected void immersionInit() {
+        super.immersionInit();
         ImmersionBar.with(this)
                 .titleBar(toolbar)
                 .navigationBarColor(R.color.btn13)

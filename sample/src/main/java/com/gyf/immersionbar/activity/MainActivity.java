@@ -1,24 +1,16 @@
 package com.gyf.immersionbar.activity;
 
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.BarParams;
-import com.gyf.barlibrary.FlymeOSStatusBarFontUtils;
 import com.gyf.barlibrary.ImmersionBar;
-import com.gyf.barlibrary.OSUtils;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
@@ -62,12 +54,13 @@ public class MainActivity extends BaseActivity {
 //                .barColorTransform(R.color.orange)  //状态栏和导航栏变色后的颜色
 //                .removeSupportView(toolbar)  //移除指定view支持
 //                .removeSupportAllView() //移除全部view支持
+//                .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为false
+//                .fixMarginAtBottom(true)   //当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
 //                .addTag("tag")  //给以上设置的参数打标记
 //                .getTag("tag")  //根据tag获得沉浸式参数
 //                .reset()  //重置所以沉浸式参数
 //                .init();  //必须调用方可沉浸式
     }
-
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
             R.id.btn_drawer, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
@@ -154,25 +147,6 @@ public class MainActivity extends BaseActivity {
         }
 
     }
-
-    private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange) {
-            int navigationBarIsMin = Settings.System.getInt(getContentResolver(),
-                    "navigationbar_is_min", 0);
-            if (navigationBarIsMin == 1) {
-                //导航键隐藏了
-                ImmersionBar.with(MainActivity.this)
-                        .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                        .init();
-            } else {
-                ImmersionBar.with(MainActivity.this)
-                        .hideBar(BarHide.FLAG_SHOW_BAR)
-                        .init();
-                //导航键显示了
-            }
-        }
-    };
 
     @Override
     protected void onStop() {

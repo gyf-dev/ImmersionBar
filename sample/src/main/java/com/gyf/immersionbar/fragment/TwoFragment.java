@@ -28,6 +28,7 @@ public class TwoFragment extends BaseFragment {
 
     @Override
     protected void immersionInit() {
+        super.immersionInit();
         ImmersionBar.with(this)
                 .titleBar(toolbar)
                 .statusBarDarkFont(true, 0.2f)
