@@ -96,7 +96,7 @@
 
 ## 在Fragment中实现沉浸式
 
-注意：2.2.6版本已将ImmersionFragment这个类标记为过时，请用户自行使用懒加载方式实现
+注意：2.2.6版本已将[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)这个类标记为过时，请用户自行使用懒加载方式实现
 
 - 在Fragment使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
