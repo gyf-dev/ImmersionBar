@@ -49,6 +49,7 @@ public class BarParams implements Cloneable {
     public boolean keyboardEnable = false;   //解决软键盘与输入框冲突问题
     public int keyboardMode;                 //软键盘属性
     public boolean navigationBarEnable = true;      //是否能修改导航栏颜色
+    public boolean navigationBarWithKitkatEnable = true;      //是否能修改4.4手机导航栏颜色
     public boolean fixMarginAtBottom = false;  //解决出现底部多余导航栏高度，默认为false
 
     @Override

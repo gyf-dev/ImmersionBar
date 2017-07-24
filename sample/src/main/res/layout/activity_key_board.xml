@@ -7,26 +7,21 @@
     android:background="@color/darker_gray"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/status_bar_height"
-        android:background="@color/colorPrimary" />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="解决EditText和软键盘的问题"
         app:titleTextColor="@android:color/white" />
 
     <ListView
-        android:background="@android:color/white"
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@android:color/white" />
 
 
     <EditText

@@ -30,7 +30,7 @@ public class PicActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_pic);
         ButterKnife.bind(this);
         ImmersionBar.with(this)
-                .titleBar(toolbar,false)
+                .titleBar(toolbar, false)
                 .transparentBar()
                 .init();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -39,7 +39,7 @@ public class PicActivity extends SwipeBackActivity {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
                 ImmersionBar.with(PicActivity.this)
-                        .addViewSupportTransformColor(toolbar,R.color.colorPrimary)
+                        .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
                         .navigationBarColorTransform(R.color.orange)
                         .barAlpha(alpha)
                         .init();

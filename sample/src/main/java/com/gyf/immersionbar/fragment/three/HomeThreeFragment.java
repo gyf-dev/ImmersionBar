@@ -1,6 +1,11 @@
-package com.gyf.immersionbar.fragment;
+package com.gyf.immersionbar.fragment.three;
 
+import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +17,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.adapter.OneAdapter;
+import com.gyf.immersionbar.fragment.BaseNoImmersionAndNoLazyFragment;
+import com.gyf.immersionbar.fragment.BaseNoImmersionFragment;
 import com.gyf.immersionbar.utils.GlideImageLoader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -26,7 +33,7 @@ import butterknife.BindView;
  * Created by geyifeng on 2017/5/12.
  */
 
-public class OneFragment extends BaseFragment {
+public class HomeThreeFragment extends BaseNoImmersionFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -35,15 +42,31 @@ public class OneFragment extends BaseFragment {
     @BindView(R.id.refreshLayout)
     TwinklingRefreshLayout refreshLayout;
     private OneAdapter mOneAdapter;
+    private List<String> mItemList = new ArrayList<>();
+    private List<String> mImages = new ArrayList<>();
+    private int bannerHeight;
     private View headView;
-    private List<String> mItemList;
-    private List<String> mImages;
-    private int bannerHeight = 300;
-    private Banner banner;
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ImmersionBar.setTitleBar(getActivity(), mToolbar);
+    }
 
     @Override
     protected int setLayoutId() {
-        return R.layout.fragment_one;
+        return R.layout.fragment_one_home;
+    }
+
+    @Override
+    protected void initData() {
+        for (int i = 1; i <= 20; i++) {
+            mItemList.add("item" + i);
+        }
+        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
+        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
+        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
+        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
     }
 
     @Override
@@ -55,39 +78,28 @@ public class OneFragment extends BaseFragment {
         mOneAdapter = new OneAdapter();
         mOneAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         mRv.setAdapter(mOneAdapter);
-    }
-
-    @Override
-    protected void initData() {
-        mItemList = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
-            mItemList.add("item" + i);
-        }
-        mImages = new ArrayList<>();
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mOneAdapter.setNewData(mItemList);
         addHeaderView();
+        mOneAdapter.setPreLoadNumber(1);
+        mOneAdapter.setNewData(mItemList);
     }
 
     private void addHeaderView() {
-        headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
-        banner = (Banner) headView.findViewById(R.id.banner);
-        banner.setImages(mImages)
-                .setImageLoader(new GlideImageLoader())
-                .setDelayTime(5000)
-                .start();
-        mOneAdapter.addHeaderView(headView);
-        mOneAdapter.setPreLoadNumber(1);
+        if (mImages != null && mImages.size() > 0) {
+            headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
+            Banner banner = (Banner) headView.findViewById(R.id.banner);
+            banner.setImages(mImages)
+                    .setImageLoader(new GlideImageLoader())
+                    .setDelayTime(5000)
+                    .start();
+            mOneAdapter.addHeaderView(headView);
+            ViewGroup.LayoutParams bannerParams = banner.getLayoutParams();
+            ViewGroup.LayoutParams titleBarParams = mToolbar.getLayoutParams();
+            bannerHeight = bannerParams.height - titleBarParams.height - ImmersionBar.getStatusBarHeight(getActivity());
+        }
     }
 
     @Override
     protected void setListener() {
-        ViewGroup.LayoutParams bannerParams = banner.getLayoutParams();
-        ViewGroup.LayoutParams titleBarParams = mToolbar.getLayoutParams();
-        bannerHeight = bannerParams.height - titleBarParams.height - ImmersionBar.getStatusBarHeight(getActivity());
         mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int totalDy = 0;
 
@@ -95,15 +107,13 @@ public class OneFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 totalDy += dy;
-                ImmersionBar immersionBar = ImmersionBar.with(OneFragment.this)
-                        .addViewSupportTransformColor(mToolbar, R.color.colorPrimary);
                 if (totalDy <= bannerHeight) {
                     float alpha = (float) totalDy / bannerHeight;
-                    immersionBar.statusBarAlpha(alpha)
-                            .init();
+                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
+                            , ContextCompat.getColor(mActivity, R.color.colorPrimary), alpha));
                 } else {
-                    immersionBar.statusBarAlpha(1.0f)
-                            .init();
+                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
+                            , ContextCompat.getColor(mActivity, R.color.colorPrimary), 1));
                 }
             }
         });
@@ -133,7 +143,7 @@ public class OneFragment extends BaseFragment {
                         mOneAdapter.setNewData(mItemList);
                         refreshLayout.finishRefreshing();
                         mToolbar.setVisibility(View.VISIBLE);
-                        ImmersionBar.with(OneFragment.this).statusBarDarkFont(false).init();
+                        ImmersionBar.with(mActivity).statusBarDarkFont(false).init();
                     }
                 }, 2000);
             }
@@ -141,17 +151,17 @@ public class OneFragment extends BaseFragment {
             @Override
             public void onPullingDown(TwinklingRefreshLayout refreshLayout, float fraction) {
                 mToolbar.setVisibility(View.GONE);
-                ImmersionBar.with(OneFragment.this).statusBarDarkFont(true).init();
+                ImmersionBar.with(mActivity).statusBarDarkFont(true).init();
             }
 
             @Override
             public void onPullDownReleasing(TwinklingRefreshLayout refreshLayout, float fraction) {
                 if (Math.abs(fraction - 1.0f) > 0) {
                     mToolbar.setVisibility(View.VISIBLE);
-                    ImmersionBar.with(OneFragment.this).statusBarDarkFont(false).init();
+                    ImmersionBar.with(mActivity).statusBarDarkFont(false).init();
                 } else {
                     mToolbar.setVisibility(View.GONE);
-                    ImmersionBar.with(OneFragment.this).statusBarDarkFont(true).init();
+                    ImmersionBar.with(mActivity).statusBarDarkFont(true).init();
                 }
             }
         });
@@ -171,14 +181,5 @@ public class OneFragment extends BaseFragment {
             data.add("item" + i);
         }
         return data;
-    }
-
-    @Override
-    protected void immersionInit() {
-        super.immersionInit();
-        ImmersionBar.with(this)
-                .titleBar(mToolbar,false)
-                .navigationBarColor(R.color.colorPrimary)
-                .init();
     }
 }

@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,9 +28,19 @@
         <activity
             android:name=".activity.BackActivity"
             android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".activity.FragmentActivity" />
         <activity
-            android:name=".activity.FragmentActivity"
-            android:screenOrientation="portrait" />
+            android:name=".activity.FragmentOneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".activity.FragmentTwoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".activity.FragmentThreeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".activity.FragmentFourActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".activity.OverActivity" />
         <activity android:name=".activity.Over1Activity" />
         <activity android:name=".activity.Over2Activity" />
@@ -37,6 +49,9 @@
         <activity android:name=".activity.Over5Activity" />
         <activity android:name=".activity.KeyBoardActivity" />
         <activity android:name=".activity.CoordinatorActivity" />
+        <activity
+            android:name=".activity.TabLayoutActivity"
+            android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".activity.FlymeActivity" />
         <activity android:name=".activity.ShapeActivity" />
         <activity

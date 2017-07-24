@@ -39,4 +39,10 @@
     <color name="shape1">#5d8df7</color>
     <color name="shape2">#5EB9F8</color>
     <color name="shape3">#5CC2F8</color>
+
+    <color name="cool_green_normal">#4caf50</color>
+    <color name="cool_green_shade">#81c784</color>
+
+    <color name="tab_bottom_normal">#999999</color>
+    <color name="tab_bottom_selected">#46c01b</color>
 </resources>

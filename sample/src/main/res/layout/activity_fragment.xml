@@ -3,71 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darker_gray"
     android:orientation="vertical">
 
-    <com.gyf.immersionbar.view.CustomViewPager
-        android:id="@+id/viewPager"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
+        app:title="结合Fragment使用"
+        app:titleTextColor="@android:color/white" />
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#888" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
 
-    <com.lzy.widget.AlphaIndicator
-        android:id="@+id/alphaIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.lzy.widget.AlphaView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            app:av_tabIconNormal="@mipmap/home_normal"
-            app:av_tabIconSelected="@mipmap/home_selected"
-            app:av_tabText="微信"
-            app:av_tabTextSize="14sp"
-            app:av_textColorNormal="#999999"
-            app:av_textColorSelected="#46c01b" />
+            <Button
+                android:id="@+id/btn_one"
+                style="@style/btn"
+                android:text="方法一：在Fragment里使用沉浸式(fragment+viewpager)" />
+            <Button
+                android:id="@+id/btn_two"
+                style="@style/btn"
+                android:text="方法二：在Fragment里使用沉浸式(fragment)" />
+            <Button
+                android:id="@+id/btn_three"
+                style="@style/btn"
+                android:text="方法三：在Activity里使用沉浸式(fragment+viewpager)" />
+            <Button
+                android:id="@+id/btn_four"
+                style="@style/btn"
+                android:text="方法四：在Activity里使用沉浸式(fragment)" />
+        </LinearLayout>
+    </ScrollView>
 
-        <com.lzy.widget.AlphaView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            app:av_tabIconNormal="@mipmap/category_normal"
-            app:av_tabIconSelected="@mipmap/category_selected"
-            app:av_tabText="通讯录"
-            app:av_tabTextSize="14sp"
-            app:av_textColorNormal="#999999"
-            app:av_textColorSelected="#46c01b" />
-
-        <com.lzy.widget.AlphaView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            app:av_tabIconNormal="@mipmap/service_normal"
-            app:av_tabIconSelected="@mipmap/service_selected"
-            app:av_tabText="发现"
-            app:av_tabTextSize="14sp"
-            app:av_textColorNormal="#999999"
-            app:av_textColorSelected="#46c01b" />
-
-        <com.lzy.widget.AlphaView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            app:av_tabIconNormal="@mipmap/mine_normal"
-            app:av_tabIconSelected="@mipmap/mine_selected"
-            app:av_tabText="我"
-            app:av_tabTextSize="14sp"
-            app:av_textColorNormal="#999999"
-            app:av_textColorSelected="#46c01b" />
-    </com.lzy.widget.AlphaIndicator>
 </LinearLayout>

@@ -43,28 +43,43 @@ public class KeyBoardActivity extends BaseActivity {
     private List<Map<String, Object>> mapList;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_key_board);
-        ButterKnife.bind(this);
-        ImmersionBar.with(this)
+    protected int setLayoutId() {
+        return R.layout.activity_key_board;
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.titleBar(toolbar)
                 .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
                 .init();
-        //解决软键盘与底部输入框冲突问题，或者使用以下方法，任选其一
+//        解决软键盘与底部输入框冲突问题，或者使用以下方法，任选其一
 //        KeyboardPatch.patch(this).enable();
 //        KeyboardPatch.patch(this,layout).enable();  //layout指的是当前布局的根节点
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+    }
+
+    @Override
+    protected void initData() {
         mapList = new ArrayList<>();
         for (int i = 1; i <= 20; i++) {
             Map<String, Object> map = new HashMap<>();
             map.put("desc", "我是假数据" + i);
             mapList.add(map);
         }
+    }
+
+    @Override
+    protected void initView() {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         listView.setAdapter(new SimpleAdapter(this, mapList, R.layout.item_simple, new String[]{"desc"}, new int[]{R.id.text}));
+    }
+
+    @Override
+    protected void setListener() {
         //toolbar返回按钮监听
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

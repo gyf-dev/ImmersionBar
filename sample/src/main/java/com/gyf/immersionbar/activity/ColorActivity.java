@@ -1,20 +1,14 @@
 package com.gyf.immersionbar.activity;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by geyifeng on 2017/5/8.
@@ -38,22 +32,27 @@ public class ColorActivity extends BaseActivity {
     SeekBar seekBar;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_color);
-        ButterKnife.bind(this);
-        ImmersionBar.with(this)
-                .statusBarView(R.id.top_view)
+    protected int setLayoutId() {
+        return R.layout.activity_color;
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.statusBarView(R.id.top_view)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.btn8)
                 .init();
+    }
+
+    @Override
+    protected void setListener() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
-                ImmersionBar.with(ColorActivity.this)
-                        .barAlpha(alpha)
+                mImmersionBar.barAlpha(alpha)
                         .statusBarColorTransform(R.color.btn14)
                         .navigationBarColorTransform(R.color.btn3)
                         .addViewSupportTransformColor(mToolbar)

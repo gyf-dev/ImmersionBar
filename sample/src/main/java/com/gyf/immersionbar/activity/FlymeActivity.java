@@ -24,21 +24,24 @@ public class FlymeActivity extends BaseActivity {
     Button btn;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flyme);
-        ButterKnife.bind(this);
-        ImmersionBar.with(this)
-                .statusBarView(R.id.top_view)
-                .init();
+    protected int setLayoutId() {
+        return R.layout.activity_flyme;
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.statusBarView(R.id.top_view).init();
+    }
+
+    @Override
+    protected void setListener() {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String s = "#" + et.getText().toString();
                 if (s.length() == 7)
-                    ImmersionBar.with(FlymeActivity.this)
-                            .flymeOSStatusBarFontColor(s)
-                            .init();
+                    mImmersionBar.flymeOSStatusBarFontColor(s).init();
                 else
                     Toast.makeText(FlymeActivity.this, "请正确输入6位颜色值", Toast.LENGTH_SHORT).show();
             }

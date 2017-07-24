@@ -17,6 +17,7 @@ public class KeyboardPatch {
     private View mDecorView;
     private View mContentView;
     private boolean flag = false;
+    private BarParams mBarParams;
 
     private KeyboardPatch(Activity activity) {
         this(activity, activity.findViewById(android.R.id.content));
@@ -26,6 +27,7 @@ public class KeyboardPatch {
         this.mActivity = activity;
         this.mDecorView = activity.getWindow().getDecorView();
         this.mContentView = contentView;
+        mBarParams = ImmersionBar.with(mActivity).getBarParams();
         if (contentView.equals(activity.findViewById(android.R.id.content))) {
             this.flag = false;
         } else {
@@ -95,19 +97,33 @@ public class KeyboardPatch {
             if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
                     if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
-                            || !ImmersionBar.with(mActivity).getBarParams().navigationBarEnable) {
-                        mContentView.setPadding(0, 0, 0, diff);
+                            || !mBarParams.navigationBarEnable) {
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity), 0, diff);
+                        else
+                            mContentView.setPadding(0, 0, 0, diff);
                     } else {
-                        mContentView.setPadding(0, 0, 0, diff + ImmersionBar.getNavigationBarHeight(mActivity));
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity),
+                                    0, diff + ImmersionBar.getNavigationBarHeight(mActivity));
+                        else
+                            mContentView.setPadding(0, 0, 0, diff + ImmersionBar.getNavigationBarHeight(mActivity));
                     }
                 }
             } else {
                 if (mContentView.getPaddingBottom() != 0) {
                     if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
-                            || !ImmersionBar.with(mActivity).getBarParams().navigationBarEnable) {
-                        mContentView.setPadding(0, 0, 0, 0);
+                            || !mBarParams.navigationBarEnable) {
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity), 0, 0);
+                        else
+                            mContentView.setPadding(0, 0, 0, 0);
                     } else {
-                        mContentView.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(mActivity));
+                        if (mBarParams.fits)
+                            mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity),
+                                    0, ImmersionBar.getNavigationBarHeight(mActivity));
+                        else
+                            mContentView.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(mActivity));
                     }
                 }
             }

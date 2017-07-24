@@ -9,9 +9,8 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.ViewConfiguration;
-
-import java.lang.reflect.Method;
+import android.view.Display;
+import android.view.WindowManager;
 
 /**
  * Created by geyifeng on 2017/5/11.
@@ -23,9 +22,7 @@ class BarConfig {
     private static final String NAV_BAR_HEIGHT_RES_NAME = "navigation_bar_height";
     private static final String NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME = "navigation_bar_height_landscape";
     private static final String NAV_BAR_WIDTH_RES_NAME = "navigation_bar_width";
-    private static final String SHOW_NAV_BAR_RES_NAME = "config_showNavigationBar";
 
-    private static String sNavBarOverride;
     private final int mStatusBarHeight;
     private final int mActionBarHeight;
     private final boolean mHasNavigationBar;
@@ -33,19 +30,6 @@ class BarConfig {
     private final int mNavigationBarWidth;
     private final boolean mInPortrait;
     private final float mSmallestWidthDp;
-
-    static {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                Class c = Class.forName("android.os.SystemProperties");
-                Method m = c.getDeclaredMethod("get", String.class);
-                m.setAccessible(true);
-                sNavBarOverride = (String) m.invoke(null, "qemu.hw.mainkeys");
-            } catch (Throwable e) {
-                sNavBarOverride = null;
-            }
-        }
-    }
 
 
     public BarConfig(Activity activity) {
@@ -75,7 +59,7 @@ class BarConfig {
         Resources res = context.getResources();
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (hasNavBar(context)) {
+            if (hasNavBar((Activity) context)) {
                 String key;
                 if (mInPortrait) {
                     key = NAV_BAR_HEIGHT_RES_NAME;
@@ -93,7 +77,7 @@ class BarConfig {
         Resources res = context.getResources();
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (hasNavBar(context)) {
+            if (hasNavBar((Activity) context)) {
                 return getInternalDimensionSize(res, NAV_BAR_WIDTH_RES_NAME);
             }
         }
@@ -101,21 +85,25 @@ class BarConfig {
     }
 
     @TargetApi(14)
-    private boolean hasNavBar(Context context) {
-        Resources res = context.getResources();
-        int resourceId = res.getIdentifier(SHOW_NAV_BAR_RES_NAME, "bool", "android");
-        if (resourceId != 0) {
-            boolean hasNav = res.getBoolean(resourceId);
-            // check override flag (see static block)
-            if ("1".equals(sNavBarOverride)) {
-                hasNav = false;
-            } else if ("0".equals(sNavBarOverride)) {
-                hasNav = true;
-            }
-            return hasNav;
-        } else { // fallback
-            return !ViewConfiguration.get(context).hasPermanentMenuKey();
+    private static boolean hasNavBar(Activity activity) {
+        WindowManager windowManager = activity.getWindowManager();
+        Display d = windowManager.getDefaultDisplay();
+
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            d.getRealMetrics(realDisplayMetrics);
         }
+
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        d.getMetrics(displayMetrics);
+
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
 
     private int getInternalDimensionSize(Resources res, String key) {

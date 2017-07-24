@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/cool_green_normal" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--标题栏-->
+            <include layout="@layout/cool_title" />
+
+            <!--选项卡-->
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@color/cool_green_normal"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@color/colorBarText" />
+        </android.support.design.widget.AppBarLayout>
+
+        <!--包含可滑动的布局内容(RecyclerView,NestedScrollView,不支持ListView，ScrollView)
+        必须要设置app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        属性来告知CoordinatorLayout该组件是带有滑动行为的组件,
+        然后CoordinatorLayout在接受到滑动时会通知AppBarLayout中可滑动的Toolbar可以滑出屏幕-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.5'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.6'
    ```
 
 >eclipse
 
-[barlibrary-2.2.5.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.5.jar) 
+[barlibrary-2.2.6.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.6.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/sample-2.2.5.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.6.apk) 
   
 ## 用法 
 ### 初始化
@@ -54,7 +54,8 @@
                  .barColorTransform(R.color.orange)  //状态栏和导航栏变色后的颜色
                  .removeSupportView(toolbar)  //移除指定view支持
                  .removeSupportAllView() //移除全部view支持
-                 .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为false
+                 .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为true
+                 .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4手机导航栏颜色，默认为true
                  .fixMarginAtBottom(true)   //当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
@@ -71,100 +72,41 @@
     ```
 	
 ## 建议
-- 建议在BaseActivity中初始化和销毁
+- 建议在BaseActivity中初始化和销毁,可以参看demo中[BaseActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/BaseActivity.java)
 
     ```java
     public class BaseActivity extends AppCompatActivity {
+  
+         private ImmersionBar mImmersionBar;
          @Override
          protected void onCreate(@Nullable Bundle savedInstanceState) {
              super.onCreate(savedInstanceState);
-             ImmersionBar.with(this).init();   //所有子类都将继承这些相同的属性
+           mImmersionBar = ImmersionBar.with(this);
+           mImmersionBar.init();   //所有子类都将继承这些相同的属性
+            
          }
      
          @Override
          protected void onDestroy() {
              super.onDestroy();
-             ImmersionBar.with(this).destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+             mImmersionBar.destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
          }
      }
     ```
 
-## 在Fragment中的用法（fragment+viewpager）
-为了使每个fragment都可以设置不同的沉浸式样式，这里给出两种解决方式，这两种实现效果都一样的
+## 在Fragment中实现沉浸式
 
--  ①使用viewpager的addOnPageChangeListener方法，代码如下
+注意：2.1.6版本已将ImmersionFragment这个类标记为过时，请用户自行使用懒加载方式实现
 
-   ```java
-    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                switch (position) {
-                    case 0:
-                        ImmersionBar.with(oneFragment)
-                                .navigationBarColor(R.color.btn4)
-                                .init();
-                        break;
-                    case 1:
-                        ImmersionBar.with(twoFragment)
-                                .statusBarDarkFont(true)
-                                .navigationBarColor(R.color.btn3)
-                                .init();
-                        break;
-                    case 2:
-                        ImmersionBar.with(threeFragment)
-                                .navigationBarColor(R.color.btn13)
-                                .init();
-                        break;
-                    case 3:
-                        ImmersionBar.with(fourFragment)
-                                .statusBarDarkFont(true)
-                                .navigationBarColor(R.color.btn1)
-                                .init();
-                        break;
-                }
-            }
-    
-            @Override
-            public void onPageSelected(int position) {
-    
-            }
-    
-            @Override
-            public void onPageScrollStateChanged(int state) {
-    
-            }
-        });
-    ```
-    
--  ②继承ImmersionFragment类，在immersionInit中初始化沉浸式，调用该方法必须保证加载Fragment的Activity先初始化,代码如下：
-
-    ```java
-    public class OneFragment extends ImmersionFragment {
-         @Nullable
-         @Override
-            public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-                return inflater.inflate(R.layout.fragment_one, container, false);
-            }
-            @Override
-            protected void immersionInit() {
-                ImmersionBar.with(this) 
-                        .statusBarDarkFont(false)
-                        .navigationBarColor(R.color.btn4)
-                        .init();
-            }
-        }
-    ```
-- 如果想使当前Fragment不走immersionInit()方法，请子类重写immersionEnabled()方法，返回值设为false
-   ```java
-        @Override
-        protected boolean immersionEnabled() {
-            return false;
-        }
-   ```
-- 如果你的Fragment页面沉浸式都一样的话，你完全可以把它放在activity里的onCreate方法中初始化
+- 在Fragment使用ImmersionBar
+  #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
+  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseNoLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseNoLazyFragment.java)这个类
+- 在Activity使用ImmersionBar
+  #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
+  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
 
 ## 状态栏与布局顶部重叠解决方案，五种方案任选其一
-- ① 使用dimen自定义状态栏高度
+- ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
 
     在values-v19/dimens.xml文件下
     ```xml
@@ -254,12 +196,16 @@
          ImmersionBar.with(this)
                .statusBarView(view)
                .init();
+         //或者
+         //ImmersionBar.setTitleBar(this,view);
      ```   
 - ⑤ 使用ImmersionBar的titleBar(View view)方法
     ```java
              ImmersionBar.with(this)
                    .titleBar(view) //指定标题栏view,xml里的标题的高度不能指定为warp_content
                    .init();
+             //或者
+             //ImmersionBar.setTitleBar(this, view);
      ```
        
 ## 解决EditText和软键盘的问题
@@ -282,6 +228,52 @@
                      .init();
    ```
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
+
+## 解决华为emui3.0或者3.1手机手动隐藏导航栏按钮时，导航栏背景未被隐藏的问题
+什么叫做手动隐藏，就是下图中标红的向下隐藏按钮
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/emui3.1_navigation_bar.png"/>
+- 第一种解决方案，监听华为虚拟按钮，建议在baseActivity里使用
+
+  ```java
+  
+  @Override
+      protected void onCreate(@Nullable Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          immersionBar = ImmersionBar.with(this);
+          immersionBar.init();
+          if (OSUtils.isEMUI3_1())  //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
+              getContentResolver().registerContentObserver(Settings.System.getUriFor
+                      ("navigationbar_is_min"), true, mNavigationStatusObserver);
+      }
+      
+      private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
+          @Override
+          public void onChange(boolean selfChange) {
+              int navigationBarIsMin = Settings.System.getInt(getContentResolver(),
+                      "navigationbar_is_min", 0);
+              if (navigationBarIsMin == 1) {
+                  //导航键隐藏了
+                  immersionBar
+                          .transparentNavigationBar()
+                          .init();
+              } else {
+                  //导航键显示了
+                  immersionBar
+                          .navigationBarColor(android.R.color.black)
+                          .fullScreen(false)
+                          .init();
+              }
+          }
+      };
+  ```      
+- 第二种解决方案，禁止对导航栏相关设置
+  ```java
+         ImmersionBar.with(this)
+                     .navigationBarEnable(false)   //禁止对导航栏相关设置
+                   //或者
+                   // .navigationBarWithKitkatEnable(false)  //禁止对4.4设备导航栏相关设置
+                     .init();
+   ```
 
 ## 状态栏和导航栏其它方法
 	
@@ -330,9 +322,9 @@
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_4.4_no.gif"/>
 
 ## 特别鸣谢 ##
-* 感谢[zhangzhen92](https://github.com/zhangzhen92)远程协助测试
+* 感谢[zhangzhen92](https://github.com/zhangzhen92)和[MrWhhh](https://github.com/MrWhhh)提供测试
 
 ## 联系我 ##
-- QQ群 314360549（沉浸式交流）
+- QQ群 314360549（问题交流）
 - WeChat(微信)
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/wechat.JPG"/>
