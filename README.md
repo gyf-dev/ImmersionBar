@@ -55,7 +55,7 @@
                  .removeSupportView(toolbar)  //移除指定view支持
                  .removeSupportAllView() //移除全部view支持
                  .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为true
-                 .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4手机导航栏颜色，默认为true
+                 .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4和emui3.1手机导航栏颜色，默认为true
                  .fixMarginAtBottom(true)   //当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
@@ -96,7 +96,7 @@
 
 ## 在Fragment中实现沉浸式
 
-注意：2.1.6版本已将ImmersionFragment这个类标记为过时，请用户自行使用懒加载方式实现
+注意：2.2.6版本已将ImmersionFragment这个类标记为过时，请用户自行使用懒加载方式实现
 
 - 在Fragment使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
