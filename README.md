@@ -197,7 +197,7 @@
                .statusBarView(view)
                .init();
          //或者
-         //ImmersionBar.setTitleBar(this,view);
+         //ImmersionBar.setStatusBarView(this,view);
      ```   
 - ⑤ 使用ImmersionBar的titleBar(View view)方法
     ```java

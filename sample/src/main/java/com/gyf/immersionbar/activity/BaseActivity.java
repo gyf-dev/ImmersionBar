@@ -15,6 +15,7 @@ import com.gyf.immersionbar.R;
 import butterknife.ButterKnife;
 
 /**
+ * Activity基类
  * Created by geyifeng on 2017/5/9.
  */
 
