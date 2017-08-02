@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
 
 import butterknife.ButterKnife;
@@ -69,6 +71,13 @@ public abstract class BaseLazyFragment extends Fragment {
         }
         initView();
         setListener();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mImmersionBar != null)
+            mImmersionBar.destroy();
     }
 
     @Override

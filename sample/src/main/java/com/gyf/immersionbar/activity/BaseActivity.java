@@ -31,7 +31,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         //绑定控件
         ButterKnife.bind(this);
         //初始化沉浸式
-        initImmersionBar();
+        if (isImmersionBarEnabled())
+            initImmersionBar();
         //初始化数据
         initData();
         //view与数据绑定
@@ -40,7 +41,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setListener();
         //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
         if (OSUtils.isEMUI3_1()) {
-            LogUtils.e("isEMUI3_1");
             //第一种
             getContentResolver().registerContentObserver(Settings.System.getUriFor
                     (NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
@@ -72,7 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void setListener() {
     }
 
-
     private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
@@ -89,4 +88,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     };
+
+    /**
+     * 是否可以使用沉浸式
+     * Is immersion bar enabled boolean.
+     *
+     * @return the boolean
+     */
+    protected boolean isImmersionBarEnabled() {
+        return true;
+    }
 }

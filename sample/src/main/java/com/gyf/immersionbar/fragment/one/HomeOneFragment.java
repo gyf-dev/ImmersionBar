@@ -114,7 +114,8 @@ public class HomeOneFragment extends BaseLazyFragment {
                     mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
                             , ContextCompat.getColor(mActivity, R.color.colorPrimary), 1));
                 }
-                //在Fragment里使用的时候，并且支持旋转屏幕，不建议使用ImmersionBar里的addViewSupportTransformColor()方法实现滑动渐变标题
+                //在Fragment里使用的时候，并且加载Fragment的Activity配置了android:configChanges="orientation|keyboardHidden|screenSize"属性时，
+                //不建议使用ImmersionBar里的addViewSupportTransformColor()方法实现标题滑动渐变
                 //原因是会导致影响其他页面的沉浸式效果，除非每个页面的沉浸式参数都一样
 //                mImmersionBar.addViewSupportTransformColor(mToolbar, R.color.colorPrimary);
 //                if (totalDy <= bannerHeight) {

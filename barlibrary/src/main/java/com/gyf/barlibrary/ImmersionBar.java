@@ -2,6 +2,7 @@ package com.gyf.barlibrary;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -10,6 +11,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.view.Gravity;
@@ -37,30 +39,16 @@ public class ImmersionBar {
     private static Map<String, BarParams> mMap = new HashMap<>();
     private static Map<String, BarParams> mTagMap = new HashMap<>();
     private static Map<String, ArrayList<String>> mTagKeyMap = new HashMap<>();
-    private static List<String> mFragmentList = new ArrayList<>();
     private Activity mActivity;
     private Window mWindow;
-    private ViewGroup mViewGroup;
+    private ViewGroup mDecorView;
     private ViewGroup mContentView;
     private BarParams mBarParams;
 
     private BarConfig mConfig;
     private String mActivityName;
     private String mFragmentName;
-
-    /**
-     * 在Fragment里初始化
-     * Instantiates a new Immersion bar.
-     *
-     * @param fragment the fragment
-     */
-    private ImmersionBar(Fragment fragment) {
-        mActivityName = fragment.getActivity().getClass().getName();
-        mFragmentName = mActivityName + "_and_" + fragment.getClass().getName();
-        if (!mFragmentList.contains(mFragmentName))
-            mFragmentList.add(mFragmentName);
-        initParams(fragment.getActivity(), mFragmentName);
-    }
+    private String mImmersionBarName;
 
     /**
      * 在Activit里初始化
@@ -69,35 +57,64 @@ public class ImmersionBar {
      * @param activity the activity
      */
     private ImmersionBar(Activity activity) {
+        mActivity = activity;
         mActivityName = activity.getClass().getName();
-        initParams(activity, mActivityName);
+        mWindow = mActivity.getWindow();
+        mImmersionBarName = mActivityName;
+        initParams();
+    }
+
+    /**
+     * 在Fragment里初始化
+     * Instantiates a new Immersion bar.
+     *
+     * @param fragment the fragment
+     */
+    private ImmersionBar(Fragment fragment) {
+        mActivity = fragment.getActivity();
+        mActivityName = mActivity.getClass().getName();
+        mWindow = mActivity.getWindow();
+        mFragmentName = mActivityName + "_AND_" + fragment.getClass().getName();
+        mImmersionBarName = mFragmentName;
+        initParams();
+    }
+
+    /**
+     * 在Dialog里初始化
+     * Instantiates a new Immersion bar.
+     *
+     * @param activity  the activity
+     * @param dialog    the dialog
+     * @param dialogTag the dialog tag  dialog标识，不能为空
+     */
+    private ImmersionBar(Activity activity, Dialog dialog, String dialogTag) {
+        mActivity = activity;
+        mActivityName = mActivity.getClass().getName();
+        mWindow = dialog.getWindow();
+        mImmersionBarName = mActivityName + "_AND_" + dialogTag;
+        initParams();
     }
 
     /**
      * 初始化沉浸式默认参数
      * Init params.
-     *
-     * @param activity the activity
-     * @param name     the name
      */
-    private void initParams(Activity activity, String name) {
-        mActivity = activity;
-        mWindow = mActivity.getWindow();
-        mViewGroup = (ViewGroup) mWindow.getDecorView();
-        mContentView = (ViewGroup) mActivity.findViewById(android.R.id.content);
-        mConfig = new BarConfig(activity);
-        if (mMap.get(name) == null) {
+    private void initParams() {
+        mDecorView = (ViewGroup) mWindow.getDecorView();
+        mContentView = (ViewGroup) mDecorView.findViewById(android.R.id.content);
+        mConfig = new BarConfig(mActivity);
+        if (mMap.get(mImmersionBarName) == null) {
             mBarParams = new BarParams();
-            if (mFragmentName != null && (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
+            if (!isEmpty(mFragmentName) && (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
                     || OSUtils.isEMUI3_1())) { //保证一个activity页面有同一个状态栏view和导航栏view
                 if (mMap.get(mActivityName) == null)
                     throw new IllegalArgumentException("在Fragment里使用时，请先在加载Fragment的Activity里初始化！！！");
                 mBarParams.statusBarView = mMap.get(mActivityName).statusBarView;
                 mBarParams.navigationBarView = mMap.get(mActivityName).navigationBarView;
             }
-            mMap.put(name, mBarParams);
+            mMap.put(mImmersionBarName, mBarParams);
         } else {
-            mBarParams = mMap.get(name);
+            mBarParams = mMap.get(mImmersionBarName);
         }
     }
 
@@ -109,6 +126,8 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public static ImmersionBar with(Activity activity) {
+        if (activity == null)
+            throw new IllegalArgumentException("Activity不能为null");
         return new ImmersionBar(activity);
     }
 
@@ -120,7 +139,28 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public static ImmersionBar with(Fragment fragment) {
+        if (fragment == null)
+            throw new IllegalArgumentException("Fragment不能为null");
         return new ImmersionBar(fragment);
+    }
+
+    /**
+     * 在dialog里使用
+     * With immersion bar.
+     *
+     * @param activity  the activity
+     * @param dialog    the dialog
+     * @param dialogTag the dialog tag
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(Activity activity, Dialog dialog, String dialogTag) {
+        if (activity == null)
+            throw new IllegalArgumentException("Activity不能为null");
+        if (dialog == null)
+            throw new IllegalArgumentException("Dialog不能为null");
+        if (isEmpty(dialogTag))
+            throw new IllegalArgumentException("tag不能为null或空");
+        return new ImmersionBar(activity, dialog, dialogTag);
     }
 
     /**
@@ -1070,7 +1110,7 @@ public class ImmersionBar {
             mBarParams.statusBarView = barParamsTemp.statusBarView;
             mBarParams.navigationBarView = barParamsTemp.navigationBarView;
         }
-        mMap.put(mActivityName, mBarParams);
+        mMap.put(mImmersionBarName, mBarParams);
         return this;
     }
 
@@ -1187,7 +1227,7 @@ public class ImmersionBar {
      * 通过上面配置后初始化后方可成功调用
      */
     public void init() {
-        mMap.put(mActivityName, mBarParams);
+        mMap.put(mImmersionBarName, mBarParams);
         initBar();   //初始化沉浸式
         setStatusBarView();  //通过状态栏高度动态设置状态栏布局
         transformView();  //变色view
@@ -1195,15 +1235,14 @@ public class ImmersionBar {
     }
 
     /**
-     * 当Activity关闭的时候，在onDestroy方法中调用
+     * 当Activity/Fragment/Dialog关闭的时候调用
      */
     public void destroy() {
         if (mActivity != null)
             mActivity = null;
-        if (mActivityName != null) {
-            if (mBarParams != null) {
+        if (!isEmpty(mImmersionBarName)) {
+            if (mBarParams != null)
                 mBarParams = null;
-            }
             ArrayList<String> tagList = mTagKeyMap.get(mActivityName);
             if (tagList != null && tagList.size() > 0) {
                 for (String tag : tagList) {
@@ -1211,13 +1250,7 @@ public class ImmersionBar {
                 }
                 mTagKeyMap.remove(mActivityName);
             }
-            if (mFragmentList.size() > 0) {
-                for (String name : mFragmentList) {
-                    if (name.contains(mActivityName))
-                        mMap.remove(name);
-                }
-            }
-            mMap.remove(mActivityName);
+            mMap.remove(mImmersionBarName);
         }
     }
 
@@ -1238,13 +1271,14 @@ public class ImmersionBar {
             uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
             mWindow.getDecorView().setSystemUiVisibility(uiFlags);
         }
-        if (OSUtils.isMIUI6More())
+        if (OSUtils.isMIUI6Later())
             setMIUIStatusBarDarkFont(mWindow, mBarParams.darkFont);         //修改miui状态栏字体颜色
-        if (OSUtils.isFlymeOS4More()) {          // 修改Flyme OS状态栏字体颜色
+        if (OSUtils.isFlymeOS4Later()) {          // 修改Flyme OS状态栏字体颜色
             if (mBarParams.flymeOSStatusBarFontColor != 0) {
                 FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.flymeOSStatusBarFontColor);
             } else {
-                FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.darkFont);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                    FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.darkFont);
             }
         }
     }
@@ -1313,7 +1347,7 @@ public class ImmersionBar {
         ViewGroup viewGroup = (ViewGroup) mBarParams.statusBarView.getParent();
         if (viewGroup != null)
             viewGroup.removeView(mBarParams.statusBarView);
-        mViewGroup.addView(mBarParams.statusBarView);
+        mDecorView.addView(mBarParams.statusBarView);
     }
 
     /**
@@ -1346,7 +1380,7 @@ public class ImmersionBar {
         ViewGroup viewGroup = (ViewGroup) mBarParams.navigationBarView.getParent();
         if (viewGroup != null)
             viewGroup.removeView(mBarParams.navigationBarView);
-        mViewGroup.addView(mBarParams.navigationBarView);
+        mDecorView.addView(mBarParams.navigationBarView);
     }
 
     /**
@@ -1554,9 +1588,9 @@ public class ImmersionBar {
     private void keyboardEnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (mBarParams.keyboardEnable) {  //解决软键盘与底部输入框冲突问题
-                KeyboardPatch.patch(mActivity).enable(mBarParams.keyboardMode);
+                KeyboardPatch.patch(mActivity, mWindow, mBarParams).enable(mBarParams.keyboardMode);
             } else {
-                KeyboardPatch.patch(mActivity).disable(mBarParams.keyboardMode);
+                KeyboardPatch.patch(mActivity, mWindow, mBarParams).disable(mBarParams.keyboardMode);
             }
         }
     }
@@ -1671,7 +1705,7 @@ public class ImmersionBar {
      * @return the boolean
      */
     public static boolean isSupportStatusBarDarkFont() {
-        if (OSUtils.isMIUI6More() || OSUtils.isFlymeOS4More()
+        if (OSUtils.isMIUI6Later() || OSUtils.isFlymeOS4Later()
                 || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
             return true;
         } else
@@ -1709,6 +1743,17 @@ public class ImmersionBar {
     }
 
     /**
+     * 隐藏状态栏
+     * Hide status bar.
+     *
+     * @param window the window
+     */
+    public static void hideStatusBar(Window window) {
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    /**
      * Gets bar params.
      *
      * @return the bar params
@@ -1725,7 +1770,7 @@ public class ImmersionBar {
         return barParams;
     }
 
-    private boolean isEmpty(String str) {
+    private static boolean isEmpty(String str) {
         return str == null || str.trim().length() == 0;
     }
 }

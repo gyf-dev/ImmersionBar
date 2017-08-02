@@ -36,4 +36,34 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--自定义Dialog样式-->
+    <style name="MyDialog" parent="AlertDialog.AppCompat">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!--顶部弹出Dialog动画-->
+    <style name="TopDialog" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_top_in</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_top_out</item>
+    </style>
+
+    <!--底部弹出Dialog动画-->
+    <style name="BottomDialog" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_bottom_in</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_bottom_out</item>
+    </style>
+
+    <!--左边弹出Dialog动画-->
+    <style name="LeftDialog" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_left_in</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_left_out</item>
+    </style>
+
+    <!--右边弹出Dialog动画-->
+    <style name="RightDialog" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_right_in</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_right_out</item>
+    </style>
+
 </resources>

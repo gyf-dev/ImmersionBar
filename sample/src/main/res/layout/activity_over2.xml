@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darker_gray"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -15,14 +15,15 @@
         app:titleTextColor="@android:color/white" />
 
     <TextView
-        android:layout_weight="1"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="20dp"
+        android:layout_weight="1"
         android:lineSpacingExtra="3dp"
         android:textColor="@android:color/black"
         android:textSize="15sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

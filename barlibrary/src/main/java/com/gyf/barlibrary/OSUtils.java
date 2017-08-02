@@ -27,11 +27,11 @@ public class OSUtils {
 
     /**
      * 判断miui版本是否大于等于6
-     * Is miui 6 more boolean.
+     * Is miui 6 later boolean.
      *
      * @return the boolean
      */
-    public static boolean isMIUI6More() {
+    public static boolean isMIUI6Later() {
         String version = getMIUIVersion();
         if ((!version.isEmpty() && Integer.valueOf(version.substring(1)) >= 6)) {
             return true;
@@ -96,11 +96,11 @@ public class OSUtils {
 
     /**
      * 判断flymeOS的版本是否大于等于4
-     * Is flyme os 4 more boolean.
+     * Is flyme os 4 later boolean.
      *
      * @return the boolean
      */
-    public static boolean isFlymeOS4More() {
+    public static boolean isFlymeOS4Later() {
         String version = getFlymeOSVersion();
         int num;
         if (!version.isEmpty()) {

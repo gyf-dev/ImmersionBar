@@ -29,18 +29,21 @@
                 android:id="@+id/btn_one"
                 style="@style/btn"
                 android:text="方法一：在Fragment里使用沉浸式(fragment+viewpager)" />
+
             <Button
                 android:id="@+id/btn_two"
                 style="@style/btn"
-                android:text="方法二：在Fragment里使用沉浸式(fragment)" />
+                android:text="方法二：在Fragment里使用沉浸式(使用show()和hide()控制fragment)" />
+
             <Button
                 android:id="@+id/btn_three"
                 style="@style/btn"
                 android:text="方法三：在Activity里使用沉浸式(fragment+viewpager)" />
+
             <Button
                 android:id="@+id/btn_four"
                 style="@style/btn"
-                android:text="方法四：在Activity里使用沉浸式(fragment)" />
+                android:text="方法四：在Activity里使用沉浸式(使用show()和hide()控制fragment)" />
         </LinearLayout>
     </ScrollView>
 

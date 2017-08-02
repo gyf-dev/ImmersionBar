@@ -59,6 +59,7 @@
             android:theme="@style/ActionBar" />
         <activity android:name=".activity.WhiteStatusBarActivity" />
         <activity android:name=".activity.WebActivity" />
+        <activity android:name=".activity.DialogActivity" />
     </application>
 
 </manifest>

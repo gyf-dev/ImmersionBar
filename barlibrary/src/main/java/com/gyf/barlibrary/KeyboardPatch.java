@@ -1,11 +1,12 @@
 package com.gyf.barlibrary;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Build;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 
 /**
@@ -20,19 +21,32 @@ public class KeyboardPatch {
     private BarParams mBarParams;
 
     private KeyboardPatch(Activity activity) {
-        this(activity, activity.findViewById(android.R.id.content));
+        this(activity, activity.getWindow());
+    }
+
+    private KeyboardPatch(Activity activity, Dialog dialog) {
+        this(activity, dialog.getWindow());
+    }
+
+    private KeyboardPatch(Activity activity, Window window) {
+        this(activity, window, ImmersionBar.with(activity).getBarParams());
+    }
+
+    private KeyboardPatch(Activity activity, Window window, BarParams barParams) {
+        this.mActivity = activity;
+        this.mDecorView = activity.getWindow().getDecorView();
+        this.mContentView = window.getDecorView().findViewById(android.R.id.content);
+        mBarParams = barParams;
     }
 
     private KeyboardPatch(Activity activity, View contentView) {
         this.mActivity = activity;
         this.mDecorView = activity.getWindow().getDecorView();
         this.mContentView = contentView;
-        mBarParams = ImmersionBar.with(mActivity).getBarParams();
-        if (contentView.equals(activity.findViewById(android.R.id.content))) {
-            this.flag = false;
-        } else {
+        if (!mContentView.equals(activity.findViewById(android.R.id.content))
+                || !mContentView.equals(mDecorView.findViewById(android.R.id.content)))
             this.flag = true;
-        }
+        mBarParams = ImmersionBar.with(mActivity).getBarParams();
     }
 
     /**
@@ -44,6 +58,19 @@ public class KeyboardPatch {
     public static KeyboardPatch patch(Activity activity) {
         return new KeyboardPatch(activity);
     }
+
+    public static KeyboardPatch patch(Activity activity, Dialog dialog) {
+        return new KeyboardPatch(activity, dialog);
+    }
+
+    public static KeyboardPatch patch(Activity activity, Window window) {
+        return new KeyboardPatch(activity, window);
+    }
+
+    public static KeyboardPatch patch(Activity activity, Window window, BarParams barParams) {
+        return new KeyboardPatch(activity, window, barParams);
+    }
+
 
     /**
      * Patch keyboard patch.
@@ -97,7 +124,7 @@ public class KeyboardPatch {
             if (diff > 0) {
                 if (mContentView.getPaddingBottom() != diff) {
                     if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
-                            || !mBarParams.navigationBarEnable) {
+                            || !mBarParams.navigationBarEnable || !mBarParams.navigationBarWithKitkatEnable) {
                         if (mBarParams.fits)
                             mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity), 0, diff);
                         else
@@ -113,7 +140,7 @@ public class KeyboardPatch {
             } else {
                 if (mContentView.getPaddingBottom() != 0) {
                     if (flag || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1())
-                            || !mBarParams.navigationBarEnable) {
+                            || !mBarParams.navigationBarEnable || !mBarParams.navigationBarWithKitkatEnable) {
                         if (mBarParams.fits)
                             mContentView.setPadding(0, ImmersionBar.getStatusBarHeight(mActivity), 0, 0);
                         else

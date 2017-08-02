@@ -23,7 +23,7 @@ public class Over1Activity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.navigationBarColor(R.color.colorPrimary).init();
+        mImmersionBar.navigationBarColor(R.color.colorPrimary).keyboardEnable(true).init();
     }
 
     @Override

@@ -7,20 +7,20 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.6'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.7'
    ```
 
 >eclipse
 
-[barlibrary-2.2.6.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.6.jar) 
+[barlibrary-2.2.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.7.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.6.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.7.apk) 
   
-## 用法 
+## 用法
 ### 初始化
 - 基础用法（已经可以满足日常沉浸式）
 
@@ -101,9 +101,38 @@
 - 在Fragment使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseNoLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseNoLazyFragment.java)这个类
+  注意：
+  - 2.2.7版本以后别忘了在Fragment的onDestroy方法里销毁沉浸式了，2.2.7版本之前不需要调用
+  
+  ```java
+     @Override
+     protected void onDestroy() {
+         super.onDestroy();
+         mImmersionBar.destroy();  
+     }
+  ```
+  - 以show()和hide()方式控制Fragment显示隐藏，别忘了重写onHiddenChanged方法，如下
+  
+  ```java
+       @Override
+       public void onHiddenChanged(boolean hidden) {
+           super.onHiddenChanged(hidden);
+           if (!hidden && mImmersionBar != null)
+              mImmersionBar.init();
+       }
+    ```
 - 在Activity使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
+
+## 在Dialog中实现沉浸式，具体实现参考demo
+
+   ```java
+         ImmersionBar.with(this, dialog, "flag")   //第三个参数是为当前Dialog加上标记，多个Dialog之间不可相同
+                     .init();
+      
+   ```
+   如果Dialog底部有输入框，使用keyboardEnable(true)解决输入框问题时，偶尔不起作用，目前还没有好的解决方案，如果你有解决方案请联系我
 
 ## 状态栏与布局顶部重叠解决方案，五种方案任选其一
 - ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
@@ -162,8 +191,7 @@
 
     ```java
         ImmersionBar.with(this)
-            .statusBarColor(R.color.colorPrimary)
-            .fitsSystemWindows(true)  //使用该属性必须指定状态栏的颜色，不然状态栏透明，很难看
+            .fitsSystemWindows(true)  //使用该属性,默认颜色是R.color.colorPrimary
             .init();
     ```
 - ④ 使用ImmersionBar的statusBarView(View view)方法
@@ -202,7 +230,7 @@
 - ⑤ 使用ImmersionBar的titleBar(View view)方法
     ```java
              ImmersionBar.with(this)
-                   .titleBar(view) //指定标题栏view,xml里的标题的高度不能指定为warp_content
+                   .titleBar(view) //指定标题栏view,xml里的标题的高度不能指定为warp_content，如果是自定义xml实现标题栏的话，最外层节点不能为RelativeLayout
                    .init();
              //或者
              //ImmersionBar.setTitleBar(this, view);
@@ -271,7 +299,7 @@
          ImmersionBar.with(this)
                      .navigationBarEnable(false)   //禁止对导航栏相关设置
                    //或者
-                   // .navigationBarWithKitkatEnable(false)  //禁止对4.4设备导航栏相关设置
+                   // .navigationBarWithKitkatEnable(false)  //禁止对4.4设备或者emui3.1手机导航栏相关设置
                      .init();
    ```
 
@@ -295,15 +323,24 @@
     
 - public static int getStatusBarHeight(Activity activity)
  
-    或得状态栏的高度
+    获得状态栏的高度
     
 - public static int getActionBarHeight(Activity activity)
  
-    或得ActionBar得高度
+    获得ActionBar的高度
     
 - public static boolean isSupportStatusBarDarkFont()
  
     判断当前设备支不支持状态栏字体设置为黑色
+
+- public static void hideStatusBar(Window window) 
+ 
+    隐藏状态栏
+    
+## 混淆规则(proguard-rules.pro)
+   ```
+    -keep class com.gyf.barlibrary.* {*;} 
+   ```
 
 ## 效果图 ##
 #### 说明 ####

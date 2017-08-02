@@ -33,6 +33,7 @@ public class Over3Activity extends BaseActivity {
         mImmersionBar.fitsSystemWindows(true)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.colorPrimary)
+                .keyboardEnable(true)
                 .init();
     }
 

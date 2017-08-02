@@ -68,6 +68,11 @@
                     android:text="结合fragment使用" />
 
                 <Button
+                    android:id="@+id/btn_dialog_fragment"
+                    style="@style/btn"
+                    android:text="结合Dialog使用" />
+
+                <Button
                     android:id="@+id/btn_drawer"
                     style="@style/btn"
                     android:text="结合侧边栏使用" />
