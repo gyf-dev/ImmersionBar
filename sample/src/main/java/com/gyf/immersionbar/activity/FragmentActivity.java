@@ -24,7 +24,7 @@ public class FragmentActivity extends BaseActivity {
         mImmersionBar.titleBar(R.id.toolbar).init();
     }
 
-    @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four})
+    @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four, R.id.btn_five})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_one:
@@ -38,6 +38,9 @@ public class FragmentActivity extends BaseActivity {
                 break;
             case R.id.btn_four:
                 startActivity(new Intent(this, FragmentFourActivity.class));
+                break;
+            case R.id.btn_five:
+                startActivity(new Intent(this, FragmentFiveActivity.class));
                 break;
         }
     }

@@ -1,10 +1,13 @@
 package com.gyf.immersionbar.activity;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gyf.barlibrary.BarHide;
@@ -14,6 +17,7 @@ import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.blurry.Blurry;
 
 public class MainActivity extends BaseActivity {
 
@@ -21,11 +25,18 @@ public class MainActivity extends BaseActivity {
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.iv_bg)
+    ImageView iv_bg;
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
         mImmersionBar.titleBar(toolbar).init();
+    }
+
+    @Override
+    protected void initView() {
+        Blurry.with(this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(iv_bg);
     }
 
     @Override
@@ -36,7 +47,7 @@ public class MainActivity extends BaseActivity {
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
             R.id.btn_dialog_fragment, R.id.btn_drawer, R.id.btn_tab, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
             R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
-            R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light})
+            R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light, R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_pic_color:
@@ -120,6 +131,20 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.btn_bar_font_light:
                 mImmersionBar.statusBarDarkFont(false).init();
+                break;
+            case R.id.ll_github:
+                Intent intent = new Intent(this, BlogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("blog", "github");
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
+                break;
+            case R.id.ll_jianshu:
+                Intent intent2 = new Intent(this, BlogActivity.class);
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("blog", "jianshu");
+                intent2.putExtra("bundle", bundle2);
+                startActivity(intent2);
                 break;
         }
 

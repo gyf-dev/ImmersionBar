@@ -17,8 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.adapter.OneAdapter;
-import com.gyf.immersionbar.fragment.BaseNoImmersionAndNoLazyFragment;
-import com.gyf.immersionbar.fragment.BaseNoImmersionFragment;
 import com.gyf.immersionbar.utils.GlideImageLoader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -33,7 +31,7 @@ import butterknife.BindView;
  * Created by geyifeng on 2017/5/12.
  */
 
-public class HomeThreeFragment extends BaseNoImmersionFragment {
+public class HomeThreeFragment extends BaseThreeFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;

@@ -48,7 +48,7 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.navigationBarColor(R.color.colorPrimary).navigationBarWithKitkatEnable(false).init();
+        mImmersionBar.keyboardEnable(true).navigationBarColor(R.color.colorPrimary).navigationBarWithKitkatEnable(false).init();
     }
 
     @Override

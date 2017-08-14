@@ -4,7 +4,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.BaseNoImmersionAndNoLazyFragment;
 
 import butterknife.BindView;
 
@@ -12,7 +11,7 @@ import butterknife.BindView;
  * Created by geyifeng on 2017/7/20.
  */
 
-public class HomeFourFragment extends BaseNoImmersionAndNoLazyFragment {
+public class HomeFourFragment extends BaseFourFragment {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -23,6 +22,6 @@ public class HomeFourFragment extends BaseNoImmersionAndNoLazyFragment {
 
     @Override
     protected void initView() {
-        ImmersionBar.setTitleBar(mActivity,toolbar);
+        ImmersionBar.setTitleBar(mActivity, toolbar);
     }
 }

@@ -24,25 +24,25 @@ public class FlymeOSStatusBarFontUtils {
         try {
             mSetStatusBarColorIcon = Activity.class.getMethod("setStatusBarDarkIcon", int.class);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+
         }
         try {
             mSetStatusBarDarkIcon = Activity.class.getMethod("setStatusBarDarkIcon", boolean.class);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+
         }
         try {
             mStatusBarColorFiled = WindowManager.LayoutParams.class.getField("statusBarColor");
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+
         }
         try {
             Field field = View.class.getField("SYSTEM_UI_FLAG_LIGHT_STATUS_BAR");
             SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = field.getInt(null);
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -51,7 +51,7 @@ public class FlymeOSStatusBarFontUtils {
      *
      * @param color 颜色
      * @param level 级别
-     * @return
+     * @return boolean
      */
     public static boolean isBlackColor(int color, int level) {
         int grey = toGrey(color);
@@ -62,6 +62,7 @@ public class FlymeOSStatusBarFontUtils {
      * 颜色转换成灰度值
      *
      * @param rgb 颜色
+     * @return the int
      * @return　灰度值
      */
     public static int toGrey(int rgb) {

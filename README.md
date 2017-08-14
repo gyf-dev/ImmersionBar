@@ -7,18 +7,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.7'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.8'
    ```
 
 >eclipse
 
-[barlibrary-2.2.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.7.jar) 
+[barlibrary-2.2.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.8.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.7.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.8.apk) 
   
 ## 用法
 ### 初始化
@@ -46,6 +46,7 @@
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
                  .addViewSupportTransformColor(toolbar)  //设置支持view变色，可以添加多个view，不指定颜色，默认和状态栏同色，还有两个重载方法
                  .titleBar(view)    //解决状态栏和布局重叠问题，任选其一
+                 .titleBarMarginTop(view)     //解决状态栏和布局重叠问题，任选其一
                  .statusBarView(view)  //解决状态栏和布局重叠问题，任选其一
                  .fitsSystemWindows(true)    //解决状态栏和布局重叠问题，任选其一，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
                  .supportActionBar(true) //支持ActionBar使用
@@ -89,7 +90,8 @@
          @Override
          protected void onDestroy() {
              super.onDestroy();
-             mImmersionBar.destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+             if (mImmersionBar != null)
+                mImmersionBar.destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
          }
      }
     ```
@@ -100,7 +102,7 @@
 
 - 在Fragment使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
-  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseNoLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseNoLazyFragment.java)这个类
+  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseTwoFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseTwoFragment.java)这个类
   注意：
   - 2.2.7版本以后别忘了在Fragment的onDestroy方法里销毁沉浸式了，2.2.7版本之前不需要调用
   
@@ -108,7 +110,8 @@
      @Override
      protected void onDestroy() {
          super.onDestroy();
-         mImmersionBar.destroy();  
+         if (mImmersionBar != null)
+            mImmersionBar.destroy();  
      }
   ```
   - 以show()和hide()方式控制Fragment显示隐藏，别忘了重写onHiddenChanged方法，如下
@@ -124,7 +127,8 @@
 - 在Activity使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
-
+- 使用Fragment第三方框架Fragmentation实现沉浸式
+  #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseFiveFragment.java)这个类
 ## 在Dialog中实现沉浸式，具体实现参考demo
 
    ```java
@@ -132,9 +136,9 @@
                      .init();
       
    ```
-   如果Dialog底部有输入框，使用keyboardEnable(true)解决输入框问题时，偶尔不起作用，目前还没有好的解决方案，如果你有解决方案请联系我
+   注意：在dialog使用，当销毁dialog同时，别忘了调用ImmersionBar的destroy方法了
 
-## 状态栏与布局顶部重叠解决方案，五种方案任选其一
+## 状态栏与布局顶部重叠解决方案，六种方案任选其一
 - ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
 
     在values-v19/dimens.xml文件下
@@ -191,7 +195,8 @@
 
     ```java
         ImmersionBar.with(this)
-            .fitsSystemWindows(true)  //使用该属性,默认颜色是R.color.colorPrimary
+            .fitsSystemWindows(true)  //使用该属性,必须指定状态栏颜色
+            .statusBarColor(R.color.colorPrimary)
             .init();
     ```
 - ④ 使用ImmersionBar的statusBarView(View view)方法
@@ -227,19 +232,30 @@
          //或者
          //ImmersionBar.setStatusBarView(this,view);
      ```   
-- ⑤ 使用ImmersionBar的titleBar(View view)方法
+- ⑤ 使用ImmersionBar的titleBar(View view)方法，原理是设置paddingTop
     ```java
              ImmersionBar.with(this)
-                   .titleBar(view) //指定标题栏view,xml里的标题的高度不能指定为warp_content，如果是自定义xml实现标题栏的话，最外层节点不能为RelativeLayout
+                   .titleBar(view) //可以为任意view，如果是自定义xml实现标题栏的话，最外层节点不能为RelativeLayout
                    .init();
              //或者
              //ImmersionBar.setTitleBar(this, view);
+     ```
+- ⑥ 使用ImmersionBar的titleBarMarginTop(View view)方法，原理是设置marginTop
+    ```java
+             ImmersionBar.with(this)
+                   .titleBarMarginTop(view)  //可以为任意view
+                   .statusBarColor(R.color.colorPrimary)  //指定状态栏颜色,根据情况是否设置
+                   .init();
+             //或者使用静态方法设置
+             //ImmersionBar.setTitleBarMarginTop(this,view);
      ```
        
 ## 解决EditText和软键盘的问题
    ```java
        ImmersionBar.with(this)
                    .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
+               //  .keyboardEnable(true, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+                                         | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //软键盘自动弹出
                    .init();
        或者
        // KeyboardPatch.patch(this).enable();

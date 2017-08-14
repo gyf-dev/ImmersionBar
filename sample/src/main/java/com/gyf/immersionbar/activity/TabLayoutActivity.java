@@ -1,6 +1,8 @@
 package com.gyf.immersionbar.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
@@ -26,6 +29,7 @@ public class TabLayoutActivity extends SwipeBackActivity {
 
     private List<String> mData;
     private Toolbar toolbar;
+    private ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class TabLayoutActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_tab_layout);
         initData(1);
         initView();
+        mImmersionBar = ImmersionBar.with(this);
         ImmersionBar.with(this)
                 .statusBarView(R.id.view)
                 .init();
@@ -109,5 +114,11 @@ public class TabLayoutActivity extends SwipeBackActivity {
             super(itemView);
             tv = (TextView) itemView.findViewById(R.id.tv_info);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mImmersionBar.destroy();
     }
 }

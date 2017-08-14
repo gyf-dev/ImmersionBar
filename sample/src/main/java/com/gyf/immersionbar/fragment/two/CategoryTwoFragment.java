@@ -3,7 +3,6 @@ package com.gyf.immersionbar.fragment.two;
 import android.support.v7.widget.Toolbar;
 
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.BaseNoLazyFragment;
 
 import butterknife.BindView;
 
@@ -11,7 +10,7 @@ import butterknife.BindView;
  * Created by geyifeng on 2017/7/20.
  */
 
-public class CategoryTwoFragment extends BaseNoLazyFragment {
+public class CategoryTwoFragment extends BaseTwoFragment {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 

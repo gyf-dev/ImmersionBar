@@ -1,13 +1,17 @@
 package com.gyf.immersionbar.activity;
 
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.fragment.FullDialogFragment;
@@ -19,10 +23,11 @@ import butterknife.OnClick;
  * Created by geyifeng on 2017/7/31.
  */
 
-public class DialogActivity extends BaseActivity {
+public class DialogActivity extends BaseActivity implements DialogInterface.OnDismissListener {
 
     @BindView(R.id.btn_full)
     Button btn_full;
+    private ImmersionBar mImmersionBarDialog = null;
 
     @Override
     protected int setLayoutId() {
@@ -32,7 +37,7 @@ public class DialogActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.toolbar).init();
+        mImmersionBar.titleBar(R.id.toolbar).keyboardEnable(true).init();
     }
 
     @Override
@@ -48,10 +53,15 @@ public class DialogActivity extends BaseActivity {
 
     @OnClick({R.id.btn_full_two, R.id.btn_top, R.id.btn_bottom, R.id.btn_left, R.id.btn_right})
     public void onClick(View view) {
+        mImmersionBar.keyboardEnable(false).init();  //取消activity的软键盘监听
         //弹出Dialog
-        AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialog).create();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
+        AlertDialog dialog = builder.create();
+        dialog.setOnDismissListener(this);
         dialog.show();
-        dialog.setContentView(R.layout.dialog);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog, null);
+        Toolbar toolbar = (Toolbar) dialogView.findViewById(R.id.toolbar);
+        dialog.setContentView(dialogView);
         Window window = dialog.getWindow();
         //解决无法弹出输入法的问题
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
@@ -67,9 +77,8 @@ public class DialogActivity extends BaseActivity {
                 window.setGravity(Gravity.TOP);
                 window.setWindowAnimations(R.style.RightDialog);
                 window.setLayout(width, height);
-                ImmersionBar.with(this, dialog, "Full")
-                        .fitsSystemWindows(true)
-                        .statusBarColor(R.color.colorPrimary)
+                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Full");
+                mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarWithKitkatEnable(false)
                         .keyboardEnable(true)
                         .init();
@@ -78,9 +87,8 @@ public class DialogActivity extends BaseActivity {
                 window.setGravity(Gravity.TOP);
                 window.setWindowAnimations(R.style.TopDialog);
                 window.setLayout(width, height / 2);
-                ImmersionBar.with(this, dialog, "Top")
-                        .fitsSystemWindows(true)
-                        .statusBarColor(R.color.colorPrimary)
+                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Top");
+                mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarWithKitkatEnable(false)
                         .init();
                 break;
@@ -88,18 +96,15 @@ public class DialogActivity extends BaseActivity {
                 window.setGravity(Gravity.BOTTOM);
                 window.setWindowAnimations(R.style.BottomDialog);
                 window.setLayout(width, height / 2);
-                ImmersionBar.with(this, dialog, "Bottom")
-                        .statusBarDarkFont(true)
-                        .navigationBarColor(R.color.colorPrimary)
-                        .init();
+                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Bottom");
+                mImmersionBarDialog.navigationBarColor(R.color.cool_green_normal).init();
                 break;
             case R.id.btn_left:
                 window.setGravity(Gravity.TOP | Gravity.START);
                 window.setWindowAnimations(R.style.LeftDialog);
                 window.setLayout(width * 2 / 3, height);
-                ImmersionBar.with(this, dialog, "Left")
-                        .fitsSystemWindows(true)
-                        .statusBarColor(R.color.colorPrimary)
+                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Left");
+                mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarWithKitkatEnable(false)
                         .keyboardEnable(true)
                         .init();
@@ -108,14 +113,19 @@ public class DialogActivity extends BaseActivity {
                 window.setGravity(Gravity.TOP | Gravity.END);
                 window.setWindowAnimations(R.style.RightDialog);
                 window.setLayout(width * 2 / 3, height);
-                ImmersionBar.with(this, dialog, "Right")
-                        .fitsSystemWindows(true)
-                        .statusBarDarkFont(true)
-                        .statusBarColor(R.color.colorPrimary)
+                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Right");
+                mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarWithKitkatEnable(false)
                         .keyboardEnable(true)
                         .init();
                 break;
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        mImmersionBar.keyboardEnable(true).init();
+        if (mImmersionBarDialog != null)
+            mImmersionBarDialog.destroy();
     }
 }

@@ -5,13 +5,23 @@
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimary"
-        app:title="我是弹出的Dialog"
-        app:titleTextColor="@android:color/white" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/test" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:title="我是弹出的Dialog"
+            app:titleTextColor="@android:color/white" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

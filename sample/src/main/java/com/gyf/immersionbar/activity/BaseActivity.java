@@ -39,20 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         //设置监听
         setListener();
-        //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
-        if (OSUtils.isEMUI3_1()) {
-            //第一种
-            getContentResolver().registerContentObserver(Settings.System.getUriFor
-                    (NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
-            //第二种,禁止对导航栏的设置
-            //mImmersionBar.navigationBarEnable(false).init();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mImmersionBar.destroy();  //在BaseActivity里销毁
+        if (mImmersionBar != null)
+            mImmersionBar.destroy();  //在BaseActivity里销毁
     }
 
     protected abstract int setLayoutId();
@@ -61,6 +54,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         //在BaseActivity里初始化
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.init();
+        //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
+        if (OSUtils.isEMUI3_1()) {
+            //第一种
+            getContentResolver().registerContentObserver(Settings.System.getUriFor
+                    (NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
+            //第二种,禁止对导航栏的设置
+            //mImmersionBar.navigationBarEnable(false).init();
+        }
     }
 
     protected void initData() {

@@ -13,48 +13,63 @@
         app:title="结合Dialog使用"
         app:titleTextColor="@android:color/white" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <Button
-            android:id="@+id/btn_full"
-            style="@style/btn"
+
+        <LinearLayout
             android:layout_gravity="center"
-            android:text="全屏DialogFragment" />
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_full_two"
-            style="@style/btn"
-            android:layout_gravity="center"
-            android:text="全屏弹出Dialog" />
+            <Button
+                android:id="@+id/btn_full"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="全屏DialogFragment" />
 
-        <Button
-            android:id="@+id/btn_top"
-            style="@style/btn"
-            android:layout_gravity="center"
-            android:text="顶部弹出Dialog" />
+            <Button
+                android:id="@+id/btn_full_two"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="全屏弹出Dialog" />
 
-        <Button
-            android:id="@+id/btn_bottom"
-            style="@style/btn"
-            android:layout_gravity="center"
-            android:text="底部弹出Dialog" />
+            <Button
+                android:id="@+id/btn_top"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="顶部弹出Dialog" />
 
-        <Button
-            android:id="@+id/btn_left"
-            style="@style/btn"
-            android:layout_gravity="center"
-            android:text="左边弹出Dialog" />
+            <Button
+                android:id="@+id/btn_bottom"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="底部弹出Dialog" />
 
-        <Button
-            android:id="@+id/btn_right"
-            style="@style/btn"
-            android:layout_gravity="center"
-            android:text="右边弹出Dialog" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_left"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="左边弹出Dialog" />
 
+            <Button
+                android:id="@+id/btn_right"
+                style="@style/btn"
+                android:layout_gravity="center"
+                android:text="右边弹出Dialog" />
+        </LinearLayout>
+    </ScrollView>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="我是底部" />
 </LinearLayout>

@@ -20,7 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:title="沉浸式（ImmersionBar）"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            android:elevation="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
                     android:id="@+id/btn_color"
                     style="@style/btn"
                     android:text="彩色状态栏 + 彩色导航栏" />
+
                 <Button
                     android:id="@+id/btn_shape"
                     style="@style/btn"

@@ -27,6 +27,12 @@ public class ActionBarActivity extends BaseActivity {
     }
 
     @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.keyboardEnable(true).init();
+    }
+
+    @Override
     protected void initView() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

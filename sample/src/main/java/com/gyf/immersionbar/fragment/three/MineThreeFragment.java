@@ -7,8 +7,6 @@ import android.view.View;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.BaseLazyFragment;
-import com.gyf.immersionbar.fragment.BaseNoImmersionFragment;
 
 import butterknife.BindView;
 
@@ -16,7 +14,7 @@ import butterknife.BindView;
  * Created by geyifeng on 2017/5/12.
  */
 
-public class MineThreeFragment extends BaseNoImmersionFragment {
+public class MineThreeFragment extends BaseThreeFragment {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

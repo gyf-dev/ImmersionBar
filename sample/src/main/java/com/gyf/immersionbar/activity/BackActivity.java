@@ -25,4 +25,9 @@ public class BackActivity extends SwipeBackActivity {
                 .init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

@@ -44,6 +44,12 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.keyboardEnable(true).init();
+    }
+
+    @Override
     protected void initView() {
         selectedFragment(0);
         tabSelected(ll_home);

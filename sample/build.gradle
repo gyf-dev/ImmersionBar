@@ -34,12 +34,29 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     testCompile 'junit:junit:4.12'
     compile project(':barlibrary')
+    //注解
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    //侧滑返回
     compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    //log日志
     compile 'com.apkfuns.logutils:library:1.4.2.2'
+    //轮播图
     compile 'com.youth.banner:banner:1.4.9'
+    //RecyclerView框架
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18'
+    //图片加载框架
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //下拉刷新上拉加载
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
+    //圆形imageView
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    // 模糊
+    compile 'jp.wasabeef:blurry:2.1.1'
+    // 内存泄漏检测
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    // Fragment框架
+    compile 'me.yokeyword:fragmentation:1.1.1'
 }

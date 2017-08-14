@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.BaseLazyFragment;
 
 import butterknife.BindView;
 

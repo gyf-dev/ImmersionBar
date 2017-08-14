@@ -1,4 +1,4 @@
-package com.gyf.immersionbar.fragment;
+package com.gyf.immersionbar.fragment.one;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import butterknife.ButterKnife;
 
 /**
- * Fragment的基类，懒加载
+ * 当使用viewpager加载Fragment，沉浸式的使用，原理懒加载
  * Created by geyifeng on 2017/4/7.
  */
 public abstract class BaseLazyFragment extends Fragment {
@@ -147,7 +147,7 @@ public abstract class BaseLazyFragment extends Fragment {
      */
     protected void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.navigationBarWithKitkatEnable(false).init();
+        mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).init();
     }
 
     /**

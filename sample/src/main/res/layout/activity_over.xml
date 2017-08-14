@@ -25,6 +25,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -50,10 +51,16 @@
                 android:id="@+id/btn_four"
                 style="@style/btn"
                 android:text="方法四" />
+
             <Button
                 android:id="@+id/btn_five"
                 style="@style/btn"
                 android:text="方法五" />
+
+            <Button
+                android:id="@+id/btn_six"
+                style="@style/btn"
+                android:text="方法六" />
         </LinearLayout>
     </ScrollView>
 

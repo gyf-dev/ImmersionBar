@@ -45,4 +45,5 @@
 
     <color name="tab_bottom_normal">#999999</color>
     <color name="tab_bottom_selected">#46c01b</color>
+    <color name="github_color">#1E2327</color>
 </resources>

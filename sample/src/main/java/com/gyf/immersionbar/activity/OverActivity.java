@@ -32,7 +32,7 @@ public class OverActivity extends BaseActivity {
         textView.setText(text);
     }
 
-    @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four, R.id.btn_five})
+    @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four, R.id.btn_five, R.id.btn_six})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_one:
@@ -49,6 +49,9 @@ public class OverActivity extends BaseActivity {
                 break;
             case R.id.btn_five:
                 startActivity(new Intent(this, Over5Activity.class));
+                break;
+            case R.id.btn_six:
+                startActivity(new Intent(this, Over6Activity.class));
                 break;
         }
     }

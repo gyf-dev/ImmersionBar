@@ -13,7 +13,7 @@ import butterknife.BindView;
 
 public class WebActivity extends BaseActivity {
     @BindView(R.id.web)
-    WebView web;
+    WebView mWebView;
     @BindView(R.id.line)
     LinearLayout layout;
 
@@ -33,6 +33,20 @@ public class WebActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        web.loadUrl("file:///android_asset/input_webview.html");
+        mWebView.loadUrl("file:///android_asset/input_webview.html");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (mWebView != null) {
+                mWebView.removeAllViews();
+                mWebView.destroy();
+                mWebView = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
