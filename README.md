@@ -57,7 +57,7 @@
                  .removeSupportAllView() //移除全部view支持
                  .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为true
                  .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4和emui3.1手机导航栏颜色，默认为true
-                 .fixMarginAtBottom(true)   //当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
+                 .fixMarginAtBottom(true)   //已过时，当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
@@ -174,7 +174,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性，要慎用，会有意想不到的坑，比如界面会发生错位
+- ② 使用系统的fitsSystemWindows属性，不用再Fragment使用该属性
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
