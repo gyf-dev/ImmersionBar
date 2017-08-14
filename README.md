@@ -12,7 +12,7 @@
 
 >eclipse
 
-[barlibrary-2.2.7.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.8.jar) 
+[barlibrary-2.2.8.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.8.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)

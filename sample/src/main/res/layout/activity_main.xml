@@ -20,8 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:title="沉浸式（ImmersionBar）"
-            app:titleTextColor="@android:color/white"
-            android:elevation="8dp" />
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
