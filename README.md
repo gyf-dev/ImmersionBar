@@ -101,8 +101,8 @@
 注意：2.2.6版本已将[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)这个类标记为过时，请用户自行使用懒加载方式实现
 
 - 在Fragment使用ImmersionBar
-  #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseLazyFragment.java)这个类
-  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseTwoFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseTwoFragment.java)这个类
+  #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/one/BaseLazyFragment.java)这个类
+  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseTwoFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/two/BaseTwoFragment.java)这个类
   注意：
   - 2.2.7版本以后别忘了在Fragment的onDestroy方法里销毁沉浸式了，2.2.7版本之前不需要调用
   
@@ -127,8 +127,8 @@
 - 在Activity使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
-- 使用Fragment第三方框架Fragmentation实现沉浸式
-  #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/BaseFiveFragment.java)这个类
+- 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
+  #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseFiveFragment.java)这个类
 ## 在Dialog中实现沉浸式，具体实现参考demo
 
    ```java
@@ -255,7 +255,7 @@
        ImmersionBar.with(this)
                    .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
                //  .keyboardEnable(true, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
-                                         | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //软键盘自动弹出
+               //                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //软键盘自动弹出
                    .init();
        或者
        // KeyboardPatch.patch(this).enable();
