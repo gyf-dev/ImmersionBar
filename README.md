@@ -174,7 +174,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性，不用再Fragment使用该属性
+- ② 使用系统的fitsSystemWindows属性，不要再Fragment使用该属性
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
