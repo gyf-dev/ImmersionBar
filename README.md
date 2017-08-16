@@ -137,6 +137,8 @@
       
    ```
    注意：在dialog使用，当销毁dialog同时，别忘了调用ImmersionBar的destroy方法了
+   
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
 
 ## 状态栏与布局顶部重叠解决方案，六种方案任选其一
 - ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
@@ -174,7 +176,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性，不要再Fragment使用该属性
+- ② 使用系统的fitsSystemWindows属性，使用该属性不会导致输入框与软键盘冲突问题，不要再Fragment使用该属性
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -251,6 +253,8 @@
      ```
        
 ## 解决EditText和软键盘的问题
+
+ - 第一种方案
    ```java
        ImmersionBar.with(this)
                    .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
@@ -262,7 +266,9 @@
        或者,layout指的是当前布局的根节点
        // KeyboardPatch.patch(this, layout).enable();
    ```
- 
+ - 第二种方案
+   不使用keyboardEnable方法，只需要在布局的根节点（最外层节点）加上android:fitsSystemWindows="true"属性即可，只适合纯色状态栏
+    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_edit.gif"/>
 
 ## 当白色背景状态栏遇到不能改变状态栏字体为深色的设备时，解决方案
