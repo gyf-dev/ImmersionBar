@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Fragment的基类,禁止懒加载功能
@@ -20,6 +21,7 @@ public abstract class BaseFourFragment extends Fragment {
 
     protected Activity mActivity;
     protected View mRootView;
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -37,10 +39,16 @@ public abstract class BaseFourFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         initData();
         initView();
         setListener();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     /**

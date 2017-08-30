@@ -1,37 +1,71 @@
-package com.gyf.immersionbar.fragment.five;
+package com.gyf.immersionbar.fragment.dialog;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * 基于Fragmentation框架实现沉浸式，如果要在Fragment实现沉浸式，请在onSupportVisible实现沉浸式，
- * 至于解决布局重叠问题，建议使用readme里第四种或者第五种，参考onViewCreated方法
- * Created by geyifeng on 2017/8/12.
+ * DialogFragment 实现沉浸式的基类
+ * Created by geyifeng on 2017/8/26.
  */
 
-public abstract class BaseFiveFragment extends SupportFragment {
+public abstract class BaseDialogFragment extends DialogFragment {
+
     protected Activity mActivity;
     protected View mRootView;
+
     protected ImmersionBar mImmersionBar;
+    protected Window mWindow;
+    protected int mWidth;  //屏幕宽度
+    protected int mHeight;  //屏幕高度
     private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //全屏
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialog);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        dialog.setCanceledOnTouchOutside(true);  //点击外部消失
+        mWindow = dialog.getWindow();
+        //测量宽高
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            DisplayMetrics dm = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(dm);
+            mWidth = dm.widthPixels;
+            mHeight = dm.heightPixels;
+        } else {
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            mWidth = metrics.widthPixels;
+            mHeight = metrics.heightPixels;
+        }
     }
 
     @Nullable
@@ -41,43 +75,16 @@ public abstract class BaseFiveFragment extends SupportFragment {
         return mRootView;
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        if (view != null) {
-            View titleBar = view.findViewById(setTitleBar());
-            if (titleBar != null)
-                ImmersionBar.setTitleBar(mActivity, titleBar);
-            View statusBarView = view.findViewById(setStatusBarView());
-            if (statusBarView != null)
-                ImmersionBar.setStatusBarView(mActivity, statusBarView);
-        }
+        if (isImmersionBarEnabled())
+            initImmersionBar();
         initData();
         initView();
         setListener();
-    }
-
-    protected int setTitleBar() {
-        return R.id.toolbar;
-    }
-
-    protected int setStatusBarView() {
-        return 0;
-    }
-
-    @Override
-    public void onSupportVisible() {
-        super.onSupportVisible();
-        //如果要在Fragment单独使用沉浸式，请在onSupportVisible实现沉浸式
-        if (isImmersionBarEnabled()) {
-            mImmersionBar = ImmersionBar.with(this);
-            mImmersionBar.navigationBarWithKitkatEnable(false).init();
-        }
-    }
-
-    private boolean isImmersionBarEnabled() {
-        return false;
     }
 
     @Override
@@ -85,7 +92,7 @@ public abstract class BaseFiveFragment extends SupportFragment {
         super.onDestroy();
         unbinder.unbind();
         if (mImmersionBar != null)
-            mImmersionBar.init();
+            mImmersionBar.destroy();
     }
 
     /**
@@ -94,6 +101,24 @@ public abstract class BaseFiveFragment extends SupportFragment {
      * @return the layout id
      */
     protected abstract int setLayoutId();
+
+    /**
+     * 是否在Fragment使用沉浸式
+     *
+     * @return the boolean
+     */
+    protected boolean isImmersionBarEnabled() {
+        return true;
+    }
+
+    /**
+     * 初始化沉浸式
+     */
+    protected void initImmersionBar() {
+        mImmersionBar = ImmersionBar.with(this, getDialog());
+        mImmersionBar.init();
+    }
+
 
     /**
      * 初始化数据

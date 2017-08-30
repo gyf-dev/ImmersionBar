@@ -1,11 +1,10 @@
 package com.gyf.barlibrary;
 
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
-import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class BarParams implements Cloneable {
     @FloatRange(from = 0f, to = 1f)
     public float statusBarAlpha = 0.0f;           //状态栏透明度
     @FloatRange(from = 0f, to = 1f)
-    public float navigationBarAlpha = 0.0f;       //导航栏透明度
+    float navigationBarAlpha = 0.0f;       //导航栏透明度
     public boolean fullScreen = false;            //有导航栏的情况，全屏显示
     public boolean fullScreenTemp = fullScreen;
     public BarHide barHide = BarHide.FLAG_SHOW_BAR;  //隐藏Bar
@@ -37,6 +36,12 @@ public class BarParams implements Cloneable {
     @FloatRange(from = 0f, to = 1f)
     public float viewAlpha = 0.0f;
     public boolean fits = false;                                   //解决标题栏与状态栏重叠问题
+    @ColorInt
+    public int statusBarColorContentView = Color.TRANSPARENT;
+    @ColorInt
+    public int statusBarColorContentViewTransform = Color.BLACK;
+    @FloatRange(from = 0f, to = 1f)
+    public float statusBarContentViewAlpha = 0.0f;
     public int navigationBarColorTemp = navigationBarColor;
     public View statusBarView;                       //4.4自定义一个状态栏
     public View navigationBarView;                //4.4自定义一个导航栏
@@ -56,7 +61,10 @@ public class BarParams implements Cloneable {
     public boolean navigationBarWithKitkatEnable = true;      //是否能修改4.4手机导航栏颜色
     @Deprecated
     public boolean fixMarginAtBottom = false;  //解决出现底部多余导航栏高度，默认为false
-    public boolean systemWindows = false;
+    public boolean systemWindows = false;      //也没是否使用fitsSystemWindows属性
+    public KeyboardPatch keyboardPatch;        //软键盘监听类
+    public OnKeyboardListener onKeyboardListener;   //软键盘监听类
+    public ContentObserver navigationStatusObserver;  //emui3.1监听器
 
     @Override
     protected BarParams clone() {

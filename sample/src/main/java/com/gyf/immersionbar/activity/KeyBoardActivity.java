@@ -1,21 +1,14 @@
 package com.gyf.immersionbar.activity;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.gyf.barlibrary.BarHide;
-import com.gyf.barlibrary.ImmersionBar;
-import com.gyf.barlibrary.KeyboardPatch;
 import com.gyf.immersionbar.R;
 
 import java.util.ArrayList;
@@ -24,9 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static android.R.attr.name;
 
 /**
  * Created by geyifeng on 2017/5/8.

@@ -141,7 +141,6 @@ public class HomeThreeFragment extends BaseThreeFragment {
                         mOneAdapter.setNewData(mItemList);
                         refreshLayout.finishRefreshing();
                         mToolbar.setVisibility(View.VISIBLE);
-                        ImmersionBar.with(mActivity).statusBarDarkFont(false).init();
                     }
                 }, 2000);
             }
@@ -149,17 +148,14 @@ public class HomeThreeFragment extends BaseThreeFragment {
             @Override
             public void onPullingDown(TwinklingRefreshLayout refreshLayout, float fraction) {
                 mToolbar.setVisibility(View.GONE);
-                ImmersionBar.with(mActivity).statusBarDarkFont(true).init();
             }
 
             @Override
             public void onPullDownReleasing(TwinklingRefreshLayout refreshLayout, float fraction) {
                 if (Math.abs(fraction - 1.0f) > 0) {
                     mToolbar.setVisibility(View.VISIBLE);
-                    ImmersionBar.with(mActivity).statusBarDarkFont(false).init();
                 } else {
                     mToolbar.setVisibility(View.GONE);
-                    ImmersionBar.with(mActivity).statusBarDarkFont(true).init();
                 }
             }
         });

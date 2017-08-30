@@ -15,6 +15,7 @@ import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * 当使用viewpager加载Fragment，沉浸式的使用，原理懒加载
@@ -42,6 +43,7 @@ public abstract class BaseLazyFragment extends Fragment {
     protected boolean mIsImmersion;
 
     protected ImmersionBar mImmersionBar;
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -59,7 +61,7 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, mRootView);
+        unbinder = ButterKnife.bind(this, mRootView);
         if (isLazyLoad()) {
             mIsPrepare = true;
             mIsImmersion = true;
@@ -76,6 +78,7 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unbinder.unbind();
         if (mImmersionBar != null)
             mImmersionBar.destroy();
     }
@@ -181,13 +184,6 @@ public abstract class BaseLazyFragment extends Fragment {
     @SuppressWarnings("unchecked")
     protected <T extends View> T findActivityViewById(@IdRes int id) {
         return (T) mActivity.findViewById(id);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden && mImmersionBar != null)
-            mImmersionBar.init();
     }
 
 }

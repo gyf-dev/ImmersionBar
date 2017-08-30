@@ -7,12 +7,12 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.8'
+   compile 'com.gyf.barlibrary:barlibrary:2.2.9'
    ```
 
 >eclipse
 
-[barlibrary-2.2.8.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.8.jar) 
+[barlibrary-2.2.9.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.9.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
@@ -48,7 +48,7 @@
                  .titleBar(view)    //解决状态栏和布局重叠问题，任选其一
                  .titleBarMarginTop(view)     //解决状态栏和布局重叠问题，任选其一
                  .statusBarView(view)  //解决状态栏和布局重叠问题，任选其一
-                 .fitsSystemWindows(true)    //解决状态栏和布局重叠问题，任选其一，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色
+                 .fitsSystemWindows(true)    //解决状态栏和布局重叠问题，任选其一，默认为false，当为true时一定要指定statusBarColor()，不然状态栏为透明色，还有一些重载方法
                  .supportActionBar(true) //支持ActionBar使用
                  .statusBarColorTransform(R.color.orange)  //状态栏变色后的颜色
                  .navigationBarColorTransform(R.color.orange) //导航栏变色后的颜色
@@ -62,6 +62,13 @@
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
                  .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false，还有一个重载方法，可以指定软键盘mode
+                 .keyboardMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //单独指定软键盘模式
+                 .setOnKeyboardListener(new OnKeyboardListener() {    //软键盘监听回调
+                       @Override
+                       public void onKeyboardChange(boolean isPopup, int keyboardHeight) {
+                           LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
+                       }
+                  })
                  .init();  //必须调用方可沉浸式
     ```
     
@@ -69,7 +76,7 @@
 - 在activity的onDestroy方法中执行
 
     ```java
-    ImmersionBar.with(this).destroy(); //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+    ImmersionBar.with(this).destroy(); //必须调用该方法，防止内存泄漏
     ```
 	
 ## 建议
@@ -91,7 +98,7 @@
          protected void onDestroy() {
              super.onDestroy();
              if (mImmersionBar != null)
-                mImmersionBar.destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+                mImmersionBar.destroy();  //必须调用该方法，防止内存泄漏，不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
          }
      }
     ```
@@ -129,13 +136,21 @@
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
 - 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
   #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseFiveFragment.java)这个类
+
 ## 在Dialog中实现沉浸式，具体实现参考demo
+- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseDialogFragment.java)这个类
 
    ```java
-         ImmersionBar.with(this, dialog, "flag")   //第三个参数是为当前Dialog加上标记，多个Dialog之间不可相同
-                     .init();
+         ImmersionBar.with(this, dialog) .init();
       
    ```
+- ②其他dialog
+    ```java
+            ImmersionBar.with(this, dialog, "flag")   //第三个参数是为当前Dialog加上标记，多个Dialog之间不可相同
+                        .init();
+         
+    ```
+    
    注意：在dialog使用，当销毁dialog同时，别忘了调用ImmersionBar的destroy方法了
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
@@ -261,10 +276,6 @@
                //  .keyboardEnable(true, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
                //                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //软键盘自动弹出
                    .init();
-       或者
-       // KeyboardPatch.patch(this).enable();
-       或者,layout指的是当前布局的根节点
-       // KeyboardPatch.patch(this, layout).enable();
    ```
  - 第二种方案
    不使用keyboardEnable方法，只需要在布局的根节点（最外层节点）加上android:fitsSystemWindows="true"属性即可，只适合纯色状态栏
@@ -279,51 +290,6 @@
    ```
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
 
-## 解决华为emui3.0或者3.1手机手动隐藏导航栏按钮时，导航栏背景未被隐藏的问题
-什么叫做手动隐藏，就是下图中标红的向下隐藏按钮
-<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/emui3.1_navigation_bar.png"/>
-- 第一种解决方案，监听华为虚拟按钮，建议在baseActivity里使用
-
-  ```java
-  
-  @Override
-      protected void onCreate(@Nullable Bundle savedInstanceState) {
-          super.onCreate(savedInstanceState);
-          immersionBar = ImmersionBar.with(this);
-          immersionBar.init();
-          if (OSUtils.isEMUI3_1())  //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
-              getContentResolver().registerContentObserver(Settings.System.getUriFor
-                      ("navigationbar_is_min"), true, mNavigationStatusObserver);
-      }
-      
-      private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
-          @Override
-          public void onChange(boolean selfChange) {
-              int navigationBarIsMin = Settings.System.getInt(getContentResolver(),
-                      "navigationbar_is_min", 0);
-              if (navigationBarIsMin == 1) {
-                  //导航键隐藏了
-                  immersionBar
-                          .transparentNavigationBar()
-                          .init();
-              } else {
-                  //导航键显示了
-                  immersionBar
-                          .navigationBarColor(android.R.color.black)
-                          .fullScreen(false)
-                          .init();
-              }
-          }
-      };
-  ```      
-- 第二种解决方案，禁止对导航栏相关设置
-  ```java
-         ImmersionBar.with(this)
-                     .navigationBarEnable(false)   //禁止对导航栏相关设置
-                   //或者
-                   // .navigationBarWithKitkatEnable(false)  //禁止对4.4设备或者emui3.1手机导航栏相关设置
-                     .init();
-   ```
 
 ## 状态栏和导航栏其它方法
 	

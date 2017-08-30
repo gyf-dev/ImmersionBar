@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.gyf.barlibrary.ImmersionBar;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * 当以show()和hide()方法形式加载Fragment，沉浸式的使用
@@ -24,6 +25,7 @@ public abstract class BaseTwoFragment extends Fragment {
     protected View mRootView;
 
     protected ImmersionBar mImmersionBar;
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -41,7 +43,7 @@ public abstract class BaseTwoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         if (isImmersionBarEnabled())
             initImmersionBar();
         initData();
@@ -52,6 +54,7 @@ public abstract class BaseTwoFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unbinder.unbind();
         if (mImmersionBar != null)
             mImmersionBar.destroy();
     }

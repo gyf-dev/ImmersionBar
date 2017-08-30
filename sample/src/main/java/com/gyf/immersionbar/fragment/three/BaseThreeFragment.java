@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.gyf.barlibrary.ImmersionBar;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Fragment的基类,禁止懒加载功能
@@ -22,6 +23,7 @@ public abstract class BaseThreeFragment extends Fragment {
 
     protected Activity mActivity;
     protected View mRootView;
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -39,10 +41,16 @@ public abstract class BaseThreeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         initData();
         initView();
         setListener();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     /**

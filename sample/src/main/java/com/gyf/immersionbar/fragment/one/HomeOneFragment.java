@@ -153,7 +153,6 @@ public class HomeOneFragment extends BaseLazyFragment {
                         mOneAdapter.setNewData(mItemList);
                         refreshLayout.finishRefreshing();
                         mToolbar.setVisibility(View.VISIBLE);
-                        mImmersionBar.statusBarDarkFont(false).init();
                     }
                 }, 2000);
             }
@@ -161,17 +160,14 @@ public class HomeOneFragment extends BaseLazyFragment {
             @Override
             public void onPullingDown(TwinklingRefreshLayout refreshLayout, float fraction) {
                 mToolbar.setVisibility(View.GONE);
-                mImmersionBar.statusBarDarkFont(true).init();
             }
 
             @Override
             public void onPullDownReleasing(TwinklingRefreshLayout refreshLayout, float fraction) {
                 if (Math.abs(fraction - 1.0f) > 0) {
                     mToolbar.setVisibility(View.VISIBLE);
-                    mImmersionBar.statusBarDarkFont(false).init();
                 } else {
                     mToolbar.setVisibility(View.GONE);
-                    mImmersionBar.statusBarDarkFont(true).init();
                 }
             }
         });

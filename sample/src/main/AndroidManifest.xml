@@ -32,26 +32,43 @@
         <activity android:name=".activity.FragmentActivity" />
         <activity
             android:name=".activity.FragmentOneActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.FragmentTwoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.FragmentThreeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.FragmentFourActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.FragmentFiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.OverActivity" />
-        <activity android:name=".activity.Over1Activity" />
-        <activity android:name=".activity.Over2Activity" />
-        <activity android:name=".activity.Over3Activity" />
-        <activity android:name=".activity.Over4Activity" />
-        <activity android:name=".activity.Over5Activity" />
-        <activity android:name=".activity.Over6Activity" />
+        <activity
+            android:name=".activity.Over1Activity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Over2Activity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Over3Activity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Over4Activity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Over5Activity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Over6Activity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.KeyBoardActivity" />
         <activity android:name=".activity.CoordinatorActivity" />
         <activity
@@ -61,10 +78,13 @@
         <activity android:name=".activity.ShapeActivity" />
         <activity
             android:name=".activity.ActionBarActivity"
-            android:theme="@style/ActionBar" />
+            android:theme="@style/ActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.WhiteStatusBarActivity" />
         <activity android:name=".activity.WebActivity" />
-        <activity android:name=".activity.DialogActivity" />
+        <activity
+            android:name=".activity.DialogActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.BlogActivity"
             android:hardwareAccelerated="false"

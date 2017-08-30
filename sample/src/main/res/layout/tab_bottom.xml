@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/ll">
 
     <LinearLayout
         android:id="@+id/ll_home"
