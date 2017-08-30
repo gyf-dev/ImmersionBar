@@ -18,7 +18,7 @@
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.8.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.9.apk) 
   
 ## 用法
 ### 初始化
@@ -138,7 +138,7 @@
   #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseFiveFragment.java)这个类
 
 ## 在Dialog中实现沉浸式，具体实现参考demo
-- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseDialogFragment.java)这个类
+- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/dialog/BaseDialogFragment.java)这个类
 
    ```java
          ImmersionBar.with(this, dialog) .init();
