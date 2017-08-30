@@ -347,7 +347,7 @@
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_4.4_no.gif"/>
 
 ## 特别鸣谢 ##
-* 感谢[zhangzhen92](https://github.com/zhangzhen92)和[MrWhhh](https://github.com/MrWhhh)提供测试
+* 感谢[zhangzhen92](https://github.com/zhangzhen92)、 [yutouxiansheng](https://github.com/yutouxiansheng) 、[MrWhhh](https://github.com/MrWhhh)提供测试
 
 ## 联系我 ##
 - QQ群 314360549（问题交流）
