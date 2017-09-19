@@ -3,6 +3,7 @@ package com.gyf.immersionbar;
 import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Created by geyifeng on 2017/8/4.
@@ -16,5 +17,6 @@ public class MyApp extends Application {
 //            return;
 //        }
 //        LeakCanary.install(this);
+        CrashReport.initCrashReport(getApplicationContext(), "31a5f1f394", true);
     }
 }

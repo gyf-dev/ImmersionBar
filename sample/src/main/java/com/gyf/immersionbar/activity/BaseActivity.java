@@ -1,8 +1,11 @@
 package com.gyf.immersionbar.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.barlibrary.ImmersionBar;
 
@@ -16,6 +19,7 @@ import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    private InputMethodManager imm;
     protected ImmersionBar mImmersionBar;
     private Unbinder unbinder;
 
@@ -40,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        this.imm = null;
         if (mImmersionBar != null)
             mImmersionBar.destroy();  //在BaseActivity里销毁
     }
@@ -69,5 +74,20 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected boolean isImmersionBarEnabled() {
         return true;
+    }
+
+    public void finish() {
+        super.finish();
+        hideSoftKeyBoard();
+    }
+
+    public void hideSoftKeyBoard() {
+        View localView = getCurrentFocus();
+        if (this.imm == null) {
+            this.imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+        }
+        if ((localView != null) && (this.imm != null)) {
+            this.imm.hideSoftInputFromWindow(localView.getWindowToken(), 2);
+        }
     }
 }

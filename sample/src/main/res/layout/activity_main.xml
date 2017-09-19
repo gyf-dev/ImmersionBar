@@ -69,7 +69,7 @@
                     android:text="结合fragment使用" />
 
                 <Button
-                    android:id="@+id/btn_dialog_fragment"
+                    android:id="@+id/btn_dialog"
                     style="@style/btn"
                     android:text="结合Dialog使用" />
 

@@ -1,6 +1,9 @@
 package com.gyf.immersionbar.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gyf.barlibrary.BarHide;
@@ -27,16 +31,19 @@ public class MainActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.iv_bg)
     ImageView iv_bg;
+    @BindView(R.id.tv_version)
+    TextView tv_version;
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(toolbar).init();
+        mImmersionBar.titleBar(R.id.toolbar).init();
     }
 
     @Override
     protected void initView() {
         Blurry.with(this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(iv_bg);
+        tv_version.setText("当前版本：" + getVersionName(this));
     }
 
     @Override
@@ -45,7 +52,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
-            R.id.btn_dialog_fragment, R.id.btn_drawer, R.id.btn_tab, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
+            R.id.btn_dialog, R.id.btn_drawer, R.id.btn_tab, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
             R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
             R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light, R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
@@ -68,7 +75,7 @@ public class MainActivity extends BaseActivity {
             case R.id.btn_fragment:
                 startActivity(new Intent(this, FragmentActivity.class));
                 break;
-            case R.id.btn_dialog_fragment:
+            case R.id.btn_dialog:
                 startActivity(new Intent(this, DialogActivity.class));
                 break;
             case R.id.btn_drawer:
@@ -150,4 +157,16 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    public String getVersionName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        String versionName = "";
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
 }

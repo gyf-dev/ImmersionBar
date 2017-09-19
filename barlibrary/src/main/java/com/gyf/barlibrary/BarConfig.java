@@ -108,9 +108,14 @@ class BarConfig {
 
     private int getInternalDimensionSize(Resources res, String key) {
         int result = 0;
-        int resourceId = res.getIdentifier(key, "dimen", "android");
-        if (resourceId > 0) {
-            result = res.getDimensionPixelSize(resourceId);
+        try {
+            Class clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
+            if (resourceId > 0)
+                result = res.getDimensionPixelSize(resourceId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

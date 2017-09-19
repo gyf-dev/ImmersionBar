@@ -1,3 +1,4 @@
+![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
 
 ## 直接看效果图，最下面有各个版本的效果图
@@ -7,18 +8,18 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.2.9'
+   compile 'com.gyf.barlibrary:barlibrary:2.3.0'
    ```
 
 >eclipse
 
-[barlibrary-2.2.9.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.2.9.jar) 
+[barlibrary-2.3.0.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.3.0.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.2.9.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.0.apk) 
   
 ## 用法
 ### 初始化

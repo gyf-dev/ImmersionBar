@@ -1382,14 +1382,14 @@ public class ImmersionBar {
         setStatusBarView();  //通过状态栏高度动态设置状态栏布局
         transformView();  //变色view
         keyboardEnable();  //解决软键盘与底部输入框冲突问题
-        registerEMUI3_1();  //解决华为emui3.1或者3.0的问题
+        registerEMUI3_x();  //解决华为emui3.1或者3.0导航栏手动隐藏的问题
     }
 
     /**
      * 当Activity/Fragment/Dialog关闭的时候调用
      */
     public void destroy() {
-        unRegisterEMUI3_1();
+        unRegisterEMUI3_x();
         if (mBarParams.keyboardPatch != null) {
             mBarParams.keyboardPatch.disable(mBarParams.keyboardMode);  //取消监听
             mBarParams.keyboardPatch = null;
@@ -1639,12 +1639,13 @@ public class ImmersionBar {
     }
 
     /**
-     * 注册emui3.1导航栏监听函数
-     * Register emui 3 1.
+     * 注册emui3.x导航栏监听函数
+     * Register emui 3 x.
      */
-    private void registerEMUI3_1() {
-        if (OSUtils.isEMUI3_1()) {
-            if (mBarParams.navigationStatusObserver == null) {
+    private void registerEMUI3_x() {
+        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
+                && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
+            if (mBarParams.navigationStatusObserver == null && mBarParams.navigationBarView != null) {
                 mBarParams.navigationStatusObserver = new ContentObserver(new Handler()) {
                     @Override
                     public void onChange(boolean selfChange) {
@@ -1674,12 +1675,13 @@ public class ImmersionBar {
     }
 
     /**
-     * 取消注册emui3.1导航栏监听函数
-     * Un register emui 3 1.
+     * 取消注册emui3.x导航栏监听函数
+     * Un register emui 3 x.
      */
-    private void unRegisterEMUI3_1() {
-        if (OSUtils.isEMUI3_1()) {
-            if (mBarParams.navigationStatusObserver != null)
+    private void unRegisterEMUI3_x() {
+        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
+                && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
+            if (mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
                 mActivity.getContentResolver().unregisterContentObserver(mBarParams.navigationStatusObserver);
         }
     }

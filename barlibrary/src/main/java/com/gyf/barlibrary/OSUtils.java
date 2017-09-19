@@ -33,8 +33,14 @@ public class OSUtils {
      */
     public static boolean isMIUI6Later() {
         String version = getMIUIVersion();
-        if ((!version.isEmpty() && Integer.valueOf(version.substring(1)) >= 6)) {
-            return true;
+        int num;
+        if ((!version.isEmpty())) {
+            try {
+                num = Integer.valueOf(version.substring(1));
+                return num >= 6;
+            } catch (NumberFormatException e) {
+                return false;
+            }
         } else
             return false;
     }
@@ -85,6 +91,20 @@ public class OSUtils {
     }
 
     /**
+     * 判断是否为emui3.0版本
+     * Is emui 3 1 boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isEMUI3_0() {
+        String property = getEMUIVersion();
+        if (property.contains("EmotionUI_3.0")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 判断是否为flymeOS
      * Is flyme os boolean.
      *
@@ -104,13 +124,15 @@ public class OSUtils {
         String version = getFlymeOSVersion();
         int num;
         if (!version.isEmpty()) {
-            if (version.toLowerCase().contains("os")) {
-                num = Integer.valueOf(version.substring(9, 10));
-            } else {
-                num = Integer.valueOf(version.substring(6, 7));
-            }
-            if (num >= 4) {
-                return true;
+            try {
+                if (version.toLowerCase().contains("os")) {
+                    num = Integer.valueOf(version.substring(9, 10));
+                } else {
+                    num = Integer.valueOf(version.substring(6, 7));
+                }
+                return num >= 4;
+            } catch (NumberFormatException e) {
+                return false;
             }
         }
         return false;
@@ -126,13 +148,15 @@ public class OSUtils {
         String version = getFlymeOSVersion();
         int num;
         if (!version.isEmpty()) {
-            if (version.toLowerCase().contains("os")) {
-                num = Integer.valueOf(version.substring(9, 10));
-            } else {
-                num = Integer.valueOf(version.substring(6, 7));
-            }
-            if (num == 5) {
-                return true;
+            try {
+                if (version.toLowerCase().contains("os")) {
+                    num = Integer.valueOf(version.substring(9, 10));
+                } else {
+                    num = Integer.valueOf(version.substring(6, 7));
+                }
+                return num == 5;
+            } catch (NumberFormatException e) {
+                return false;
             }
         }
         return false;
