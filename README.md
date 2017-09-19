@@ -208,6 +208,7 @@
             .statusBarColor(R.color.colorPrimary)
             .init();
    ```
+   - 注意：ImmersionBar一定要在设置完布局以后使用，
 
 - ③ 使用ImmersionBar的fitsSystemWindows(boolean fits)方法
 

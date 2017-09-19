@@ -85,7 +85,7 @@ public abstract class BaseFiveFragment extends SupportFragment {
         super.onDestroy();
         unbinder.unbind();
         if (mImmersionBar != null)
-            mImmersionBar.init();
+            mImmersionBar.destroy();
     }
 
     /**
