@@ -17,6 +17,5 @@ public class MyApp extends Application {
 //            return;
 //        }
 //        LeakCanary.install(this);
-        CrashReport.initCrashReport(getApplicationContext(), "31a5f1f394", true);
     }
 }
