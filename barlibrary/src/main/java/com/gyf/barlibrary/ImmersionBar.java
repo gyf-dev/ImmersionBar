@@ -27,7 +27,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -68,8 +67,7 @@ public class ImmersionBar {
      * @param activity the activity
      */
     private ImmersionBar(Activity activity) {
-        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
-        mActivity = activityWeakReference.get();
+        mActivity = activity;
         mWindow = mActivity.getWindow();
         mActivityName = activity.getClass().getName();
         mImmersionBarName = mActivityName;
@@ -90,24 +88,20 @@ public class ImmersionBar {
         if (activity == null) {
             throw new IllegalArgumentException("Activity不能为空!!!");
         }
-        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
-        WeakReference<Fragment> fragmentWeakReference = new WeakReference<>(fragment);
-        mActivity = activityWeakReference.get();
+        mActivity = activity;
         mWindow = mActivity.getWindow();
         mActivityName = mActivity.getClass().getName();
-        mFragmentName = mActivityName + "_AND_" + fragmentWeakReference.get().getClass().getName();
+        mFragmentName = mActivityName + "_AND_" + fragment.getClass().getName();
         mImmersionBarName = mFragmentName;
         initParams();
     }
 
     private ImmersionBar(DialogFragment dialogFragment, Dialog dialog) {
-        WeakReference<DialogFragment> dialogFragmentWeakReference = new WeakReference<>(dialogFragment);
-        WeakReference<Dialog> dialogWeakReference = new WeakReference<>(dialog);
-        mActivity = dialogFragmentWeakReference.get().getActivity();
-        mDialog = dialogWeakReference.get();
+        mActivity = dialogFragment.getActivity();
+        mDialog = dialog;
         mWindow = mDialog.getWindow();
         mActivityName = mActivity.getClass().getName();
-        mImmersionBarName = mActivityName + "_AND_" + dialogFragmentWeakReference.get().getClass().getName();
+        mImmersionBarName = mActivityName + "_AND_" + dialogFragment.getClass().getName();
         initParams();
     }
 
@@ -120,10 +114,8 @@ public class ImmersionBar {
      * @param dialogTag the dialog tag  dialog标识，不能为空
      */
     private ImmersionBar(Activity activity, Dialog dialog, String dialogTag) {
-        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
-        WeakReference<Dialog> dialogWeakReference = new WeakReference<>(dialog);
-        mActivity = activityWeakReference.get();
-        mDialog = dialogWeakReference.get();
+        mActivity = activity;
+        mDialog = dialog;
         mWindow = mDialog.getWindow();
         mActivityName = mActivity.getClass().getName();
         mImmersionBarName = mActivityName + "_AND_" + dialogTag;
