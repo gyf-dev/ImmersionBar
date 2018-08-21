@@ -40,7 +40,7 @@ public class BlogActivity extends BaseActivity {
         if (blog.equals("github")) {
             mWebView.loadUrl("https://github.com/gyf-dev/ImmersionBar");
         } else {
-            mWebView.loadUrl("http://www.jianshu.com/p/2a884e211a62");
+            mWebView.loadUrl("https://www.jianshu.com/p/2a884e211a62");
         }
         mWebView.setWebViewClient(new WebViewClient() {
             @Override

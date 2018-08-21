@@ -15,11 +15,14 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/llScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="7dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="7dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -48,8 +51,8 @@
             android:layout_weight="1"
             android:background="@drawable/shape_seek"
             android:cursorVisible="false"
-            android:drawableStart="@mipmap/seek"
             android:drawablePadding="10dp"
+            android:drawableStart="@mipmap/seek"
             android:hint="搜一搜"
             android:padding="10dp"
             android:textColor="@color/colorBarText"

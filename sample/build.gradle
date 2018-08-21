@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.gyf.immersionbar"
         minSdkVersion 18
@@ -26,39 +26,39 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    testCompile 'junit:junit:4.12'
-    compile project(':barlibrary')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    implementation project(':barlibrary')
     //注解
-    compile 'com.jakewharton:butterknife:8.5.1'
+    implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     //侧滑返回
-    compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
     //log日志
-    compile 'com.apkfuns.logutils:library:1.4.2.2'
+    implementation 'com.apkfuns.logutils:library:1.5.1.1'
     //轮播图
-    compile 'com.youth.banner:banner:1.4.9'
+    implementation 'com.youth.banner:banner:1.4.9'
     //RecyclerView框架
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     //图片加载框架
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     //下拉刷新上拉加载
-    compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //圆形imageView
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     // 模糊
-    compile 'jp.wasabeef:blurry:2.1.1'
+    implementation 'jp.wasabeef:blurry:2.1.1'
     // 内存泄漏检测
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     // Fragment框架
-    compile 'me.yokeyword:fragmentation:1.1.1'
+    implementation 'me.yokeyword:fragmentation:1.1.1'
     //腾讯bugly
-    compile 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
 }

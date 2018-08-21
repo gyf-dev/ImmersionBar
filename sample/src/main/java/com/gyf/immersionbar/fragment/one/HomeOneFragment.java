@@ -1,5 +1,6 @@
 package com.gyf.immersionbar.fragment.one;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
+import com.gyf.immersionbar.activity.FragmentOneActivity;
 import com.gyf.immersionbar.adapter.OneAdapter;
 import com.gyf.immersionbar.utils.GlideImageLoader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -39,6 +42,8 @@ public class HomeOneFragment extends BaseLazyFragment {
     RecyclerView mRv;
     @BindView(R.id.refreshLayout)
     TwinklingRefreshLayout refreshLayout;
+    @BindView(R.id.llScan)
+    LinearLayout mLlScan;
     private OneAdapter mOneAdapter;
     private List<String> mItemList = new ArrayList<>();
     private List<String> mImages = new ArrayList<>();
@@ -169,6 +174,13 @@ public class HomeOneFragment extends BaseLazyFragment {
                 } else {
                     mToolbar.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        mLlScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), FragmentOneActivity.class));
             }
         });
     }

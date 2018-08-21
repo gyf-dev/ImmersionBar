@@ -116,5 +116,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:text="当前版本：2.3.0" />
+        android:text="当前版本：2.3.1" />
 </LinearLayout>

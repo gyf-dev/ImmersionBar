@@ -8,18 +8,33 @@
 > android studio
 
    ```groovy
-   compile 'com.gyf.barlibrary:barlibrary:2.3.0'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.1'
    ```
 
 >eclipse
 
-[barlibrary-2.3.0.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/barlibrary-2.3.0.jar) 
+[immersionbar-2.3.1.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.1.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.0.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.1.apk) 
+
+## 关于全面屏与刘海
+- 解决全面屏上下部分留黑或留白问题，以下三种任选其一，或者都写
+
+  ① 在manifest的Application节点中加入
+    ```xml
+      <meta-data 
+        android:name="android.max_aspect"
+        android:value="2.1" />
+    ```
+   ② 在manifest的Application节点下加入如下属性,这句话的意思是支持分屏模式
+   ```xml
+      android:resizeableActivity="true"
+   ```
+   ③ 升级targetSdkVersion为25以上版本
   
 ## 用法
 ### 初始化

@@ -13,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.gyf.barlibrary.OSUtils;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.fragment.dialog.BottomDialogFragment;
 import com.gyf.immersionbar.fragment.dialog.FullDialogFragment;
@@ -135,7 +134,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                 window.setGravity(Gravity.TOP);
                 window.setWindowAnimations(R.style.RightDialog);
                 window.setLayout(width, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Full");
+                mImmersionBarDialog = ImmersionBar.with(this, dialog);
                 mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarColor(R.color.btn3)
                         .keyboardEnable(true)
@@ -145,21 +144,21 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                 window.setGravity(Gravity.TOP);
                 window.setWindowAnimations(R.style.TopDialog);
                 window.setLayout(width, height / 2);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Top");
+                mImmersionBarDialog = ImmersionBar.with(this, dialog);
                 mImmersionBarDialog.titleBar(toolbar).navigationBarWithKitkatEnable(false).init();
                 break;
             case R.id.btn_bottom:
                 window.setGravity(Gravity.BOTTOM);
                 window.setWindowAnimations(R.style.BottomDialog);
                 window.setLayout(width, height / 2);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Bottom");
+                mImmersionBarDialog = ImmersionBar.with(this, dialog);
                 mImmersionBarDialog.navigationBarColor(R.color.cool_green_normal).init();
                 break;
             case R.id.btn_left:
                 window.setGravity(Gravity.TOP | Gravity.START);
                 window.setWindowAnimations(R.style.LeftDialog);
                 window.setLayout(width * 2 / 3, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Left");
+                mImmersionBarDialog = ImmersionBar.with(this, dialog);
                 mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarColor(R.color.btn11)
                         .keyboardEnable(true).init();
@@ -168,7 +167,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                 window.setGravity(Gravity.TOP | Gravity.END);
                 window.setWindowAnimations(R.style.RightDialog);
                 window.setLayout(width * 2 / 3, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog, "Right");
+                mImmersionBarDialog = ImmersionBar.with(this, dialog);
                 mImmersionBarDialog.titleBar(toolbar)
                         .navigationBarColor(R.color.btn6)
                         .keyboardEnable(true)

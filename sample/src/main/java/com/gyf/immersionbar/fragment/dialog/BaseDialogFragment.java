@@ -115,7 +115,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * 初始化沉浸式
      */
     protected void initImmersionBar() {
-        mImmersionBar = ImmersionBar.with(this, getDialog());
+        mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.init();
     }
 

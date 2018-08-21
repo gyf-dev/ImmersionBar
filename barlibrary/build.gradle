@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -29,29 +29,29 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/barlibrary-2.2.9.jar'
-    from('build/intermediates/bundles/default/')
+    delete 'build/libs/immersionbar-2.3.0.jar'
+    from('build/intermediates/bundles/release/')
     into('build/libs/')
     include('classes.jar')
-    rename('classes.jar', 'barlibrary-2.3.0.jar')
+    rename('classes.jar', 'immersionbar-2.3.1.jar')
 }
 
 makeJar.dependsOn(build)
 
 publish {
-    userOrg = 'magic-dev'
-    groupId = 'com.gyf.barlibrary'
-    artifactId = 'barlibrary'
-    publishVersion = '2.3.0'
+    userOrg = 'geyifeng'
+    groupId = 'com.gyf.immersionbar'
+    artifactId = 'immersionbar'
+    publishVersion = '2.3.1'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }
