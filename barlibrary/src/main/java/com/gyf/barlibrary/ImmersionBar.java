@@ -19,7 +19,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,7 +152,6 @@ public class ImmersionBar {
      * Init params.
      */
     private void initParams() {
-        Log.e("mImmersionBarName = ", mImmersionBarName);
         mDecorView = (ViewGroup) mWindow.getDecorView();
         mContentView = mDecorView.findViewById(android.R.id.content);
         mConfig = new BarConfig(mActivity);

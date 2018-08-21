@@ -33,7 +33,7 @@
     ```xml
       <meta-data 
         android:name="android.max_aspect"
-        android:value="2.1" />
+        android:value="2.2" />
     ```
    ② 在manifest的Application节点下加入如下属性,这句话的意思是支持分屏模式
    ```xml
