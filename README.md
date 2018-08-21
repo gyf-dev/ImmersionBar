@@ -7,7 +7,7 @@
 ## 使用 
 > android studio
 
-- 2.3.1+(由于之前账户以及忘记，所以只能重新更改路径)
+- 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
    implementation 'com.gyf.immersionbar:immersionbar:2.3.1'
    ```
