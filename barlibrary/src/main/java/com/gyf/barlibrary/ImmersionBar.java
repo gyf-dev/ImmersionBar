@@ -1685,28 +1685,32 @@ public class ImmersionBar {
                 mBarParams.navigationStatusObserver = new ContentObserver(new Handler()) {
                     @Override
                     public void onChange(boolean selfChange) {
-                        int navigationBarIsMin = Settings.System.getInt(mActivity.getContentResolver(),
-                                NAVIGATIONBAR_IS_MIN, 0);
-                        if (navigationBarIsMin == 1) {
-                            //导航键隐藏了
-                            mBarParams.navigationBarView.setVisibility(View.GONE);
-                            mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
-                        } else {
-                            //导航键显示了
-                            mBarParams.navigationBarView.setVisibility(View.VISIBLE);
-                            if (!mBarParams.systemWindows) {
-                                if (mConfig.isNavigationAtBottom())
-                                    mContentView.setPadding(0, mContentView.getPaddingTop(), 0, mConfig.getNavigationBarHeight());
-                                else
-                                    mContentView.setPadding(0, mContentView.getPaddingTop(), mConfig.getNavigationBarWidth(), 0);
-                            } else
+                        if (mActivity != null && mActivity.getContentResolver() != null) {
+                            int navigationBarIsMin = Settings.System.getInt(mActivity.getContentResolver(),
+                                    NAVIGATIONBAR_IS_MIN, 0);
+                            if (navigationBarIsMin == 1) {
+                                //导航键隐藏了
+                                mBarParams.navigationBarView.setVisibility(View.GONE);
                                 mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
+                            } else {
+                                //导航键显示了
+                                mBarParams.navigationBarView.setVisibility(View.VISIBLE);
+                                if (!mBarParams.systemWindows) {
+                                    if (mConfig.isNavigationAtBottom())
+                                        mContentView.setPadding(0, mContentView.getPaddingTop(), 0, mConfig.getNavigationBarHeight());
+                                    else
+                                        mContentView.setPadding(0, mContentView.getPaddingTop(), mConfig.getNavigationBarWidth(), 0);
+                                } else
+                                    mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
+                            }
                         }
                     }
                 };
+                if (mActivity != null && mActivity.getContentResolver() != null && mBarParams.navigationStatusObserver != null) {
+                    mActivity.getContentResolver().registerContentObserver(Settings.System.getUriFor
+                            (NAVIGATIONBAR_IS_MIN), true, mBarParams.navigationStatusObserver);
+                }
             }
-            mActivity.getContentResolver().registerContentObserver(Settings.System.getUriFor
-                    (NAVIGATIONBAR_IS_MIN), true, mBarParams.navigationStatusObserver);
         }
     }
 
@@ -1717,7 +1721,8 @@ public class ImmersionBar {
     private void unRegisterEMUI3_x() {
         if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
                 && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
-            if (mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
+            if (mActivity != null && mActivity.getContentResolver() != null &&
+                    mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
                 mActivity.getContentResolver().unregisterContentObserver(mBarParams.navigationStatusObserver);
         }
     }
