@@ -312,7 +312,14 @@
    ```
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
 
-
+## 关于结合今日头条屏幕适配
+- 有些小伙伴使用fitsSystemWindows(true)方法之后之后，状态栏与标题栏之间仍然会有白色空隙，如果还是想使用fitsSystemWindows方法，请使用两个参数的fitsSystemWindows方法，
+  第二个参数指定为状态栏颜色就好了，比如
+  
+  ```java
+  fitsSystemWindows(true,R.color.colorPrimary)
+  ```
+    
 ## 状态栏和导航栏其它方法
 	
 - public static boolean hasNavigationBar(Activity activity)
