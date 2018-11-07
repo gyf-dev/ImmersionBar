@@ -7,13 +7,15 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
 /**
- * Created by geyifeng on 2017/5/11.
+ * @author geyifeng
+ * @date 2017/5/11
  */
 
 class BarConfig {
@@ -22,6 +24,7 @@ class BarConfig {
     private static final String NAV_BAR_HEIGHT_RES_NAME = "navigation_bar_height";
     private static final String NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME = "navigation_bar_height_landscape";
     private static final String NAV_BAR_WIDTH_RES_NAME = "navigation_bar_width";
+    private static final String MIUI_FORCE_FSG_NAV_BAR = "force_fsg_nav_bar";
 
     private final int mStatusBarHeight;
     private final int mActionBarHeight;
@@ -36,7 +39,7 @@ class BarConfig {
         Resources res = activity.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         mSmallestWidthDp = getSmallestWidthDp(activity);
-        mStatusBarHeight = getInternalDimensionSize(res, STATUS_BAR_HEIGHT_RES_NAME);
+        mStatusBarHeight = getInternalDimensionSize(STATUS_BAR_HEIGHT_RES_NAME);
         mActionBarHeight = getActionBarHeight(activity);
         mNavigationBarHeight = getNavigationBarHeight(activity);
         mNavigationBarWidth = getNavigationBarWidth(activity);
@@ -56,7 +59,6 @@ class BarConfig {
 
     @TargetApi(14)
     private int getNavigationBarHeight(Context context) {
-        Resources res = context.getResources();
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (hasNavBar((Activity) context)) {
@@ -66,7 +68,7 @@ class BarConfig {
                 } else {
                     key = NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME;
                 }
-                return getInternalDimensionSize(res, key);
+                return getInternalDimensionSize(key);
             }
         }
         return result;
@@ -74,18 +76,24 @@ class BarConfig {
 
     @TargetApi(14)
     private int getNavigationBarWidth(Context context) {
-        Resources res = context.getResources();
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (hasNavBar((Activity) context)) {
-                return getInternalDimensionSize(res, NAV_BAR_WIDTH_RES_NAME);
+                return getInternalDimensionSize(NAV_BAR_WIDTH_RES_NAME);
             }
         }
         return result;
     }
 
     @TargetApi(14)
-    private static boolean hasNavBar(Activity activity) {
+    private boolean hasNavBar(Activity activity) {
+        //判断小米手机是否开启了全面屏,开启了，直接返回false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (Settings.Global.getInt(activity.getContentResolver(), MIUI_FORCE_FSG_NAV_BAR, 0) != 0) {
+                return false;
+            }
+        }
+        //其他手机根据屏幕真实高度与显示高度是否相同来判断
         WindowManager windowManager = activity.getWindowManager();
         Display d = windowManager.getDefaultDisplay();
 
@@ -106,15 +114,14 @@ class BarConfig {
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
 
-    private int getInternalDimensionSize(Resources res, String key) {
+    private int getInternalDimensionSize(String key) {
         int result = 0;
         try {
-            Class clazz = Class.forName("com.android.internal.R$dimen");
-            Object object = clazz.newInstance();
-            int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
-            if (resourceId > 0)
-                result = res.getDimensionPixelSize(resourceId);
-        } catch (Exception e) {
+            int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
+            if (resourceId > 0) {
+                result = Resources.getSystem().getDimensionPixelSize(resourceId);
+            }
+        } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
         return result;
@@ -168,7 +175,7 @@ class BarConfig {
      *
      * @return True if this device uses soft key navigation, False otherwise.
      */
-    public boolean hasNavigtionBar() {
+    public boolean hasNavigationBar() {
         return mHasNavigationBar;
     }
 

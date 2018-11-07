@@ -1498,7 +1498,7 @@ public class ImmersionBar {
             uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION; //Activity全屏显示，但导航栏不会被隐藏覆盖，导航栏依然可见，Activity底部布局部分会被导航栏遮住。
         }
         mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        if (mConfig.hasNavigtionBar()) {  //判断是否存在导航栏
+        if (mConfig.hasNavigationBar()) {  //判断是否存在导航栏
             mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);  //需要设置这个才能设置状态栏颜色
@@ -1520,7 +1520,7 @@ public class ImmersionBar {
     private void initBarBelowLOLLIPOP() {
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
         setupStatusBarView(); //创建一个假的状态栏
-        if (mConfig.hasNavigtionBar()) {  //判断是否存在导航栏，是否禁止设置导航栏
+        if (mConfig.hasNavigationBar()) {  //判断是否存在导航栏，是否禁止设置导航栏
             if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable)
                 mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//透明导航栏，设置这个，如果有导航栏，底部布局会被导航栏遮住
             else
@@ -1613,7 +1613,7 @@ public class ImmersionBar {
 
         }
         // 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题
-        if (mConfig.hasNavigtionBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
+        if (mConfig.hasNavigationBar() && !mBarParams.fullScreenTemp && !mBarParams.fullScreen) {
             if (mConfig.isNavigationAtBottom()) { //判断导航栏是否在底部
                 if (!mBarParams.isSupportActionBar) { //判断是否支持actionBar
                     if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
@@ -1679,7 +1679,7 @@ public class ImmersionBar {
      * Register emui 3 x.
      */
     private void registerEMUI3_x() {
-        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
+        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigationBar()
                 && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
             if (mBarParams.navigationStatusObserver == null && mBarParams.navigationBarView != null) {
                 mBarParams.navigationStatusObserver = new ContentObserver(new Handler()) {
@@ -1719,7 +1719,7 @@ public class ImmersionBar {
      * Un register emui 3 x.
      */
     private void unRegisterEMUI3_x() {
-        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
+        if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigationBar()
                 && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
             if (mActivity != null && mActivity.getContentResolver() != null &&
                     mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
@@ -2022,7 +2022,7 @@ public class ImmersionBar {
     @TargetApi(14)
     public static boolean hasNavigationBar(Activity activity) {
         BarConfig config = new BarConfig(activity);
-        return config.hasNavigtionBar();
+        return config.hasNavigationBar();
     }
 
     /**
