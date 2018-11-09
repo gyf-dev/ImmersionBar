@@ -24,7 +24,7 @@
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta01.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta03.apk) 
 
 ## 关于全面屏与刘海
 - 解决全面屏上下部分留黑或留白问题，以下三种任选其一，或者都写
