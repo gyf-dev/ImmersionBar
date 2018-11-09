@@ -2,12 +2,14 @@ package com.gyf.immersionbar.fragment.two;
 
 import android.support.v7.widget.Toolbar;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/7/20.
+ * @author geyifeng
+ * @date 2017/7/20
  */
 
 public class CategoryTwoFragment extends BaseTwoFragment {
@@ -22,10 +24,9 @@ public class CategoryTwoFragment extends BaseTwoFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar
+        ImmersionBar.with(this)
                 .titleBar(toolbar)
+                .navigationBarColor(R.color.btn1)
                 .init();
-        //或者
-        //ImmersionBar.setTitleBar(getActivity(),toolbar);
     }
 }

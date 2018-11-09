@@ -1,19 +1,21 @@
 package com.gyf.immersionbar.activity;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class ColorActivity extends BaseActivity {
 
     @BindView(R.id.text_view)
@@ -32,19 +34,21 @@ public class ColorActivity extends BaseActivity {
     SeekBar seekBar;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_color;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.statusBarView(R.id.top_view)
+        ImmersionBar.with(this)
+                .statusBarView(R.id.top_view)
                 .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.btn8)
                 .init();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void setListener() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -52,7 +56,7 @@ public class ColorActivity extends BaseActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
                 textView.setText("透明度:" + alpha + "f");
-                mImmersionBar.barAlpha(alpha)
+                ImmersionBar.with(ColorActivity.this).barAlpha(alpha)
                         .statusBarColorTransform(R.color.btn14)
                         .navigationBarColorTransform(R.color.btn3)
                         .addViewSupportTransformColor(mToolbar)

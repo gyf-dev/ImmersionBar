@@ -5,26 +5,25 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.apkfuns.logutils.LogUtils;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * Created by geyifeng on 2017/8/12.
+ * @author geyifeng
+ * @date 2017/8/12
  */
-
 public class MainFragment extends BaseFiveFragment implements View.OnClickListener {
 
     @BindView(R.id.ll_home)
-    LinearLayout ll_home;
+    LinearLayout llHome;
     @BindView(R.id.ll_category)
-    LinearLayout ll_category;
+    LinearLayout llCategory;
     @BindView(R.id.ll_service)
-    LinearLayout ll_service;
+    LinearLayout llService;
     @BindView(R.id.ll_mine)
-    LinearLayout ll_mine;
+    LinearLayout llMine;
 
     private SupportFragment[] mFragments = new SupportFragment[4];
 
@@ -72,15 +71,15 @@ public class MainFragment extends BaseFiveFragment implements View.OnClickListen
 
     @Override
     protected void initView() {
-        tabSelected(ll_home);
+        tabSelected(llHome);
     }
 
     @Override
     protected void setListener() {
-        ll_home.setOnClickListener(this);
-        ll_category.setOnClickListener(this);
-        ll_service.setOnClickListener(this);
-        ll_mine.setOnClickListener(this);
+        llHome.setOnClickListener(this);
+        llCategory.setOnClickListener(this);
+        llService.setOnClickListener(this);
+        llMine.setOnClickListener(this);
     }
 
     @Override
@@ -88,28 +87,30 @@ public class MainFragment extends BaseFiveFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.ll_home:
                 showHideFragment(mFragments[HOME]);
-                tabSelected(ll_home);
+                tabSelected(llHome);
                 break;
             case R.id.ll_category:
                 showHideFragment(mFragments[CATEGORY]);
-                tabSelected(ll_category);
+                tabSelected(llCategory);
                 break;
             case R.id.ll_service:
                 showHideFragment(mFragments[SERVICE]);
-                tabSelected(ll_service);
+                tabSelected(llService);
                 break;
             case R.id.ll_mine:
                 showHideFragment(mFragments[MINE]);
-                tabSelected(ll_mine);
+                tabSelected(llMine);
+                break;
+            default:
                 break;
         }
     }
 
     private void tabSelected(LinearLayout linearLayout) {
-        ll_home.setSelected(false);
-        ll_category.setSelected(false);
-        ll_service.setSelected(false);
-        ll_mine.setSelected(false);
+        llHome.setSelected(false);
+        llCategory.setSelected(false);
+        llService.setSelected(false);
+        llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
 }

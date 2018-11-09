@@ -7,11 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.one.MineOneFragment;
-import com.gyf.immersionbar.fragment.one.HomeOneFragment;
-import com.gyf.immersionbar.fragment.one.ServiceOneFragment;
-import com.gyf.immersionbar.fragment.one.CategoryOneFragment;
 import com.gyf.immersionbar.fragment.three.CategoryThreeFragment;
 import com.gyf.immersionbar.fragment.three.HomeThreeFragment;
 import com.gyf.immersionbar.fragment.three.MineThreeFragment;
@@ -23,32 +20,32 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class FragmentThreeActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.viewPager)
     CustomViewPager viewPager;
     @BindView(R.id.ll_home)
-    LinearLayout ll_home;
+    LinearLayout llHome;
     @BindView(R.id.ll_category)
-    LinearLayout ll_category;
+    LinearLayout llCategory;
     @BindView(R.id.ll_service)
-    LinearLayout ll_service;
+    LinearLayout llService;
     @BindView(R.id.ll_mine)
-    LinearLayout ll_mine;
+    LinearLayout llMine;
     private ArrayList<Fragment> mFragments;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_fragment_one;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.keyboardEnable(true).navigationBarColor(R.color.colorPrimary).navigationBarWithKitkatEnable(false).init();
+        ImmersionBar.with(this).keyboardEnable(true).navigationBarColor(R.color.colorPrimary).init();
     }
 
     @Override
@@ -68,15 +65,15 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
     protected void initView() {
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(3);
-        ll_home.setSelected(true);
+        llHome.setSelected(true);
     }
 
     @Override
     protected void setListener() {
-        ll_home.setOnClickListener(this);
-        ll_category.setOnClickListener(this);
-        ll_service.setOnClickListener(this);
-        ll_mine.setOnClickListener(this);
+        llHome.setOnClickListener(this);
+        llCategory.setOnClickListener(this);
+        llService.setOnClickListener(this);
+        llMine.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
     }
 
@@ -85,19 +82,21 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.ll_home:
                 viewPager.setCurrentItem(0);
-                tabSelected(ll_home);
+                tabSelected(llHome);
                 break;
             case R.id.ll_category:
                 viewPager.setCurrentItem(1);
-                tabSelected(ll_category);
+                tabSelected(llCategory);
                 break;
             case R.id.ll_service:
                 viewPager.setCurrentItem(2);
-                tabSelected(ll_service);
+                tabSelected(llService);
                 break;
             case R.id.ll_mine:
                 viewPager.setCurrentItem(3);
-                tabSelected(ll_mine);
+                tabSelected(llMine);
+                break;
+            default:
                 break;
         }
     }
@@ -111,20 +110,22 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                tabSelected(ll_home);
-                mImmersionBar.statusBarDarkFont(false).navigationBarColor(R.color.colorPrimary).init();
+                tabSelected(llHome);
+                ImmersionBar.with(this).statusBarDarkFont(false).navigationBarColor(R.color.colorPrimary).init();
                 break;
             case 1:
-                tabSelected(ll_category);
-                mImmersionBar.statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
+                tabSelected(llCategory);
+                ImmersionBar.with(this).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
                 break;
             case 2:
-                tabSelected(ll_service);
-                mImmersionBar.statusBarDarkFont(false).navigationBarColor(R.color.btn13).init();
+                tabSelected(llService);
+                ImmersionBar.with(this).statusBarDarkFont(false).navigationBarColor(R.color.btn13).init();
                 break;
             case 3:
-                tabSelected(ll_mine);
-                mImmersionBar.statusBarDarkFont(true).navigationBarColor(R.color.btn1).init();
+                tabSelected(llMine);
+                ImmersionBar.with(this).statusBarDarkFont(true).navigationBarColor(R.color.btn1).init();
+                break;
+            default:
                 break;
         }
     }
@@ -135,10 +136,10 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
     }
 
     private void tabSelected(LinearLayout linearLayout) {
-        ll_home.setSelected(false);
-        ll_category.setSelected(false);
-        ll_service.setSelected(false);
-        ll_mine.setSelected(false);
+        llHome.setSelected(false);
+        llCategory.setSelected(false);
+        llService.setSelected(false);
+        llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
 

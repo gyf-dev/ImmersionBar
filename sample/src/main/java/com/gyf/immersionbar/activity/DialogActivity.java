@@ -24,97 +24,85 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by geyifeng on 2017/7/31.
+ * @author geyifeng
+ * @date 2017/7/31
  */
-
 public class DialogActivity extends BaseActivity implements DialogInterface.OnDismissListener {
 
     @BindView(R.id.btn_full_fragment)
-    Button btn_full_fragment;
+    Button btnFullFragment;
     @BindView(R.id.btn_top_fragment)
-    Button btn_top_fragment;
+    Button btnTopFragment;
     @BindView(R.id.btn_bottom_fragment)
-    Button btn_bottom_fragment;
+    Button btnBottomFragment;
     @BindView(R.id.btn_left_fragment)
-    Button btn_left_fragment;
+    Button btnLeftFragment;
     @BindView(R.id.btn_right_fragment)
-    Button btn_right_fragment;
-    private ImmersionBar mImmersionBarDialog = null;
+    Button btnRightFragment;
+
+    private AlertDialog mAlertDialog;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_dialog;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.toolbar).keyboardEnable(true).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).keyboardEnable(true).init();
     }
 
     @Override
     protected void setListener() {
-        btn_full_fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //如果弹出的dialog里有输入框并且activity里设置了keyboardEnable为true的话，
-                //当弹出Dialog的时候，要把activity的keyboardEnable方法设置为false，
-                //当dialog关闭时，要把keyboardEnable设置为打开之前的状态
-                mImmersionBar.keyboardEnable(false).init();
-                FullDialogFragment fullDialogFragment = new FullDialogFragment();
-                fullDialogFragment.show(getSupportFragmentManager(), "FullDialogFragment");
-            }
+        btnFullFragment.setOnClickListener(v -> {
+            //如果弹出的dialog里有输入框并且activity里设置了keyboardEnable为true的话，
+            //当弹出Dialog的时候，要把activity的keyboardEnable方法设置为false，
+            //当dialog关闭时，要把keyboardEnable设置为打开之前的状态
+            ImmersionBar.with(this).keyboardEnable(false).init();
+            FullDialogFragment fullDialogFragment = new FullDialogFragment();
+            fullDialogFragment.show(getSupportFragmentManager(), FullDialogFragment.class.getSimpleName());
         });
-        btn_top_fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mImmersionBar.keyboardEnable(false).init();
-                TopDialogFragment fullDialogFragment = new TopDialogFragment();
-                fullDialogFragment.show(getSupportFragmentManager(), "TopDialogFragment");
-            }
+        btnTopFragment.setOnClickListener(v -> {
+            ImmersionBar.with(this).keyboardEnable(false).init();
+            TopDialogFragment fullDialogFragment = new TopDialogFragment();
+            fullDialogFragment.show(getSupportFragmentManager(), TopDialogFragment.class.getSimpleName());
         });
-        btn_bottom_fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mImmersionBar.keyboardEnable(false).init();
-                BottomDialogFragment fullDialogFragment = new BottomDialogFragment();
-                fullDialogFragment.show(getSupportFragmentManager(), "BottomDialogFragment");
-            }
+        btnBottomFragment.setOnClickListener(v -> {
+            ImmersionBar.with(this).keyboardEnable(false).init();
+            BottomDialogFragment fullDialogFragment = new BottomDialogFragment();
+            fullDialogFragment.show(getSupportFragmentManager(), BottomDialogFragment.class.getSimpleName());
         });
-        btn_left_fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mImmersionBar.keyboardEnable(false).init();
-                LeftDialogFragment fullDialogFragment = new LeftDialogFragment();
-                fullDialogFragment.show(getSupportFragmentManager(), "LeftDialogFragment");
-            }
+        btnLeftFragment.setOnClickListener(v -> {
+            ImmersionBar.with(this).keyboardEnable(false).init();
+            LeftDialogFragment fullDialogFragment = new LeftDialogFragment();
+            fullDialogFragment.show(getSupportFragmentManager(), LeftDialogFragment.class.getSimpleName());
         });
-        btn_right_fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mImmersionBar.keyboardEnable(false).init();
-                RightDialogFragment fullDialogFragment = new RightDialogFragment();
-                fullDialogFragment.show(getSupportFragmentManager(), "RightDialogFragment");
-            }
+        btnRightFragment.setOnClickListener(v -> {
+            ImmersionBar.with(this).keyboardEnable(false).init();
+            RightDialogFragment fullDialogFragment = new RightDialogFragment();
+            fullDialogFragment.show(getSupportFragmentManager(), RightDialogFragment.class.getSimpleName());
         });
     }
 
     @OnClick({R.id.btn_full, R.id.btn_top, R.id.btn_bottom, R.id.btn_left, R.id.btn_right})
     public void onClick(View view) {
-        mImmersionBar.keyboardEnable(false).init();  //取消activity的软键盘监听
+        //取消activity的软键盘监听
+        ImmersionBar.with(this).keyboardEnable(false).init();
         //弹出Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
-        AlertDialog dialog = builder.create();
-        dialog.setOnDismissListener(this);
-        dialog.show();
+        mAlertDialog = builder.create();
+        mAlertDialog.setOnDismissListener(this);
+        mAlertDialog.show();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog, null);
-        Toolbar toolbar = (Toolbar) dialogView.findViewById(R.id.toolbar);
-        dialog.setContentView(dialogView);
-        Window window = dialog.getWindow();
-        //解决无法弹出输入法的问题
-        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Toolbar toolbar = dialogView.findViewById(R.id.toolbar);
+        mAlertDialog.setContentView(dialogView);
+        Window window = mAlertDialog.getWindow();
+        if (window != null) {
+            //解决无法弹出输入法的问题
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        }
         //计算屏幕宽高
         int width;
         int height;
@@ -131,59 +119,75 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
 
         switch (view.getId()) {
             case R.id.btn_full:
-                window.setGravity(Gravity.TOP);
-                window.setWindowAnimations(R.style.RightDialog);
-                window.setLayout(width, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog);
-                mImmersionBarDialog.titleBar(toolbar)
-                        .navigationBarColor(R.color.btn3)
-                        .keyboardEnable(true)
-                        .init();
+                if (window != null) {
+                    window.setGravity(Gravity.TOP);
+                    window.setWindowAnimations(R.style.RightDialog);
+                    window.setLayout(width, height);
+                    ImmersionBar.with(this, mAlertDialog)
+                            .titleBar(toolbar)
+                            .navigationBarColor(R.color.btn3)
+                            .keyboardEnable(true)
+                            .init();
+                }
                 break;
             case R.id.btn_top:
-                window.setGravity(Gravity.TOP);
-                window.setWindowAnimations(R.style.TopDialog);
-                window.setLayout(width, height / 2);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog);
-                mImmersionBarDialog.titleBar(toolbar).navigationBarWithKitkatEnable(false).init();
+                if (window != null) {
+                    window.setGravity(Gravity.TOP);
+                    window.setWindowAnimations(R.style.TopDialog);
+                    window.setLayout(width, height / 2);
+                    ImmersionBar.with(this, mAlertDialog)
+                            .titleBar(toolbar)
+                            .navigationBarWithKitkatEnable(false)
+                            .init();
+                }
                 break;
             case R.id.btn_bottom:
-                window.setGravity(Gravity.BOTTOM);
-                window.setWindowAnimations(R.style.BottomDialog);
-                window.setLayout(width, height / 2);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog);
-                mImmersionBarDialog.navigationBarColor(R.color.cool_green_normal).init();
+                if (window != null) {
+                    window.setGravity(Gravity.BOTTOM);
+                    window.setWindowAnimations(R.style.BottomDialog);
+                    window.setLayout(width, height / 2);
+                    ImmersionBar.with(this, mAlertDialog)
+                            .navigationBarColor(R.color.cool_green_normal)
+                            .init();
+                }
                 break;
             case R.id.btn_left:
-                window.setGravity(Gravity.TOP | Gravity.START);
-                window.setWindowAnimations(R.style.LeftDialog);
-                window.setLayout(width * 2 / 3, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog);
-                mImmersionBarDialog.titleBar(toolbar)
-                        .navigationBarColor(R.color.btn11)
-                        .keyboardEnable(true).init();
+                if (window != null) {
+                    window.setGravity(Gravity.TOP | Gravity.START);
+                    window.setWindowAnimations(R.style.LeftDialog);
+                    window.setLayout(width * 2 / 3, height);
+                    ImmersionBar.with(this, mAlertDialog)
+                            .titleBar(toolbar)
+                            .navigationBarColor(R.color.btn11)
+                            .keyboardEnable(true).init();
+                }
                 break;
             case R.id.btn_right:
-                window.setGravity(Gravity.TOP | Gravity.END);
-                window.setWindowAnimations(R.style.RightDialog);
-                window.setLayout(width * 2 / 3, height);
-                mImmersionBarDialog = ImmersionBar.with(this, dialog);
-                mImmersionBarDialog.titleBar(toolbar)
-                        .navigationBarColor(R.color.btn6)
-                        .keyboardEnable(true)
-                        .init();
+                if (window != null) {
+                    window.setGravity(Gravity.TOP | Gravity.END);
+                    window.setWindowAnimations(R.style.RightDialog);
+                    window.setLayout(width * 2 / 3, height);
+                    ImmersionBar.with(this, mAlertDialog)
+                            .titleBar(toolbar)
+                            .navigationBarColor(R.color.btn6)
+                            .keyboardEnable(true)
+                            .init();
+                }
+                break;
+            default:
                 break;
         }
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        mImmersionBar.keyboardEnable(true).init();
-        if (mImmersionBarDialog != null)
-            mImmersionBarDialog.destroy();
+        ImmersionBar.with(this).keyboardEnable(true).init();
+        if (mAlertDialog != null) {
+            ImmersionBar.with(this, mAlertDialog).destroy();
+        }
     }
 
     public ImmersionBar getActivityImmersionBar() {
-        return mImmersionBar;
+        return ImmersionBar.with(this);
     }
 }

@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ import java.util.Map;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class KeyBoardActivity extends BaseActivity {
 
     @BindView(R.id.line)
@@ -31,15 +32,16 @@ public class KeyBoardActivity extends BaseActivity {
     private List<Map<String, Object>> mapList;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_key_board;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(toolbar)
-                .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题
+        ImmersionBar.with(this).titleBar(toolbar)
+                //解决软键盘与底部输入框冲突问题
+                .keyboardEnable(true)
                 .init();
 //        解决软键盘与底部输入框冲突问题，或者使用以下方法，任选其一
 //        KeyboardPatch.patch(this).enable();
@@ -69,11 +71,6 @@ public class KeyBoardActivity extends BaseActivity {
     @Override
     protected void setListener() {
         //toolbar返回按钮监听
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 }

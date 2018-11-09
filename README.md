@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta02'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta03'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,7 +18,7 @@
 
 >eclipse
 
-[immersionbar-2.3.2-beta02.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta02.jar) 
+[immersionbar-2.3.2-beta03.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta03.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
@@ -106,20 +106,24 @@
     ```java
     public class BaseActivity extends AppCompatActivity {
   
-         private ImmersionBar mImmersionBar;
          @Override
          protected void onCreate(@Nullable Bundle savedInstanceState) {
              super.onCreate(savedInstanceState);
-           mImmersionBar = ImmersionBar.with(this);
-           mImmersionBar.init();   //所有子类都将继承这些相同的属性
+             ImmersionBar.with(this).init();   //所有子类都将继承这些相同的属性
             
          }
      
          @Override
          protected void onDestroy() {
              super.onDestroy();
-             if (mImmersionBar != null)
-                mImmersionBar.destroy();  //必须调用该方法，防止内存泄漏，不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+             ImmersionBar.with(this).destroy();  //必须调用该方法，防止内存泄漏，不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+         }
+       
+        @Override
+         protected void onConfigurationChanged(Configuration newConfig) {
+             super.onConfigurationChanged(newConfig);
+             // 如果你的app可以横竖屏切换，并且适配4.4或者emui3手机请务必在onConfigurationChanged方法里添加这句话
+             ImmersionBar.with(this).init();   
          }
      }
     ```
@@ -138,8 +142,7 @@
      @Override
      protected void onDestroy() {
          super.onDestroy();
-         if (mImmersionBar != null)
-            mImmersionBar.destroy();  
+         ImmersionBar.with(this).destroy();
      }
   ```
   - 以show()和hide()方式控制Fragment显示隐藏，别忘了重写onHiddenChanged方法，如下
@@ -148,8 +151,8 @@
        @Override
        public void onHiddenChanged(boolean hidden) {
            super.onHiddenChanged(hidden);
-           if (!hidden && mImmersionBar != null)
-              mImmersionBar.init();
+           if (!hidden)
+              ImmersionBar.with(this).init(); 
        }
     ```
 - 在Activity使用ImmersionBar

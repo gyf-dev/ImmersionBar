@@ -9,9 +9,9 @@ import com.gyf.immersionbar.R;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class BackActivity extends SwipeBackActivity {
 
 

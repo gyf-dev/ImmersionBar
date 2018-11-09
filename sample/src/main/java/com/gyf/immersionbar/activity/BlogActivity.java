@@ -8,6 +8,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
@@ -15,7 +16,9 @@ import butterknife.BindView;
 import static android.view.KeyEvent.KEYCODE_BACK;
 
 /**
- * Created by geyifeng on 2017/8/3.
+ *
+ * @author geyifeng
+ * @date 2017/8/3
  */
 
 public class BlogActivity extends BaseActivity {
@@ -31,13 +34,13 @@ public class BlogActivity extends BaseActivity {
     }
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_git_hub;
     }
 
     @Override
     protected void initView() {
-        if (blog.equals("github")) {
+        if ("github".equals(blog)) {
             mWebView.loadUrl("https://github.com/gyf-dev/ImmersionBar");
         } else {
             mWebView.loadUrl("https://www.jianshu.com/p/2a884e211a62");
@@ -54,10 +57,11 @@ public class BlogActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        if (blog.equals("github")) {
-            mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.github_color).init();
-        } else
-            mImmersionBar.fitsSystemWindows(true).statusBarColorInt(Color.WHITE).statusBarDarkFont(true, 0.2f).init();
+        if ("github".equals(blog)) {
+            ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.github_color).init();
+        } else {
+            ImmersionBar.with(this).fitsSystemWindows(true).statusBarColorInt(Color.WHITE).statusBarDarkFont(true, 0.2f).init();
+        }
     }
 
     @Override

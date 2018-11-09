@@ -2,7 +2,9 @@ package com.gyf.barlibrary;
 
 /**
  * 软键盘监听
- * Created by geyifeng on 2017/8/28.
+ *
+ * @author geyifeng
+ * @date 2017/8/28
  */
 public interface OnKeyboardListener {
     /**

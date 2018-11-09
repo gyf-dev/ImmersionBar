@@ -1,5 +1,6 @@
 package com.gyf.immersionbar.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,9 @@ import butterknife.ButterKnife;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
- * Created by gyf on 2016/10/24.
+ *
+ * @author gyf
+ * @date 2016/10/24
  */
 public class PicActivity extends SwipeBackActivity {
     @BindView(R.id.text_view)
@@ -34,6 +37,7 @@ public class PicActivity extends SwipeBackActivity {
                 .transparentBar()
                 .init();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;

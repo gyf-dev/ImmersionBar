@@ -3,7 +3,7 @@ package com.gyf.immersionbar.fragment.four;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,8 +14,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Fragment的基类,禁止懒加载功能
- * Created by geyifeng on 2017/4/7.
+ * Fragment的基类
+ *
+ * @author geyifeng
+ * @date 2017/4/7
  */
 public abstract class BaseFourFragment extends Fragment {
 
@@ -31,13 +33,13 @@ public abstract class BaseFourFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(setLayoutId(), container, false);
         return mRootView;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         initData();
@@ -77,17 +79,5 @@ public abstract class BaseFourFragment extends Fragment {
      */
     protected void setListener() {
 
-    }
-
-    /**
-     * 找到activity的控件
-     *
-     * @param <T> the type parameter
-     * @param id  the id
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
     }
 }

@@ -19,25 +19,25 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class FragmentOneActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.viewPager)
     CustomViewPager viewPager;
     @BindView(R.id.ll_home)
-    LinearLayout ll_home;
+    LinearLayout llHome;
     @BindView(R.id.ll_category)
-    LinearLayout ll_category;
+    LinearLayout llCategory;
     @BindView(R.id.ll_service)
-    LinearLayout ll_service;
+    LinearLayout llService;
     @BindView(R.id.ll_mine)
-    LinearLayout ll_mine;
+    LinearLayout llMine;
     private ArrayList<Fragment> mFragments;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_fragment_one;
     }
 
@@ -58,15 +58,15 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(3);
-        ll_home.setSelected(true);
+        llHome.setSelected(true);
     }
 
     @Override
     protected void setListener() {
-        ll_home.setOnClickListener(this);
-        ll_category.setOnClickListener(this);
-        ll_service.setOnClickListener(this);
-        ll_mine.setOnClickListener(this);
+        llHome.setOnClickListener(this);
+        llCategory.setOnClickListener(this);
+        llService.setOnClickListener(this);
+        llMine.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
     }
 
@@ -75,19 +75,21 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.ll_home:
                 viewPager.setCurrentItem(0);
-                tabSelected(ll_home);
+                tabSelected(llHome);
                 break;
             case R.id.ll_category:
                 viewPager.setCurrentItem(1);
-                tabSelected(ll_category);
+                tabSelected(llCategory);
                 break;
             case R.id.ll_service:
                 viewPager.setCurrentItem(2);
-                tabSelected(ll_service);
+                tabSelected(llService);
                 break;
             case R.id.ll_mine:
                 viewPager.setCurrentItem(3);
-                tabSelected(ll_mine);
+                tabSelected(llMine);
+                break;
+            default:
                 break;
         }
     }
@@ -101,16 +103,18 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                tabSelected(ll_home);
+                tabSelected(llHome);
                 break;
             case 1:
-                tabSelected(ll_category);
+                tabSelected(llCategory);
                 break;
             case 2:
-                tabSelected(ll_service);
+                tabSelected(llService);
                 break;
             case 3:
-                tabSelected(ll_mine);
+                tabSelected(llMine);
+                break;
+            default:
                 break;
         }
     }
@@ -121,10 +125,10 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void tabSelected(LinearLayout linearLayout) {
-        ll_home.setSelected(false);
-        ll_category.setSelected(false);
-        ll_service.setSelected(false);
-        ll_mine.setSelected(false);
+        llHome.setSelected(false);
+        llCategory.setSelected(false);
+        llService.setSelected(false);
+        llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
 

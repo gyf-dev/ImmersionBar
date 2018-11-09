@@ -10,16 +10,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class OverActivity extends BaseActivity {
 
     @BindView(R.id.text)
     TextView textView;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_over;
     }
 
@@ -52,6 +52,8 @@ public class OverActivity extends BaseActivity {
                 break;
             case R.id.btn_six:
                 startActivity(new Intent(this, Over6Activity.class));
+                break;
+            default:
                 break;
         }
     }

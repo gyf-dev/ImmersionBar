@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
@@ -22,18 +22,22 @@ import butterknife.Unbinder;
 
 /**
  * DialogFragment 实现沉浸式的基类
- * Created by geyifeng on 2017/8/26.
+ *
+ * @author geyifeng
+ * @date 2017 /8/26
  */
-
 public abstract class BaseDialogFragment extends DialogFragment {
-
     protected Activity mActivity;
     protected View mRootView;
-
-    protected ImmersionBar mImmersionBar;
     protected Window mWindow;
-    protected int mWidth;  //屏幕宽度
-    protected int mHeight;  //屏幕高度
+    /**
+     * 屏幕宽度
+     */
+    protected int mWidth;
+    /**
+     * 屏幕高度
+     */
+    protected int mHeight;
     private Unbinder unbinder;
 
     @Override
@@ -53,7 +57,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        dialog.setCanceledOnTouchOutside(true);  //点击外部消失
+        //点击外部消失
+        dialog.setCanceledOnTouchOutside(true);
         mWindow = dialog.getWindow();
         //测量宽高
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -70,7 +75,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(setLayoutId(), container, false);
         return mRootView;
     }
@@ -80,8 +85,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        if (isImmersionBarEnabled())
+        if (isImmersionBarEnabled()) {
             initImmersionBar();
+        }
         initData();
         initView();
         setListener();
@@ -91,8 +97,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (mImmersionBar != null)
-            mImmersionBar.destroy();
+        ImmersionBar.with(this).destroy();
     }
 
     /**
@@ -115,8 +120,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * 初始化沉浸式
      */
     protected void initImmersionBar() {
-        mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.init();
+        ImmersionBar.with(this).init();
     }
 
 
@@ -139,17 +143,5 @@ public abstract class BaseDialogFragment extends DialogFragment {
      */
     protected void setListener() {
 
-    }
-
-    /**
-     * 找到activity的控件
-     *
-     * @param <T> the type parameter
-     * @param id  the id
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
     }
 }

@@ -3,25 +3,32 @@ package com.gyf.immersionbar.fragment.one;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
  * 当使用viewpager加载Fragment，沉浸式的使用，原理懒加载
- * Created by geyifeng on 2017/4/7.
+ *
+ * @author geyifeng
+ * @date 2017/4/7
  */
 public abstract class BaseLazyFragment extends Fragment {
+
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     protected Activity mActivity;
     protected View mRootView;
@@ -42,7 +49,6 @@ public abstract class BaseLazyFragment extends Fragment {
      */
     protected boolean mIsImmersion;
 
-    protected ImmersionBar mImmersionBar;
     private Unbinder unbinder;
 
     @Override
@@ -53,23 +59,25 @@ public abstract class BaseLazyFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(setLayoutId(), container, false);
         return mRootView;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, mRootView);
+        ImmersionBar.setTitleBar(mActivity, toolbar);
         if (isLazyLoad()) {
             mIsPrepare = true;
             mIsImmersion = true;
             onLazyLoad();
         } else {
             initData();
-            if (isImmersionBarEnabled())
+            if (isImmersionBarEnabled()) {
                 initImmersionBar();
+            }
         }
         initView();
         setListener();
@@ -79,8 +87,7 @@ public abstract class BaseLazyFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (mImmersionBar != null)
-            mImmersionBar.destroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -149,8 +156,7 @@ public abstract class BaseLazyFragment extends Fragment {
      * 初始化沉浸式
      */
     protected void initImmersionBar() {
-        mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).init();
+        ImmersionBar.with(this).keyboardEnable(true).init();
     }
 
     /**
@@ -173,17 +179,4 @@ public abstract class BaseLazyFragment extends Fragment {
     protected void onInvisible() {
 
     }
-
-    /**
-     * 找到activity的控件
-     *
-     * @param <T> the type parameter
-     * @param id  the id
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
-    }
-
 }

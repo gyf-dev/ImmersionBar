@@ -1,18 +1,18 @@
 package com.gyf.immersionbar.fragment.five;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/7/20.
+ * @author geyifeng
+ * @date 2017/7/20
  */
-
 public class HomeFiveFragment extends BaseFiveFragment {
     @BindView(R.id.text)
     TextView text;
@@ -29,6 +29,13 @@ public class HomeFiveFragment extends BaseFiveFragment {
         return R.layout.fragment_two_home;
     }
 
+    @Override
+    public void initImmersionBar() {
+        super.initImmersionBar();
+        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
+    }
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
         super.initView();

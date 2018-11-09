@@ -28,9 +28,9 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/12.
+ * @author geyifeng
+ * @date 2017/5/12
  */
-
 public class HomeThreeFragment extends BaseThreeFragment {
 
     @BindView(R.id.toolbar)
@@ -43,7 +43,6 @@ public class HomeThreeFragment extends BaseThreeFragment {
     private List<String> mItemList = new ArrayList<>();
     private List<String> mImages = new ArrayList<>();
     private int bannerHeight;
-    private View headView;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -83,8 +82,8 @@ public class HomeThreeFragment extends BaseThreeFragment {
 
     private void addHeaderView() {
         if (mImages != null && mImages.size() > 0) {
-            headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
-            Banner banner = (Banner) headView.findViewById(R.id.banner);
+            View headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
+            Banner banner = headView.findViewById(R.id.banner);
             banner.setImages(mImages)
                     .setImageLoader(new GlideImageLoader())
                     .setDelayTime(5000)
@@ -115,33 +114,23 @@ public class HomeThreeFragment extends BaseThreeFragment {
                 }
             }
         });
-        mOneAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mOneAdapter.addData(addData());
-                        if (mItemList.size() == 100) {
-                            mOneAdapter.loadMoreEnd();
-                        } else
-                            mOneAdapter.loadMoreComplete();
-                    }
-                }, 2000);
+        mOneAdapter.setOnLoadMoreListener(() -> new Handler().postDelayed(() -> {
+            mOneAdapter.addData(addData());
+            if (mItemList.size() == 100) {
+                mOneAdapter.loadMoreEnd();
+            } else {
+                mOneAdapter.loadMoreComplete();
             }
-        }, mRv);
+        }, 2000), mRv);
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mItemList.clear();
-                        mItemList.addAll(newData());
-                        mOneAdapter.setNewData(mItemList);
-                        refreshLayout.finishRefreshing();
-                        mToolbar.setVisibility(View.VISIBLE);
-                    }
+                new Handler().postDelayed(() -> {
+                    mItemList.clear();
+                    mItemList.addAll(newData());
+                    mOneAdapter.setNewData(mItemList);
+                    refreshLayout.finishRefreshing();
+                    mToolbar.setVisibility(View.VISIBLE);
                 }, 2000);
             }
 

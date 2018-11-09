@@ -2,14 +2,16 @@ package com.gyf.immersionbar.fragment.dialog;
 
 import android.view.Gravity;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.activity.DialogActivity;
 
 /**
  * 底部DialogFragment
- * Created by geyifeng on 2017/7/28.
+ *
+ * @author geyifeng
+ * @date 2017/7/28
  */
-
 public class BottomDialogFragment extends BaseDialogFragment {
 
     @Override
@@ -28,7 +30,7 @@ public class BottomDialogFragment extends BaseDialogFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.navigationBarColor(R.color.cool_green_normal).init();
+        ImmersionBar.with(this).navigationBarColor(R.color.cool_green_normal).init();
     }
 
     @Override

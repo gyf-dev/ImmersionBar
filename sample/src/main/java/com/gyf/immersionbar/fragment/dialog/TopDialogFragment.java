@@ -3,6 +3,7 @@ package com.gyf.immersionbar.fragment.dialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.activity.DialogActivity;
 
@@ -10,9 +11,10 @@ import butterknife.BindView;
 
 /**
  * 顶部DialogFragment
- * Created by geyifeng on 2017/7/28.
+ *
+ * @author geyifeng
+ * @date 2017/7/28
  */
-
 public class TopDialogFragment extends BaseDialogFragment {
 
     @BindView(R.id.toolbar)
@@ -34,7 +36,8 @@ public class TopDialogFragment extends BaseDialogFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(toolbar)
+        ImmersionBar.with(this)
+                .titleBar(toolbar)
                 .navigationBarWithKitkatEnable(false)
                 .init();
     }

@@ -1,13 +1,16 @@
 package com.gyf.immersionbar.activity;
 
+import android.annotation.SuppressLint;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
 
 public class Over2Activity extends BaseActivity {
@@ -16,17 +19,17 @@ public class Over2Activity extends BaseActivity {
     TextView textView;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_over2;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.barColor(R.color.colorPrimary)
-                .init();
+        ImmersionBar.with(this).barColor(R.color.colorPrimary).init();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
         super.initView();

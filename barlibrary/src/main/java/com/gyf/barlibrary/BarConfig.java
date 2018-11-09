@@ -35,7 +35,7 @@ class BarConfig {
     private final float mSmallestWidthDp;
 
 
-    public BarConfig(Activity activity) {
+    BarConfig(Activity activity) {
         Resources res = activity.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         mSmallestWidthDp = getSmallestWidthDp(activity);
@@ -148,7 +148,7 @@ class BarConfig {
      *
      * @return True if navigation should appear at the bottom of the screen, False otherwise.
      */
-    public boolean isNavigationAtBottom() {
+    boolean isNavigationAtBottom() {
         return (mSmallestWidthDp >= 600 || mInPortrait);
     }
 
@@ -157,7 +157,7 @@ class BarConfig {
      *
      * @return The height of the status bar (in pixels).
      */
-    public int getStatusBarHeight() {
+    int getStatusBarHeight() {
         return mStatusBarHeight;
     }
 
@@ -166,7 +166,7 @@ class BarConfig {
      *
      * @return The height of the action bar (in pixels).
      */
-    public int getActionBarHeight() {
+    int getActionBarHeight() {
         return mActionBarHeight;
     }
 
@@ -175,7 +175,7 @@ class BarConfig {
      *
      * @return True if this device uses soft key navigation, False otherwise.
      */
-    public boolean hasNavigationBar() {
+    boolean hasNavigationBar() {
         return mHasNavigationBar;
     }
 
@@ -185,7 +185,7 @@ class BarConfig {
      * @return The height of the navigation bar (in pixels). If the device does not have
      * soft navigation keys, this will always return 0.
      */
-    public int getNavigationBarHeight() {
+    int getNavigationBarHeight() {
         return mNavigationBarHeight;
     }
 
@@ -195,7 +195,7 @@ class BarConfig {
      * @return The width of the navigation bar (in pixels). If the device does not have
      * soft navigation keys, this will always return 0.
      */
-    public int getNavigationBarWidth() {
+    int getNavigationBarWidth() {
         return mNavigationBarWidth;
     }
 

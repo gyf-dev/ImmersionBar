@@ -1,22 +1,23 @@
 package com.gyf.immersionbar.activity;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 /**
- * Created by geyifeng on 2017/6/6.
+ * @author geyifeng
+ * @date 2017/6/6
  */
-
 public class ShapeActivity extends BaseActivity {
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_shape;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.toolbar)
+        ImmersionBar.with(this).titleBar(R.id.toolbar)
                 .navigationBarColor(R.color.shape1)
                 .init();
     }

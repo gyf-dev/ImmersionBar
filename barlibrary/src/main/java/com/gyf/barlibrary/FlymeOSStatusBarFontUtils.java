@@ -12,7 +12,9 @@ import java.lang.reflect.Method;
 
 /**
  * Flyme OS 修改状态栏字体颜色工具类
- * Created by gyf on 2017/05/30.
+ *
+ * @author gyf
+ * @date 2017 /05/30
  */
 public class FlymeOSStatusBarFontUtils {
     private static Method mSetStatusBarColorIcon;
@@ -23,25 +25,25 @@ public class FlymeOSStatusBarFontUtils {
     static {
         try {
             mSetStatusBarColorIcon = Activity.class.getMethod("setStatusBarDarkIcon", int.class);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException ignored) {
 
         }
         try {
             mSetStatusBarDarkIcon = Activity.class.getMethod("setStatusBarDarkIcon", boolean.class);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException ignored) {
 
         }
         try {
             mStatusBarColorFiled = WindowManager.LayoutParams.class.getField("statusBarColor");
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException ignored) {
 
         }
         try {
             Field field = View.class.getField("SYSTEM_UI_FLAG_LIGHT_STATUS_BAR");
             SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = field.getInt(null);
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException ignored) {
 
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException ignored) {
 
         }
     }
@@ -51,7 +53,7 @@ public class FlymeOSStatusBarFontUtils {
      *
      * @param color 颜色
      * @param level 级别
-     * @return boolean
+     * @return boolean boolean
      */
     public static boolean isBlackColor(int color, int level) {
         int grey = toGrey(color);
@@ -206,10 +208,8 @@ public class FlymeOSStatusBarFontUtils {
             changeMeizuFlag(window.getAttributes(), "MEIZU_FLAG_DARK_STATUS_BAR_ICON", dark);
         } else {
             View decorView = window.getDecorView();
-            if (decorView != null) {
-                setStatusBarDarkIcon(decorView, dark);
-                setStatusBarColor(window, 0);
-            }
+            setStatusBarDarkIcon(decorView, dark);
+            setStatusBarColor(window, 0);
         }
     }
 

@@ -6,51 +6,51 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.gyf.immersionbar.R;
-import com.gyf.immersionbar.fragment.two.MineTwoFragment;
-import com.gyf.immersionbar.fragment.two.HomeTwoFragment;
-import com.gyf.immersionbar.fragment.two.ServiceTwoFragment;
 import com.gyf.immersionbar.fragment.two.CategoryTwoFragment;
+import com.gyf.immersionbar.fragment.two.HomeTwoFragment;
+import com.gyf.immersionbar.fragment.two.MineTwoFragment;
+import com.gyf.immersionbar.fragment.two.ServiceTwoFragment;
 
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/7/20.
+ * @author geyifeng
+ * @date 2017/7/20
  */
-
 public class FragmentTwoActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.content)
     FrameLayout content;
     @BindView(R.id.ll_home)
-    LinearLayout ll_home;
+    LinearLayout llHome;
     @BindView(R.id.ll_category)
-    LinearLayout ll_category;
+    LinearLayout llCategory;
     @BindView(R.id.ll_service)
-    LinearLayout ll_service;
+    LinearLayout llService;
     @BindView(R.id.ll_mine)
-    LinearLayout ll_mine;
+    LinearLayout llMine;
     private HomeTwoFragment homeTwoFragment;
     private CategoryTwoFragment categoryTwoFragment;
     private ServiceTwoFragment serviceTwoFragment;
     private MineTwoFragment mineTwoFragment;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_fragment_two;
     }
 
     @Override
     protected void initView() {
         selectedFragment(0);
-        tabSelected(ll_home);
+        tabSelected(llHome);
     }
 
     @Override
     protected void setListener() {
-        ll_home.setOnClickListener(this);
-        ll_category.setOnClickListener(this);
-        ll_service.setOnClickListener(this);
-        ll_mine.setOnClickListener(this);
+        llHome.setOnClickListener(this);
+        llCategory.setOnClickListener(this);
+        llService.setOnClickListener(this);
+        llMine.setOnClickListener(this);
     }
 
     @Override
@@ -58,19 +58,21 @@ public class FragmentTwoActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.ll_home:
                 selectedFragment(0);
-                tabSelected(ll_home);
+                tabSelected(llHome);
                 break;
             case R.id.ll_category:
                 selectedFragment(1);
-                tabSelected(ll_category);
+                tabSelected(llCategory);
                 break;
             case R.id.ll_service:
                 selectedFragment(2);
-                tabSelected(ll_service);
+                tabSelected(llService);
                 break;
             case R.id.ll_mine:
                 selectedFragment(3);
-                tabSelected(ll_mine);
+                tabSelected(llMine);
+                break;
+            default:
                 break;
         }
     }
@@ -83,50 +85,60 @@ public class FragmentTwoActivity extends BaseActivity implements View.OnClickLis
                 if (homeTwoFragment == null) {
                     homeTwoFragment = new HomeTwoFragment();
                     transaction.add(R.id.content, homeTwoFragment);
-                } else
+                } else {
                     transaction.show(homeTwoFragment);
+                }
                 break;
             case 1:
                 if (categoryTwoFragment == null) {
                     categoryTwoFragment = new CategoryTwoFragment();
                     transaction.add(R.id.content, categoryTwoFragment);
-                } else
+                } else {
                     transaction.show(categoryTwoFragment);
+                }
                 break;
             case 2:
                 if (serviceTwoFragment == null) {
                     serviceTwoFragment = new ServiceTwoFragment();
                     transaction.add(R.id.content, serviceTwoFragment);
-                } else
+                } else {
                     transaction.show(serviceTwoFragment);
+                }
                 break;
             case 3:
                 if (mineTwoFragment == null) {
                     mineTwoFragment = new MineTwoFragment();
                     transaction.add(R.id.content, mineTwoFragment);
-                } else
+                } else {
                     transaction.show(mineTwoFragment);
+                }
+                break;
+            default:
                 break;
         }
         transaction.commit();
     }
 
     private void hideFragment(FragmentTransaction transaction) {
-        if (homeTwoFragment != null)
+        if (homeTwoFragment != null) {
             transaction.hide(homeTwoFragment);
-        if (categoryTwoFragment != null)
+        }
+        if (categoryTwoFragment != null) {
             transaction.hide(categoryTwoFragment);
-        if (serviceTwoFragment != null)
+        }
+        if (serviceTwoFragment != null) {
             transaction.hide(serviceTwoFragment);
-        if (mineTwoFragment != null)
+        }
+        if (mineTwoFragment != null) {
             transaction.hide(mineTwoFragment);
+        }
     }
 
     private void tabSelected(LinearLayout linearLayout) {
-        ll_home.setSelected(false);
-        ll_category.setSelected(false);
-        ll_service.setSelected(false);
-        ll_mine.setSelected(false);
+        llHome.setSelected(false);
+        llCategory.setSelected(false);
+        llService.setSelected(false);
+        llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
 }

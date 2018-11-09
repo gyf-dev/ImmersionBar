@@ -1,5 +1,6 @@
 package com.gyf.immersionbar.activity;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
@@ -9,9 +10,9 @@ import com.gyf.immersionbar.R;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/8.
+ * @author geyifeng
+ * @date 2017/5/8
  */
-
 public class Over6Activity extends BaseActivity {
 
     @BindView(R.id.text)
@@ -20,14 +21,14 @@ public class Over6Activity extends BaseActivity {
     Toolbar toolbar;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_over6;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.navigationBarColor(R.color.colorPrimary)
+        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary)
                 .titleBarMarginTop(R.id.toolbar)
                 .statusBarColor(R.color.colorPrimary)
                 .keyboardEnable(true)
@@ -38,6 +39,7 @@ public class Over6Activity extends BaseActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
         textView.setText("不需要在xml文件增加view给状态栏预留空间，重点是这个方法titleBarMarginTop(toolbar)，实现原理：" +

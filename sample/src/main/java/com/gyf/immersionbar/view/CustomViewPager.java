@@ -7,9 +7,10 @@ import android.view.MotionEvent;
 
 /**
  * 设置viewpager不可滑动 默认可以滑动
- * Created by geyifeng on 2017/1/14.
+ *
+ * @author geyifeng
+ * @date 2017/1/14
  */
-
 public class CustomViewPager extends ViewPager {
 
     private boolean isScroll = true;
@@ -43,6 +44,6 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        setCurrentItem(item,false);
+        setCurrentItem(item, false);
     }
 }

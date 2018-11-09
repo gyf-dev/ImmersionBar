@@ -3,25 +3,26 @@ package com.gyf.immersionbar.activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 import butterknife.OnClick;
 
 /**
- * Created by geyifeng on 2017/7/19.
+ * @author geyifeng
+ * @date 2017/7/19
  */
-
 public class FragmentActivity extends BaseActivity {
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_fragment;
     }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.toolbar).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).init();
     }
 
     @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four, R.id.btn_five})
@@ -41,6 +42,8 @@ public class FragmentActivity extends BaseActivity {
                 break;
             case R.id.btn_five:
                 startActivity(new Intent(this, FragmentFiveActivity.class));
+                break;
+            default:
                 break;
         }
     }

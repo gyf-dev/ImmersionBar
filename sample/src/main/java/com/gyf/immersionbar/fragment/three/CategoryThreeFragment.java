@@ -11,9 +11,9 @@ import com.gyf.immersionbar.R;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/12.
+ * @author geyifeng
+ * @date 2017/5/12
  */
-
 public class CategoryThreeFragment extends BaseThreeFragment {
 
     @BindView(R.id.toolbar)

@@ -1,9 +1,7 @@
 package com.gyf.immersionbar.activity;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +15,16 @@ import android.widget.Toast;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.BarParams;
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.BuildConfig;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.blurry.Blurry;
 
+/**
+ * @author geyifeng
+ */
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.drawer)
@@ -30,25 +32,26 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.iv_bg)
-    ImageView iv_bg;
+    ImageView ivBg;
     @BindView(R.id.tv_version)
-    TextView tv_version;
+    TextView tvVersion;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.toolbar).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).init();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
-        Blurry.with(this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(iv_bg);
-        tv_version.setText("当前版本：" + getVersionName(this));
-    }
-
-    @Override
-    protected int setLayoutId() {
-        return R.layout.activity_main;
+        Blurry.with(this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(ivBg);
+        tvVersion.setText("当前版本：" + BuildConfig.VERSION_NAME);
     }
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
@@ -56,117 +59,111 @@ public class MainActivity extends BaseActivity {
             R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
             R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light, R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.btn_pic_color:
-                startActivity(new Intent(this, PicAndColorActivity.class));
+                intent = new Intent(this, PicAndColorActivity.class);
                 break;
             case R.id.btn_pic:
-                startActivity(new Intent(this, PicActivity.class));
+                intent = new Intent(this, PicActivity.class);
                 break;
             case R.id.btn_color:
-                startActivity(new Intent(this, ColorActivity.class));
+                intent = new Intent(this, ColorActivity.class);
                 break;
             case R.id.btn_shape:
-                startActivity(new Intent(this, ShapeActivity.class));
+                intent = new Intent(this, ShapeActivity.class);
                 break;
             case R.id.btn_swipe_back:
-                startActivity(new Intent(this, BackActivity.class));
+                intent = new Intent(this, BackActivity.class);
                 break;
             case R.id.btn_fragment:
-                startActivity(new Intent(this, FragmentActivity.class));
+                intent = new Intent(this, FragmentActivity.class);
                 break;
             case R.id.btn_dialog:
-                startActivity(new Intent(this, DialogActivity.class));
+                intent = new Intent(this, DialogActivity.class);
                 break;
             case R.id.btn_drawer:
                 drawer.openDrawer(Gravity.START);
                 break;
             case R.id.btn_flyme:
-                startActivity(new Intent(this, FlymeActivity.class));
+                intent = new Intent(this, FlymeActivity.class);
                 break;
             case R.id.btn_coordinator:
-                startActivity(new Intent(this, CoordinatorActivity.class));
+                intent = new Intent(this, CoordinatorActivity.class);
                 break;
             case R.id.btn_tab:
-                startActivity(new Intent(this, TabLayoutActivity.class));
+                intent = new Intent(this, TabLayoutActivity.class);
                 break;
             case R.id.btn_web:
-                startActivity(new Intent(this, WebActivity.class));
+                intent = new Intent(this, WebActivity.class);
                 break;
             case R.id.btn_action_bar:
-                startActivity(new Intent(this, ActionBarActivity.class));
+                intent = new Intent(this, ActionBarActivity.class);
                 break;
             case R.id.btn_over:
-                startActivity(new Intent(this, OverActivity.class));
+                intent = new Intent(this, OverActivity.class);
                 break;
             case R.id.btn_key_board:
-                startActivity(new Intent(this, KeyBoardActivity.class));
+                intent = new Intent(this, KeyBoardActivity.class);
                 break;
             case R.id.btn_white_status_bar:
-                startActivity(new Intent(this, WhiteStatusBarActivity.class));
+                intent = new Intent(this, WhiteStatusBarActivity.class);
                 break;
             case R.id.btn_status_hide:
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+                ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
                 break;
             case R.id.btn_navigation_hide:
-                if (ImmersionBar.hasNavigationBar(this))
+                if (ImmersionBar.hasNavigationBar(this)) {
                     ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
-                else
+                } else {
                     Toast.makeText(this, "当前设备没有导航栏或者低于4.4系统", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_bar_hide:
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR).init();
+                ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
                 break;
             case R.id.btn_bar_show:
-                mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR).init();
+                ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
                 break;
             case R.id.btn_full:
                 if (ImmersionBar.hasNavigationBar(this)) {
-                    BarParams barParams = mImmersionBar.getBarParams();
-                    if (barParams.fullScreen)
-                        mImmersionBar.fullScreen(false).navigationBarColor(R.color.black).init();
-                    else
-                        mImmersionBar.fullScreen(true).transparentNavigationBar().init();
-                } else
+                    BarParams barParams = ImmersionBar.with(this).getBarParams();
+                    if (barParams.fullScreen) {
+                        ImmersionBar.with(this).fullScreen(false).navigationBarColor(R.color.colorPrimary).init();
+                    } else {
+                        ImmersionBar.with(this).fullScreen(true).transparentNavigationBar().init();
+                    }
+                } else {
                     Toast.makeText(this, "当前设备没有导航栏或者低于4.4系统", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_bar_font_dark:
-                if (ImmersionBar.isSupportStatusBarDarkFont())
-                    mImmersionBar.statusBarDarkFont(true).init();
-                else
+                if (ImmersionBar.isSupportStatusBarDarkFont()) {
+                    ImmersionBar.with(this).statusBarDarkFont(true).init();
+                } else {
                     Toast.makeText(this, "当前设备不支持状态栏字体变色", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_bar_font_light:
-                mImmersionBar.statusBarDarkFont(false).init();
+                ImmersionBar.with(this).statusBarDarkFont(false).init();
                 break;
             case R.id.ll_github:
-                Intent intent = new Intent(this, BlogActivity.class);
+                intent = new Intent(this, BlogActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("blog", "github");
                 intent.putExtra("bundle", bundle);
-                startActivity(intent);
                 break;
             case R.id.ll_jianshu:
-                Intent intent2 = new Intent(this, BlogActivity.class);
+                intent = new Intent(this, BlogActivity.class);
                 Bundle bundle2 = new Bundle();
                 bundle2.putString("blog", "jianshu");
-                intent2.putExtra("bundle", bundle2);
-                startActivity(intent2);
+                intent.putExtra("bundle", bundle2);
+                break;
+            default:
                 break;
         }
-
-    }
-
-    public String getVersionName(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo;
-        String versionName = "";
-        try {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            versionName = packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if (intent != null) {
+            startActivity(intent);
         }
-        return versionName;
     }
 }

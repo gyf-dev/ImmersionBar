@@ -6,7 +6,9 @@ import java.lang.reflect.Method;
 
 /**
  * 手机系统判断
- * Created by geyifeng on 2017/4/18.
+ *
+ * @author geyifeng
+ * @date 2017/4/18
  */
 public class OSUtils {
 
@@ -180,8 +182,8 @@ public class OSUtils {
     private static String getSystemProperty(String key, String defaultValue) {
         try {
             Class<?> clz = Class.forName("android.os.SystemProperties");
-            Method get = clz.getMethod("get", String.class, String.class);
-            return (String) get.invoke(clz, key, defaultValue);
+            Method method = clz.getMethod("get", String.class, String.class);
+            return (String) method.invoke(clz, key, defaultValue);
         } catch (Exception e) {
             e.printStackTrace();
         }

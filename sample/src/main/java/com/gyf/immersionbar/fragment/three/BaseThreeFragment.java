@@ -3,21 +3,20 @@ package com.gyf.immersionbar.fragment.three;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gyf.barlibrary.ImmersionBar;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Fragment的基类,禁止懒加载功能
- * Created by geyifeng on 2017/4/7.
+ * Fragment的基类
+ *
+ * @author geyifeng
+ * @date 2017/4/7
  */
 public abstract class BaseThreeFragment extends Fragment {
 
@@ -79,17 +78,5 @@ public abstract class BaseThreeFragment extends Fragment {
      */
     protected void setListener() {
 
-    }
-
-    /**
-     * 找到activity的控件
-     *
-     * @param <T> the type parameter
-     * @param id  the id
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
     }
 }

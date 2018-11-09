@@ -1,8 +1,7 @@
 package com.gyf.immersionbar.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.apkfuns.logutils.LogUtils;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
@@ -22,14 +20,12 @@ import java.util.List;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
- * Created by geyifeng on 2017/7/4.
+ * @author geyifeng
+ * @date 2017/7/4
  */
-
 public class TabLayoutActivity extends SwipeBackActivity {
 
     private List<String> mData;
-    private Toolbar toolbar;
-    private ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +33,9 @@ public class TabLayoutActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_tab_layout);
         initData(1);
         initView();
-        mImmersionBar = ImmersionBar.with(this);
         ImmersionBar.with(this)
                 .statusBarView(R.id.view)
+                .navigationBarColor(R.color.cool_green_normal)
                 .init();
     }
 
@@ -52,7 +48,7 @@ public class TabLayoutActivity extends SwipeBackActivity {
 
     private void initView() {
         //设置ToolBar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         //setSupportActionBar(toolbar);//替换系统的actionBar
 
@@ -87,12 +83,11 @@ public class TabLayoutActivity extends SwipeBackActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    //RecyclerView Adapter
     private RecyclerView.Adapter mAdapter = new RecyclerView.Adapter<MyViewHolder>() {
 
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new MyViewHolder(getLayoutInflater().inflate(R.layout.item_layout, parent, false));
         }
 
@@ -112,13 +107,13 @@ public class TabLayoutActivity extends SwipeBackActivity {
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tv = (TextView) itemView.findViewById(R.id.tv_info);
+            tv = itemView.findViewById(R.id.tv_info);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mImmersionBar.destroy();
+        ImmersionBar.with(this).destroy();
     }
 }

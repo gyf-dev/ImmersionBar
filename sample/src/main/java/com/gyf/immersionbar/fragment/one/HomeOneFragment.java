@@ -2,9 +2,8 @@ package com.gyf.immersionbar.fragment.one;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,9 +30,9 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * Created by geyifeng on 2017/5/12.
+ * @author geyifeng
+ * @date 2017/5/12
  */
-
 public class HomeOneFragment extends BaseLazyFragment {
 
     @BindView(R.id.toolbar)
@@ -48,13 +47,6 @@ public class HomeOneFragment extends BaseLazyFragment {
     private List<String> mItemList = new ArrayList<>();
     private List<String> mImages = new ArrayList<>();
     private int bannerHeight;
-    private View headView;
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ImmersionBar.setTitleBar(getActivity(), mToolbar);
-    }
 
     @Override
     protected int setLayoutId() {
@@ -88,8 +80,8 @@ public class HomeOneFragment extends BaseLazyFragment {
 
     private void addHeaderView() {
         if (mImages != null && mImages.size() > 0) {
-            headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
-            Banner banner = (Banner) headView.findViewById(R.id.banner);
+            View headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
+            Banner banner = headView.findViewById(R.id.banner);
             banner.setImages(mImages)
                     .setImageLoader(new GlideImageLoader())
                     .setDelayTime(5000)
@@ -107,7 +99,7 @@ public class HomeOneFragment extends BaseLazyFragment {
             private int totalDy = 0;
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 totalDy += dy;
                 if (totalDy <= bannerHeight) {
@@ -118,47 +110,25 @@ public class HomeOneFragment extends BaseLazyFragment {
                     mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
                             , ContextCompat.getColor(mActivity, R.color.colorPrimary), 1));
                 }
-                //在Fragment里使用的时候，并且加载Fragment的Activity配置了android:configChanges="orientation|keyboardHidden|screenSize"属性时，
-                //不建议使用ImmersionBar里的addViewSupportTransformColor()方法实现标题滑动渐变
-                //原因是会导致影响其他页面的沉浸式效果，除非每个页面的沉浸式参数都一样
-//                mImmersionBar.addViewSupportTransformColor(mToolbar, R.color.colorPrimary);
-//                if (totalDy <= bannerHeight) {
-//                    float alpha = (float) totalDy / bannerHeight;
-//                    mImmersionBar.statusBarAlpha(alpha)
-//                            .init();
-//                } else {
-//                    mImmersionBar.statusBarAlpha(1.0f)
-//                            .init();
-//                }
             }
         });
-        mOneAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mOneAdapter.addData(addData());
-                        if (mItemList.size() == 100) {
-                            mOneAdapter.loadMoreEnd();
-                        } else
-                            mOneAdapter.loadMoreComplete();
-                    }
-                }, 2000);
+        mOneAdapter.setOnLoadMoreListener(() -> new Handler().postDelayed(() -> {
+            mOneAdapter.addData(addData());
+            if (mItemList.size() == 100) {
+                mOneAdapter.loadMoreEnd();
+            } else {
+                mOneAdapter.loadMoreComplete();
             }
-        }, mRv);
+        }, 2000), mRv);
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mItemList.clear();
-                        mItemList.addAll(newData());
-                        mOneAdapter.setNewData(mItemList);
-                        refreshLayout.finishRefreshing();
-                        mToolbar.setVisibility(View.VISIBLE);
-                    }
+                new Handler().postDelayed(() -> {
+                    mItemList.clear();
+                    mItemList.addAll(newData());
+                    mOneAdapter.setNewData(mItemList);
+                    refreshLayout.finishRefreshing();
+                    mToolbar.setVisibility(View.VISIBLE);
                 }, 2000);
             }
 
@@ -177,12 +147,7 @@ public class HomeOneFragment extends BaseLazyFragment {
             }
         });
 
-        mLlScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FragmentOneActivity.class));
-            }
-        });
+        mLlScan.setOnClickListener(v -> startActivity(new Intent(getActivity(), FragmentOneActivity.class)));
     }
 
     private List<String> addData() {
@@ -204,7 +169,7 @@ public class HomeOneFragment extends BaseLazyFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.statusBarColorTransformEnable(false)
+        ImmersionBar.with(this).statusBarColorTransformEnable(false)
                 .navigationBarColor(R.color.colorPrimary)
                 .init();
     }
