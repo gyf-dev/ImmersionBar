@@ -109,14 +109,15 @@
          @Override
          protected void onCreate(@Nullable Bundle savedInstanceState) {
              super.onCreate(savedInstanceState);
-             ImmersionBar.with(this).init();   //所有子类都将继承这些相同的属性
-            
+             // 所有子类都将继承这些相同的属性,请在设置界面之后设置
+             ImmersionBar.with(this).init();  
          }
      
          @Override
          protected void onDestroy() {
              super.onDestroy();
-             ImmersionBar.with(this).destroy();  //必须调用该方法，防止内存泄漏，不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+             // 必须调用该方法，防止内存泄漏
+             ImmersionBar.with(this).destroy();  
          }
        
         @Override
