@@ -18,7 +18,7 @@
 
 >eclipse
 
-[immersionbar-2.3.2-beta04.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta04.jar) 
+[immersionbar-2.3.2-beta04.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta04.aar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
