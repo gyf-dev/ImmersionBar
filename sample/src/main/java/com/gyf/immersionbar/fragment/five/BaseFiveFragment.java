@@ -66,17 +66,17 @@ public abstract class BaseFiveFragment extends SupportFragment {
     public void onSupportVisible() {
         super.onSupportVisible();
         //请在onSupportVisible实现沉浸式
-        initImmersionBar();
-    }
-
-    public void initImmersionBar() {
         if (isImmersionBarEnabled()) {
-            ImmersionBar.with(this).init();
+            initImmersionBar();
         }
     }
 
+    public void initImmersionBar() {
+        ImmersionBar.with(this).keyboardEnable(true).init();
+    }
+
     private boolean isImmersionBarEnabled() {
-        return false;
+        return true;
     }
 
     @Override

@@ -2,12 +2,13 @@ package com.gyf.immersionbar.fragment.one;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
+import com.gyf.immersionbar.fragment.BaseFragment;
 
 /**
  * @author geyifeng
  * @date 2017/5/12
  */
-public class MineOneFragment extends BaseLazyFragment {
+public class MineOneFragment extends BaseFragment {
 
     @Override
     protected int setLayoutId() {
@@ -15,7 +16,7 @@ public class MineOneFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initImmersionBar() {
+    public void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this)
                 .statusBarDarkFont(true)

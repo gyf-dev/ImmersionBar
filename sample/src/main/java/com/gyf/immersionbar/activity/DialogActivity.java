@@ -57,6 +57,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
     protected void setListener() {
         btnFullFragment.setOnClickListener(v -> {
             //如果弹出的dialog里有输入框并且activity里设置了keyboardEnable为true的话，
+            //为了防止dialog里的输入框弹起的时候，activity的输入框也跟着弹起，
             //当弹出Dialog的时候，要把activity的keyboardEnable方法设置为false，
             //当dialog关闭时，要把keyboardEnable设置为打开之前的状态
             ImmersionBar.with(this).keyboardEnable(false).init();

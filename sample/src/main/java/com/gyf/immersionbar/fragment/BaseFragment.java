@@ -1,17 +1,20 @@
-package com.gyf.immersionbar.fragment.two;
+package com.gyf.immersionbar.fragment;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.barlibrary.ImmersionFragment;
+import com.gyf.immersionbar.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -21,7 +24,10 @@ import butterknife.Unbinder;
  * @author geyifeng
  * @date 2017/4/7
  */
-public abstract class BaseTwoFragment extends Fragment {
+public abstract class BaseFragment extends ImmersionFragment {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     protected Activity mActivity;
     protected View mRootView;
@@ -45,9 +51,7 @@ public abstract class BaseTwoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        if (isImmersionBarEnabled()) {
-            initImmersionBar();
-        }
+        ImmersionBar.setTitleBar(mActivity, toolbar);
         initData();
         initView();
         setListener();
@@ -57,17 +61,6 @@ public abstract class BaseTwoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (isImmersionBarEnabled()) {
-            ImmersionBar.with(this).destroy();
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (isImmersionBarEnabled() && !hidden) {
-            ImmersionBar.with(this).init();
-        }
     }
 
     /**
@@ -77,22 +70,11 @@ public abstract class BaseTwoFragment extends Fragment {
      */
     protected abstract int setLayoutId();
 
-    /**
-     * 是否在Fragment使用沉浸式
-     *
-     * @return the boolean
-     */
-    protected boolean isImmersionBarEnabled() {
-        return true;
-    }
 
-    /**
-     * 初始化沉浸式
-     */
-    protected void initImmersionBar() {
+    @Override
+    public void initImmersionBar() {
         ImmersionBar.with(this).keyboardEnable(true).init();
     }
-
 
     /**
      * 初始化数据

@@ -1,45 +1,78 @@
 package com.gyf.barlibrary;
 
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 
 /**
- * ImmersionFragment沉浸式基类，因为fragment是基于activity之上的，
- * 为了能够在fragment使用沉浸式而fragment之间又相互不影响，必须实现immersionInit方法，
- * 原理是当用户可见才执行沉浸式初始化
- * 已过时，当配合vieapager使用时，请自行使用懒加载方式实现,或者参看我的demo里的BaseLazyFragment
+ * 为了方便在Fragment使用沉浸式请继承ImmersionFragment，
+ * 请在immersionBarEnabled方法中实现你的沉浸式代码，
+ * ImmersionProxy已经做了ImmersionBar.with(mFragment).destroy()了，所以不需要在你的代码中做这个处理了
+ * 如果不能继承，请拷贝代码到你的项目中
  *
  * @author geyifeng
  * @date 2017/5/12
  */
-@Deprecated
-public abstract class ImmersionFragment extends Fragment {
+public abstract class ImmersionFragment extends Fragment implements ImmersionOwner {
+
+    /**
+     * ImmersionBar代理类
+     */
+    private ImmersionProxy immersionProxy = new ImmersionProxy(this);
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if ((isVisibleToUser && isResumed())) {
-            onResume();
-        }
+        immersionProxy.setUserVisibleHint(isVisibleToUser);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint() && immersionEnabled()) {
-            immersionInit();
-        }
+        immersionProxy.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        immersionProxy.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        immersionProxy.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        immersionProxy.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        immersionProxy.onHiddenChanged(hidden);
     }
 
     /**
-     * 当前页面Fragment支持沉浸式初始化。子类可以重写返回false，设置不支持沉浸式初始化
-     * Immersion bar enabled boolean.
-     *
-     * @return the boolean
+     * 用户可见时候调用
+     * On visible.
      */
-    @Deprecated
-    protected boolean immersionEnabled() {
-        return true;
+    @Override
+    public void onVisible() {
     }
 
-    @Deprecated
-    protected abstract void immersionInit();
+    /**
+     * 用户不可见时候调用
+     * On invisible.
+     */
+    @Override
+    public void onInvisible() {
+    }
+
+    @Override
+    public boolean immersionBarEnabled() {
+        return true;
+    }
 }

@@ -2,7 +2,6 @@ package com.gyf.immersionbar.activity;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -43,9 +42,6 @@ public class KeyBoardActivity extends BaseActivity {
                 //解决软键盘与底部输入框冲突问题
                 .keyboardEnable(true)
                 .init();
-//        解决软键盘与底部输入框冲突问题，或者使用以下方法，任选其一
-//        KeyboardPatch.patch(this).enable();
-//        KeyboardPatch.patch(this,layout).enable();  //layout指的是当前布局的根节点
     }
 
     @Override

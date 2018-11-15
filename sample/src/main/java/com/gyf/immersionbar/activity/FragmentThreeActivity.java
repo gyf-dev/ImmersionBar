@@ -45,7 +45,7 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).keyboardEnable(true).navigationBarColor(R.color.colorPrimary).init();
+        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
     }
 
     @Override
@@ -111,19 +111,19 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
         switch (position) {
             case 0:
                 tabSelected(llHome);
-                ImmersionBar.with(this).statusBarDarkFont(false).navigationBarColor(R.color.colorPrimary).init();
+                ImmersionBar.with(this).keyboardEnable(false).statusBarDarkFont(false).navigationBarColor(R.color.colorPrimary).init();
                 break;
             case 1:
                 tabSelected(llCategory);
-                ImmersionBar.with(this).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
+                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
                 break;
             case 2:
                 tabSelected(llService);
-                ImmersionBar.with(this).statusBarDarkFont(false).navigationBarColor(R.color.btn13).init();
+                ImmersionBar.with(this).keyboardEnable(false).statusBarDarkFont(false).navigationBarColor(R.color.btn13).init();
                 break;
             case 3:
                 tabSelected(llMine);
-                ImmersionBar.with(this).statusBarDarkFont(true).navigationBarColor(R.color.btn1).init();
+                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true).navigationBarColor(R.color.btn1).init();
                 break;
             default:
                 break;

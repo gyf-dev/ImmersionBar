@@ -26,6 +26,6 @@ public class ServiceFiveFragment extends BaseFiveFragment {
     @Override
     public void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).navigationBarColor(R.color.btn2).init();
+        ImmersionBar.with(this).navigationBarColor(R.color.btn2).keyboardEnable(false).init();
     }
 }

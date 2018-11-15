@@ -1,21 +1,15 @@
 package com.gyf.immersionbar.fragment.two;
 
-import android.support.v7.widget.Toolbar;
-
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
-
-import butterknife.BindView;
+import com.gyf.immersionbar.fragment.BaseFragment;
 
 /**
- *
  * @author geyifeng
  * @date 2017/7/20
  */
 
-public class MineTwoFragment extends BaseTwoFragment {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+public class MineTwoFragment extends BaseFragment {
 
     @Override
     protected int setLayoutId() {
@@ -23,10 +17,9 @@ public class MineTwoFragment extends BaseTwoFragment {
     }
 
     @Override
-    protected void initImmersionBar() {
+    public void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this)
-                .titleBar(toolbar)
                 .navigationBarColor(R.color.btn7)
                 .init();
     }

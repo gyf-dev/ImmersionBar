@@ -19,6 +19,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 import com.gyf.immersionbar.activity.FragmentOneActivity;
 import com.gyf.immersionbar.adapter.OneAdapter;
+import com.gyf.immersionbar.fragment.BaseFragment;
 import com.gyf.immersionbar.utils.GlideImageLoader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -33,7 +34,7 @@ import butterknife.BindView;
  * @author geyifeng
  * @date 2017/5/12
  */
-public class HomeOneFragment extends BaseLazyFragment {
+public class HomeOneFragment extends BaseFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -167,9 +168,10 @@ public class HomeOneFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initImmersionBar() {
+    public void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this).statusBarColorTransformEnable(false)
+                .keyboardEnable(false)
                 .navigationBarColor(R.color.colorPrimary)
                 .init();
     }

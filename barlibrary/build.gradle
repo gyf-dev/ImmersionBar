@@ -33,16 +33,16 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/immersionbar-2.3.2-beta02.jar'
+    delete 'build/libs/immersionbar-2.3.2-beta03.jar'
     from('build/intermediates/bundles/release/')
     into('build/libs/')
     include('classes.jar')
-    rename('classes.jar', 'immersionbar-2.3.2-beta03.jar')
+    rename('classes.jar', 'immersionbar-2.3.2-beta04.jar')
 }
 
 makeJar.dependsOn(build)
@@ -51,7 +51,7 @@ publish {
     userOrg = 'geyifeng'
     groupId = 'com.gyf.immersionbar'
     artifactId = 'immersionbar'
-    publishVersion = '2.3.2-beta03'
+    publishVersion = '2.3.2-beta04'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }

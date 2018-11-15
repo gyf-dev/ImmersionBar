@@ -6,7 +6,6 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
 
 /**
- *
  * @author geyifeng
  * @date 2017/7/20
  */

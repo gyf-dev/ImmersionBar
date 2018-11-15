@@ -21,6 +21,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <!--适配全面屏-->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
+        <!--适配华为(hua wei)刘海屏-->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <!--适配小米(xiao mi)刘海屏-->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden">
@@ -96,7 +109,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.KeyBoardActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
         <activity
             android:name=".activity.CoordinatorActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
@@ -116,7 +129,7 @@
             android:theme="@style/ActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.WhiteStatusBarActivity"
+            android:name=".activity.WhiteBarActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
         <activity
             android:name=".activity.WebActivity"

@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta03'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta04'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,28 +18,45 @@
 
 >eclipse
 
-[immersionbar-2.3.2-beta03.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta03.jar) 
+[immersionbar-2.3.2-beta04.jar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2-beta04.jar) 
 
 ## 版本说明
 ### [点我](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta03.apk) 
+### [下载](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta04.apk) 
 
 ## 关于全面屏与刘海
-- 解决全面屏上下部分留黑或留白问题，以下三种任选其一，或者都写
-
-  ① 在manifest的Application节点下加入
-    ```xml
+### 关于全面屏
+   在manifest加入如下配置，四选其一，或者都写
+   ① 在manifest的Application节点下加入
+   ```xml
       <meta-data 
         android:name="android.max_aspect"
-        android:value="2.2" />
-    ```
-   ② 在manifest的Application节点中加入如下属性,这句话的意思是支持分屏模式
+        android:value="2.4" />
+   ```
+   ② 在manifest的Application节点中加入
    ```xml
       android:resizeableActivity="true"
    ```
-   ③ 升级targetSdkVersion为25以上版本
+   ③ 在manifest的Application节点中加入
+   ```xml
+      android:maxAspectRatio="2.4"
+   ```
+   ④ 升级targetSdkVersion为25以上版本
+   
+### 关于刘海屏 
+  在manifest的Application节点下加入，vivo和oppo没有相关配置信息
+   ```xml
+      <!--适配华为（huawei）刘海屏-->
+      <meta-data 
+        android:name="android.notch_support" 
+        android:value="true"/>
+      <!--适配小米（xiaomi）刘海屏-->
+      <meta-data
+        android:name="notch.config"
+        android:value="portrait|landscape" />
+   ```
   
 ## 用法
 ### 初始化
@@ -131,31 +148,9 @@
 
 ## 在Fragment中实现沉浸式
 
-注意：2.2.6版本已将[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)这个类标记为过时，请用户自行使用懒加载方式实现
-
 - 在Fragment使用ImmersionBar
-  #### 第一种，当结合viewpager使用的时候，请使用懒加载的形式，参考demo中的[BaseLazyFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/one/BaseLazyFragment.java)这个类
-  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，参考demo中的[BaseTwoFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/sample/src/main/java/com/gyf/immersionbar/fragment/two/BaseTwoFragment.java)这个类
-  注意：
-  - 2.2.7版本以后别忘了在Fragment的onDestroy方法里销毁沉浸式了，2.2.7版本之前不需要调用
-  
-  ```java
-     @Override
-     protected void onDestroy() {
-         super.onDestroy();
-         ImmersionBar.with(this).destroy();
-     }
-  ```
-  - 以show()和hide()方式控制Fragment显示隐藏，别忘了重写onHiddenChanged方法，如下
-  
-  ```java
-       @Override
-       public void onHiddenChanged(boolean hidden) {
-           super.onHiddenChanged(hidden);
-           if (!hidden)
-              ImmersionBar.with(this).init(); 
-       }
-    ```
+  #### 第一种，你的Fragment直接继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled放回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
+  #### 第二种，如果你的Fragment不能继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
 - 在Activity使用ImmersionBar
   #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
   #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
@@ -171,8 +166,7 @@
    ```
 - ②其他dialog
     ```java
-            ImmersionBar.with(this, dialog)
-                        .init();
+         ImmersionBar.with(this, dialog).init();
          
     ```
     
@@ -344,14 +338,23 @@
 - public static int getActionBarHeight(Activity activity)
  
     获得ActionBar的高度
+
+- public static boolean hasNotchScreen(Activity activity)
+ 
+    是否是刘海屏
     
 - public static boolean isSupportStatusBarDarkFont()
  
     判断当前设备支不支持状态栏字体设置为黑色
 
+- public static boolean isSupportNavigationIconDark()
+ 
+    判断当前设备支不支持导航栏图标设置为黑色
+
 - public static void hideStatusBar(Window window) 
  
     隐藏状态栏
+    
     
 ## 混淆规则(proguard-rules.pro)
    ```

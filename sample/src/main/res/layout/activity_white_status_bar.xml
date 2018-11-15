@@ -6,13 +6,8 @@
     android:background="@color/btn5"
     android:orientation="vertical">
 
-    <View
-        android:id="@id/top_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@android:color/white"/>
-
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@android:color/white"
@@ -22,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Q：当白色背景状态栏或者白色状态栏时候，是不是觉得状态栏字体看不清，影响美观？点击'立即解决'试试看吧！"
+        android:text="Q：当白色背景状态栏/导航栏或者白色状态栏/导航栏时候，是不是觉得状态栏字体和导航栏图标看不清，影响美观？点击'立即解决'试试看吧！"
         android:textSize="18sp" />
 
     <TextView

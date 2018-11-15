@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
                 intent = new Intent(this, KeyBoardActivity.class);
                 break;
             case R.id.btn_white_status_bar:
-                intent = new Intent(this, WhiteStatusBarActivity.class);
+                intent = new Intent(this, WhiteBarActivity.class);
                 break;
             case R.id.btn_status_hide:
                 ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();

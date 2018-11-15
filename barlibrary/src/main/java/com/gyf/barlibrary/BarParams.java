@@ -61,7 +61,9 @@ public class BarParams implements Cloneable {
      * 状态栏字体深色与亮色标志位
      * The Dark font.
      */
-    boolean darkFont = false;
+    boolean statusBarDarkFont = false;
+
+    boolean navigationBarDarkIcon = false;
     /**
      * 是否可以修改状态栏颜色
      * The Status bar flag.
@@ -143,8 +145,7 @@ public class BarParams implements Cloneable {
      * 软键盘属性
      * The Keyboard mode.
      */
-    int keyboardMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
-            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+    int keyboardMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
     /**
      * 是否能修改导航栏颜色
      * The Navigation bar enable.
@@ -161,16 +162,6 @@ public class BarParams implements Cloneable {
      */
     @Deprecated
     boolean fixMarginAtBottom = false;
-    /**
-     * xml是否使用fitsSystemWindows属性
-     * The System windows.
-     */
-    boolean systemWindows = false;
-    /**
-     * 软键盘监听类
-     * The Keyboard patch.
-     */
-    KeyboardPatch keyboardPatch;
     /**
      * 软键盘监听类
      * The On keyboard listener.
