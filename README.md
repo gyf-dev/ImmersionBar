@@ -24,7 +24,7 @@
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [下载immersionBar-2.3.2-beta04](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta04.apk) 
+### [下载demo  immersionBar-2.3.2-beta04.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2-beta04.apk) 
 
 ## 关于全面屏与刘海
 ### 关于全面屏
