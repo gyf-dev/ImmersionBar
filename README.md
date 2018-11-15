@@ -29,6 +29,7 @@
 ## 关于全面屏与刘海
 ### 关于全面屏
    在manifest加入如下配置，四选其一，或者都写
+   
    ① 在manifest的Application节点下加入
    ```xml
       <meta-data 
@@ -46,7 +47,7 @@
    ④ 升级targetSdkVersion为25以上版本
    
 ### 关于刘海屏 
-  在manifest的Application节点下加入，vivo和oppo没有相关配置信息
+  在manifest的Application节点下加入，vivo和oppo没有找到相关配置信息
    ```xml
       <!--适配华为（huawei）刘海屏-->
       <meta-data 
@@ -79,6 +80,7 @@
                  .navigationBarAlpha(0.4f)  //导航栏透明度，不写默认0.0F
                  .barAlpha(0.3f)  //状态栏和导航栏透明度，不写默认0.0f
                  .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
+                 .navigationBarDarkIcon(true) //导航栏是深色，不写默认为亮色
                  .flymeOSStatusBarFontColor(R.color.btn3)  //修改flyme OS状态栏字体颜色
                  .fullScreen(true)      //有导航栏的情况下，activity全屏显示，也就是activity最下面被导航栏覆盖，不写默认非全屏
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
@@ -148,20 +150,20 @@
 
 ## 在Fragment中实现沉浸式
 
-- 在Fragment使用ImmersionBar
-  #### 第一种，你的Fragment直接继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled放回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
-  #### 第二种，如果你的Fragment不能继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
-- 在Activity使用ImmersionBar
-  #### 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
-  #### 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
-- 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
-  #### 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseFiveFragment.java)这个类
+#### 在Fragment使用ImmersionBar
+  - 第一种，你的Fragment直接继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled放回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
+  - 第二种，如果你的Fragment不能继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
+#### 在Activity使用ImmersionBar
+  - 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
+  - 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类
+#### 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
+  - 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/five/BaseFiveFragment.java)这个类
 
 ## 在Dialog中实现沉浸式，具体实现参考demo
 - ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/dialog/BaseDialogFragment.java)这个类
 
    ```java
-         ImmersionBar.with(this) .init();
+         ImmersionBar.with(this).init();
       
    ```
 - ②其他dialog
