@@ -25,7 +25,8 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     private View mContentView;
     private View mChildView;
     private int mPaddingLeft = 0, mPaddingTop = 0, mPaddingRight = 0, mPaddingBottom = 0;
-    private int tempKeyboardHeight;
+    private int mTempKeyboardHeight;
+    private boolean mIsAddListener;
 
     FitsKeyboard(ImmersionBar immersionBar, Activity activity, Window window) {
         mImmersionBar = immersionBar;
@@ -49,13 +50,15 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     void enable(int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mWindow.setSoftInputMode(mode);
-            mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+            if (!mIsAddListener) {
+                mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+                mIsAddListener = true;
+            }
         }
     }
 
     void disable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             if (mChildView != null) {
                 mContentView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
             } else {
@@ -63,6 +66,15 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                         mImmersionBar.getPaddingTop(),
                         mImmersionBar.getPaddingRight(),
                         mImmersionBar.getPaddingBottom());
+            }
+        }
+    }
+
+    void cancel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (mIsAddListener) {
+                mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mIsAddListener = false;
             }
         }
     }
@@ -76,8 +88,8 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
             //获取当前窗口可视区域大小
             mDecorView.getWindowVisibleDisplayFrame(rect);
             keyboardHeight = mContentView.getHeight() - rect.bottom;
-            if (keyboardHeight != tempKeyboardHeight) {
-                tempKeyboardHeight = keyboardHeight;
+            if (keyboardHeight != mTempKeyboardHeight) {
+                mTempKeyboardHeight = keyboardHeight;
                 if (!ImmersionBar.checkFitsSystemWindows(mContentView)) {
                     if (mChildView != null) {
                         if (mImmersionBar.getBarParams().isSupportActionBar) {

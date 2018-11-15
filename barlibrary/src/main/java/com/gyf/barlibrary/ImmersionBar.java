@@ -2087,7 +2087,7 @@ public class ImmersionBar {
                 mNavigationObserver = null;
             }
             if (mFitsKeyboard != null) {
-                mFitsKeyboard.disable();
+                mFitsKeyboard.cancel();
                 mFitsKeyboard = null;
             }
         }
@@ -2113,17 +2113,14 @@ public class ImmersionBar {
             } else {
                 ImmersionBar immersionBar = mImmersionBarMap.get(mActivity.toString());
                 if (immersionBar != null) {
-                    if (mBarParams.keyboardEnable) {
-                        if (mFitsKeyboard == null) {
-                            if (immersionBar.mFitsKeyboard == null) {
-                                immersionBar.mFitsKeyboard = new FitsKeyboard(immersionBar, mActivity, mWindow);
-                            }
-                            mFitsKeyboard = immersionBar.mFitsKeyboard;
+                    if (immersionBar.mBarParams.keyboardEnable) {
+                        if (immersionBar.mFitsKeyboard == null) {
+                            immersionBar.mFitsKeyboard = new FitsKeyboard(immersionBar, immersionBar.mActivity, immersionBar.mWindow);
                         }
-                        mFitsKeyboard.enable(mBarParams.keyboardMode);
+                        immersionBar.mFitsKeyboard.enable(immersionBar.mBarParams.keyboardMode);
                     } else {
-                        if (mFitsKeyboard != null) {
-                            mFitsKeyboard.disable();
+                        if (immersionBar.mFitsKeyboard != null) {
+                            immersionBar.mFitsKeyboard.disable();
                         }
                     }
                 }
