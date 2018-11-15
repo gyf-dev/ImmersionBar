@@ -66,7 +66,7 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
             case R.id.ll_home:
                 selectedFragment(0);
                 tabSelected(llHome);
-                ImmersionBar.with(this).fitsSystemWindows(false).keyboardEnable(false).transparentStatusBar().navigationBarColor(R.color.colorPrimary).init();
+                ImmersionBar.with(this).reset().navigationBarColor(R.color.colorPrimary).init();
                 break;
             case R.id.ll_category:
                 selectedFragment(1);
@@ -76,12 +76,12 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
             case R.id.ll_service:
                 selectedFragment(2);
                 tabSelected(llService);
-                ImmersionBar.with(this).fitsSystemWindows(true).keyboardEnable(false).barColor(R.color.btn2).init();
+                ImmersionBar.with(this).reset().fitsSystemWindows(true).barColor(R.color.btn2).statusBarDarkFont(true, 0.2f).init();
                 break;
             case R.id.ll_mine:
                 selectedFragment(3);
                 tabSelected(llMine);
-                ImmersionBar.with(this).fitsSystemWindows(true).keyboardEnable(true).barColor(R.color.btn7).init();
+                ImmersionBar.with(this).fitsSystemWindows(true).keyboardEnable(true).statusBarDarkFont(false).barColor(R.color.btn7).init();
                 break;
             default:
                 break;
