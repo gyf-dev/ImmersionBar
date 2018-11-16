@@ -58,7 +58,7 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     void disable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mIsAddListener) {
             if (mChildView != null) {
                 mContentView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
             } else {
@@ -71,11 +71,9 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     void cancel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (mIsAddListener) {
-                mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mIsAddListener = false;
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mIsAddListener) {
+            mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            mIsAddListener = false;
         }
     }
 
@@ -90,7 +88,7 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
             keyboardHeight = mContentView.getHeight() - rect.bottom;
             if (keyboardHeight != mTempKeyboardHeight) {
                 mTempKeyboardHeight = keyboardHeight;
-                if (!ImmersionBar.checkFitsSystemWindows(mContentView)) {
+                if (!ImmersionBar.checkFitsSystemWindows(mWindow.getDecorView().findViewById(android.R.id.content))) {
                     if (mChildView != null) {
                         if (mImmersionBar.getBarParams().isSupportActionBar) {
                             keyboardHeight += mActionBarHeight;

@@ -145,7 +145,8 @@ public class BarParams implements Cloneable {
      * 软键盘属性
      * The Keyboard mode.
      */
-    int keyboardMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+    int keyboardMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
     /**
      * 是否能修改导航栏颜色
      * The Navigation bar enable.

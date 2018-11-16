@@ -1440,6 +1440,7 @@ public class ImmersionBar {
      */
     public ImmersionBar reset() {
         mBarParams = new BarParams();
+        mFitsStatusBarType = FLAG_FITS_DEFAULT;
         return this;
     }
 
@@ -1485,7 +1486,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar keyboardEnable(boolean enable) {
-        return keyboardEnable(enable, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        return keyboardEnable(enable, mBarParams.keyboardMode);
     }
 
     /**
@@ -1849,7 +1850,7 @@ public class ImmersionBar {
      * Fits windows above lollipop.
      */
     private void fitsWindowsAboveLOLLIPOP() {
-        if (checkFitsSystemWindows(mContentView)) {
+        if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
@@ -1870,7 +1871,7 @@ public class ImmersionBar {
      * Fits windows below lollipop.
      */
     private void fitsWindowsBelowLOLLIPOP() {
-        if (checkFitsSystemWindows(mContentView)) {
+        if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
