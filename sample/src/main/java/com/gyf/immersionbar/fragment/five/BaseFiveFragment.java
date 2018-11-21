@@ -37,7 +37,7 @@ public abstract class BaseFiveFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(setLayoutId(), container, false);
+        mRootView = inflater.inflate(getLayoutId(), container, false);
         return mRootView;
     }
 
@@ -86,12 +86,13 @@ public abstract class BaseFiveFragment extends SupportFragment {
         ImmersionBar.with(this).destroy();
     }
 
+
     /**
-     * Sets layout id.
+     * Gets layout id.
      *
      * @return the layout id
      */
-    protected abstract int setLayoutId();
+    protected abstract int getLayoutId();
 
     /**
      * 初始化数据

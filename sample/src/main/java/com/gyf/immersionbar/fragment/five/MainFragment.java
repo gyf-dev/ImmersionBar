@@ -40,7 +40,7 @@ public class MainFragment extends BaseFiveFragment implements View.OnClickListen
     }
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_fragment_two;
     }
 

@@ -19,7 +19,7 @@ public class ServiceFiveFragment extends BaseFiveFragment {
     }
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_two_service;
     }
 
