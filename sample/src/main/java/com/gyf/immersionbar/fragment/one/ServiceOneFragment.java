@@ -11,7 +11,7 @@ import com.gyf.immersionbar.fragment.BaseFragment;
 public class ServiceOneFragment extends BaseFragment {
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_one_service;
     }
 
@@ -20,6 +20,7 @@ public class ServiceOneFragment extends BaseFragment {
         super.initImmersionBar();
         ImmersionBar.with(this)
                 .navigationBarColor(R.color.btn13)
+                .navigationBarDarkIcon(true)
                 .keyboardEnable(false)
                 .init();
     }

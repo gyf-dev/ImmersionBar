@@ -12,7 +12,7 @@ import com.gyf.immersionbar.fragment.BaseFragment;
 public class MineTwoFragment extends BaseFragment {
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_two_mine;
     }
 

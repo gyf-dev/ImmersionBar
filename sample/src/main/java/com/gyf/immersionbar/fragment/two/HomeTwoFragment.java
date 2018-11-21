@@ -10,8 +10,9 @@ import com.gyf.immersionbar.fragment.BaseFragment;
  */
 
 public class HomeTwoFragment extends BaseFragment {
+
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_two_home;
     }
 

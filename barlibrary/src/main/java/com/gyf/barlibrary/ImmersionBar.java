@@ -46,6 +46,8 @@ public class ImmersionBar {
     private static final int IMMERSION_STATUS_BAR_VIEW = R.id.immersion_status_bar_view;
     private static final int IMMERSION_NAVIGATION_BAR_VIEW = R.id.immersion_navigation_bar_view;
     private static final String NAVIGATIONBAR_IS_MIN = "navigationbar_is_min";
+    private static final String MIUI_STATUS_BAR_DARK = "EXTRA_FLAG_STATUS_BAR_DARK_MODE";
+    private static final String MIUI_NAVIGATION_BAR_DARK = "EXTRA_FLAG_NAVIGATION_BAR_DARK_MODE";
 
     private static final int FLAG_FITS_DEFAULT = 0X00;
     private static final int FLAG_FITS_TITLE = 0X01;
@@ -1642,18 +1644,18 @@ public class ImmersionBar {
             fitsWindows();
             mDecorView.setSystemUiVisibility(uiFlags);
         }
-        //修改miui状态栏字体颜色
         if (OSUtils.isMIUI6Later()) {
-            setMIUIStatusBarDarkFont(mWindow, mBarParams.statusBarDarkFont);
+            //修改miui状态栏字体颜色
+            setMIUIBarDark(mWindow, MIUI_STATUS_BAR_DARK, mBarParams.statusBarDarkFont);
+            //修改miui导航栏图标为黑色
+            setMIUIBarDark(mWindow, MIUI_NAVIGATION_BAR_DARK, mBarParams.navigationBarDarkIcon);
         }
         // 修改Flyme OS状态栏字体颜色
         if (OSUtils.isFlymeOS4Later()) {
             if (mBarParams.flymeOSStatusBarFontColor != 0) {
                 FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.flymeOSStatusBarFontColor);
             } else {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.statusBarDarkFont);
-                }
+                FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.statusBarDarkFont);
             }
         }
     }
@@ -1851,6 +1853,7 @@ public class ImmersionBar {
      */
     private void fitsWindowsAboveLOLLIPOP() {
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
+            mIsFitsLayoutOverlap = true;
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
@@ -1872,6 +1875,7 @@ public class ImmersionBar {
      */
     private void fitsWindowsBelowLOLLIPOP() {
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
+            mIsFitsLayoutOverlap = true;
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
@@ -1992,23 +1996,17 @@ public class ImmersionBar {
         }
     }
 
-    /**
-     * 设置状态栏字体图标为深色，需要MIUIV6以上
-     *
-     * @param window   the window
-     * @param darkFont the dark font
-     */
     @SuppressLint("PrivateApi")
-    private void setMIUIStatusBarDarkFont(Window window, boolean darkFont) {
+    private void setMIUIBarDark(Window window, String key, boolean dark) {
         if (window != null) {
             Class<? extends Window> clazz = window.getClass();
             try {
                 int darkModeFlag;
                 Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                Field field = layoutParams.getField(key);
                 darkModeFlag = field.getInt(layoutParams);
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                if (darkFont) {
+                if (dark) {
                     //状态栏透明且黑色字体
                     extraFlagField.invoke(window, darkModeFlag, darkModeFlag);
                 } else {
@@ -2182,7 +2180,7 @@ public class ImmersionBar {
      * @return the boolean
      */
     public static boolean isSupportNavigationIconDark() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+        return OSUtils.isMIUI6Later() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
     /**
@@ -2289,7 +2287,7 @@ public class ImmersionBar {
     }
 
     /**
-     * 检查布局是否使用了android:fitsSystemWindows="true"属性
+     * 检查布局根节点是否使用了android:fitsSystemWindows="true"属性
      * Check fits system windows boolean.
      *
      * @param view the view
@@ -2304,7 +2302,9 @@ public class ImmersionBar {
             for (int i = 0, count = viewGroup.getChildCount(); i < count; i++) {
                 View childView = viewGroup.getChildAt(i);
                 if (childView instanceof DrawerLayout) {
-                    continue;
+                    if (checkFitsSystemWindows(childView)) {
+                        return true;
+                    }
                 }
                 if (childView.getFitsSystemWindows()) {
                     return true;

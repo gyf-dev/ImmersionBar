@@ -43,7 +43,7 @@ public abstract class BaseFragment extends ImmersionFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(setLayoutId(), container, false);
+        mRootView = inflater.inflate(getLayoutId(), container, false);
         return mRootView;
     }
 
@@ -64,11 +64,11 @@ public abstract class BaseFragment extends ImmersionFragment {
     }
 
     /**
-     * Sets layout id.
+     * Gets layout id.
      *
      * @return the layout id
      */
-    protected abstract int setLayoutId();
+    protected abstract int getLayoutId();
 
 
     @Override

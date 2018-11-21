@@ -48,14 +48,14 @@ public class ImmersionProxy {
     }
 
     public void onResume() {
-        mIsFirstShow = true;
         if (mFragment.getUserVisibleHint()) {
             mVisible = true;
             mImmersionOwner.onVisible();
-            if (mImmersionOwner.immersionBarEnabled()) {
+            if (mImmersionOwner.immersionBarEnabled() && !mIsFirstShow) {
                 mImmersionOwner.initImmersionBar();
             }
         }
+        mIsFirstShow = true;
     }
 
     public void onPause() {
@@ -80,15 +80,6 @@ public class ImmersionProxy {
     }
 
     public void onHiddenChanged(boolean hidden) {
-        if (hidden) {
-            mVisible = false;
-            mImmersionOwner.onInvisible();
-        } else {
-            mVisible = true;
-            mImmersionOwner.onVisible();
-            if (mImmersionOwner.immersionBarEnabled()) {
-                mImmersionOwner.initImmersionBar();
-            }
-        }
+        mFragment.setUserVisibleHint(!hidden);
     }
 }

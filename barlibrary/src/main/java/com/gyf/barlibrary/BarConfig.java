@@ -125,7 +125,7 @@ class BarConfig {
     private int getInternalDimensionSize(Context context, String key) {
         int result = 0;
         try {
-            int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
+            int resourceId = context.getResources().getIdentifier(key, "dimen", "android");
             if (resourceId > 0) {
                 result = Math.max(context.getResources().getDimensionPixelSize(resourceId),
                         Resources.getSystem().getDimensionPixelSize(resourceId));

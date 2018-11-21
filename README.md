@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.2'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta02'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,13 +18,13 @@
 
 >eclipse
 
-[immersionbar-2.3.2.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.2.aar) 
+[immersionbar-2.3.3-beta02.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta02.aar) 
 
 ## 版本说明
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [点我下载immersionBar-2.3.2.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.2.apk) 
+### [点我下载immersionBar-2.3.3-beta02.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta02.apk) 
 
 ## 关于全面屏与刘海
 ### 关于全面屏

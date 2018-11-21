@@ -50,7 +50,7 @@ public class HomeOneFragment extends BaseFragment {
     private int bannerHeight;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_one_home;
     }
 

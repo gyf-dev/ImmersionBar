@@ -38,11 +38,11 @@ dependencies {
 }
 
 task makeJar(type: Copy) {
-    delete 'build/libs/immersionbar-2.3.2-beta04.jar'
+    delete 'build/libs/immersionbar-2.3.3-beta01.jar'
     from('build/intermediates/bundles/release/')
     into('build/libs/')
     include('classes.jar')
-    rename('classes.jar', 'immersionbar-2.3.2-beta05.jar')
+    rename('classes.jar', 'immersionbar-2.3.3-beta02.jar')
 }
 
 makeJar.dependsOn(build)
@@ -51,7 +51,7 @@ publish {
     userOrg = 'geyifeng'
     groupId = 'com.gyf.immersionbar'
     artifactId = 'immersionbar'
-    publishVersion = '2.3.2'
+    publishVersion = '2.3.3-beta02'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }
