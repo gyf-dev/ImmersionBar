@@ -21,6 +21,7 @@ public class MineOneFragment extends BaseFragment {
         ImmersionBar.with(this)
                 .statusBarDarkFont(true)
                 .navigationBarColor(R.color.btn1)
+                .navigationBarDarkIcon(true)
                 .init();
     }
 }

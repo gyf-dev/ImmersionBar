@@ -20,7 +20,6 @@ public class ServiceOneFragment extends BaseFragment {
         super.initImmersionBar();
         ImmersionBar.with(this)
                 .navigationBarColor(R.color.btn13)
-                .navigationBarDarkIcon(true)
                 .keyboardEnable(false)
                 .init();
     }
