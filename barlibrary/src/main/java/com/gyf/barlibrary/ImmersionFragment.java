@@ -1,6 +1,8 @@
 package com.gyf.barlibrary;
 
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 /**
@@ -10,7 +12,7 @@ import android.support.v4.app.Fragment;
  * 如果不能继承，请拷贝代码到你的项目中
  *
  * @author geyifeng
- * @date 2017/5/12
+ * @date 2017 /5/12
  */
 public abstract class ImmersionFragment extends Fragment implements ImmersionOwner {
 
@@ -23,6 +25,18 @@ public abstract class ImmersionFragment extends Fragment implements ImmersionOwn
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         immersionProxy.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        immersionProxy.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        immersionProxy.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -44,19 +58,35 @@ public abstract class ImmersionFragment extends Fragment implements ImmersionOwn
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        immersionProxy.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         immersionProxy.onHiddenChanged(hidden);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        immersionProxy.onConfigurationChanged(newConfig);
+    }
+
     /**
-     * 用户可见时候调用
+     * 懒加载，在view初始化完成之前执行
+     * On lazy after view.
+     */
+    @Override
+    public void onLazyBeforeView() {
+    }
+
+    /**
+     * 懒加载，在view初始化完成之后执行
+     * On lazy before view.
+     */
+    @Override
+    public void onLazyAfterView() {
+    }
+
+    /**
+     * Fragment用户可见时候调用
      * On visible.
      */
     @Override
@@ -64,13 +94,19 @@ public abstract class ImmersionFragment extends Fragment implements ImmersionOwn
     }
 
     /**
-     * 用户不可见时候调用
+     * Fragment用户不可见时候调用
      * On invisible.
      */
     @Override
     public void onInvisible() {
     }
 
+    /**
+     * 是否可以实现沉浸式，当为true的时候才可以执行initImmersionBar方法
+     * Immersion bar enabled boolean.
+     *
+     * @return the boolean
+     */
     @Override
     public boolean immersionBarEnabled() {
         return true;

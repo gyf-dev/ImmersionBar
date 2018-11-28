@@ -46,7 +46,7 @@ class BarConfig {
         Resources res = activity.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         mSmallestWidthDp = getSmallestWidthDp(activity);
-        mStatusBarHeight = getInternalDimensionSize(STATUS_BAR_HEIGHT_RES_NAME);
+        mStatusBarHeight = getInternalDimensionSize(activity, STATUS_BAR_HEIGHT_RES_NAME);
         mActionBarHeight = getActionBarHeight(activity);
         mNavigationBarHeight = getNavigationBarHeight(activity);
         mNavigationBarWidth = getNavigationBarWidth(activity);
@@ -76,7 +76,7 @@ class BarConfig {
                 } else {
                     key = NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME;
                 }
-                return getInternalDimensionSize(key);
+                return getInternalDimensionSize(context, key);
             }
         }
         return result;
@@ -87,7 +87,7 @@ class BarConfig {
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (hasNavBar((Activity) context)) {
-                return getInternalDimensionSize(NAV_BAR_WIDTH_RES_NAME);
+                return getInternalDimensionSize(context, NAV_BAR_WIDTH_RES_NAME);
             }
         }
         return result;
@@ -122,12 +122,14 @@ class BarConfig {
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
 
-    private int getInternalDimensionSize(String key) {
+    private int getInternalDimensionSize(Context context, String key) {
         int result = 0;
         try {
-            int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
+            int resourceId = context.getResources().getIdentifier(key, "dimen", "android");
             if (resourceId > 0) {
-                result = Resources.getSystem().getDimensionPixelSize(resourceId);
+                result = Math.round(context.getResources().getDimensionPixelSize(resourceId) *
+                        Resources.getSystem().getDisplayMetrics().density /
+                        context.getResources().getDisplayMetrics().density);
             }
         } catch (Resources.NotFoundException ignored) {
             return 0;
