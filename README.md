@@ -26,7 +26,7 @@
 ## 下载demo 
 ### [点我下载immersionBar-2.3.3-beta05.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta05.apk) 
 
-## 关于使用Android支持库
+## 关于使用AndroidX支持库
 - 请在你的gradle.properties加入如下配置
     ```groovy
        android.useAndroidX=true
