@@ -91,7 +91,7 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 if (!ImmersionBar.checkFitsSystemWindows(mWindow.getDecorView().findViewById(android.R.id.content))) {
                     if (mChildView != null) {
                         if (mImmersionBar.getBarParams().isSupportActionBar) {
-                            keyboardHeight += mActionBarHeight;
+                            keyboardHeight += mActionBarHeight + mStatusBarHeight;
                         }
                         if (mImmersionBar.getBarParams().fits) {
                             keyboardHeight += mStatusBarHeight;

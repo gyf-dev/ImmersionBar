@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta05'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta06'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,16 +18,16 @@
 
 >eclipse
 
-[immersionbar-2.3.3-beta05.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta05.aar) 
+[immersionbar-2.3.3-beta06.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta06.aar) 
 
 ## 版本说明
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [点我下载immersionBar-2.3.3-beta05.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta05.apk) 
+### [点我下载immersionBar-2.3.3-beta06.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta06.apk) 
 
 ## 关于使用AndroidX支持库
-- 请在你的gradle.properties加入如下配置
+- 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
     ```groovy
        android.useAndroidX=true
        android.enableJetifier=true
@@ -158,8 +158,20 @@
 ## 在Fragment中实现沉浸式
 
 #### 在Fragment使用ImmersionBar
-  - 第一种，你的Fragment直接继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled放回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
-  - 第二种，如果你的Fragment不能继承[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
+  - 第一种，你的Fragment直接继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled放回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
+  - 第二种，如果你的Fragment不能继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)实现[SimpleImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionOwner.java)接口，或者参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
+  
+  > [SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)和[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)区别是什么？
+    
+    | 方法名字 | SimpleImmersionFragment | ImmersionFragment |
+    | ------ | ------ | ------ |
+    | initImmersionBar()沉浸式代码写着这里 | ✅ | ✅ |
+    | immersionBarEnabled()当前Fragment是否可以走initImmersionBar方法 | ✅ | ✅ |
+    | onLazyBeforeView()懒加载，在view初始化之前调用 | ❌ | ✅ |
+    | onLazyAfterView()懒加载，在view初始化之后调用 | ❌ | ✅ |
+    | onVisible()当前Fragment对用户可见的时候调用 | ❌ | ✅ |
+    | onInvisible()当前Fragment不可见的时候调用 | ❌ | ✅ |
+    
 #### 在Activity使用ImmersionBar
   - 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
   - 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentFourActivity.java)这个类

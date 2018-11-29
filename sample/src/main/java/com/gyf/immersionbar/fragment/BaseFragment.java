@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.gyf.barlibrary.ImmersionFragment;
+import com.gyf.barlibrary.SimpleImmersionFragment;
 import com.gyf.immersionbar.R;
 
 import butterknife.BindView;
@@ -24,7 +24,7 @@ import butterknife.Unbinder;
  * @author geyifeng
  * @date 2017/4/7
  */
-public abstract class BaseFragment extends ImmersionFragment {
+public abstract class BaseFragment extends SimpleImmersionFragment {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

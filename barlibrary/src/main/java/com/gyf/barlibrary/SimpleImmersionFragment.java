@@ -14,91 +14,41 @@ import android.support.v4.app.Fragment;
  * @author geyifeng
  * @date 2017 /5/12
  */
-public abstract class ImmersionFragment extends Fragment implements ImmersionOwner {
+public abstract class SimpleImmersionFragment extends Fragment implements SimpleImmersionOwner {
 
     /**
      * ImmersionBar代理类
      */
-    private ImmersionProxy mImmersionProxy = new ImmersionProxy(this);
+    private SimpleImmersionProxy mSimpleImmersionProxy = new SimpleImmersionProxy(this);
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        mImmersionProxy.setUserVisibleHint(isVisibleToUser);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mImmersionProxy.onCreate(savedInstanceState);
+        mSimpleImmersionProxy.setUserVisibleHint(isVisibleToUser);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mImmersionProxy.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mImmersionProxy.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mImmersionProxy.onPause();
+        mSimpleImmersionProxy.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mImmersionProxy.onDestroy();
+        mSimpleImmersionProxy.onDestroy();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        mImmersionProxy.onHiddenChanged(hidden);
+        mSimpleImmersionProxy.onHiddenChanged(hidden);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mImmersionProxy.onConfigurationChanged(newConfig);
-    }
-
-    /**
-     * 懒加载，在view初始化完成之前执行
-     * On lazy after view.
-     */
-    @Override
-    public void onLazyBeforeView() {
-    }
-
-    /**
-     * 懒加载，在view初始化完成之后执行
-     * On lazy before view.
-     */
-    @Override
-    public void onLazyAfterView() {
-    }
-
-    /**
-     * Fragment用户可见时候调用
-     * On visible.
-     */
-    @Override
-    public void onVisible() {
-    }
-
-    /**
-     * Fragment用户不可见时候调用
-     * On invisible.
-     */
-    @Override
-    public void onInvisible() {
+        mSimpleImmersionProxy.onConfigurationChanged(newConfig);
     }
 
     /**
