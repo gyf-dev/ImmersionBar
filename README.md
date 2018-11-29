@@ -163,14 +163,14 @@
   
   > [SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)和[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)区别是什么？
     
-    | 方法名字 | SimpleImmersionFragment | ImmersionFragment |
-    | ------ | ------ | ------ |
-    | initImmersionBar()沉浸式代码写着这里 | ✅ | ✅ |
-    | immersionBarEnabled()当前Fragment是否可以走initImmersionBar方法 | ✅ | ✅ |
-    | onLazyBeforeView()懒加载，在view初始化之前调用 | ❌ | ✅ |
-    | onLazyAfterView()懒加载，在view初始化之后调用 | ❌ | ✅ |
-    | onVisible()当前Fragment对用户可见的时候调用 | ❌ | ✅ |
-    | onInvisible()当前Fragment不可见的时候调用 | ❌ | ✅ |
+   | 方法名字 | SimpleImmersionFragment | ImmersionFragment |
+   | :------: | :------: | :------: |
+   | initImmersionBar()：沉浸式代码写着这里 | ✅ | ✅ |
+   | immersionBarEnabled()：当前Fragment是否可以走initImmersionBar方法 | ✅ | ✅ |
+   | onLazyBeforeView()：懒加载，在view初始化之前调用 | ❌ | ✅ |
+   | onLazyAfterView()：懒加载，在view初始化之后调用 | ❌ | ✅ |
+   | onVisible()：当前Fragment对用户可见的时候调用 | ❌ | ✅ |
+   | onInvisible()：当前Fragment不可见的时候调用 | ❌ | ✅ |
     
 #### 在Activity使用ImmersionBar
   - 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/FragmentThreeActivity.java)这个类
