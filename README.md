@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta06'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta09'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,13 +18,13 @@
 
 >eclipse
 
-[immersionbar-2.3.3-beta06.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta06.aar) 
+[immersionbar-2.3.3-beta09.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta09.aar) 
 
 ## 版本说明
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [点我下载immersionBar-2.3.3-beta06.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta06.apk) 
+### [点我下载immersionBar-2.3.3-beta09.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta09.apk) 
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略

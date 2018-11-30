@@ -61,6 +61,7 @@ public class ImmersionBar {
     private static Map<String, ImmersionBar> mImmersionBarMap = new HashMap<>();
 
     private Activity mActivity;
+    private Fragment mFragment;
     private Dialog mDialog;
     private Window mWindow;
     private ViewGroup mDecorView;
@@ -150,8 +151,8 @@ public class ImmersionBar {
     }
 
     private ImmersionBar(Activity activity, Fragment fragment) {
-
         mActivity = activity;
+        mFragment = fragment;
         if (mActivity == null) {
             throw new IllegalArgumentException("Activity不能为空!!!");
         }
@@ -183,6 +184,7 @@ public class ImmersionBar {
 
     private ImmersionBar(DialogFragment dialogFragment, Dialog dialog) {
         mActivity = dialogFragment.getActivity();
+        mFragment = dialogFragment;
         mDialog = dialog;
         if (mActivity == null) {
             throw new IllegalArgumentException("Activity不能为空!!!");
@@ -1344,7 +1346,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar titleBar(@IdRes int viewId) {
-        return titleBar(mActivity.findViewById(viewId), true);
+        return titleBar(viewId, true);
     }
 
     /**
@@ -1355,7 +1357,15 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar titleBar(@IdRes int viewId, boolean statusBarFlag) {
-        return titleBar(mActivity.findViewById(viewId), statusBarFlag);
+        if (mFragment != null) {
+            if (mFragment.getView() != null) {
+                return titleBar(mFragment.getView().findViewById(viewId), statusBarFlag);
+            } else {
+                return this;
+            }
+        } else {
+            return titleBar(mActivity.findViewById(viewId), statusBarFlag);
+        }
     }
 
     /**
@@ -1390,7 +1400,15 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar titleBarMarginTop(@IdRes int viewId) {
-        return titleBarMarginTop(mActivity.findViewById(viewId));
+        if (mFragment != null) {
+            if (mFragment.getView() != null) {
+                return titleBarMarginTop(mFragment.getView().findViewById(viewId));
+            } else {
+                return this;
+            }
+        } else {
+            return titleBarMarginTop(mActivity.findViewById(viewId));
+        }
     }
 
     /**
@@ -1853,7 +1871,6 @@ public class ImmersionBar {
      */
     private void fitsWindowsAboveLOLLIPOP() {
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
-            mIsFitsLayoutOverlap = true;
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
@@ -1875,7 +1892,6 @@ public class ImmersionBar {
      */
     private void fitsWindowsBelowLOLLIPOP() {
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
-            mIsFitsLayoutOverlap = true;
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mBarConfig.getActionBarHeight(), 0, 0);
             }
