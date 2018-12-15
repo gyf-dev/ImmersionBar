@@ -1052,6 +1052,18 @@ public class ImmersionBar {
         return this;
     }
 
+
+    /**
+     * 是否启用 自动根据状态栏颜色调整状态栏字体深色与亮色
+     *
+     * @param isEnable true启用 默认false
+     * @return the immersion bar
+     */
+    public ImmersionBar enableAutoDarkFont(boolean isEnable) {
+        mBarParams.enableAutoDarkFont = isEnable;
+        return this;
+    }
+
     /**
      * 状态栏字体深色或亮色
      *
@@ -1623,6 +1635,8 @@ public class ImmersionBar {
      * Update bar params.
      */
     private void updateBarParams() {
+        adjustDarkFontParams();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //获得Bar相关信息
             mBarConfig = new BarConfig(mActivity);
@@ -1813,6 +1827,15 @@ public class ImmersionBar {
             navigationBarView.setVisibility(View.VISIBLE);
         } else {
             navigationBarView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 调整状态栏字体参数
+     */
+    private void adjustDarkFontParams() {
+        if (mBarParams.enableAutoDarkFont) {
+            statusBarDarkFont(mBarParams.statusBarColor > 0xFFBABABA);
         }
     }
 

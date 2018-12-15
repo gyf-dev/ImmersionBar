@@ -64,6 +64,13 @@ public class BarParams implements Cloneable {
     boolean statusBarDarkFont = false;
 
     boolean navigationBarDarkIcon = false;
+
+    /**
+     * 是否启用 自动根据状态栏颜色调整状态栏字体深色与亮色
+     * Auto Dark font.
+     */
+    boolean enableAutoDarkFont = false;
+
     /**
      * 是否可以修改状态栏颜色
      * The Status bar flag.

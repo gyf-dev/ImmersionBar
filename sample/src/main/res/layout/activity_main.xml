@@ -118,6 +118,10 @@
                     android:id="@+id/btn_white_status_bar"
                     style="@style/btn"
                     android:text="解决白色状态栏问题" />
+                <Button
+                    android:id="@+id/btn_auto_status_font"
+                    style="@style/btn"
+                    android:text="自动根据状态栏颜色调整字体" />
 
                 <Button
                     android:id="@+id/btn_status_hide"
