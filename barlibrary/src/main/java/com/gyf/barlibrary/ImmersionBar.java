@@ -1836,8 +1836,8 @@ public class ImmersionBar {
     private void adjustDarkModeParams() {
         if (mBarParams.enableAutoDarkMode) {
             int boundaryColor = 0xFFBABABA;
-            statusBarDarkFont(mBarParams.statusBarColor > boundaryColor);
-            navigationBarDarkIcon(mBarParams.navigationBarColor > boundaryColor);
+            statusBarDarkFont(mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > boundaryColor);
+            navigationBarDarkIcon(mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > boundaryColor);
         }
     }
 
