@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
                 intent = new Intent(this, WhiteBarActivity.class);
                 break;
             case R.id.btn_auto_status_font:
-                intent = new Intent(this, AutoStatusFontActivity.class);
+                intent = new Intent(this, AutoDarkModeActivity.class);
                 break;
             case R.id.btn_status_hide:
                 ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();

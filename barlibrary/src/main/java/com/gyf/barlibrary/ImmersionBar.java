@@ -1054,13 +1054,13 @@ public class ImmersionBar {
 
 
     /**
-     * 是否启用 自动根据状态栏颜色调整状态栏字体深色与亮色
+     * 是否启用 自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式
      *
      * @param isEnable true启用 默认false
      * @return the immersion bar
      */
-    public ImmersionBar enableAutoDarkFont(boolean isEnable) {
-        mBarParams.enableAutoDarkFont = isEnable;
+    public ImmersionBar enableAutoDarkMode(boolean isEnable) {
+        mBarParams.enableAutoDarkMode = isEnable;
         return this;
     }
 
@@ -1635,7 +1635,7 @@ public class ImmersionBar {
      * Update bar params.
      */
     private void updateBarParams() {
-        adjustDarkFontParams();
+        adjustDarkModeParams();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //获得Bar相关信息
@@ -1831,11 +1831,13 @@ public class ImmersionBar {
     }
 
     /**
-     * 调整状态栏字体参数
+     * 调整深色亮色模式参数
      */
-    private void adjustDarkFontParams() {
-        if (mBarParams.enableAutoDarkFont) {
-            statusBarDarkFont(mBarParams.statusBarColor > 0xFFBABABA);
+    private void adjustDarkModeParams() {
+        if (mBarParams.enableAutoDarkMode) {
+            int boundaryColor = 0xFFBABABA;
+            statusBarDarkFont(mBarParams.statusBarColor > boundaryColor);
+            navigationBarDarkIcon(mBarParams.navigationBarColor > boundaryColor);
         }
     }
 

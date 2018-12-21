@@ -17,7 +17,7 @@ import butterknife.BindView;
  * @author github.com/dengyuhan
  * @date 2018/12/16 03:56
  */
-public class AutoStatusFontActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.seek_bar)
     SeekBar seek_bar;
@@ -32,11 +32,11 @@ public class AutoStatusFontActivity extends BaseActivity implements SeekBar.OnSe
 
     @Override
     protected void initImmersionBar() {
-        super.initImmersionBar();
         ImmersionBar.with(this)
-                .enableAutoDarkFont(true)
+                .enableAutoDarkMode(true)
                 .titleBar(toolbar)
                 .statusBarColorInt(Color.BLACK)
+                .navigationBarColorInt(Color.BLACK)
                 .addViewSupportTransformColor(toolbar).init();
     }
 
@@ -49,12 +49,13 @@ public class AutoStatusFontActivity extends BaseActivity implements SeekBar.OnSe
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float fraction = (float) progress / 100;
-        final Integer statusBarColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
+        final Integer barColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
 
         ImmersionBar.with(this)
-                .enableAutoDarkFont(true)
+                .enableAutoDarkMode(true)
                 .titleBar(toolbar)
-                .statusBarColorInt(statusBarColor)
+                .statusBarColorInt(barColor)
+                .navigationBarColorInt(barColor)
                 .addViewSupportTransformColor(toolbar).init();
     }
 
