@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(R.id.toolbar).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).keyboardEnable(true).init();
     }
 
     @SuppressLint("SetTextI18n")
@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity {
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
             R.id.btn_dialog, R.id.btn_drawer, R.id.btn_tab, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
             R.id.btn_key_board, R.id.btn_white_status_bar, R.id.btn_auto_status_font, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
+            R.id.btn_key_board, R.id.btn_all_edit, R.id.btn_login, R.id.btn_white_status_bar, R.id.btn_status_hide, R.id.btn_navigation_hide, R.id.btn_bar_hide,
             R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light, R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
         Intent intent = null;
@@ -105,6 +106,12 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.btn_key_board:
                 intent = new Intent(this, KeyBoardActivity.class);
+                break;
+            case R.id.btn_all_edit:
+                intent = new Intent(this, AllEditActivity.class);
+                break;
+            case R.id.btn_login:
+                intent = new Intent(this, LoginActivity.class);
                 break;
             case R.id.btn_white_status_bar:
                 intent = new Intent(this, WhiteBarActivity.class);

@@ -8,7 +8,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
-        versionName "2.3.3-beta09"
+        versionName "2.3.3-beta15"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //侧滑返回
-    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+    implementation 'me.imid.swipebacklayout.lib:library:1.3.0'
     //log日志
     implementation 'com.apkfuns.logutils:library:1.5.1.1'
     //轮播图

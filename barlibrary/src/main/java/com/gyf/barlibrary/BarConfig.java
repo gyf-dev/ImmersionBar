@@ -125,11 +125,18 @@ class BarConfig {
     private int getInternalDimensionSize(Context context, String key) {
         int result = 0;
         try {
-            int resourceId = context.getResources().getIdentifier(key, "dimen", "android");
+            int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
             if (resourceId > 0) {
-                result = Math.round(context.getResources().getDimensionPixelSize(resourceId) *
-                        Resources.getSystem().getDisplayMetrics().density /
-                        context.getResources().getDisplayMetrics().density);
+                int sizeOne = context.getResources().getDimensionPixelSize(resourceId);
+                int sizeTwo = Resources.getSystem().getDimensionPixelSize(resourceId);
+
+                if (sizeTwo >= sizeOne) {
+                    return sizeTwo;
+                } else {
+                    float densityOne = context.getResources().getDisplayMetrics().density;
+                    float densityTwo = Resources.getSystem().getDisplayMetrics().density;
+                    return Math.round(sizeOne * densityTwo / densityOne);
+                }
             }
         } catch (Resources.NotFoundException ignored) {
             return 0;

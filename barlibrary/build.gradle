@@ -8,7 +8,6 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
-
     }
     lintOptions {
         checkReleaseBuilds false
@@ -26,7 +25,7 @@ publish {
     userOrg = 'geyifeng'
     groupId = 'com.gyf.immersionbar'
     artifactId = 'immersionbar'
-    publishVersion = '2.3.3-beta09'
+    publishVersion = '2.3.3-beta15'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }

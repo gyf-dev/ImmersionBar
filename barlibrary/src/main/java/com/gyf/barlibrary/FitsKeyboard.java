@@ -3,6 +3,7 @@ package com.gyf.barlibrary;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -36,10 +37,15 @@ public class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
         FrameLayout frameLayout = mDecorView.findViewById(android.R.id.content);
         mChildView = frameLayout.getChildAt(0);
         if (mChildView != null) {
-            mPaddingLeft = mChildView.getPaddingLeft();
-            mPaddingTop = mChildView.getPaddingTop();
-            mPaddingRight = mChildView.getPaddingRight();
-            mPaddingBottom = mChildView.getPaddingBottom();
+            if (mChildView instanceof DrawerLayout) {
+                mChildView = ((DrawerLayout) mChildView).getChildAt(0);
+            }
+            if (mChildView != null) {
+                mPaddingLeft = mChildView.getPaddingLeft();
+                mPaddingTop = mChildView.getPaddingTop();
+                mPaddingRight = mChildView.getPaddingRight();
+                mPaddingBottom = mChildView.getPaddingBottom();
+            }
         }
         mContentView = mChildView != null ? mChildView : frameLayout;
         BarConfig barConfig = new BarConfig(mActivity);

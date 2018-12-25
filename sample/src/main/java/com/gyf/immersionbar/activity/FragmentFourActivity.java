@@ -76,7 +76,7 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
             case R.id.ll_service:
                 selectedFragment(2);
                 tabSelected(llService);
-                ImmersionBar.with(this).reset().fitsSystemWindows(true).barColor(R.color.btn2).statusBarDarkFont(true, 0.2f).init();
+                ImmersionBar.with(this).reset().fitsSystemWindows(false).navigationBarColor(R.color.btn2).statusBarDarkFont(true, 0.2f).init();
                 break;
             case R.id.ll_mine:
                 selectedFragment(3);
