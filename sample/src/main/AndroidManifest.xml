@@ -132,6 +132,9 @@
             android:name=".activity.WhiteBarActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
         <activity
+            android:name=".activity.AutoDarkModeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
             android:name=".activity.WebActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
         <activity

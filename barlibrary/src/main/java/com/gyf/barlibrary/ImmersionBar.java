@@ -1044,6 +1044,18 @@ public class ImmersionBar {
         return this;
     }
 
+
+    /**
+     * 是否启用 自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式
+     *
+     * @param isEnable true启用 默认false
+     * @return the immersion bar
+     */
+    public ImmersionBar autoDarkModeEnable(boolean isEnable) {
+        mBarParams.autoDarkModeEnable = isEnable;
+        return this;
+    }
+
     /**
      * 状态栏字体深色或亮色
      *
@@ -1619,6 +1631,8 @@ public class ImmersionBar {
      * Update bar params.
      */
     private void updateBarParams() {
+        adjustDarkModeParams();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //是否可以修改emui3系列手机导航栏
             if (OSUtils.isEMUI3_x() && mBarParams.navigationBarWithKitkatEnable) {
@@ -1815,6 +1829,17 @@ public class ImmersionBar {
             navigationBarView.setVisibility(View.VISIBLE);
         } else {
             navigationBarView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 调整深色亮色模式参数
+     */
+    private void adjustDarkModeParams() {
+        if (mBarParams.autoDarkModeEnable) {
+            int boundaryColor = 0xFFBABABA;
+            statusBarDarkFont(mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > boundaryColor);
+            navigationBarDarkIcon(mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > boundaryColor);
         }
     }
 
