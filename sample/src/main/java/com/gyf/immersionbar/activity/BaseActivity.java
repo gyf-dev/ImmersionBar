@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.barlibrary.OSUtils;
 import com.gyf.immersionbar.R;
 
 import butterknife.ButterKnife;
@@ -42,6 +43,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // 非必加
+        // 如果你的app可以横竖屏切换，适配了华为emui3系列系统手机，并且navigationBarWithEMUI3Enable为true，
+        // 请在onResume方法里添加这句代码（同时满足这三个条件才需要加上代码哦：1、横竖屏可以切换；2、华为emui3系列系统手机；3、navigationBarWithEMUI3Enable为true）
+        // 否则请忽略
+        if (OSUtils.isEMUI3_x() && isImmersionBarEnabled()) {
+            ImmersionBar.with(this).init();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mInputMethodManager = null;
@@ -66,6 +79,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (isImmersionBarEnabled()) {
+            // 非必加
+            // 如果你的app可以横竖屏切换，适配了4.4或者华为emui3.1系统手机，并且navigationBarWithKitkatEnable为true，
+            // 请务必在onConfigurationChanged方法里添加如下代码（同时满足这三个条件才需要加上代码哦：1、横竖屏可以切换；2、android4.4或者华为emui3.1系统手机；3、navigationBarWithKitkatEnable为true）
+            // 否则请忽略
             ImmersionBar.with(this).init();
         }
     }

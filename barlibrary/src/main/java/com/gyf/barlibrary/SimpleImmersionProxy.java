@@ -44,7 +44,7 @@ public class SimpleImmersionProxy {
     }
 
     public void onDestroy() {
-        if (mSimpleImmersionOwner.immersionBarEnabled() && mFragment != null && mFragment.getActivity() != null) {
+        if (mFragment != null && mFragment.getActivity() != null && mSimpleImmersionOwner.immersionBarEnabled()) {
             ImmersionBar.with(mFragment).destroy();
         }
         mFragment = null;
@@ -56,7 +56,9 @@ public class SimpleImmersionProxy {
     }
 
     public void onHiddenChanged(boolean hidden) {
-        mFragment.setUserVisibleHint(!hidden);
+        if (mFragment != null) {
+            mFragment.setUserVisibleHint(!hidden);
+        }
     }
 
     /**
@@ -66,11 +68,16 @@ public class SimpleImmersionProxy {
      * @return the boolean
      */
     public boolean isUserVisibleHint() {
-        return mFragment.getUserVisibleHint();
+        if (mFragment != null) {
+            return mFragment.getUserVisibleHint();
+        } else {
+            return false;
+        }
     }
 
     private void setImmersionBar() {
-        if (mIsActivityCreated && mFragment.getUserVisibleHint() && mSimpleImmersionOwner.immersionBarEnabled()) {
+        if (mFragment != null && mIsActivityCreated && mFragment.getUserVisibleHint()
+                && mSimpleImmersionOwner.immersionBarEnabled()) {
             mSimpleImmersionOwner.initImmersionBar();
         }
     }

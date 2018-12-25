@@ -43,32 +43,34 @@ public class ImmersionProxy {
     }
 
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (mFragment.getUserVisibleHint()) {
-            if (!mIsLazyBeforeView) {
-                mImmersionOwner.onLazyBeforeView();
-                mIsLazyBeforeView = true;
-            }
-            if (mIsActivityCreated) {
-                if (mFragment.getUserVisibleHint()) {
-                    if (mImmersionOwner.immersionBarEnabled()) {
-                        mImmersionOwner.initImmersionBar();
-                    }
-                    if (!mIsLazyAfterView) {
-                        mImmersionOwner.onLazyAfterView();
-                        mIsLazyAfterView = true;
-                    }
-                    mImmersionOwner.onVisible();
+        if (mFragment != null) {
+            if (mFragment.getUserVisibleHint()) {
+                if (!mIsLazyBeforeView) {
+                    mImmersionOwner.onLazyBeforeView();
+                    mIsLazyBeforeView = true;
                 }
-            }
-        } else {
-            if (mIsActivityCreated) {
-                mImmersionOwner.onInvisible();
+                if (mIsActivityCreated) {
+                    if (mFragment.getUserVisibleHint()) {
+                        if (mImmersionOwner.immersionBarEnabled()) {
+                            mImmersionOwner.initImmersionBar();
+                        }
+                        if (!mIsLazyAfterView) {
+                            mImmersionOwner.onLazyAfterView();
+                            mIsLazyAfterView = true;
+                        }
+                        mImmersionOwner.onVisible();
+                    }
+                }
+            } else {
+                if (mIsActivityCreated) {
+                    mImmersionOwner.onInvisible();
+                }
             }
         }
     }
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        if (mFragment.getUserVisibleHint()) {
+        if (mFragment != null && mFragment.getUserVisibleHint()) {
             if (!mIsLazyBeforeView) {
                 mImmersionOwner.onLazyBeforeView();
                 mIsLazyBeforeView = true;
@@ -78,7 +80,7 @@ public class ImmersionProxy {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         mIsActivityCreated = true;
-        if (mFragment.getUserVisibleHint()) {
+        if (mFragment != null && mFragment.getUserVisibleHint()) {
             if (mImmersionOwner.immersionBarEnabled()) {
                 mImmersionOwner.initImmersionBar();
             }
@@ -90,17 +92,19 @@ public class ImmersionProxy {
     }
 
     public void onResume() {
-        if (mFragment.getUserVisibleHint()) {
+        if (mFragment != null && mFragment.getUserVisibleHint()) {
             mImmersionOwner.onVisible();
         }
     }
 
     public void onPause() {
-        mImmersionOwner.onInvisible();
+        if (mFragment != null) {
+            mImmersionOwner.onInvisible();
+        }
     }
 
     public void onDestroy() {
-        if (mImmersionOwner.immersionBarEnabled() && mFragment != null && mFragment.getActivity() != null) {
+        if (mFragment != null && mFragment.getActivity() != null && mImmersionOwner.immersionBarEnabled()) {
             ImmersionBar.with(mFragment).destroy();
         }
         mFragment = null;
@@ -108,7 +112,7 @@ public class ImmersionProxy {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        if (mFragment.getUserVisibleHint()) {
+        if (mFragment != null && mFragment.getUserVisibleHint()) {
             if (mImmersionOwner.immersionBarEnabled()) {
                 mImmersionOwner.initImmersionBar();
             }
@@ -117,7 +121,9 @@ public class ImmersionProxy {
     }
 
     public void onHiddenChanged(boolean hidden) {
-        mFragment.setUserVisibleHint(!hidden);
+        if (mFragment != null) {
+            mFragment.setUserVisibleHint(!hidden);
+        }
     }
 
     /**
@@ -127,6 +133,10 @@ public class ImmersionProxy {
      * @return the boolean
      */
     public boolean isUserVisibleHint() {
-        return mFragment.getUserVisibleHint();
+        if (mFragment != null) {
+            return mFragment.getUserVisibleHint();
+        } else {
+            return false;
+        }
     }
 }

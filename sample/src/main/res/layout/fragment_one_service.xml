@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/btn13" />
+        android:background="@drawable/shape" />
 
     <EditText
         android:layout_width="match_parent"

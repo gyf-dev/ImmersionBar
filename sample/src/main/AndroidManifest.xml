@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
 
-
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -21,15 +20,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <!--适配全面屏-->
+
+        <!-- 适配全面屏 -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
-        <!--适配华为(hua wei)刘海屏-->
+        <!-- 适配华为(hua wei)刘海屏 -->
         <meta-data
             android:name="android.notch_support"
             android:value="true" />
-        <!--适配小米(xiao mi)刘海屏-->
+        <!-- 适配小米(xiao mi)刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
@@ -140,6 +140,12 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.BlogActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.AllEditActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
     </application>
 

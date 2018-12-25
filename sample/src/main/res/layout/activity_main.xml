@@ -115,6 +115,16 @@
                     android:text="解决EditText和软键盘的问题 " />
 
                 <Button
+                    android:id="@+id/btn_all_edit"
+                    style="@style/btn"
+                    android:text="界面全是EditText " />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    style="@style/btn"
+                    android:text="登录界面" />
+
+                <Button
                     android:id="@+id/btn_white_status_bar"
                     style="@style/btn"
                     android:text="解决白色状态栏问题" />

@@ -63,12 +63,16 @@ public class BarParams implements Cloneable {
      */
     boolean statusBarDarkFont = false;
 
+    /**
+     * 导航栏图标深色与亮色标志位
+     * The Navigation bar dark icon.
+     */
     boolean navigationBarDarkIcon = false;
     /**
      * 是否可以修改状态栏颜色
      * The Status bar flag.
      */
-    boolean statusBarFlag = true;
+    boolean statusBarColorEnabled = true;
     /**
      * 状态栏变换后的颜色
      * The Status bar color transform.
@@ -106,10 +110,6 @@ public class BarParams implements Cloneable {
      */
     @FloatRange(from = 0f, to = 1f)
     float contentAlpha = 0.0f;
-    /**
-     * The Navigation bar color temp.
-     */
-    int navigationBarColorTemp = navigationBarColor;
     /**
      * 解决标题栏与状态栏重叠问题
      * The Fits.
@@ -153,10 +153,15 @@ public class BarParams implements Cloneable {
      */
     boolean navigationBarEnable = true;
     /**
-     * 是否能修改4.4手机导航栏颜色
+     * 是否能修改4.4手机以及华为emui3.1导航栏颜色
      * The Navigation bar with kitkat enable.
      */
     boolean navigationBarWithKitkatEnable = true;
+    /**
+     * 是否可以修改emui3系列手机导航栏
+     * The Navigation bar with emui 3 enable.
+     */
+    boolean navigationBarWithEMUI3Enable = true;
     /**
      * 解决出现底部多余导航栏高度，默认为false，已废弃
      * The Fix margin at bottom.

@@ -10,7 +10,7 @@
     <View
         android:id="@+id/top_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -20,43 +20,56 @@
         app:title="彩色状态栏 + 彩色导航栏"
         app:titleTextColor="@android:color/white" />
 
-    <TextView
-        android:id="@+id/text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:text="透明度:0.0f"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp" />
-
-    <SeekBar
-        android:id="@+id/seek_bar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn1"
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:text="透明度:0.0f"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp" />
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@color/btn1" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@color/btn3" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@color/btn5" />
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@color/btn1" />
-
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@color/btn3" />
-
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@color/btn5" />
+        android:text="我是底部" />
 </LinearLayout>
