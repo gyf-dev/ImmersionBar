@@ -33,7 +33,7 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
     @Override
     protected void initImmersionBar() {
         ImmersionBar.with(this)
-                .enableAutoDarkMode(true)
+                .autoDarkModeEnable(true)
                 .titleBar(toolbar)
                 .statusBarColorInt(Color.BLACK)
                 .navigationBarColorInt(Color.BLACK)
@@ -52,7 +52,7 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
         final Integer barColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
 
         ImmersionBar.with(this)
-                .enableAutoDarkMode(true)
+                .autoDarkModeEnable(true)
                 .titleBar(toolbar)
                 .statusBarColorInt(barColor)
                 .navigationBarColorInt(barColor)

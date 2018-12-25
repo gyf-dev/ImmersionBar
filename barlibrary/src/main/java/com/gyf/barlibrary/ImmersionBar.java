@@ -1051,8 +1051,8 @@ public class ImmersionBar {
      * @param isEnable true启用 默认false
      * @return the immersion bar
      */
-    public ImmersionBar enableAutoDarkMode(boolean isEnable) {
-        mBarParams.enableAutoDarkMode = isEnable;
+    public ImmersionBar autoDarkModeEnable(boolean isEnable) {
+        mBarParams.autoDarkModeEnable = isEnable;
         return this;
     }
 
@@ -1836,7 +1836,7 @@ public class ImmersionBar {
      * 调整深色亮色模式参数
      */
     private void adjustDarkModeParams() {
-        if (mBarParams.enableAutoDarkMode) {
+        if (mBarParams.autoDarkModeEnable) {
             int boundaryColor = 0xFFBABABA;
             statusBarDarkFont(mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > boundaryColor);
             navigationBarDarkIcon(mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > boundaryColor);
