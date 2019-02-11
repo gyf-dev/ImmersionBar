@@ -76,6 +76,13 @@ public class BarParams implements Cloneable {
     boolean autoDarkModeEnable = false;
 
     /**
+     * 自动深色模式的状态栏透明度
+     * Status bar transparency in automatic dark mode.
+     */
+    @FloatRange(from = 0f, to = 1f)
+    float autoDarkModeStatusBarAlpha = 0.0f;
+
+    /**
      * 是否可以修改状态栏颜色
      * The Status bar flag.
      */

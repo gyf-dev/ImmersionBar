@@ -1052,7 +1052,19 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar autoDarkModeEnable(boolean isEnable) {
+        return autoDarkModeEnable(isEnable, 0f);
+    }
+
+    /**
+     * 是否启用 自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式，判断设备支不支持状态栏变色来设置状态栏透明度
+     *
+     * @param isEnable    true启用 默认false
+     * @param statusAlpha the status alpha 如果不支持状态栏字体变色可以使用statusAlpha来指定状态栏透明度，比如白色状态栏的时候可以用到
+     * @return the immersion bar
+     */
+    public ImmersionBar autoDarkModeEnable(boolean isEnable, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
         mBarParams.autoDarkModeEnable = isEnable;
+        mBarParams.autoDarkModeStatusBarAlpha = statusAlpha;
         return this;
     }
 
@@ -1838,8 +1850,12 @@ public class ImmersionBar {
     private void adjustDarkModeParams() {
         if (mBarParams.autoDarkModeEnable) {
             int boundaryColor = 0xFFBABABA;
-            statusBarDarkFont(mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > boundaryColor);
-            navigationBarDarkIcon(mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > boundaryColor);
+            if (mBarParams.statusBarColor != Color.TRANSPARENT) {
+                statusBarDarkFont(mBarParams.statusBarColor > boundaryColor, mBarParams.autoDarkModeStatusBarAlpha);
+            }
+            if (mBarParams.navigationBarColor != Color.TRANSPARENT) {
+                navigationBarDarkIcon(mBarParams.navigationBarColor > boundaryColor, mBarParams.autoDarkModeStatusBarAlpha);
+            }
         }
     }
 
