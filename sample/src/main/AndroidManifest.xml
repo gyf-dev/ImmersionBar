@@ -118,6 +118,11 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
             android:theme="@style/AppTheme.Transparent" />
         <activity
+            android:name=".activity.TabLayout2Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
             android:name=".activity.FlymeActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
         <activity

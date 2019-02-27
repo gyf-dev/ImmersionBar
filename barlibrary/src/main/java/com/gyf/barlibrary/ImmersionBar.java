@@ -49,6 +49,11 @@ public class ImmersionBar {
     private static final String MIUI_STATUS_BAR_DARK = "EXTRA_FLAG_STATUS_BAR_DARK_MODE";
     private static final String MIUI_NAVIGATION_BAR_DARK = "EXTRA_FLAG_NAVIGATION_BAR_DARK_MODE";
 
+    /**
+     * 自动改变字体颜色的临界值
+     */
+    private final static int BOUNDARY_COLOR = 0xFFBABABA;
+
     private static final int FLAG_FITS_DEFAULT = 0X00;
     private static final int FLAG_FITS_TITLE = 0X01;
     private static final int FLAG_FITS_TITLE_MARGIN_TOP = 0X02;
@@ -981,7 +986,7 @@ public class ImmersionBar {
             throw new IllegalArgumentException("View参数不能为空");
         }
         Map<Integer, Integer> map = mBarParams.viewMap.get(view);
-        if (map.size() != 0) {
+        if (map != null && map.size() != 0) {
             mBarParams.viewMap.remove(view);
         }
         return this;
@@ -1044,7 +1049,6 @@ public class ImmersionBar {
         return this;
     }
 
-
     /**
      * 是否启用 自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式
      *
@@ -1052,7 +1056,72 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar autoDarkModeEnable(boolean isEnable) {
-        mBarParams.autoDarkModeEnable = isEnable;
+        return this.autoDarkModeEnable(isEnable, 0f);
+    }
+
+    /**
+     * 是否启用自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式
+     * Auto dark mode enable immersion bar.
+     *
+     * @param isEnable          the is enable
+     * @param autoDarkModeAlpha the auto dark mode alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar autoDarkModeEnable(boolean isEnable, @FloatRange(from = 0f, to = 1f) float autoDarkModeAlpha) {
+        mBarParams.autoStatusBarDarkModeEnable = isEnable;
+        mBarParams.autoStatusBarDarkModeAlpha = autoDarkModeAlpha;
+        mBarParams.autoNavigationBarDarkModeEnable = isEnable;
+        mBarParams.autoNavigationBarDarkModeAlpha = autoDarkModeAlpha;
+        return this;
+    }
+
+    /**
+     * 是否启用自动根据StatusBar颜色调整深色模式与亮色模式
+     * Auto status bar dark mode enable immersion bar.
+     *
+     * @param isEnable the is enable
+     * @return the immersion bar
+     */
+    public ImmersionBar autoStatusBarDarkModeEnable(boolean isEnable) {
+        return this.autoStatusBarDarkModeEnable(isEnable, 0f);
+    }
+
+    /**
+     * 是否启用自动根据StatusBar颜色调整深色模式与亮色模式
+     * Auto status bar dark mode enable immersion bar.
+     *
+     * @param isEnable          the is enable
+     * @param autoDarkModeAlpha the auto dark mode alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar autoStatusBarDarkModeEnable(boolean isEnable, @FloatRange(from = 0f, to = 1f) float autoDarkModeAlpha) {
+        mBarParams.autoStatusBarDarkModeEnable = isEnable;
+        mBarParams.autoStatusBarDarkModeAlpha = autoDarkModeAlpha;
+        return this;
+    }
+
+    /**
+     * 是否启用自动根据StatusBar颜色调整深色模式与亮色模式
+     * Auto navigation bar dark mode enable immersion bar.
+     *
+     * @param isEnable the is enable
+     * @return the immersion bar
+     */
+    public ImmersionBar autoNavigationBarDarkModeEnable(boolean isEnable) {
+        return this.autoNavigationBarDarkModeEnable(isEnable, 0f);
+    }
+
+    /**
+     * 是否启用自动根据NavigationBar颜色调整深色模式与亮色模式
+     * Auto navigation bar dark mode enable immersion bar.
+     *
+     * @param isEnable          the is enable
+     * @param autoDarkModeAlpha the auto dark mode alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar autoNavigationBarDarkModeEnable(boolean isEnable, @FloatRange(from = 0f, to = 1f) float autoDarkModeAlpha) {
+        mBarParams.autoNavigationBarDarkModeEnable = isEnable;
+        mBarParams.autoNavigationBarDarkModeAlpha = autoDarkModeAlpha;
         return this;
     }
 
@@ -1076,13 +1145,11 @@ public class ImmersionBar {
      */
     public ImmersionBar statusBarDarkFont(boolean isDarkFont, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
         mBarParams.statusBarDarkFont = isDarkFont;
-        if (!isDarkFont) {
-            mBarParams.flymeOSStatusBarFontColor = 0;
-        }
-        if (isSupportStatusBarDarkFont()) {
-            mBarParams.statusBarAlpha = 0;
-        } else {
+        if (isDarkFont && !isSupportStatusBarDarkFont()) {
             mBarParams.statusBarAlpha = statusAlpha;
+        } else {
+            mBarParams.flymeOSStatusBarFontColor = 0;
+            mBarParams.statusBarAlpha = 0f;
         }
         return this;
     }
@@ -1108,10 +1175,10 @@ public class ImmersionBar {
      */
     public ImmersionBar navigationBarDarkIcon(boolean isDarkIcon, @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
         mBarParams.navigationBarDarkIcon = isDarkIcon;
-        if (isSupportNavigationIconDark()) {
-            mBarParams.navigationBarAlpha = 0;
-        } else {
+        if (isDarkIcon && !isSupportNavigationIconDark()) {
             mBarParams.navigationBarAlpha = navigationAlpha;
+        } else {
+            mBarParams.navigationBarAlpha = 0f;
         }
         return this;
     }
@@ -1160,7 +1227,7 @@ public class ImmersionBar {
      */
     public ImmersionBar hideBar(BarHide barHide) {
         mBarParams.barHide = barHide;
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_1()) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_x()) {
             if ((mBarParams.barHide == BarHide.FLAG_HIDE_NAVIGATION_BAR) ||
                     (mBarParams.barHide == BarHide.FLAG_HIDE_BAR)) {
                 mBarParams.hideNavigationBar = true;
@@ -1632,7 +1699,6 @@ public class ImmersionBar {
      */
     private void updateBarParams() {
         adjustDarkModeParams();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //是否可以修改emui3系列手机导航栏
             if (OSUtils.isEMUI3_x() && mBarParams.navigationBarWithKitkatEnable) {
@@ -1657,7 +1723,7 @@ public class ImmersionBar {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //防止系统栏隐藏时内容区域大小发生变化
             int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_x()) {
                 //适配刘海屏
                 fitsNotchScreen();
                 //初始化5.0以上，包含5.0
@@ -1760,7 +1826,7 @@ public class ImmersionBar {
         //创建一个假的状态栏
         setupStatusBarView();
         //判断是否存在导航栏，是否禁止设置导航栏
-        if (mBarConfig.hasNavigationBar() || OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) {
+        if (mBarConfig.hasNavigationBar() || OSUtils.isEMUI3_x()) {
             if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
                 //透明导航栏，设置这个，如果有导航栏，底部布局会被导航栏遮住
                 mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -1836,10 +1902,13 @@ public class ImmersionBar {
      * 调整深色亮色模式参数
      */
     private void adjustDarkModeParams() {
-        if (mBarParams.autoDarkModeEnable) {
-            int boundaryColor = 0xFFBABABA;
-            statusBarDarkFont(mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > boundaryColor);
-            navigationBarDarkIcon(mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > boundaryColor);
+        if (mBarParams.autoStatusBarDarkModeEnable) {
+            boolean statusBarDarkFont = mBarParams.statusBarColor != Color.TRANSPARENT && mBarParams.statusBarColor > BOUNDARY_COLOR;
+            statusBarDarkFont(statusBarDarkFont, mBarParams.autoStatusBarDarkModeAlpha);
+        }
+        if (mBarParams.autoNavigationBarDarkModeEnable) {
+            boolean navigationBarDarkIcon = mBarParams.navigationBarColor != Color.TRANSPARENT && mBarParams.navigationBarColor > BOUNDARY_COLOR;
+            navigationBarDarkIcon(navigationBarDarkIcon, mBarParams.autoNavigationBarDarkModeAlpha);
         }
     }
 
@@ -1879,7 +1948,7 @@ public class ImmersionBar {
      * 修正界面显示
      */
     private void fitsWindows() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_x()) {
             //android 5.0以上解决状态栏和布局重叠问题
             fitsWindowsAboveLOLLIPOP();
         } else {

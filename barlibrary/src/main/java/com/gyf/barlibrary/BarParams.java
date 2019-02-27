@@ -13,7 +13,7 @@ import java.util.Map;
  * 沉浸式参数信息
  *
  * @author geyifeng
- * @date 2017/5/9
+ * @date 2017 /5/9
  */
 public class BarParams implements Cloneable {
     /**
@@ -29,6 +29,9 @@ public class BarParams implements Cloneable {
     @ColorInt
     int navigationBarColor = Color.BLACK;
 
+    /**
+     * The Default navigation bar color.
+     */
     int defaultNavigationBarColor = Color.BLACK;
     /**
      * 状态栏透明度
@@ -68,12 +71,29 @@ public class BarParams implements Cloneable {
      * The Navigation bar dark icon.
      */
     boolean navigationBarDarkIcon = false;
+    /**
+     * 是否启用 自动根据StatusBar颜色调整深色模式与亮色模式
+     * The Auto status bar dark mode enable.
+     */
+    boolean autoStatusBarDarkModeEnable = false;
 
     /**
-     * 是否启用 自动根据StatusBar和NavigationBar颜色调整深色模式与亮色模式
-     * Auto Dark font.
+     * 是否启用 自动根据NavigationBar颜色调整深色模式与亮色模式
+     * The Auto navigation bar dark mode enable.
      */
-    boolean autoDarkModeEnable = false;
+    boolean autoNavigationBarDarkModeEnable = false;
+
+    /**
+     * The Auto status bar dark mode alpha.
+     */
+    @FloatRange(from = 0f, to = 1f)
+    float autoStatusBarDarkModeAlpha = 0.0f;
+
+    /**
+     * The Auto navigation bar dark mode alpha.
+     */
+    @FloatRange(from = 0f, to = 1f)
+    float autoNavigationBarDarkModeAlpha = 0.0f;
 
     /**
      * 是否可以修改状态栏颜色
@@ -186,8 +206,7 @@ public class BarParams implements Cloneable {
         BarParams barParams = null;
         try {
             barParams = (BarParams) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+        } catch (CloneNotSupportedException ignored) {
         }
         return barParams;
     }

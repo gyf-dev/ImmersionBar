@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick({R.id.btn_pic_color, R.id.btn_pic, R.id.btn_color, R.id.btn_shape, R.id.btn_swipe_back, R.id.btn_fragment,
-            R.id.btn_dialog, R.id.btn_drawer, R.id.btn_tab, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
+            R.id.btn_dialog, R.id.btn_drawer, R.id.btn_tab, R.id.btn_tab_two, R.id.btn_coordinator, R.id.btn_web, R.id.btn_action_bar, R.id.btn_flyme, R.id.btn_over,
             R.id.btn_key_board, R.id.btn_all_edit, R.id.btn_login, R.id.btn_white_status_bar, R.id.btn_auto_status_font, R.id.btn_status_hide, R.id.btn_navigation_hide,
             R.id.btn_bar_hide, R.id.btn_bar_show, R.id.btn_full, R.id.btn_bar_font_dark, R.id.btn_bar_font_light, R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
@@ -93,6 +93,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.btn_tab:
                 intent = new Intent(this, TabLayoutActivity.class);
+                break;
+            case R.id.btn_tab_two:
+                intent = new Intent(this, TabLayout2Activity.class);
                 break;
             case R.id.btn_web:
                 intent = new Intent(this, WebActivity.class);

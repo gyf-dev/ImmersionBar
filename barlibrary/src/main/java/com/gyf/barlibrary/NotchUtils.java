@@ -211,6 +211,10 @@ public class NotchUtils {
      * @return the boolean
      */
     private static boolean hasNotchAtOPPO(Context context) {
-        return context.getPackageManager().hasSystemFeature(NOTCH_OPPO);
+        try {
+            return context.getPackageManager().hasSystemFeature(NOTCH_OPPO);
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 }

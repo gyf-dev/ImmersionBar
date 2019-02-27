@@ -89,6 +89,11 @@
                     android:text="结合TabLayout使用" />
 
                 <Button
+                    android:id="@+id/btn_tab_two"
+                    style="@style/btn"
+                    android:text="结合TabLayout使用(二)" />
+
+                <Button
                     android:id="@+id/btn_web"
                     style="@style/btn"
                     android:text="结合WebView使用" />
@@ -128,6 +133,7 @@
                     android:id="@+id/btn_white_status_bar"
                     style="@style/btn"
                     android:text="解决白色状态栏问题" />
+
                 <Button
                     android:id="@+id/btn_auto_status_font"
                     style="@style/btn"

@@ -9,7 +9,7 @@
 
 - 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta15'
+   implementation 'com.gyf.immersionbar:immersionbar:2.3.3'
    ```
 - 2.3.0以下版本
    ```groovy
@@ -18,13 +18,13 @@
 
 >eclipse
 
-[immersionbar-2.3.3-beta15.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3-beta15.aar) 
+[immersionbar-2.3.3.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3.aar) 
 
 ## 版本说明
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [点我下载immersionBar-2.3.3-beta15.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3-beta15.apk) 
+### [点我下载immersionBar-2.3.3.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3.apk) 
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
@@ -88,6 +88,9 @@
                  .barAlpha(0.3f)  //状态栏和导航栏透明度，不写默认0.0f
                  .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
                  .navigationBarDarkIcon(true) //导航栏图标是深色，不写默认为亮色
+                 .autoDarkModeEnable(true) //自动状态栏字体和导航栏图标变色，必须指定状态栏颜色和导航栏颜色才可以自动变色哦
+                 .autoStatusBarDarkModeEnable(true,0.2f) //自动状态栏字体变色，必须指定状态栏颜色才可以自动变色哦
+                 .autoNavigationBarDarkModeEnable(true,0.2f) //自动导航栏图标变色，必须指定导航栏颜色才可以自动变色哦
                  .flymeOSStatusBarFontColor(R.color.btn3)  //修改flyme OS状态栏字体颜色
                  .fullScreen(true)      //有导航栏的情况下，activity全屏显示，也就是activity最下面被导航栏覆盖，不写默认非全屏
                  .hideBar(BarHide.FLAG_HIDE_BAR)  //隐藏状态栏或导航栏或两者，不写默认不隐藏
@@ -395,6 +398,7 @@
 ## 混淆规则(proguard-rules.pro)
    ```
     -keep class com.gyf.barlibrary.* {*;} 
+    -dontwarn com.gyf.barlibrary.**
    ```
 
 ## 效果图 ##
@@ -418,5 +422,3 @@
 
 ## 联系我 ##
 - QQ群 314360549（问题交流）
-- WeChat(微信)
-<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/wechat.JPG"/>

@@ -25,7 +25,7 @@ publish {
     userOrg = 'geyifeng'
     groupId = 'com.gyf.immersionbar'
     artifactId = 'immersionbar'
-    publishVersion = '2.3.3-beta15'
+    publishVersion = '2.3.3'
     desc = 'Android bar management'
     website = 'https://github.com/gyf-dev/ImmersionBar'
 }

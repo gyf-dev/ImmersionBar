@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.design.animation.ArgbEvaluatorCompat;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
@@ -20,10 +21,12 @@ import butterknife.BindView;
 public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.seek_bar)
-    SeekBar seek_bar;
+    SeekBar seekBar;
 
     @BindView(R.id.toolbar)
     View toolbar;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     @Override
     protected int getLayoutId() {
@@ -33,30 +36,32 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
     @Override
     protected void initImmersionBar() {
         ImmersionBar.with(this)
-                .autoDarkModeEnable(true)
-                .titleBar(toolbar)
+                .fitsSystemWindows(true)
                 .statusBarColorInt(Color.BLACK)
                 .navigationBarColorInt(Color.BLACK)
-                .addViewSupportTransformColor(toolbar).init();
+                .autoDarkModeEnable(true, 0.2f)
+                .init();
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void setListener() {
-        seek_bar.setOnSeekBarChangeListener(this);
+        seekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float fraction = (float) progress / 100;
-        final Integer barColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
+        Integer barColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
+        Integer textColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.WHITE, Color.BLACK);
+
+        toolbar.setBackgroundColor(barColor);
+        tvTitle.setTextColor(textColor);
 
         ImmersionBar.with(this)
-                .autoDarkModeEnable(true)
-                .titleBar(toolbar)
                 .statusBarColorInt(barColor)
                 .navigationBarColorInt(barColor)
-                .addViewSupportTransformColor(toolbar).init();
+                .init();
     }
 
     @Override

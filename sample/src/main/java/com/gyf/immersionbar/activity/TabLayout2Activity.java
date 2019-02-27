@@ -1,9 +1,10 @@
 package com.gyf.immersionbar.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.immersionbar.R;
@@ -16,9 +17,9 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  * @author geyifeng
- * @date 2017/7/4
+ * @date 2017/5/30
  */
-public class TabLayoutActivity extends SwipeBackActivity {
+public class TabLayout2Activity extends SwipeBackActivity {
 
     private List<String> mData;
     private TabAdapter mAdapter;
@@ -26,12 +27,12 @@ public class TabLayoutActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab_layout);
+        setContentView(R.layout.activity_tab_layout_two);
         initData(1);
         initView();
         ImmersionBar.with(this)
                 .statusBarView(R.id.view)
-                .navigationBarColor(R.color.cool_green_normal)
+                .navigationBarEnable(false)
                 .init();
     }
 
@@ -44,9 +45,22 @@ public class TabLayoutActivity extends SwipeBackActivity {
 
     private void initView() {
         //设置ToolBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        //setSupportActionBar(toolbar);//替换系统的actionBar
+        ImmersionBar.setTitleBar(this, findViewById(R.id.toolbar));
+
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsingToolbarLayout.post(() -> {
+            int offHeight = collapsingToolbarLayout.getHeight() - ImmersionBar.getStatusBarHeight(this);
+            appBarLayout.addOnOffsetChangedListener((appBarLayout1, i) -> {
+                if (Math.abs(i) >= offHeight) {
+                    ImmersionBar.with(this).statusBarDarkFont(true, 0.2f).init();
+                } else {
+                    ImmersionBar.with(this).statusBarDarkFont(false).init();
+                }
+            });
+        });
+
 
         //设置TabLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
