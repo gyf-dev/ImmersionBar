@@ -163,12 +163,10 @@
 - ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/dialog/BaseDialogFragment.java)这个类
    ```java
        ImmersionBar.with(this).init();
-      
    ```
 - ②其他dialog，关闭dialog的时候必须调用销毁方法
     ```java
         ImmersionBar.with(this, dialog).init();
-         
     ```
     销毁方法：
     
