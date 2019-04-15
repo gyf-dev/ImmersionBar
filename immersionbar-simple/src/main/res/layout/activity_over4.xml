@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker_gray"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/status_bar_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary" />
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:title="方法四"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="我是底部" />
+</LinearLayout>

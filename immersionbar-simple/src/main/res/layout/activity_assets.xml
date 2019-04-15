@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f9f9f9"
+    android:orientation="vertical">
+
+    <!--**************title start****************-->
+    <RelativeLayout
+        android:id="@+id/mTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#F56A3D">
+
+        <LinearLayout
+            android:id="@+id/item_title_layout_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="15dp">
+
+            <ImageView
+                android:id="@+id/item_title_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/ic_arrow" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/home_title_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="资产管理"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/item_title_layout_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingRight="15dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/item_title_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/ic_arrow" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <!--**************title end****************-->
+
+    <LinearLayout
+        android:id="@+id/main_assets_house"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingTop="17dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="17dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="13dp"
+            android:src="@drawable/ic_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的房屋"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/ic_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_assets_car"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingTop="17dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="17dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="13dp"
+            android:src="@drawable/ic_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的爱车"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/ic_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_assets_car_parking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingTop="17dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="17dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="13dp"
+            android:src="@drawable/ic_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的车位"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/ic_arrow" />
+    </LinearLayout>
+
+</LinearLayout>

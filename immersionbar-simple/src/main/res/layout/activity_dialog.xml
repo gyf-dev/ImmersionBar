@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
+        app:title="结合Dialog使用"
+        app:titleTextColor="@android:color/white" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="以下将以两种形式弹出dialog，当以AlertDialog形式弹出dialog，在安卓4.4与emui3.1设备上keyboardEnable方法无法解决底部输入框与沉浸式问题"
+                android:textColor="@color/Blue"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="①、以下是以DialogFragment的形式"
+                android:textColor="@color/btn9"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_full_fragment"
+                    style="@style/btn"
+                    android:text="全屏" />
+
+                <Button
+                    android:id="@+id/btn_top_fragment"
+                    style="@style/btn"
+                    android:text="顶部半屏" />
+
+                <Button
+                    android:id="@+id/btn_bottom_fragment"
+                    style="@style/btn"
+                    android:text="底部半屏" />
+
+                <Button
+                    android:id="@+id/btn_left_fragment"
+                    style="@style/btn"
+                    android:text="左边半屏" />
+
+                <Button
+                    android:id="@+id/btn_right_fragment"
+                    style="@style/btn"
+                    android:text="右边半屏" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="②、以下是以AlertDialog的形式"
+                android:textColor="@color/btn11"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_full"
+                    style="@style/btn"
+                    android:text="全屏" />
+
+                <Button
+                    android:id="@+id/btn_top"
+                    style="@style/btn"
+                    android:text="顶部半屏" />
+
+                <Button
+                    android:id="@+id/btn_bottom"
+                    style="@style/btn"
+                    android:text="底部半屏" />
+
+                <Button
+                    android:id="@+id/btn_left"
+                    style="@style/btn"
+                    android:text="左边半屏" />
+
+                <Button
+                    android:id="@+id/btn_right"
+                    style="@style/btn"
+                    android:text="右边半屏" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="我是底部" />
+</LinearLayout>

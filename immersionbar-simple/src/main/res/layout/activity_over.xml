@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker_gray"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:title="解决布局顶部和状态栏重叠问题"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_one"
+                style="@style/btn"
+                android:text="方法一" />
+
+            <Button
+                android:id="@+id/btn_two"
+                style="@style/btn"
+                android:text="方法二" />
+
+            <Button
+                android:id="@+id/btn_three"
+                style="@style/btn"
+                android:text="方法三" />
+
+            <Button
+                android:id="@+id/btn_four"
+                style="@style/btn"
+                android:text="方法四" />
+
+            <Button
+                android:id="@+id/btn_five"
+                style="@style/btn"
+                android:text="方法五" />
+
+            <Button
+                android:id="@+id/btn_six"
+                style="@style/btn"
+                android:text="方法六" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

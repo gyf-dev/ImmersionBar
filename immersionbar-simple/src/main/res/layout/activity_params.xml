@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/btn13"
+        app:title="系统一些参数信息"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/mTvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="StatusBar Height:"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvHasNav"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="是否有NavigationBar？"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvNav"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="NavigationBar Height:"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvAction"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="ActionBar Height:"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvHasNotch"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="是否有刘海屏？"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvInsets"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="WindowInsetTop："
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvFits"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="布局是否设置了fitsSystemWindows为true？"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvStatusDark"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="是否支持状态栏字体变色？"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/mTvNavigationDark"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="是否支持导航栏图标变色？"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/mBtnStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:background="@color/btn13"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="使用静态方法动态显示隐藏状态栏"
+        android:textColor="@android:color/white" />
+</LinearLayout>

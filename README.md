@@ -6,25 +6,20 @@
 
 ## 使用 
 > android studio
-
-- 2.3.1+版本 (由于之前账户密码忘记，所以只能重新更改依赖路径)
    ```groovy
-   implementation 'com.gyf.immersionbar:immersionbar:2.3.3'
+   // 基础依赖包
+   implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta01'
+   // fragment快速实现
+   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta01'
+   // kotlin扩展
+   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0-beta01'
    ```
-- 2.3.0以下版本
-   ```groovy
-   implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
-   ```
-
->eclipse
-
-[immersionbar-2.3.3.aar](https://github.com/gyf-dev/ImmersionBar/blob/master/jar/immersionbar-2.3.3.aar) 
 
 ## 版本说明
 ### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-### [点我下载immersionBar-2.3.3.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-2.3.3.apk) 
+### [点我下载immersionBar-3.0.0beta01.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta01.apk) 
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
@@ -68,7 +63,7 @@
   
 ## 用法
 ### 初始化
-- 基础用法（已经可以满足日常沉浸式）
+- 基础用法
 
     ```java
     ImmersionBar.with(this).init();
@@ -119,67 +114,33 @@
                            LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
                        }
                   })
+                 .setOnNavigationBarListener(onNavigationBarListener)
                  .init();  //必须调用方可沉浸式
     ```
-    
-### 关闭销毁
-- 在activity的onDestroy方法中执行
+## 在Activity中实现沉浸式
 
-    ```java
-    ImmersionBar.with(this).destroy(); //必须调用该方法，防止内存泄漏
-    ```
-	
-## 建议
-- 建议在BaseActivity中初始化和销毁,可以参看demo中[BaseActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/activity/BaseActivity.java)
+- java用法
 
-    ```java
-    public class BaseActivity extends AppCompatActivity {
+   ```java
+    ImmersionBar.with(this).init();
+   ```
+- kotlin用法
+ 
+   ```kotlin
+    immersionBar {
+        statusBarColor(R.color.colorPrimary) 
+        navigationBarColor(R.color.colorPrimary)
+    }
+   ```
   
-         @Override
-         protected void onCreate(@Nullable Bundle savedInstanceState) {
-             super.onCreate(savedInstanceState);
-             // 所有子类都将继承这些相同的属性,请在设置界面之后设置
-             ImmersionBar.with(this).init();  
-         }
-       
-         @Override
-         protected void onResume() {
-             super.onResume();
-             // 非必加
-             // 如果你的app可以横竖屏切换，适配了华为emui3系列系统手机，并且navigationBarWithEMUI3Enable为true，
-             // 请在onResume方法里添加这句代码（同时满足这三个条件才需要加上代码哦：1、横竖屏可以切换；2、华为emui3系列系统手机；3、navigationBarWithEMUI3Enable为true）
-             // 否则请忽略
-             if (OSUtils.isEMUI3_x()) {
-                 ImmersionBar.with(this).init();   
-             }   
-         }
-     
-         @Override
-         protected void onDestroy() {
-             super.onDestroy();
-             // 必须调用该方法，防止内存泄漏
-             ImmersionBar.with(this).destroy();  
-         }
-       
-        @Override
-         protected void onConfigurationChanged(Configuration newConfig) {
-             super.onConfigurationChanged(newConfig);
-             // 非必加
-             // 如果你的app可以横竖屏切换，适配了4.4或者华为emui3.1系统手机，并且navigationBarWithKitkatEnable为true，
-             // 请务必在onConfigurationChanged方法里添加如下代码（同时满足这三个条件才需要加上代码哦：1、横竖屏可以切换；2、android4.4或者华为emui3.1系统手机；3、navigationBarWithKitkatEnable为true）
-             // 否则请忽略
-             ImmersionBar.with(this).init();   
-         }
-     }
-    ```
 
 ## 在Fragment中实现沉浸式
 
 #### 在Fragment使用ImmersionBar
-  - 第一种，你的Fragment直接继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled返回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
-  - 第二种，如果你的Fragment不能继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)类，请参考[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)实现[SimpleImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionOwner.java)接口，或者参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
+  - 第一种，你的Fragment直接继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/immersionbar/components/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/immersionbar/components/ImmersionFragment.java)类，在initImmersionBar方法中实现沉浸式代码，只有当immersionBarEnabled返回为true才可以走initImmersionBar方法哦，不过immersionBarEnabled默认返回已经为true了，如果当前Fragment不想走沉浸式方法，请将immersionBarEnabled设置为false
+  - 第二种，如果你的Fragment不能继承[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/immersionbar/components/SimpleImmersionFragment.java)或者[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/immersionbar/components/ImmersionFragment.java)类，请参考[SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)实现[SimpleImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionOwner.java)接口，或者参考[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)实现[ImmersionOwner](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionOwner.java)接口
   
-  > [SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)和[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/ImmersionFragment.java)区别是什么？
+  > [SimpleImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/barlibrary/SimpleImmersionFragment.java)和[ImmersionFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/barlibrary/src/main/java/com/gyf/immersionbar/components/ImmersionFragment.java)区别是什么？
     
    | 方法名字 | SimpleImmersionFragment | ImmersionFragment |
    | :------: | :------: | :------: |
@@ -198,18 +159,22 @@
 
 ## 在Dialog中实现沉浸式，具体实现参考demo
 - ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/sample/src/main/java/com/gyf/immersionbar/fragment/dialog/BaseDialogFragment.java)这个类
-
    ```java
          ImmersionBar.with(this).init();
       
    ```
-- ②其他dialog
+- ②其他dialog，关闭dialog的时候必须调用销毁方法
     ```java
          ImmersionBar.with(this, dialog).init();
          
     ```
-    
-   注意：在dialog使用，当销毁dialog同时，别忘了调用ImmersionBar的destroy方法了
+    销毁方法：
+    ```java
+      ImmersionBar.destroy(this, mAlertDialog);
+    ```
+    ```kotlin
+          destroyImmersionBar(mAlertDialog)
+    ```
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
 
@@ -311,7 +276,7 @@
 - ⑤ 使用ImmersionBar的titleBar(View view)方法，原理是设置paddingTop
     ```java
              ImmersionBar.with(this)
-                   .titleBar(view) //可以为任意view，如果是自定义xml实现标题栏的话，最外层节点不能为RelativeLayout
+                   .titleBar(view) //可以为任意view，如果是自定义xml实现标题栏的话，标题栏根节点不能为RelativeLayout或者ConstraintLayout，以及其子类
                    .init();
              //或者
              //ImmersionBar.setTitleBar(this, view);
@@ -347,7 +312,7 @@
                      .statusBarDarkFont(true, 0.2f) //原理：如果当前设备支持状态栏字体变色，会设置状态栏字体为黑色，如果当前设备不支持状态栏字体变色，会使当前状态栏加上透明度，否则不执行透明度
                      .init();
    ```
-<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/whiteStatusBar.png"/>
+<img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/maester/ImmersionBar/whiteStatusBar.png"/>
 
 ## 关于结合今日头条屏幕适配
 - 有些小伙伴使用之后，状态栏与标题栏之间仍然会有白色空隙，请升级为2.3.2-beta02以上版本
@@ -397,8 +362,8 @@
     
 ## 混淆规则(proguard-rules.pro)
    ```
-    -keep class com.gyf.barlibrary.* {*;} 
-    -dontwarn com.gyf.barlibrary.**
+    -keep class com.gyf.immersionbar.* {*;} 
+    -dontwarn com.gyf.immersionbar.**
    ```
 
 ## 效果图 ##
