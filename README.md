@@ -116,7 +116,7 @@
                            LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
                        }
                   })
-                 .setOnNavigationBarListener(onNavigationBarListener)
+                 .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，目前只支持华为和小米手机
                  .init();  //必须调用方可沉浸式
     ```
 ## 在Activity中实现沉浸式
@@ -162,22 +162,23 @@
 ## 在Dialog中实现沉浸式，具体实现参考demo
 - ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/dialog/BaseDialogFragment.java)这个类
    ```java
-         ImmersionBar.with(this).init();
+       ImmersionBar.with(this).init();
       
    ```
 - ②其他dialog，关闭dialog的时候必须调用销毁方法
     ```java
-         ImmersionBar.with(this, dialog).init();
+        ImmersionBar.with(this, dialog).init();
          
     ```
     销毁方法：
+    
     java中
     ```java
-      ImmersionBar.destroy(this, mAlertDialog);
+        ImmersionBar.destroy(this, mAlertDialog);
     ```
     kotlin中
     ```kotlin
-          destroyImmersionBar(mAlertDialog)
+        destroyImmersionBar(mAlertDialog)
     ```
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
@@ -317,9 +318,6 @@
                      .init();
    ```
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/maester/ImmersionBar/whiteStatusBar.png"/>
-
-## 关于结合今日头条屏幕适配
-- 有些小伙伴使用之后，状态栏与标题栏之间仍然会有白色空隙，请升级为2.3.2-beta02以上版本
     
 ## 状态栏和导航栏其它方法
 	
