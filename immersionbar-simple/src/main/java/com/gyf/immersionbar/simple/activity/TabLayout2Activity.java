@@ -5,10 +5,14 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.TabAdapter;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,9 @@ public class TabLayout2Activity extends SwipeBackActivity {
                 .navigationBarColor(android.R.color.white)
                 .autoDarkModeEnable(true, 0.2f)
                 .init();
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into((ImageView) findViewById(R.id.mIv));
     }
 
     private void initData(int pager) {

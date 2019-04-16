@@ -1,6 +1,11 @@
 package com.gyf.immersionbar.simple;
 
+import com.apkfuns.logutils.LogUtils;
+import com.gyf.immersionbar.simple.utils.Utils;
+
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -13,5 +18,9 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+        ArrayList<String> pics = Utils.getPics();
+        for (int i = 0; i < pics.size(); i++) {
+            System.out.println(pics.get(i));
+        }
     }
 }

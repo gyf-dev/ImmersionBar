@@ -1,8 +1,15 @@
 package com.gyf.immersionbar.simple.fragment.two;
 
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.fragment.BaseFragment;
+import com.gyf.immersionbar.simple.utils.Utils;
+
+import butterknife.BindView;
 
 /**
  * @author geyifeng
@@ -10,6 +17,9 @@ import com.gyf.immersionbar.simple.fragment.BaseFragment;
  */
 
 public class HomeTwoFragment extends BaseFragment {
+
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     @Override
     protected int getLayoutId() {
@@ -23,5 +33,13 @@ public class HomeTwoFragment extends BaseFragment {
                 .navigationBarColor(R.color.colorPrimary)
                 .keyboardEnable(false)
                 .init();
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(mIv);
     }
 }

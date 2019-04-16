@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.apkfuns.logutils.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
@@ -21,6 +22,7 @@ import com.gyf.immersionbar.simple.activity.FragmentOneActivity;
 import com.gyf.immersionbar.simple.adapter.OneAdapter;
 import com.gyf.immersionbar.simple.fragment.BaseFragment;
 import com.gyf.immersionbar.simple.utils.GlideImageLoader;
+import com.gyf.immersionbar.simple.utils.Utils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.youth.banner.Banner;
@@ -59,10 +61,7 @@ public class HomeOneFragment extends BaseFragment {
         for (int i = 1; i <= 20; i++) {
             mItemList.add("item" + i);
         }
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
-        mImages.add("http://desk.zol.com.cn/showpic/1024x768_63850_14.html");
+        mImages = Utils.getPics();
     }
 
     @Override

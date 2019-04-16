@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBar;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 
@@ -22,6 +26,8 @@ public class ActionBarActivity extends BaseActivity {
     Button btn;
     @BindView(R.id.text)
     TextView text;
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     @Override
     protected int getLayoutId() {
@@ -42,6 +48,9 @@ public class ActionBarActivity extends BaseActivity {
             actionBar.setTitle("结合actionBar使用");
         }
         text.setText("上面图片被actionBar遮挡住了,我想使布局从actionBar下面开始绘制，怎么办？");
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(mIv);
     }
 
     @SuppressLint("SetTextI18n")

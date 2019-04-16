@@ -4,11 +4,15 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Window;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * @author geyifeng
  * @date 2019/4/14 4:59 PM
  */
 public class Utils {
+
     public static Integer[] getWidthAndHeight(Window window) {
         Integer[] integer = new Integer[2];
         DisplayMetrics dm = new DisplayMetrics();
@@ -21,4 +25,29 @@ public class Utils {
         integer[1] = dm.heightPixels;
         return integer;
     }
+
+
+    public static String getPic() {
+        Random random = new Random();
+        return "http://106.14.135.179/ImmersionBar/" + random.nextInt(40) + ".jpg";
+    }
+
+    public static ArrayList<String> getPics() {
+        ArrayList<String> pics = new ArrayList<>();
+        Random random = new Random();
+
+        do {
+            String s = "http://106.14.135.179/ImmersionBar/" + random.nextInt(40) + ".jpg";
+            if (!pics.contains(s)) {
+                pics.add(s);
+            }
+        } while (pics.size() < 4);
+        return pics;
+    }
+
+    public static String getPhonePic() {
+        Random random = new Random();
+        return "http://106.14.135.179/ImmersionBar/phone/" + random.nextInt(40) + ".jpeg";
+    }
+
 }

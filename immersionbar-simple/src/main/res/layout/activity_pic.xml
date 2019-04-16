@@ -7,11 +7,10 @@
     android:background="@android:color/darker_gray">
 
     <ImageView
+        android:id="@+id/mIv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/timg" />
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/text_view"
@@ -34,6 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:title="全屏图片"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white" />
 
 </FrameLayout>

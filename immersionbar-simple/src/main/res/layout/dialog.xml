@@ -10,10 +10,10 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/mIv"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/test" />
+            android:scaleType="centerCrop" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

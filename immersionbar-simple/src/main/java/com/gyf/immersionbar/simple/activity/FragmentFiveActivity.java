@@ -22,6 +22,7 @@ public class FragmentFiveActivity extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragmentation);
+        ImmersionBar.with(this).init();
         if (findFragment(MainFragment.class) == null) {
             loadRootFragment(R.id.content, MainFragment.newInstance());
         }

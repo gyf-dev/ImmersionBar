@@ -2,10 +2,14 @@ package com.gyf.immersionbar.simple.fragment.five;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 
@@ -14,8 +18,11 @@ import butterknife.BindView;
  * @date 2017/7/20
  */
 public class HomeFiveFragment extends BaseFiveFragment {
+
     @BindView(R.id.text)
     TextView text;
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     public static HomeFiveFragment newInstance() {
         Bundle args = new Bundle();
@@ -43,5 +50,8 @@ public class HomeFiveFragment extends BaseFiveFragment {
                 "，建议使用readme里第四种或者第五种方法解决，参考BaseFiveFragment的onViewCreated方法；" +
                 "如果使用fitsSystemWindows(true)方法解决布局重叠问题，由于是采用单Activity多Fragment实现交互，Fragment之间切换就没那么丝滑了，" +
                 "如果要在Fragment单独使用沉浸式，请在onSupportVisible方法中实现。参考BaseFiveFragment的onSupportVisible方法");
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(mIv);
     }
 }

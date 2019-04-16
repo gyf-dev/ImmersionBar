@@ -2,8 +2,10 @@ package com.gyf.immersionbar.simple.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -13,11 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.BuildConfig;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,7 +33,7 @@ import jp.wasabeef.blurry.Blurry;
 /**
  * @author geyifeng
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener {
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -46,16 +53,23 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(R.id.toolbar).navigationBarColor(R.color.colorPrimary).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).init();
+    }
+
+    @Override
+    protected void setListener() {
+        super.setListener();
+        drawer.addDrawerListener(this);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
-        Blurry.with(this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(ivBg);
+        setSidePic();
         tvVersion.setText("当前版本：" + BuildConfig.VERSION_NAME);
     }
 
@@ -190,5 +204,43 @@ public class MainActivity extends BaseActivity {
         if (intent != null) {
             startActivity(intent);
         }
+    }
+
+    private void setSidePic() {
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(new BitmapImageViewTarget(ivBg) {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        super.onResourceReady(resource, transition);
+                        Blurry.with(MainActivity.this).from(resource).into(ivBg);
+                    }
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        drawer.removeDrawerListener(this);
+    }
+
+    @Override
+    public void onDrawerSlide(@NonNull View view, float v) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(@NonNull View view) {
+
+    }
+
+    @Override
+    public void onDrawerClosed(@NonNull View view) {
+        setSidePic();
+    }
+
+    @Override
+    public void onDrawerStateChanged(int i) {
+
     }
 }

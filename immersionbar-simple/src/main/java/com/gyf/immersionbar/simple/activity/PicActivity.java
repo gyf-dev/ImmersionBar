@@ -4,11 +4,15 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +29,8 @@ public class PicActivity extends SwipeBackActivity {
     SeekBar seekBar;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +41,9 @@ public class PicActivity extends SwipeBackActivity {
                 .titleBar(toolbar, false)
                 .transparentBar()
                 .init();
+        Glide.with(this).asBitmap().load(Utils.getPhonePic())
+                .apply(new RequestOptions().placeholder(R.mipmap.pic_all))
+                .into(mIv);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override

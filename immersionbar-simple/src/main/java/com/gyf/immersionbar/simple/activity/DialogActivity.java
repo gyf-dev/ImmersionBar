@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.fragment.dialog.BottomDialogFragment;
@@ -91,6 +94,10 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
         mAlertDialog.show();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog, null);
         Toolbar toolbar = dialogView.findViewById(R.id.toolbar);
+        ImageView iv = dialogView.findViewById(R.id.mIv);
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(iv);
         mAlertDialog.setContentView(dialogView);
         mDialogWindow = mAlertDialog.getWindow();
         if (mDialogWindow != null) {

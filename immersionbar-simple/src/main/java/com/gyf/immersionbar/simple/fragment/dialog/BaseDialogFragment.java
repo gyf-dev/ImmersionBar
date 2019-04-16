@@ -4,17 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.utils.Utils;
@@ -29,17 +30,10 @@ import butterknife.Unbinder;
  * @date 2017 /8/26
  */
 public abstract class BaseDialogFragment extends DialogFragment {
+
     protected Activity mActivity;
     protected View mRootView;
     protected Window mWindow;
-    /**
-     * 屏幕宽度
-     */
-    protected int mWidth;
-    /**
-     * 屏幕高度
-     */
-    protected int mHeight;
     private Unbinder unbinder;
     public Integer[] mWidthAndHeight;
 
@@ -133,7 +127,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * view与数据绑定
      */
     protected void initView() {
-
+        ImageView iv = mRootView.findViewById(R.id.mIv);
+        if (iv != null) {
+            Glide.with(this).asBitmap().load(Utils.getPic())
+                    .apply(new RequestOptions().placeholder(R.mipmap.test))
+                    .into(iv);
+        }
     }
 
     /**

@@ -20,10 +20,10 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
+                android:id="@+id/mIv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/test" />
+                android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"

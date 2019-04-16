@@ -1,15 +1,25 @@
 package com.gyf.immersionbar.simple.activity;
 
+import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * @author gyf
@@ -21,6 +31,8 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     Toolbar toolbar;
     @BindView(R.id.seek_bar)
     SeekBar seekBar;
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     @Override
     protected int getLayoutId() {
@@ -35,6 +47,14 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
                 .fullScreen(true)
                 .addTag("PicAndColor")
                 .init();
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(mIv);
     }
 
     @Override

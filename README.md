@@ -104,10 +104,6 @@
                  .removeSupportAllView() //移除全部view支持
                  .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为true
                  .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4和emui3.1手机导航栏颜色，默认为true
-                 .fixMarginAtBottom(true)   //已过时，当xml里使用android:fitsSystemWindows="true"属性时,解决4.4和emui3.1手机底部有时会出现多余空白的问题，默认为false，非必须
-                 .addTag("tag")  //给以上设置的参数打标记
-                 .getTag("tag")  //根据tag获得沉浸式参数
-                 .reset()  //重置所以沉浸式参数
                  .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false，还有一个重载方法，可以指定软键盘mode
                  .keyboardMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //单独指定软键盘模式
                  .setOnKeyboardListener(new OnKeyboardListener() {    //软键盘监听回调
@@ -117,6 +113,9 @@
                        }
                   })
                  .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，目前只支持华为和小米手机
+                 .addTag("tag")  //给以上设置的参数打标记
+                 .getTag("tag")  //根据tag获得沉浸式参数
+                 .reset()  //重置所以沉浸式参数
                  .init();  //必须调用方可沉浸式
     ```
 ## 在Activity中实现沉浸式
@@ -172,11 +171,11 @@
     
     java中
     ```java
-        ImmersionBar.destroy(this, mAlertDialog);
+        ImmersionBar.destroy(this, dialog);
     ```
     kotlin中
     ```kotlin
-        destroyImmersionBar(mAlertDialog)
+        destroyImmersionBar(dialog)
     ```
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>

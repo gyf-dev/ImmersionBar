@@ -5,10 +5,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
 
@@ -23,6 +27,8 @@ public class CoordinatorActivity extends BaseActivity {
     FloatingActionButton fab;
     @BindView(R.id.text)
     TextView textView;
+    @BindView(R.id.mIv)
+    ImageView mIv;
 
     @Override
     protected int getLayoutId() {
@@ -47,6 +53,9 @@ public class CoordinatorActivity extends BaseActivity {
         textView.setText("关于Snackbar在4.4和emui3.1上高度显示不准确的问题是由于沉浸式使用了系统的" +
                 "WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS或者WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION" +
                 "属性造成的，目前尚不知有什么解决办法");
+        Glide.with(this).asBitmap().load(Utils.getPic())
+                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .into(mIv);
     }
 
     @Override
