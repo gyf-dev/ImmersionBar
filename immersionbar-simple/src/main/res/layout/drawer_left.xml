@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
 
