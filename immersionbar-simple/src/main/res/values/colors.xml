@@ -46,4 +46,6 @@
     <color name="tab_bottom_normal">#999999</color>
     <color name="tab_bottom_selected">#46c01b</color>
     <color name="github_color">#24292E</color>
+
+    <color name="ripple_color_f2f2f2">#33f2f2f2</color>
 </resources>

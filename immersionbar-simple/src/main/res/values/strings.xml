@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">ImmersionBar</string>
+    <string name="text_params">Bar相关参数信息</string>
+    <string name="text_params_kotlin">Bar相关参数信息(kotlin)</string>
+    <string name="text_pic_color">图片状态栏 + 彩色导航栏</string>
+    <string name="text_pic">全屏图片</string>
+    <string name="text_color">彩色状态栏 + 彩色导航栏</string>
+    <string name="text_shape">仿QQ状态栏和标题栏渐变色</string>
+    <string name="text_swipe_back">结合侧滑返回使用</string>
+    <string name="text_fragment">结合fragment使用</string>
+    <string name="text_dialog">结合Dialog使用</string>
+    <string name="text_drawer">结合侧边栏使用</string>
+    <string name="text_coordinator">结合CoordinatorLayout使用</string>
+    <string name="text_tab">结合TabLayout使用</string>
+    <string name="text_tab_two">结合TabLayout使用(二)</string>
+    <string name="text_web">结合WebView使用</string>
+    <string name="text_action_bar">结合ActionBar使用</string>
+    <string name="text_flyme">修改Flyme OS状态栏字体颜色</string>
+    <string name="text_over">解决布局顶部和状态栏重叠问题</string>
+    <string name="text_key_board">解决EditText和软键盘的问题</string>
+    <string name="text_all_edit">界面全是EditText</string>
+    <string name="text_login">登录界面</string>
+    <string name="text_white_bar">解决白色状态栏问题</string>
+    <string name="text_auto_status_font">自动根据状态栏颜色调整字体</string>
+    <string name="text_status_hide">隐藏状态栏</string>
+    <string name="text_navigation_hide">隐藏导航栏</string>
+    <string name="text_bar_hide">隐藏全部</string>
+    <string name="text_bar_show">恢复显示</string>
+    <string name="text_full">有导航栏的情况，Activity全屏显示(fullScreen方法演示)（仔细看\'我是底部\'四个字）</string>
+    <string name="text_bar_font_dark">状态栏字体颜色为深色(android6.0以上或者miuiv6以上或者flymeOS4+)</string>
+    <string name="text_bar_font_light">状态栏字体颜色为亮色（默认就是亮色）</string>
 </resources>

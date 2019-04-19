@@ -89,7 +89,7 @@ public class HomeOneFragment extends BaseFragment {
             mOneAdapter.addHeaderView(headView);
             ViewGroup.LayoutParams bannerParams = banner.getLayoutParams();
             ViewGroup.LayoutParams titleBarParams = mToolbar.getLayoutParams();
-            bannerHeight = bannerParams.height - titleBarParams.height - ImmersionBar.getStatusBarHeight(getActivity());
+            bannerHeight = bannerParams.height - titleBarParams.height - ImmersionBar.getStatusBarHeight(mActivity);
         }
     }
 

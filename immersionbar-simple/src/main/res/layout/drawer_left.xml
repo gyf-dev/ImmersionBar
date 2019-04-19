@@ -59,7 +59,9 @@
             android:id="@+id/ll_github"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/press_bg_trans_f2f2f2"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -87,6 +89,9 @@
             android:id="@+id/ll_jianshu"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/press_bg_trans_f2f2f2"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--水波纹颜色-->
+    <color name="ripple_color_f2f2f2">#f2f2f2</color>
+</resources>

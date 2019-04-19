@@ -1,5 +1,6 @@
 package com.gyf.immersionbar.simple.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,9 +24,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private InputMethodManager mInputMethodManager;
 
+    protected Activity mActivity;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
         setContentView(getLayoutId());
         //绑定控件
         ButterKnife.bind(this);
