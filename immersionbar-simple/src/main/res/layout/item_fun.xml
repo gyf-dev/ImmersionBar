@@ -12,7 +12,10 @@
         android:layout_height="match_parent"
         android:background="@drawable/press_bg_trans_f2f2f2"
         android:gravity="center"
-        android:padding="10dp">
+        android:paddingStart="30dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/ivIcon"
@@ -31,4 +34,21 @@
             android:textSize="14sp" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivFlower"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="-8dp"
+        android:src="@mipmap/icon_flower_1" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@mipmap/icon_label" />
 </android.support.v7.widget.CardView>

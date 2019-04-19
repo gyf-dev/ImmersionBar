@@ -2,6 +2,8 @@ package com.gyf.immersionbar.simple.bean;
 
 import android.graphics.drawable.Drawable;
 
+import com.gyf.immersionbar.simple.utils.Utils;
+
 import java.io.Serializable;
 
 /**
@@ -11,10 +13,12 @@ import java.io.Serializable;
 public class FunBean implements Serializable {
     private String name;
     private Drawable pic;
+    private int flower;
 
     public FunBean(String name, Drawable pic) {
         this.name = name;
         this.pic = pic;
+        this.flower = Utils.getFlower();
     }
 
     public String getName() {
@@ -31,5 +35,9 @@ public class FunBean implements Serializable {
 
     public void setPic(Drawable pic) {
         this.pic = pic;
+    }
+
+    public int getFlower() {
+        return flower;
     }
 }

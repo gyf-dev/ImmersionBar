@@ -205,7 +205,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     if (ImmersionBar.hasNavigationBar(this)) {
                         ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
                     } else {
-                        Toast.makeText(this, "当前设备没有导航栏或者低于4.4系统", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 24:
@@ -223,7 +223,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             ImmersionBar.with(this).fullScreen(true).transparentNavigationBar().init();
                         }
                     } else {
-                        Toast.makeText(this, "当前设备没有导航栏或者低于4.4系统", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 27:

@@ -4,6 +4,8 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Window;
 
+import com.gyf.immersionbar.simple.R;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,6 +50,18 @@ public class Utils {
     public static String getPhonePic() {
         Random random = new Random();
         return "http://106.14.135.179/ImmersionBar/phone/" + random.nextInt(40) + ".jpeg";
+    }
+
+    public static int getFlower() {
+        Random random = new Random();
+        int i = random.nextInt(99);
+        if (i < 33) {
+            return R.mipmap.icon_flower_1;
+        } else if (i < 66) {
+            return R.mipmap.icon_flower_2;
+        } else {
+            return R.mipmap.icon_flower_3;
+        }
     }
 
 }

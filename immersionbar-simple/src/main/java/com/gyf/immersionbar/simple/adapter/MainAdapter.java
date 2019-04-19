@@ -21,6 +21,8 @@ public class MainAdapter extends BaseQuickAdapter<FunBean, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, FunBean item) {
         helper.setText(R.id.tvName, item.getName());
         ImageView ivIcon = helper.getView(R.id.ivIcon);
+        ImageView ivFlower = helper.getView(R.id.ivFlower);
+        ivFlower.setImageResource(item.getFlower());
         Glide.with(mContext).load(item.getPic()).into(ivIcon);
     }
 }
