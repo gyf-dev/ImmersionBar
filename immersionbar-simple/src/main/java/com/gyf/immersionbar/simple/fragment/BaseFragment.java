@@ -27,7 +27,6 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends SimpleImmersionFragment {
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     protected Activity mActivity;
@@ -41,6 +40,12 @@ public abstract class BaseFragment extends SimpleImmersionFragment {
         mActivity = (Activity) context;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initDataBeforeView(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public abstract class BaseFragment extends SimpleImmersionFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
+        toolbar = view.findViewById(R.id.toolbar);
         ImmersionBar.setTitleBar(mActivity, toolbar);
         initData();
         initView();
@@ -62,6 +68,10 @@ public abstract class BaseFragment extends SimpleImmersionFragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    protected void initDataBeforeView(Bundle savedInstanceState) {
+
     }
 
     /**

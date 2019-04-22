@@ -18,7 +18,7 @@ public class FunBean implements Serializable {
     public FunBean(String name, Drawable pic) {
         this.name = name;
         this.pic = pic;
-        this.flower = Utils.getFlower();
+        this.flower = Utils.getFlowerIcon();
     }
 
     public String getName() {

@@ -1,5 +1,8 @@
 package com.gyf.immersionbar.simple.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Window;
@@ -47,12 +50,12 @@ public class Utils {
         return pics;
     }
 
-    public static String getPhonePic() {
+    public static String getFullPic() {
         Random random = new Random();
         return "http://106.14.135.179/ImmersionBar/phone/" + random.nextInt(40) + ".jpeg";
     }
 
-    public static int getFlower() {
+    public static int getFlowerIcon() {
         Random random = new Random();
         int i = random.nextInt(99);
         if (i < 33) {
@@ -62,6 +65,18 @@ public class Utils {
         } else {
             return R.mipmap.icon_flower_3;
         }
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager manager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = manager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
     }
 
 }

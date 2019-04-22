@@ -33,7 +33,8 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden">
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/SplashAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -161,6 +162,9 @@
         <activity
             android:name=".activity.KotlinActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+
+        <service android:name=".service.NetworkService" />
+        <receiver android:name=".receiver.NetworkBroadCastReceiver" />
     </application>
 
 </manifest>

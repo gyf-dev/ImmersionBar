@@ -41,8 +41,8 @@ public class PicActivity extends SwipeBackActivity {
                 .titleBar(toolbar, false)
                 .transparentBar()
                 .init();
-        Glide.with(this).asBitmap().load(Utils.getPhonePic())
-                .apply(new RequestOptions().placeholder(R.mipmap.pic_all))
+        Glide.with(this).asBitmap().load(Utils.getFullPic())
+                .apply(new RequestOptions().placeholder(R.drawable.pic_all))
                 .into(mIv);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")

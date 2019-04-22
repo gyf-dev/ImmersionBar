@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 整体的背景颜色 -->
+    <item>
+        <color android:color="@android:color/white" />
+    </item>
+
+    <item android:bottom="140dp">
+        <bitmap
+            android:gravity="fill"
+            android:scaleType="fitXY"
+            android:src="@drawable/pic_all"
+            android:tileMode="disabled" />
+    </item>
+
+    <!-- 底部 -->
+    <item android:bottom="40dp">
+        <bitmap
+            android:gravity="center|bottom"
+            android:src="@drawable/icon"
+            android:tileMode="disabled" />
+    </item>
+</layer-list>

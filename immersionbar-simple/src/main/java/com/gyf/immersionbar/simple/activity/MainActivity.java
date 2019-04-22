@@ -4,10 +4,13 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apkfuns.logutils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -32,19 +36,25 @@ import com.gyf.immersionbar.simple.BuildConfig;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.MainAdapter;
 import com.gyf.immersionbar.simple.bean.FunBean;
+import com.gyf.immersionbar.simple.event.NetworkEvent;
+import com.gyf.immersionbar.simple.fragment.SplashFragment;
 import com.gyf.immersionbar.simple.model.DataUtils;
+import com.gyf.immersionbar.simple.service.NetworkService;
 import com.gyf.immersionbar.simple.utils.DensityUtil;
+import com.gyf.immersionbar.simple.utils.GlideUtils;
 import com.gyf.immersionbar.simple.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.blurry.Blurry;
 
@@ -67,6 +77,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     private int mBannerHeight;
     private Disposable mSubscribe;
+    private Intent mNetworkIntent;
+    private ImageView mIvHeader;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -79,9 +97,18 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         ImmersionBar.with(this).titleBar(R.id.toolbar).init();
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        EventBus.getDefault().register(this);
+        mNetworkIntent = new Intent(this, NetworkService.class);
+        startService(mNetworkIntent);
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
+        showSplash();
         setSidePic();
         mMainAdapter = new MainAdapter();
         tvVersion.setText("当前版本：" + BuildConfig.VERSION_NAME);
@@ -272,26 +299,61 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     private void addHeaderView() {
         View view = LayoutInflater.from(this).inflate(R.layout.item_image, mRv, false);
-        ImageView ivHeader = view.findViewById(R.id.iv_header);
-        Glide.with(this).load(Utils.getPic()).into(ivHeader);
-        mSubscribe = Observable.interval(10, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
-                    ObjectAnimator.ofFloat(ivHeader, "alpha", 0, 1).setDuration(800).start();
-                    Glide.with(this).load(Utils.getPic()).into(ivHeader);
-                });
+        mIvHeader = view.findViewById(R.id.iv_header);
+        GlideUtils.load(Utils.getPic(), mIvHeader);
         mMainAdapter.addHeaderView(view);
+    }
+
+    /**
+     * 展示Splash
+     */
+    private void showSplash() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SplashFragment.class.getSimpleName());
+        if (fragment == null) {
+            fragment = SplashFragment.newInstance();
+            ((SplashFragment) fragment).setOnSplashListener((time, totalTime) -> {
+                if (time != 0) {
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                } else {
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                }
+            });
+        }
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, fragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
+    }
+
+    private void switchPicture() {
+        if (Utils.isNetworkConnected(this)) {
+            if (mIvHeader != null) {
+                mIvHeader.post(() -> {
+                    if (mSubscribe == null) {
+                        mSubscribe = Observable.interval(10, TimeUnit.SECONDS)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(aLong -> {
+                                    ObjectAnimator.ofFloat(mIvHeader, "alpha", 0, 1).setDuration(800).start();
+                                    GlideUtils.load(Utils.getPic(), mIvHeader);
+                                });
+                    }
+                });
+            }
+        }
     }
 
     private void setSidePic() {
         Glide.with(this).asBitmap().load(Utils.getPic())
-                .apply(new RequestOptions().placeholder(R.mipmap.test))
+                .apply(new RequestOptions().placeholder(R.mipmap.test).error(R.mipmap.test).centerCrop())
                 .into(new BitmapImageViewTarget(ivBg) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         super.onResourceReady(resource, transition);
                         Blurry.with(MainActivity.this).from(resource).into(ivBg);
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                        Blurry.with(MainActivity.this).from(BitmapFactory.decodeResource(getResources(), R.mipmap.test)).into(ivBg);
                     }
                 });
     }
@@ -300,8 +362,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     protected void onDestroy() {
         super.onDestroy();
         drawer.removeDrawerListener(this);
-        if (!mSubscribe.isDisposed()) {
+        disposedSubscribe();
+        stopService(mNetworkIntent);
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void disposedSubscribe() {
+        if (mSubscribe != null && !mSubscribe.isDisposed()) {
             mSubscribe.dispose();
+            mSubscribe = null;
         }
     }
 
@@ -323,5 +392,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @Override
     public void onDrawerStateChanged(int i) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNetworkEvent(NetworkEvent networkEvent) {
+        LogUtils.e(networkEvent.isAvailable());
+        if (networkEvent.isAvailable()) {
+            switchPicture();
+        } else {
+            disposedSubscribe();
+        }
     }
 }
