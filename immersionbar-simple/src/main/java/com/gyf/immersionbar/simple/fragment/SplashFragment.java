@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author geyifeng
  * @date 2019-04-22 15:27
  */
-public class SplashFragment extends BaseFragment {
+public class SplashFragment extends BaseFragment implements Observer<Long> {
 
     @BindView(R.id.iv_splash)
     ImageView ivSplash;
@@ -34,17 +34,17 @@ public class SplashFragment extends BaseFragment {
 
     private static String mKey = "TotalTime";
 
-    private String mTag = this.getClass().getSimpleName();
-
     private long mTotalTime = 3;
 
     private Disposable mSubscribe;
     private OnSplashListener mOnSplashListener;
 
+    private boolean mIsFinish = false;
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        finish();
+        stopCountDown();
     }
 
     public static SplashFragment newInstance() {
@@ -73,53 +73,34 @@ public class SplashFragment extends BaseFragment {
         return R.layout.fragment_splash;
     }
 
-    @SuppressLint("SetTextI18n")
+    @Override
+    protected void initData() {
+        super.initData();
+        startCountDown();
+    }
+
     @Override
     protected void initView() {
         super.initView();
         ImmersionBar.setTitleBar(mActivity, tvTime);
         GlideUtils.load(Utils.getFullPic(), ivSplash, R.drawable.pic_all);
-        Observable.interval(1, TimeUnit.SECONDS)
-                .map(aLong -> mTotalTime - aLong)
-                .take(mTotalTime + 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mSubscribe = d;
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-                        tvTime.setText("我是" + aLong + "s欢迎页，点我可以关闭");
-                        if (mOnSplashListener != null) {
-                            mOnSplashListener.onTime(aLong, mTotalTime);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        finish();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        finish();
-                    }
-                });
     }
 
     @Override
     protected void setListener() {
         super.setListener();
         tvTime.setOnClickListener(v -> {
+            if (mOnSplashListener != null) {
+                mOnSplashListener.onTime(0, mTotalTime);
+            }
             finish();
         });
     }
 
+    /**
+     * 关闭当前页面
+     */
     private void finish() {
-        disposedSubscribe();
         if (getFragmentManager() != null) {
             Fragment fragment = getFragmentManager().findFragmentByTag(mTag);
             if (fragment != null) {
@@ -130,21 +111,65 @@ public class SplashFragment extends BaseFragment {
             }
             mOnSplashListener = null;
         }
+        mIsFinish = true;
     }
 
-    private void disposedSubscribe() {
+    /**
+     * 开启倒计时
+     */
+    private void startCountDown() {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .map(aLong -> mTotalTime - aLong)
+                .take(mTotalTime + 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
+    }
+
+    /**
+     * 关闭倒计时
+     */
+    private void stopCountDown() {
         if (mSubscribe != null && !mSubscribe.isDisposed()) {
             mSubscribe.dispose();
             mSubscribe = null;
         }
     }
 
+    @Override
+    public boolean immersionBarEnabled() {
+        return false;
+    }
+
+    @Override
+    public void onSubscribe(Disposable d) {
+        mSubscribe = d;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onNext(Long aLong) {
+        tvTime.setText("我是" + aLong + "s欢迎页，点我可以关闭");
+        if (mOnSplashListener != null) {
+            mOnSplashListener.onTime(aLong, mTotalTime);
+        }
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        finish();
+    }
+
+    @Override
+    public void onComplete() {
+        finish();
+    }
+
     public void setOnSplashListener(OnSplashListener onSplashListener) {
         this.mOnSplashListener = onSplashListener;
     }
 
-    @Override
-    public boolean immersionBarEnabled() {
-        return false;
+    public boolean isFinish() {
+        return mIsFinish;
     }
 }

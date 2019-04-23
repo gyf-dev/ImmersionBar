@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.TabAdapter;
 import com.gyf.immersionbar.simple.utils.Utils;
@@ -31,6 +32,7 @@ public class TabLayout2Activity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().addActivity(this);
         setContentView(R.layout.activity_tab_layout_two);
         initData(1);
         initView();
@@ -42,6 +44,12 @@ public class TabLayout2Activity extends SwipeBackActivity {
         Glide.with(this).asBitmap().load(Utils.getPic())
                 .apply(new RequestOptions().placeholder(R.mipmap.test))
                 .into((ImageView) findViewById(R.id.mIv));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppManager.getInstance().removeActivity(this);
     }
 
     private void initData(int pager) {

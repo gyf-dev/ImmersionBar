@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.fragment.five.MainFragment;
 
@@ -21,11 +22,18 @@ public class FragmentFiveActivity extends SupportActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().addActivity(this);
         setContentView(R.layout.activity_fragmentation);
         ImmersionBar.with(this).init();
         if (findFragment(MainFragment.class) == null) {
             loadRootFragment(R.id.content, MainFragment.newInstance());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppManager.getInstance().removeActivity(this);
     }
 
     @Override

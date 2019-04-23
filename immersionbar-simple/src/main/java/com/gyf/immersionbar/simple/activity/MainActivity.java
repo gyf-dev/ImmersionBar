@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apkfuns.logutils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -32,6 +32,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.BuildConfig;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.MainAdapter;
@@ -79,6 +80,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private Disposable mSubscribe;
     private Intent mNetworkIntent;
     private ImageView mIvHeader;
+    private long mFirstPressedTime;
+    private SplashFragment mSplashFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -308,10 +311,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * 展示Splash
      */
     private void showSplash() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SplashFragment.class.getSimpleName());
-        if (fragment == null) {
-            fragment = SplashFragment.newInstance();
-            ((SplashFragment) fragment).setOnSplashListener((time, totalTime) -> {
+        mSplashFragment = (SplashFragment) getSupportFragmentManager().findFragmentByTag(SplashFragment.class.getSimpleName());
+        if (mSplashFragment == null) {
+            mSplashFragment = SplashFragment.newInstance();
+            mSplashFragment.setOnSplashListener((time, totalTime) -> {
                 if (time != 0) {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 } else {
@@ -319,7 +322,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 }
             });
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, fragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, mSplashFragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
     }
 
     private void switchPicture() {
@@ -396,11 +399,35 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNetworkEvent(NetworkEvent networkEvent) {
-        LogUtils.e(networkEvent.isAvailable());
         if (networkEvent.isAvailable()) {
             switchPicture();
         } else {
             disposedSubscribe();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (mSplashFragment != null) {
+                if (mSplashFragment.isFinish()) {
+                    if (System.currentTimeMillis() - mFirstPressedTime < 2000) {
+                        super.onBackPressed();
+                        AppManager.getInstance().removeAllActivity();
+                    } else {
+                        Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                        mFirstPressedTime = System.currentTimeMillis();
+                    }
+                } else {
+                    super.onBackPressed();
+                    AppManager.getInstance().removeAllActivity();
+                }
+            } else {
+                super.onBackPressed();
+                AppManager.getInstance().removeAllActivity();
+            }
         }
     }
 }

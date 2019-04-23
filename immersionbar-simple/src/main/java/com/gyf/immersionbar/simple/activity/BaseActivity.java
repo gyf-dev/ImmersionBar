@@ -1,15 +1,12 @@
 package com.gyf.immersionbar.simple.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 
 import butterknife.ButterKnife;
@@ -22,13 +19,14 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private InputMethodManager mInputMethodManager;
+    protected String mTag = this.getClass().getSimpleName();
 
     protected Activity mActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().addActivity(this);
         mActivity = this;
         setContentView(getLayoutId());
         //绑定控件
@@ -48,7 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mInputMethodManager = null;
+        AppManager.getInstance().removeActivity(this);
     }
 
     /**
@@ -57,20 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return the layout id
      */
     protected abstract int getLayoutId();
-
-    protected void initImmersionBar() {
-        //在BaseActivity里初始化
-        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
-    }
-
-    protected void initData() {
-    }
-
-    protected void initView() {
-    }
-
-    protected void setListener() {
-    }
 
     /**
      * 是否可以使用沉浸式
@@ -82,19 +66,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        hideSoftKeyBoard();
+    /**
+     * 初始化沉浸式
+     * Init immersion bar.
+     */
+    protected void initImmersionBar() {
+        //设置共同沉浸式样式
+        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
     }
 
-    public void hideSoftKeyBoard() {
-        View localView = getCurrentFocus();
-        if (this.mInputMethodManager == null) {
-            this.mInputMethodManager = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
-        }
-        if ((localView != null) && (this.mInputMethodManager != null)) {
-            this.mInputMethodManager.hideSoftInputFromWindow(localView.getWindowToken(), 2);
-        }
+    protected void initData() {
+    }
+
+    protected void initView() {
+    }
+
+    protected void setListener() {
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.TabAdapter;
 
@@ -26,6 +27,7 @@ public class TabLayoutActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().addActivity(this);
         setContentView(R.layout.activity_tab_layout);
         initData(1);
         initView();
@@ -33,6 +35,12 @@ public class TabLayoutActivity extends SwipeBackActivity {
                 .statusBarView(R.id.view)
                 .navigationBarColor(R.color.cool_green_normal)
                 .init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppManager.getInstance().removeActivity(this);
     }
 
     private void initData(int pager) {

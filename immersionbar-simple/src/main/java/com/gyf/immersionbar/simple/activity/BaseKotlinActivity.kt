@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import com.gyf.immersionbar.ktx.immersionBar
+import com.gyf.immersionbar.simple.AppManager
 
 /**
  * @author geyifeng
  * @date 2019/4/10 5:20 PM
  */
 open class BaseKotlinActivity(@LayoutRes val layoutResID: Int) : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppManager.getInstance().addActivity(this)
         setContentView(layoutResID)
         if (isImmersionBarEnabled()) {
             initImmersionBar()
@@ -24,9 +27,12 @@ open class BaseKotlinActivity(@LayoutRes val layoutResID: Int) : AppCompatActivi
         setListener()
     }
 
-    open fun isImmersionBarEnabled(): Boolean {
-        return true
+    override fun onDestroy() {
+        super.onDestroy()
+        AppManager.getInstance().removeActivity(this)
     }
+
+    open fun isImmersionBarEnabled() = true
 
     open fun initImmersionBar() {
         immersionBar()
@@ -43,6 +49,5 @@ open class BaseKotlinActivity(@LayoutRes val layoutResID: Int) : AppCompatActivi
     open fun setListener() {
 
     }
-
 
 }

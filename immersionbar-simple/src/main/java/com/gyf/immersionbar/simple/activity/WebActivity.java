@@ -1,5 +1,7 @@
 package com.gyf.immersionbar.simple.activity;
 
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
@@ -43,12 +45,20 @@ public class WebActivity extends BaseActivity {
         super.onDestroy();
         try {
             if (mWebView != null) {
+                ViewParent parent = mWebView.getParent();
+                if (parent != null) {
+                    ((ViewGroup) parent).removeView(mWebView);
+                }
+                mWebView.stopLoading();
+                // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+                mWebView.getSettings().setJavaScriptEnabled(false);
+                mWebView.clearHistory();
+                mWebView.clearView();
                 mWebView.removeAllViews();
                 mWebView.destroy();
                 mWebView = null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 }

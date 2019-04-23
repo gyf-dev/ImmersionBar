@@ -27,12 +27,14 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends SimpleImmersionFragment {
 
-    Toolbar toolbar;
+    protected String mTag = this.getClass().getSimpleName();
 
     protected Activity mActivity;
     protected View mRootView;
 
     private Unbinder unbinder;
+
+    Toolbar toolbar;
 
     @Override
     public void onAttach(Context context) {
