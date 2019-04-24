@@ -28,14 +28,17 @@ public class AppManager {
     }
 
     public void removeActivity(Activity activity) {
-        mActivities.remove(activity);
         hideSoftKeyBoard(activity);
+        activity.finish();
+        mActivities.remove(activity);
     }
 
     public void removeAllActivity() {
         for (Activity activity : mActivities) {
-            removeActivity(activity);
+            hideSoftKeyBoard(activity);
+            activity.finish();
         }
+        mActivities.clear();
     }
 
     public <T extends Activity> boolean hasActivity(Class<T> tClass) {

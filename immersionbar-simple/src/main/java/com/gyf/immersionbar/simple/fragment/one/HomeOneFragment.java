@@ -128,21 +128,27 @@ public class HomeOneFragment extends BaseFragment {
                     mItemList.addAll(newData());
                     mOneAdapter.setNewData(mItemList);
                     refreshLayout.finishRefreshing();
-                    mToolbar.setVisibility(View.VISIBLE);
+                    if (mToolbar != null) {
+                        mToolbar.setVisibility(View.VISIBLE);
+                    }
                 }, 2000);
             }
 
             @Override
             public void onPullingDown(TwinklingRefreshLayout refreshLayout, float fraction) {
-                mToolbar.setVisibility(View.GONE);
+                if (mToolbar != null) {
+                    mToolbar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onPullDownReleasing(TwinklingRefreshLayout refreshLayout, float fraction) {
-                if (Math.abs(fraction - 1.0f) > 0) {
-                    mToolbar.setVisibility(View.VISIBLE);
-                } else {
-                    mToolbar.setVisibility(View.GONE);
+                if (mToolbar != null) {
+                    if (Math.abs(fraction - 1.0f) > 0) {
+                        mToolbar.setVisibility(View.VISIBLE);
+                    } else {
+                        mToolbar.setVisibility(View.GONE);
+                    }
                 }
             }
         });

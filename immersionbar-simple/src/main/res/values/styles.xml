@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:windowFullscreen">false</item>
     </style>
 
     <style name="SplashAppTheme" parent="AppTheme">

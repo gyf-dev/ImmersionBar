@@ -21,8 +21,8 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class NetworkService extends Service {
 
+    private NetworkEvent mNetworkEvent = new NetworkEvent();
     private NetworkBroadCastReceiver mReceiver;
-    private NetworkEvent mNetworkEvent;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,14 +32,7 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        checkNetworkEvent();
         registerNetwork(this);
-    }
-
-    private void checkNetworkEvent() {
-        if (mNetworkEvent == null) {
-            mNetworkEvent = new NetworkEvent();
-        }
     }
 
     @Override
@@ -70,7 +63,6 @@ public class NetworkService extends Service {
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             mReceiver = new NetworkBroadCastReceiver();
-            mReceiver.setNetworkEvent(mNetworkEvent);
             context.registerReceiver(mReceiver, filter);
         }
     }
