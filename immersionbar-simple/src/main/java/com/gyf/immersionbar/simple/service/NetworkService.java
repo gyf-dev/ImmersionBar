@@ -9,7 +9,6 @@ import android.net.Network;
 import android.os.Build;
 import android.os.IBinder;
 
-import com.apkfuns.logutils.LogUtils;
 import com.gyf.immersionbar.simple.event.NetworkEvent;
 import com.gyf.immersionbar.simple.receiver.NetworkBroadCastReceiver;
 
@@ -21,7 +20,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class NetworkService extends Service {
 
-    private NetworkEvent mNetworkEvent = new NetworkEvent();
+    private NetworkEvent mNetworkEvent;
     private NetworkBroadCastReceiver mReceiver;
 
     @Override
@@ -38,7 +37,7 @@ public class NetworkService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unRegisterNetwork(this);
+        unregisterNetwork(this);
     }
 
     private void registerNetwork(Context context) {
@@ -48,14 +47,14 @@ public class NetworkService extends Service {
                 @Override
                 public void onAvailable(Network network) {
                     super.onAvailable(network);
-                    mNetworkEvent.setAvailable(true);
+                    getNetworkEvent().setAvailable(true);
                     EventBus.getDefault().post(mNetworkEvent);
                 }
 
                 @Override
                 public void onLost(Network network) {
                     super.onLost(network);
-                    mNetworkEvent.setAvailable(false);
+                    getNetworkEvent().setAvailable(false);
                     EventBus.getDefault().post(mNetworkEvent);
                 }
             });
@@ -67,12 +66,19 @@ public class NetworkService extends Service {
         }
     }
 
-    private void unRegisterNetwork(Context context) {
+    private void unregisterNetwork(Context context) {
         if (mNetworkEvent != null) {
             mNetworkEvent = null;
         }
         if (mReceiver != null) {
             context.unregisterReceiver(mReceiver);
         }
+    }
+
+    private NetworkEvent getNetworkEvent() {
+        if (mNetworkEvent == null) {
+            mNetworkEvent = new NetworkEvent();
+        }
+        return mNetworkEvent;
     }
 }

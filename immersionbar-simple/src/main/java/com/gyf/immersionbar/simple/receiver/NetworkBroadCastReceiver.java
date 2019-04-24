@@ -15,14 +15,21 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class NetworkBroadCastReceiver extends BroadcastReceiver {
 
-    private NetworkEvent mNetworkEvent = new NetworkEvent();
+    private NetworkEvent mNetworkEvent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
-            mNetworkEvent.setAvailable(true);
+            getNetworkEvent().setAvailable(true);
             EventBus.getDefault().post(mNetworkEvent);
         }
+    }
+
+    private NetworkEvent getNetworkEvent() {
+        if (mNetworkEvent == null) {
+            mNetworkEvent = new NetworkEvent();
+        }
+        return mNetworkEvent;
     }
 }
