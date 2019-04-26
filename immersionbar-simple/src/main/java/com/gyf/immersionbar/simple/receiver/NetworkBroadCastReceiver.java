@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 
 import com.gyf.immersionbar.simple.event.NetworkEvent;
+import com.gyf.immersionbar.simple.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,7 +22,7 @@ public class NetworkBroadCastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
-            getNetworkEvent().setAvailable(true);
+            getNetworkEvent().setAvailable(Utils.isNetworkConnected(context));
             EventBus.getDefault().post(mNetworkEvent);
         }
     }

@@ -38,6 +38,10 @@ public class Utils {
     }
 
     public static ArrayList<String> getPics() {
+        return getPics(4);
+    }
+
+    public static ArrayList<String> getPics(int num) {
         ArrayList<String> pics = new ArrayList<>();
         Random random = new Random();
 
@@ -46,7 +50,7 @@ public class Utils {
             if (!pics.contains(s)) {
                 pics.add(s);
             }
-        } while (pics.size() < 4);
+        } while (pics.size() < num);
         return pics;
     }
 

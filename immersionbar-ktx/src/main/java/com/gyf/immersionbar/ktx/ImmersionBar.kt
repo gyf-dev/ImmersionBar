@@ -93,9 +93,8 @@ val Fragment.isNavigationAtBottom
 // statusBarView扩展
 fun Activity.fitsStatusBarView(view: View) = ImmersionBar.setStatusBarView(this, view)
 
-fun Fragment.fitsStatusBarView(view: View) = {
-    activity?.apply { ImmersionBar.setStatusBarView(this, view) }
-}
+fun Fragment.fitsStatusBarView(view: View) = activity?.run { ImmersionBar.setTitleBarMarginTop(this, view) }
+        ?: Unit
 
 // titleBar扩展
 fun Activity.fitsTitleBar(view: View) = ImmersionBar.setTitleBar(this, view)
@@ -106,9 +105,8 @@ fun Fragment.fitsTitleBar(view: View) {
 
 fun Activity.fitsTitleBarMarginTop(view: View) = ImmersionBar.setTitleBarMarginTop(this, view)
 
-fun Fragment.fitsTitleBarMarginTop(view: View) {
-    activity?.apply { ImmersionBar.setTitleBarMarginTop(this, view) }
-}
+fun Fragment.fitsTitleBarMarginTop(view: View) = activity?.run { ImmersionBar.setTitleBarMarginTop(this, view) }
+        ?: Unit
 
 // 隐藏状态栏
 fun Activity.hideStatusBar() = ImmersionBar.hideStatusBar(window)

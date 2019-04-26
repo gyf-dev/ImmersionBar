@@ -123,7 +123,7 @@ public final class ImmersionBar implements ImmersionCallback {
     private int mPaddingLeft = 0, mPaddingTop = 0, mPaddingRight = 0, mPaddingBottom = 0;
 
     /**
-     * 初始化Activity
+     * 在Activity使用
      * With immersion bar.
      *
      * @param activity the activity
@@ -134,7 +134,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     /**
-     * 调用该方法必须保证加载Fragment的Activity先初始化
+     * 在Fragment使用
      * With immersion bar.
      *
      * @param fragment the fragment
@@ -144,6 +144,13 @@ public final class ImmersionBar implements ImmersionCallback {
         return getRetriever().get(fragment);
     }
 
+    /**
+     * 在Fragment使用
+     * With immersion bar.
+     *
+     * @param fragment the fragment
+     * @return the immersion bar
+     */
     public static ImmersionBar with(@NonNull android.app.Fragment fragment) {
         return getRetriever().get(fragment);
     }
@@ -159,6 +166,13 @@ public final class ImmersionBar implements ImmersionCallback {
         return getRetriever().get(dialogFragment);
     }
 
+    /**
+     * 在DialogFragment使用
+     * With immersion bar.
+     *
+     * @param dialogFragment the dialog fragment
+     * @return the immersion bar
+     */
     public static ImmersionBar with(@NonNull android.app.DialogFragment dialogFragment) {
         return getRetriever().get(dialogFragment);
     }
@@ -186,7 +200,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     /**
-     * 在Activit里初始化
+     * 在Activity里初始化
      * Instantiates a new Immersion bar.
      *
      * @param activity the activity
@@ -211,6 +225,12 @@ public final class ImmersionBar implements ImmersionCallback {
         initCommonParameter(mActivity.getWindow());
     }
 
+    /**
+     * 在Fragment里初始化
+     * Instantiates a new Immersion bar.
+     *
+     * @param fragment the fragment
+     */
     ImmersionBar(android.app.Fragment fragment) {
         mIsFragment = true;
         mActivity = fragment.getActivity();
@@ -234,6 +254,12 @@ public final class ImmersionBar implements ImmersionCallback {
         initCommonParameter(mDialog.getWindow());
     }
 
+    /**
+     * 在dialogFragment里使用
+     * Instantiates a new Immersion bar.
+     *
+     * @param dialogFragment the dialog fragment
+     */
     ImmersionBar(android.app.DialogFragment dialogFragment) {
         mIsDialog = true;
         mActivity = dialogFragment.getActivity();
@@ -254,8 +280,8 @@ public final class ImmersionBar implements ImmersionCallback {
         mIsDialog = true;
         mActivity = activity;
         mDialog = dialog;
-        initCommonParameter(mDialog.getWindow());
         checkInitWithActivity();
+        initCommonParameter(mDialog.getWindow());
     }
 
     /**
@@ -1566,7 +1592,11 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarWithEMUI3Enable(boolean navigationBarWithEMUI3Enable) {
-        mBarParams.navigationBarWithEMUI3Enable = navigationBarWithEMUI3Enable;
+        //是否可以修改emui3系列手机导航栏
+        if (OSUtils.isEMUI3_x()) {
+            mBarParams.navigationBarWithEMUI3Enable = navigationBarWithEMUI3Enable;
+            mBarParams.navigationBarWithKitkatEnable = navigationBarWithEMUI3Enable;
+        }
         return this;
     }
 
@@ -1588,7 +1618,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     /**
-     * 当Activity/Fragment/Dialog关闭的时候调用
+     * 内部方法无需调用
      */
     void destroy() {
         //取消监听
@@ -1611,12 +1641,6 @@ public final class ImmersionBar implements ImmersionCallback {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //获得Bar相关信息
             mBarConfig = new BarConfig(mActivity);
-            //是否可以修改emui3系列手机导航栏
-            if (OSUtils.isEMUI3_x()) {
-                if (mBarParams.navigationBarWithKitkatEnable && !mBarParams.navigationBarWithEMUI3Enable) {
-                    mBarParams.navigationBarWithKitkatEnable = false;
-                }
-            }
             //如果在Fragment中使用，让Activity同步Fragment的BarParams参数
             if (mIsFragment) {
                 ImmersionBar immersionBar = with(mActivity);
@@ -2261,35 +2285,49 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setTitleBar(final Activity activity, final View view) {
-        if (activity == null) {
-            return;
-        }
-        if (view == null) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT ||
-                    layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        layoutParams.height = view.getHeight() + getStatusBarHeight(activity);
-                        view.setPadding(view.getPaddingLeft(),
-                                view.getPaddingTop() + getStatusBarHeight(activity),
-                                view.getPaddingRight(),
-                                view.getPaddingBottom());
-                        view.setLayoutParams(layoutParams);
-                    }
-                });
-            } else {
-                layoutParams.height += getStatusBarHeight(activity);
-                view.setPadding(view.getPaddingLeft(), view.getPaddingTop() + getStatusBarHeight(activity),
-                        view.getPaddingRight(), view.getPaddingBottom());
-                view.setLayoutParams(layoutParams);
+    public static void setTitleBar(final Activity activity, final View... view) {
+        for (final View v : view) {
+            if (activity == null) {
+                return;
+            }
+            if (v == null) {
+                return;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+                if (layoutParams == null) {
+                    layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT ||
+                        layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                    final ViewGroup.LayoutParams finalLayoutParams = layoutParams;
+                    v.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            finalLayoutParams.height = v.getHeight() + getStatusBarHeight(activity);
+                            v.setPadding(v.getPaddingLeft(),
+                                    v.getPaddingTop() + getStatusBarHeight(activity),
+                                    v.getPaddingRight(),
+                                    v.getPaddingBottom());
+                            v.setLayoutParams(finalLayoutParams);
+                        }
+                    });
+                } else {
+                    layoutParams.height += getStatusBarHeight(activity);
+                    v.setPadding(v.getPaddingLeft(), v.getPaddingTop() + getStatusBarHeight(activity),
+                            v.getPaddingRight(), v.getPaddingBottom());
+                    v.setLayoutParams(layoutParams);
+                }
             }
         }
+    }
+
+    public static void setTitleBar(Fragment fragment, View... view) {
+        setTitleBar(fragment.getActivity(), view);
+    }
+
+    public static void setTitleBar(android.app.Fragment fragment, View... view) {
+        setTitleBar(fragment.getActivity(), view);
     }
 
     /**
@@ -2299,21 +2337,35 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setTitleBarMarginTop(Activity activity, View view) {
-        if (activity == null) {
-            return;
+    public static void setTitleBarMarginTop(Activity activity, View... view) {
+        for (View v : view) {
+            if (activity == null) {
+                return;
+            }
+            if (v == null) {
+                return;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                ViewGroup.LayoutParams lp = v.getLayoutParams();
+                if (lp == null) {
+                    lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) lp;
+                layoutParams.setMargins(layoutParams.leftMargin,
+                        layoutParams.topMargin + getStatusBarHeight(activity),
+                        layoutParams.rightMargin,
+                        layoutParams.bottomMargin);
+                v.setLayoutParams(layoutParams);
+            }
         }
-        if (view == null) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            layoutParams.setMargins(layoutParams.leftMargin,
-                    layoutParams.topMargin + getStatusBarHeight(activity),
-                    layoutParams.rightMargin,
-                    layoutParams.bottomMargin);
-            view.setLayoutParams(layoutParams);
-        }
+    }
+
+    public static void setTitleBarMarginTop(Fragment fragment, View... view) {
+        setTitleBarMarginTop(fragment.getActivity(), view);
+    }
+
+    public static void setTitleBarMarginTop(android.app.Fragment fragment, View... view) {
+        setTitleBarMarginTop(fragment.getActivity(), view);
     }
 
     /**
@@ -2331,9 +2383,12 @@ public final class ImmersionBar implements ImmersionCallback {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.height = getStatusBarHeight(activity);
-            view.setLayoutParams(params);
+            ViewGroup.LayoutParams lp = view.getLayoutParams();
+            if (lp == null) {
+                lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+            }
+            lp.height = getStatusBarHeight(activity);
+            view.setLayoutParams(lp);
         }
     }
 

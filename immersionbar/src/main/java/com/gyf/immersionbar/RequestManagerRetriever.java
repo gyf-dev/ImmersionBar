@@ -23,6 +23,8 @@ import java.util.Map;
  */
 class RequestManagerRetriever implements Handler.Callback {
 
+    private String mTag = ImmersionBar.class.getName();
+
     private Handler mHandler;
 
     private static final int ID_REMOVE_FRAGMENT_MANAGER = 1;
@@ -46,9 +48,9 @@ class RequestManagerRetriever implements Handler.Callback {
     public ImmersionBar get(Activity activity) {
         checkNotNull(activity, "activity is null");
         if (activity instanceof FragmentActivity) {
-            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), activity.toString()).get(activity);
+            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + activity.toString()).get(activity);
         } else {
-            return getFragment(activity.getFragmentManager(), activity.toString()).get(activity);
+            return getFragment(activity.getFragmentManager(), mTag + activity.toString()).get(activity);
         }
     }
 
@@ -58,7 +60,7 @@ class RequestManagerRetriever implements Handler.Callback {
         if (fragment instanceof DialogFragment) {
             checkNotNull(((DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
-        return getSupportFragment(fragment.getChildFragmentManager(), fragment.toString()).get(fragment);
+        return getSupportFragment(fragment.getChildFragmentManager(), mTag + fragment.toString()).get(fragment);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -68,16 +70,16 @@ class RequestManagerRetriever implements Handler.Callback {
         if (fragment instanceof android.app.DialogFragment) {
             checkNotNull(((android.app.DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
-        return getFragment(fragment.getChildFragmentManager(), fragment.toString()).get(fragment);
+        return getFragment(fragment.getChildFragmentManager(), mTag + fragment.toString()).get(fragment);
     }
 
     public ImmersionBar get(Activity activity, Dialog dialog) {
         checkNotNull(activity, "activity is null");
         checkNotNull(dialog, "dialog is null");
         if (activity instanceof FragmentActivity) {
-            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), dialog.toString()).get(activity, dialog);
+            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + dialog.toString()).get(activity, dialog);
         } else {
-            return getFragment(activity.getFragmentManager(), dialog.toString()).get(activity, dialog);
+            return getFragment(activity.getFragmentManager(), mTag + dialog.toString()).get(activity, dialog);
         }
     }
 
@@ -86,12 +88,12 @@ class RequestManagerRetriever implements Handler.Callback {
             return;
         }
         if (activity instanceof FragmentActivity) {
-            SupportRequestManagerFragment fragment = getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), dialog.toString(), true);
+            SupportRequestManagerFragment fragment = getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + dialog.toString(), true);
             if (fragment != null) {
                 fragment.get(activity, dialog).destroy();
             }
         } else {
-            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(), dialog.toString(), true);
+            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(),mTag +  dialog.toString(), true);
             if (fragment != null) {
                 fragment.get(activity, dialog).destroy();
             }

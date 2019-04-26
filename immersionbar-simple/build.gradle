@@ -63,8 +63,6 @@ dependencies {
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //圆形imageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    // 模糊
-    implementation 'jp.wasabeef:blurry:3.0.0'
     // 内存泄漏检测
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
@@ -78,6 +76,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation 'jp.wasabeef:blurry:3.0.0'
 }
 repositories {
     mavenCentral()
