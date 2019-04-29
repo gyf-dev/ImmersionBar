@@ -367,7 +367,7 @@
    ```
    
 ## 问题汇总
-###### 1）、为什么顶部图片没法沉浸？
+- 1）、为什么顶部图片没法沉浸？
 
   答：但凡当前界面使用了fitsSystemWindow相关的属性或者方法为true都没法让顶部图片沉浸，所以你就要检查你的代码了，比如：
   
@@ -376,7 +376,7 @@
       ③检查你的布局xml里是否使用了android:fitsSystemWindows="true"属性；
       ④检查你的style文件里是否使用了<item name="android:fitsSystemWindows">true</item>属性。
       
-######  2）、immersionbar-components和immersionbar-ktx具体是干嘛的？
+- 2）、immersionbar-components和immersionbar-ktx具体是干嘛的？
 
   答：immersionbar-components的作用是加快你在Fragment里实现沉浸式。如果你的Fragment是以show/hide或者结合viewpager一起使用的，并且界面之间沉浸式不相同，而且又想在Fragment里使用沉浸式代码的话，因为受到Fragment生命周期的影响，必须要在Fragment里做一些相应的出来，这样才可以正常使用沉浸式。比如对于show/hide方式来说，你必须要在onHiddenChanged方法里做一些沉浸式处理；对于结合viewpager来说，就必须要在setUserVisibleHint方法里做一些处理，而immersionbar-components里的Fragment相关的类就已经做好了这方面的处理，所以就可以在initImmersionBar方法里快速实现不同样式的沉浸式了。
       
