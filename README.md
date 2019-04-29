@@ -365,6 +365,38 @@
     -keep class com.gyf.immersionbar.* {*;} 
     -dontwarn com.gyf.immersionbar.**
    ```
+   
+## 问题汇总
+- 1）、为什么顶部图片没法沉浸？
+  答：但凡当前界面使用了fitsSystemWindow相关的属性或者方法为true都没法让顶部图片沉浸，所以你就要检查你的代码了，比如：
+      ①检查你是否使用了ImmersionBar的fitsSystemWindow(true)方法；
+      ②检查你的代码中是否调用了view的setFitsSystemWindow(true)方法；
+      ③检查你的布局xml里是否使用了android:fitsSystemWindows="true"属性；
+      ④检查你的style文件里是否使用了<item name="android:fitsSystemWindows">true</item>属性。
+      
+- 2）、immersionbar-components和immersionbar-ktx具体是干嘛的？
+  答：immersionbar-components的作用是加快你在Fragment里实现沉浸式。如果你的Fragment是以show/hide或者结合viewpager一起使用的，并且界面之间沉浸式不相同，而且又想在Fragment里使用沉浸式代码的话，因为受到Fragment生命周期的影响，必须要在Fragment里做一些相应的出来，这样才可以正常使用沉浸式。比如对于show/hide方式来说，你必须要在onHiddenChanged方法里做一些沉浸式处理；对于结合viewpager来说，就必须要在setUserVisibleHint方法里做一些处理，而immersionbar-components里的Fragment相关的类就已经做好了这方面的处理，所以就可以在initImmersionBar方法里快速实现不同样式的沉浸式了。
+      immersionbar-ktx是kotlin语言的一些扩展方法，让你在kotlin使用起来更方便，比如java里的
+      ```java
+         ImmersionBar.with(this).init();
+      ```
+       在kotlin的写法就是
+      ```kotlin
+         immersionBar()
+      ```
+        再比如java里的
+      ```java
+            ImmersionBar.with(this).statusBarColor(R.color.colorPrimary).init();
+      ```
+        在kotlin的写法就是
+      ```kotlin
+         immersionBar {
+            statusBarColor(R.color.colorPrimary) 
+         }
+      ```
+      除此之外还有一些其他静态方法的简写，具体可以参考这个类[KotlinActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/KotlinActivity.kt)的演示
+       
+      
 
 ## 效果图 ##
 #### 说明 ####

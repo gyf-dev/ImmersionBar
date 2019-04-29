@@ -427,7 +427,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 if (mNetworkView.getParent() != null) {
                     mMainAdapter.removeHeaderView(mNetworkView);
                 }
-                if (mBannerAdapter != null) {
+                if (mBannerAdapter != null && mBannerPosition != -1) {
                     mBannerAdapter.notifyDataSetChanged();
                     ArrayList<String> data = mBannerAdapter.getData();
                     String s = data.get(mBannerPosition % data.size());
