@@ -1,9 +1,7 @@
 package com.gyf.immersionbar.simple.fragment.three;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.adapter.OneAdapter;
+import com.gyf.immersionbar.simple.fragment.BaseFragment;
 import com.gyf.immersionbar.simple.utils.GlideImageLoader;
 import com.gyf.immersionbar.simple.utils.Utils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -32,7 +31,7 @@ import butterknife.BindView;
  * @author geyifeng
  * @date 2017/5/12
  */
-public class HomeThreeFragment extends BaseThreeFragment {
+public class HomeThreeFragment extends BaseFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -46,13 +45,7 @@ public class HomeThreeFragment extends BaseThreeFragment {
     private int bannerHeight;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ImmersionBar.setTitleBar(getActivity(), mToolbar);
-    }
-
-    @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.fragment_one_home;
     }
 

@@ -2,13 +2,9 @@ package com.gyf.immersionbar.simple.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
+import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.BuildConfig;
@@ -37,9 +33,7 @@ import com.gyf.immersionbar.simple.bean.FunBean;
 import com.gyf.immersionbar.simple.event.NetworkEvent;
 import com.gyf.immersionbar.simple.fragment.SplashFragment;
 import com.gyf.immersionbar.simple.model.DataUtils;
-import com.gyf.immersionbar.simple.service.NetworkService;
 import com.gyf.immersionbar.simple.utils.DensityUtil;
-import com.gyf.immersionbar.simple.utils.GlideImageLoader;
 import com.gyf.immersionbar.simple.utils.GlideUtils;
 import com.gyf.immersionbar.simple.utils.Utils;
 import com.gyf.immersionbar.simple.utils.ViewUtils;
@@ -70,11 +64,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     RecyclerView mRv;
 
     /**
-     * 网络监听服务
-     */
-    private Intent mNetworkIntent;
-
-    /**
      * splash页面
      */
     private SplashFragment mSplashFragment;
@@ -90,18 +79,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     private long mFirstPressedTime;
     private ImageView mIvBanner;
+    private ArrayList<FunBean> mMainData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         drawer.removeDrawerListener(this);
-        stopService(mNetworkIntent);
         EventBus.getDefault().unregister(this);
     }
 
@@ -113,15 +103,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(R.id.toolbar).init();
+        ImmersionBar.with(this).titleBar(R.id.toolbar).setOnBarListener(this::adjustView).init();
     }
 
     @Override
     protected void initData() {
         super.initData();
-        EventBus.getDefault().register(this);
-        mNetworkIntent = new Intent(this, NetworkService.class);
-        startService(mNetworkIntent);
+        mMainData = DataUtils.getMainData(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -134,7 +122,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         mMainAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         mMainAdapter.isFirstOnly(false);
         mRv.setAdapter(mMainAdapter);
-        mMainAdapter.setNewData(DataUtils.getMainData(this));
+        mMainAdapter.setNewData(mMainData);
         addHeaderView();
         mBannerHeight = DensityUtil.dip2px(this, 180) - ImmersionBar.getActionBarHeight(this)
                 - ImmersionBar.getStatusBarHeight(this);
@@ -163,11 +151,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 totalDy += dy;
                 if (totalDy <= mBannerHeight) {
                     float alpha = (float) totalDy / mBannerHeight;
-                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
-                            , ContextCompat.getColor(mActivity, R.color.colorPrimary), alpha));
+                    mToolbar.setAlpha(alpha);
                 } else {
-                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
-                            , ContextCompat.getColor(mActivity, R.color.colorPrimary), 1));
+                    mToolbar.setAlpha(1);
                 }
 
             }
@@ -371,7 +357,40 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     private void addNetworkView() {
         mNetworkView = LayoutInflater.from(this).inflate(R.layout.item_network, mRv, false);
-        mMainAdapter.addHeaderView(mNetworkView);
+        if (!Utils.isNetworkConnected(this)) {
+            mMainAdapter.addHeaderView(mNetworkView);
+        }
+    }
+
+
+    /**
+     * 适配刘海屏折叠数据问题
+     * Adjust view.
+     *
+     * @param barProperties the bar properties,ImmersionBar#setOnBarListener
+     */
+    private void adjustView(BarProperties barProperties) {
+        if (barProperties.isNotchScreen()) {
+            if (mMainData != null) {
+                for (FunBean funBean : mMainData) {
+                    if (barProperties.isPortrait()) {
+                        funBean.setMarginStart(DensityUtil.dip2px(this, 8));
+                        funBean.setMarginEnd(DensityUtil.dip2px(this, 8));
+                    } else {
+                        if (barProperties.isLandscapeLeft()) {
+                            funBean.setMarginStart(DensityUtil.dip2px(this, 8) + barProperties.getNotchHeight());
+                            funBean.setMarginEnd(DensityUtil.dip2px(this, 8));
+                        } else {
+                            funBean.setMarginStart(DensityUtil.dip2px(this, 8));
+                            funBean.setMarginEnd(DensityUtil.dip2px(this, 8) + barProperties.getNotchHeight());
+                        }
+                    }
+                }
+            }
+            if (mMainAdapter != null) {
+                mMainAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
 

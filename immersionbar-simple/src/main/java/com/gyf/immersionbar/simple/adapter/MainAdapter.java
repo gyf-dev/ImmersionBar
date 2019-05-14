@@ -1,5 +1,7 @@
 package com.gyf.immersionbar.simple.adapter;
 
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +21,10 @@ public class MainAdapter extends BaseQuickAdapter<FunBean, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, FunBean item) {
+        CardView cardView = helper.getView(R.id.card);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) cardView.getLayoutParams();
+        layoutParams.setMarginStart(item.getMarginStart());
+        layoutParams.setMarginEnd(item.getMarginEnd());
         helper.setText(R.id.tvName, item.getName());
         ImageView ivIcon = helper.getView(R.id.ivIcon);
         ImageView ivFlower = helper.getView(R.id.ivFlower);

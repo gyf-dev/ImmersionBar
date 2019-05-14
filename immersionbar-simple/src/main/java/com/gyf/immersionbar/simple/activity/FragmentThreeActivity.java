@@ -115,7 +115,7 @@ public class FragmentThreeActivity extends BaseActivity implements View.OnClickL
                 break;
             case 1:
                 tabSelected(llCategory);
-                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
+                ImmersionBar.with(this).keyboardEnable(false).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn3).init();
                 break;
             case 2:
                 tabSelected(llService);

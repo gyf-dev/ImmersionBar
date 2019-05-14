@@ -1,6 +1,7 @@
 package com.gyf.immersionbar.simple.activity;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +36,8 @@ public class ParamsActivity extends BaseActivity {
     TextView mTvHasNotch;
     @BindView(R.id.mTvInsets)
     TextView mTvInsets;
+    @BindView(R.id.mTvNotchHeight)
+    TextView mTvNotchHeight;
     @BindView(R.id.mTvFits)
     TextView mTvFits;
     @BindView(R.id.mTvStatusDark)
@@ -77,6 +80,7 @@ public class ParamsActivity extends BaseActivity {
         mTvNav.setText(getText(getTitle(mTvNav) + ImmersionBar.getNavigationBarHeight(this)));
         mTvAction.setText(getText(getTitle(mTvAction) + ImmersionBar.getActionBarHeight(this)));
         mTvHasNotch.post(() -> mTvHasNotch.setText(getText(getTitle(mTvHasNotch) + ImmersionBar.hasNotchScreen(this))));
+        mTvNotchHeight.post(() -> mTvNotchHeight.setText(getText(getTitle(mTvNotchHeight) + ImmersionBar.getNotchHeight(this))));
         mTvFits.setText(getText(getTitle(mTvFits) + ImmersionBar.checkFitsSystemWindows(findViewById(android.R.id.content))));
         mTvStatusDark.setText(getText(getTitle(mTvStatusDark) + ImmersionBar.isSupportStatusBarDarkFont()));
         mTvNavigationDark.setText(getText(getTitle(mTvNavigationDark) + ImmersionBar.isSupportNavigationIconDark()));
@@ -113,5 +117,11 @@ public class ParamsActivity extends BaseActivity {
     private String getTitle(TextView textView) {
         String[] split = textView.getText().toString().split(" {3}");
         return split[0] + "   ";
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        initView();
     }
 }

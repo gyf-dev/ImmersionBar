@@ -1,12 +1,11 @@
 package com.gyf.immersionbar.simple.fragment.three;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 
-import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
+import com.gyf.immersionbar.simple.adapter.NewsAdapter;
+import com.gyf.immersionbar.simple.fragment.BaseFragment;
 
 import butterknife.BindView;
 
@@ -14,19 +13,27 @@ import butterknife.BindView;
  * @author geyifeng
  * @date 2017/5/12
  */
-public class CategoryThreeFragment extends BaseThreeFragment {
+public class CategoryThreeFragment extends BaseFragment {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
+    private String[] mTabName = {"关注", "头条", "视频", "娱乐", "体育", "新时代", "要闻", "知否", "段子", "本地", "公开课", "财经", "科技", "汽车"};
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ImmersionBar.setTitleBar(getActivity(), toolbar);
+    protected int getLayoutId() {
+        return R.layout.fragment_three_category;
     }
 
     @Override
-    protected int setLayoutId() {
-        return R.layout.fragment_one_category;
+    protected void initView() {
+        super.initView();
+        for (String s : mTabName) {
+            tabLayout.addTab(tabLayout.newTab().setText(s));
+        }
+        viewPager.setAdapter(new NewsAdapter(getChildFragmentManager(), mTabName));
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

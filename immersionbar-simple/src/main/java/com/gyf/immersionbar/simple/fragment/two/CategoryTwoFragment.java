@@ -2,14 +2,14 @@ package com.gyf.immersionbar.simple.fragment.two;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
-import com.gyf.immersionbar.simple.fragment.BaseFragment;
+import com.gyf.immersionbar.simple.fragment.BaseImmersionFragment;
 
 /**
  * @author geyifeng
  * @date 2017/7/20
  */
 
-public class CategoryTwoFragment extends BaseFragment {
+public class CategoryTwoFragment extends BaseImmersionFragment {
 
     @Override
     protected int getLayoutId() {

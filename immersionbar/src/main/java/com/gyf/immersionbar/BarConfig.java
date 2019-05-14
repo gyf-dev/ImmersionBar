@@ -13,7 +13,12 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
-import static com.gyf.immersionbar.Constants.*;
+import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
+import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
 
 /**
  * The type Bar config.
@@ -30,7 +35,6 @@ class BarConfig {
     private final int mNavigationBarWidth;
     private final boolean mInPortrait;
     private final float mSmallestWidthDp;
-    private final boolean mHasNotchScreen;
 
     /**
      * Instantiates a new Bar config.
@@ -46,7 +50,6 @@ class BarConfig {
         mNavigationBarHeight = getNavigationBarHeight(activity);
         mNavigationBarWidth = getNavigationBarWidth(activity);
         mHasNavigationBar = (mNavigationBarHeight > 0);
-        mHasNotchScreen = NotchUtils.hasNotchScreen(activity);
     }
 
     @TargetApi(14)
@@ -219,14 +222,4 @@ class BarConfig {
     int getNavigationBarWidth() {
         return mNavigationBarWidth;
     }
-
-    /**
-     * Has notch screen boolean.
-     *
-     * @return the boolean
-     */
-    boolean hasNotchScreen() {
-        return mHasNotchScreen;
-    }
-
 }

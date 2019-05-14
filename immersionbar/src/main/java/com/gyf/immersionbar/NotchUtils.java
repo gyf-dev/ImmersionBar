@@ -3,7 +3,9 @@ package com.gyf.immersionbar;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.Window;
@@ -217,4 +219,97 @@ public class NotchUtils {
             return false;
         }
     }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param activity the activity
+     * @return the int
+     */
+    public static int getNotchHeight(Activity activity) {
+        int notchHeight = 0;
+        int statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
+        DisplayCutout displayCutout = getDisplayCutout(activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && displayCutout != null) {
+            if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                notchHeight = displayCutout.getSafeInsetTop();
+            } else {
+                if (displayCutout.getSafeInsetLeft() == 0) {
+                    notchHeight = displayCutout.getSafeInsetRight();
+                } else {
+                    notchHeight = displayCutout.getSafeInsetLeft();
+                }
+            }
+        } else {
+            if (hasNotchAtXiaoMi(activity)) {
+                notchHeight = getXiaoMiNotchHeight(activity);
+            }
+            if (hasNotchAtHuaWei(activity)) {
+                notchHeight = getHuaWeiNotchSize(activity)[1];
+            }
+            if (hasNotchAtVIVO(activity)) {
+                notchHeight = dp2px(activity, 32);
+                if (notchHeight < statusBarHeight) {
+                    notchHeight = statusBarHeight;
+                }
+            }
+            if (hasNotchAtOPPO(activity)) {
+                notchHeight = 80;
+                if (notchHeight < statusBarHeight) {
+                    notchHeight = statusBarHeight;
+                }
+            }
+        }
+        return notchHeight;
+    }
+
+    /**
+     * Gets xiao mi notch height.
+     *
+     * @param context the context
+     * @return the xiao mi notch height
+     */
+    private static int getXiaoMiNotchHeight(Context context) {
+        int resourceId = context.getResources().getIdentifier("notch_height", "dimen", "android");
+        if (resourceId > 0) {
+            return context.getResources().getDimensionPixelSize(resourceId);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get hua wei notch size int [ ].
+     *
+     * @param context the context
+     * @return the int [ ]
+     */
+    private static int[] getHuaWeiNotchSize(Context context) {
+        int[] ret = new int[]{0, 0};
+        try {
+            ClassLoader cl = context.getClassLoader();
+            Class<?> aClass = cl.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+            Method get = aClass.getMethod("getNotchSize");
+            return (int[]) get.invoke(aClass);
+        } catch (ClassNotFoundException ignored) {
+            return ret;
+        } catch (NoSuchMethodException ignored) {
+            return ret;
+        } catch (Exception ignored) {
+            return ret;
+        }
+    }
+
+    /**
+     * Dp 2 px int.
+     *
+     * @param context the context
+     * @param dpValue the dp value
+     * @return the int
+     */
+    private static int dp2px(Context context, int dpValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    }
+
 }

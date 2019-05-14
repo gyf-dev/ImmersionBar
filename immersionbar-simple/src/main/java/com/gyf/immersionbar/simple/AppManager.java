@@ -50,7 +50,7 @@ public class AppManager {
         return false;
     }
 
-    private void hideSoftKeyBoard(Activity activity) {
+    public void hideSoftKeyBoard(Activity activity) {
         View localView = activity.getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (localView != null && imm != null) {

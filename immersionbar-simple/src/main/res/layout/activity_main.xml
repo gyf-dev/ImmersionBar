@@ -32,6 +32,8 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:alpha="0"
+                    android:background="@drawable/shape_main"
                     app:title="沉浸式（ImmersionBar）"
                     app:titleTextColor="@android:color/white" />
             </FrameLayout>

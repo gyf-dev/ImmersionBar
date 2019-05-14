@@ -137,11 +137,6 @@ public class SplashFragment extends BaseFragment implements Observer<Long> {
     }
 
     @Override
-    public boolean immersionBarEnabled() {
-        return false;
-    }
-
-    @Override
     public void onSubscribe(Disposable d) {
         mSubscribe = d;
     }

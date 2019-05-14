@@ -32,9 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         //绑定控件
         ButterKnife.bind(this);
         //初始化沉浸式
-        if (isImmersionBarEnabled()) {
-            initImmersionBar();
-        }
+        initImmersionBar();
         //初始化数据
         initData();
         //view与数据绑定
@@ -55,16 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return the layout id
      */
     protected abstract int getLayoutId();
-
-    /**
-     * 是否可以使用沉浸式
-     * Is immersion bar enabled boolean.
-     *
-     * @return the boolean
-     */
-    protected boolean isImmersionBarEnabled() {
-        return true;
-    }
 
     /**
      * 初始化沉浸式

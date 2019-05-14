@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 /**
  * @author geyifeng
@@ -28,6 +30,14 @@ public final class RequestManagerFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mDelegate != null) {
+            mDelegate.onActivityCreated(getResources().getConfiguration());
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mDelegate != null) {
@@ -40,6 +50,7 @@ public final class RequestManagerFragment extends Fragment {
         super.onDestroy();
         if (mDelegate != null) {
             mDelegate.onDestroy();
+            mDelegate = null;
         }
     }
 

@@ -17,8 +17,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -69,7 +72,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         if (isImmersionBarEnabled()) {
@@ -78,6 +81,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
         initData();
         initView();
         setListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        AppManager.getInstance().hideSoftKeyBoard(mActivity);
     }
 
     @Override

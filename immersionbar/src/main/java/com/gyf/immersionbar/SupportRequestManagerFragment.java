@@ -3,6 +3,8 @@ package com.gyf.immersionbar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 /**
@@ -28,6 +30,14 @@ public final class SupportRequestManagerFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mDelegate != null) {
+            mDelegate.onActivityCreated(getResources().getConfiguration());
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mDelegate != null) {
@@ -40,6 +50,7 @@ public final class SupportRequestManagerFragment extends Fragment {
         super.onDestroy();
         if (mDelegate != null) {
             mDelegate.onDestroy();
+            mDelegate = null;
         }
     }
 

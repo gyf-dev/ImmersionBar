@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.simple.AppManager;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.fragment.dialog.BottomDialogFragment;
 import com.gyf.immersionbar.simple.fragment.dialog.FullDialogFragment;
@@ -117,6 +118,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     ImmersionBar.with(this, mAlertDialog)
                             .titleBar(toolbar)
                             .navigationBarColor(R.color.btn3)
+                            .statusBarDarkFont(true)
                             .keyboardEnable(true)
                             .init();
                     break;
@@ -167,6 +169,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        AppManager.getInstance().hideSoftKeyBoard(this);
         ImmersionBar.destroy(this, mAlertDialog);
     }
 

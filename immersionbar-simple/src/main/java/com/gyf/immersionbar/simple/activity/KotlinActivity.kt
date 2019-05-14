@@ -1,6 +1,7 @@
 package com.gyf.immersionbar.simple.activity
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.text.SpannableString
@@ -50,6 +51,7 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
         mTvNav.text = "${mTvNav.title}$navigationBarHeight".content()
         mTvAction.text = "${mTvAction.title}$actionBarHeight".content()
         mTvHasNotch.post { mTvHasNotch.text = "${mTvHasNotch.title}$hasNotchScreen".content() }
+        mTvNotchHeight.post { mTvNotchHeight.text = "${mTvNotchHeight.title}$notchHeight".content() }
         mTvFits.text = "${mTvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
         mTvStatusDark.text = "${mTvStatusDark.title}$isSupportStatusBarDarkFont".content()
         mTvNavigationDark.text = "${mTvNavigationDark.title}$isSupportNavigationIconDark".content()
@@ -81,4 +83,9 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
     }
 
     private val TextView.title get() = text.toString().split("   ")[0] + "   "
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        initView()
+    }
 }

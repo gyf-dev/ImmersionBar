@@ -191,6 +191,11 @@ public class BarParams implements Cloneable {
      */
     public boolean navigationBarWithEMUI3Enable = true;
     /**
+     * 是否可以沉浸式
+     * The Init enable.
+     */
+    public boolean barEnable = true;
+    /**
      * 软键盘监听类
      * The On keyboard listener.
      */
@@ -200,6 +205,11 @@ public class BarParams implements Cloneable {
      * 导航栏显示隐藏监听
      */
     OnNavigationBarListener onNavigationBarListener;
+
+    /**
+     * 横竖屏监听
+     */
+    OnBarListener onBarListener;
 
     @Override
     protected BarParams clone() {

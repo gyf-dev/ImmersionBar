@@ -2,4 +2,5 @@
 <resources>
     <item name="immersion_status_bar_view" type="id" />
     <item name="immersion_navigation_bar_view" type="id" />
+    <item name="immersion_fits_layout_overlap" type="id" />
 </resources>

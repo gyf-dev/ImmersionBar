@@ -14,13 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.apkfuns.logutils.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
 import com.gyf.immersionbar.simple.activity.FragmentOneActivity;
 import com.gyf.immersionbar.simple.adapter.OneAdapter;
-import com.gyf.immersionbar.simple.fragment.BaseFragment;
+import com.gyf.immersionbar.simple.fragment.BaseImmersionFragment;
 import com.gyf.immersionbar.simple.utils.GlideImageLoader;
 import com.gyf.immersionbar.simple.utils.Utils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -36,7 +35,7 @@ import butterknife.BindView;
  * @author geyifeng
  * @date 2017/5/12
  */
-public class HomeOneFragment extends BaseFragment {
+public class HomeOneFragment extends BaseImmersionFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;

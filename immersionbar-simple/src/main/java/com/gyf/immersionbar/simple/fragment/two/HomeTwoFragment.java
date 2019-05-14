@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
-import com.gyf.immersionbar.simple.fragment.BaseFragment;
+import com.gyf.immersionbar.simple.fragment.BaseImmersionFragment;
 import com.gyf.immersionbar.simple.utils.Utils;
 
 import butterknife.BindView;
@@ -16,7 +16,7 @@ import butterknife.BindView;
  * @date 2017/7/20
  */
 
-public class HomeTwoFragment extends BaseFragment {
+public class HomeTwoFragment extends BaseImmersionFragment {
 
     @BindView(R.id.mIv)
     ImageView mIv;

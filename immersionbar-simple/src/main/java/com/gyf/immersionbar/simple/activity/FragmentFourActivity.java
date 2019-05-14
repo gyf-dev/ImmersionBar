@@ -41,12 +41,6 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    protected void initImmersionBar() {
-        super.initImmersionBar();
-        ImmersionBar.with(this).init();
-    }
-
-    @Override
     protected void initView() {
         selectedFragment(0);
         tabSelected(llHome);
@@ -66,22 +60,22 @@ public class FragmentFourActivity extends BaseActivity implements View.OnClickLi
             case R.id.ll_home:
                 selectedFragment(0);
                 tabSelected(llHome);
-                ImmersionBar.with(this).reset().navigationBarColor(R.color.colorPrimary).init();
+                ImmersionBar.with(this).keyboardEnable(false).statusBarDarkFont(false).navigationBarColor(R.color.colorPrimary).init();
                 break;
             case R.id.ll_category:
                 selectedFragment(1);
                 tabSelected(llCategory);
-                ImmersionBar.with(this).fitsSystemWindows(true).keyboardEnable(true).statusBarDarkFont(true, 0.2f).barColor(R.color.btn1).init();
+                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn1).init();
                 break;
             case R.id.ll_service:
                 selectedFragment(2);
                 tabSelected(llService);
-                ImmersionBar.with(this).reset().fitsSystemWindows(false).navigationBarColor(R.color.btn2).statusBarDarkFont(true, 0.2f).init();
+                ImmersionBar.with(this).keyboardEnable(false).statusBarDarkFont(true, 0.2f).navigationBarColor(R.color.btn2).init();
                 break;
             case R.id.ll_mine:
                 selectedFragment(3);
                 tabSelected(llMine);
-                ImmersionBar.with(this).fitsSystemWindows(true).keyboardEnable(true).statusBarDarkFont(false).barColor(R.color.btn7).init();
+                ImmersionBar.with(this).keyboardEnable(true).statusBarDarkFont(false).navigationBarColor(R.color.btn7).init();
                 break;
             default:
                 break;
