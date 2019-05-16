@@ -3,7 +3,6 @@ package com.gyf.immersionbar.simple;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 
 import com.gyf.immersionbar.simple.service.NetworkService;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -15,19 +14,19 @@ import com.tencent.bugly.crashreport.CrashReport;
 public class MyApp extends Application {
 
     @SuppressLint("StaticFieldLeak")
-    private static Context context;
+    private static Context mContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        mContext = getApplicationContext();
         // bugly
         CrashReport.initCrashReport(getApplicationContext(), "31a5f1f394", false);
         // 网络监听服务
-        startService(new Intent(this, NetworkService.class));
+        NetworkService.enqueueWork(this);
     }
 
     public static Context getContext() {
-        return context;
+        return mContext;
     }
 }

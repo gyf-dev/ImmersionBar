@@ -1,13 +1,14 @@
 package com.gyf.immersionbar.simple.service;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
-import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.gyf.immersionbar.simple.event.NetworkEvent;
 import com.gyf.immersionbar.simple.receiver.NetworkBroadCastReceiver;
@@ -18,26 +19,25 @@ import org.greenrobot.eventbus.EventBus;
  * @author geyifeng
  * @date 2019-04-22 13:34
  */
-public class NetworkService extends Service {
+public class NetworkService extends JobIntentService {
 
+    private final static int JOB_ID = 1;
     private NetworkEvent mNetworkEvent;
     private NetworkBroadCastReceiver mReceiver;
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        registerNetwork(this);
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterNetwork(this);
+    }
+
+    public static void enqueueWork(Context context) {
+        enqueueWork(context, NetworkService.class, JOB_ID, new Intent());
+    }
+
+    @Override
+    protected void onHandleWork(@NonNull Intent intent) {
+        registerNetwork(this);
     }
 
     private void registerNetwork(Context context) {
@@ -62,7 +62,7 @@ public class NetworkService extends Service {
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             mReceiver = new NetworkBroadCastReceiver();
-            context.registerReceiver(mReceiver, filter);
+            LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, filter);
         }
     }
 
@@ -71,7 +71,7 @@ public class NetworkService extends Service {
             mNetworkEvent = null;
         }
         if (mReceiver != null) {
-            context.unregisterReceiver(mReceiver);
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(mReceiver);
         }
     }
 

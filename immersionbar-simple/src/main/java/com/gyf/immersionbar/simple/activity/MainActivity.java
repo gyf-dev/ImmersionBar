@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apkfuns.logutils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.BarHide;
@@ -124,7 +125,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         mRv.setAdapter(mMainAdapter);
         mMainAdapter.setNewData(mMainData);
         addHeaderView();
-        mBannerHeight = DensityUtil.dip2px(this, 180) - ImmersionBar.getActionBarHeight(this)
+        mBannerHeight = DensityUtil.dip2px(this, 180)
                 - ImmersionBar.getStatusBarHeight(this);
     }
 
@@ -149,7 +150,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 totalDy += dy;
-                if (totalDy <= mBannerHeight) {
+                if (totalDy < 0) {
+                    totalDy = 0;
+                }
+                if (totalDy < mBannerHeight) {
                     float alpha = (float) totalDy / mBannerHeight;
                     mToolbar.setAlpha(alpha);
                 } else {
@@ -364,7 +368,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
 
     /**
-     * 适配刘海屏折叠数据问题
+     * 适配刘海屏遮挡数据问题
      * Adjust view.
      *
      * @param barProperties the bar properties,ImmersionBar#setOnBarListener

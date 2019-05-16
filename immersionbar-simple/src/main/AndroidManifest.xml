@@ -3,31 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gyf.immersionbar.simple">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".MyApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
         <!-- 适配全面屏 -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.4" /> <!-- 适配华为(hua wei)刘海屏 -->
+            android:value="2.4" />
+        <!-- 适配华为(hua wei)刘海屏 -->
         <meta-data
             android:name="android.notch_support"
-            android:value="true" /> <!-- 适配小米(xiao mi)刘海屏 -->
+            android:value="true" />
+        <!-- 适配小米(xiao mi)刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
@@ -164,7 +168,9 @@
             android:name=".activity.KotlinActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
 
-        <service android:name=".service.NetworkService" />
+        <service
+            android:name=".service.NetworkService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <receiver android:name=".receiver.NetworkBroadCastReceiver" />
     </application>
 
