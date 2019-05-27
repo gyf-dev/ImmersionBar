@@ -21,7 +21,7 @@ public class FullDialogFragment extends BaseDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mWindow.setWindowAnimations(R.style.RightDialog);
+        mWindow.setWindowAnimations(R.style.RightAnimation);
     }
 
     @Override

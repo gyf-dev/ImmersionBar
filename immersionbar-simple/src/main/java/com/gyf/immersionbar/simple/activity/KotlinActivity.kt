@@ -49,6 +49,7 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
         mTvStatus.text = "${mTvStatus.title}$statusBarHeight".content()
         mTvHasNav.text = "${mTvHasNav.title}$hasNavigationBar".content()
         mTvNav.text = "${mTvNav.title}$navigationBarHeight".content()
+        mTvNavWidth.text = "${mTvNavWidth.title}$navigationBarWidth".content()
         mTvAction.text = "${mTvAction.title}$actionBarHeight".content()
         mTvHasNotch.post { mTvHasNotch.text = "${mTvHasNotch.title}$hasNotchScreen".content() }
         mTvNotchHeight.post { mTvNotchHeight.text = "${mTvNotchHeight.title}$notchHeight".content() }

@@ -51,27 +51,27 @@
     </style>
 
     <!--顶部弹出Dialog动画-->
-    <style name="TopDialog" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/dialog_top_in</item>
-        <item name="android:windowExitAnimation">@anim/dialog_top_out</item>
+    <style name="TopAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_top_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_top_out</item>
     </style>
 
     <!--底部弹出Dialog动画-->
-    <style name="BottomDialog" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/dialog_bottom_in</item>
-        <item name="android:windowExitAnimation">@anim/dialog_bottom_out</item>
+    <style name="BottomAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_bottom_out</item>
     </style>
 
     <!--左边弹出Dialog动画-->
-    <style name="LeftDialog" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/dialog_left_in</item>
-        <item name="android:windowExitAnimation">@anim/dialog_left_out</item>
+    <style name="LeftAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_left_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_left_out</item>
     </style>
 
     <!--右边弹出Dialog动画-->
-    <style name="RightDialog" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/dialog_right_in</item>
-        <item name="android:windowExitAnimation">@anim/dialog_right_out</item>
+    <style name="RightAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_right_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_right_out</item>
     </style>
 
 </resources>

@@ -138,7 +138,7 @@ class RequestManagerRetriever implements Handler.Callback {
             }
         }
         if (destroy) {
-            fm.beginTransaction().remove(fragment).commit();
+            fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
             return null;
         }
         return fragment;
@@ -163,7 +163,7 @@ class RequestManagerRetriever implements Handler.Callback {
             }
         }
         if (destroy) {
-            fm.beginTransaction().remove(fragment).commit();
+            fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
             return null;
         }
         return fragment;

@@ -29,7 +29,7 @@ public class BarProperties {
      */
     private boolean hasNavigationBar;
     /**
-     * 状态栏高度，刘海屏有可能导致状态栏高度不一样
+     * 状态栏高度，刘海屏横竖屏有可能状态栏高度不一样
      */
     private int statusBarHeight;
     /**

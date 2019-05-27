@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -116,6 +117,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         showSplash();
         GlideUtils.loadBlurry(ivBg, Utils.getPic());
         mMainAdapter = new MainAdapter();
@@ -196,61 +198,64 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     intent = new Intent(this, DialogActivity.class);
                     break;
                 case 9:
-                    drawer.openDrawer(Gravity.START);
+                    intent = new Intent(this, PopupActivity.class);
                     break;
                 case 10:
-                    intent = new Intent(this, CoordinatorActivity.class);
+                    drawer.openDrawer(Gravity.START);
                     break;
                 case 11:
-                    intent = new Intent(this, TabLayoutActivity.class);
+                    intent = new Intent(this, CoordinatorActivity.class);
                     break;
                 case 12:
-                    intent = new Intent(this, TabLayout2Activity.class);
+                    intent = new Intent(this, TabLayoutActivity.class);
                     break;
                 case 13:
-                    intent = new Intent(this, WebActivity.class);
+                    intent = new Intent(this, TabLayout2Activity.class);
                     break;
                 case 14:
-                    intent = new Intent(this, ActionBarActivity.class);
+                    intent = new Intent(this, WebActivity.class);
                     break;
                 case 15:
-                    intent = new Intent(this, FlymeActivity.class);
+                    intent = new Intent(this, ActionBarActivity.class);
                     break;
                 case 16:
-                    intent = new Intent(this, OverActivity.class);
+                    intent = new Intent(this, FlymeActivity.class);
                     break;
                 case 17:
-                    intent = new Intent(this, KeyBoardActivity.class);
+                    intent = new Intent(this, OverActivity.class);
                     break;
                 case 18:
-                    intent = new Intent(this, AllEditActivity.class);
+                    intent = new Intent(this, KeyBoardActivity.class);
                     break;
                 case 19:
-                    intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, AllEditActivity.class);
                     break;
                 case 20:
-                    intent = new Intent(this, WhiteBarActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     break;
                 case 21:
-                    intent = new Intent(this, AutoDarkModeActivity.class);
+                    intent = new Intent(this, WhiteBarActivity.class);
                     break;
                 case 22:
-                    ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+                    intent = new Intent(this, AutoDarkModeActivity.class);
                     break;
                 case 23:
+                    ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+                    break;
+                case 24:
                     if (ImmersionBar.hasNavigationBar(this)) {
                         ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
                     } else {
                         Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case 24:
+                case 25:
                     ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
                     break;
-                case 25:
+                case 26:
                     ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
                     break;
-                case 26:
+                case 27:
                     if (ImmersionBar.hasNavigationBar(this)) {
                         BarParams barParams = ImmersionBar.with(this).getBarParams();
                         if (barParams.fullScreen) {
@@ -262,14 +267,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case 27:
+                case 28:
                     if (ImmersionBar.isSupportStatusBarDarkFont()) {
                         ImmersionBar.with(this).statusBarDarkFont(true).init();
                     } else {
                         Toast.makeText(this, "当前设备不支持状态栏字体变色", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case 28:
+                case 29:
                     ImmersionBar.with(this).statusBarDarkFont(false).init();
                     break;
                 default:
@@ -311,18 +316,27 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * 展示Splash
      */
     private void showSplash() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         mSplashFragment = (SplashFragment) getSupportFragmentManager().findFragmentByTag(SplashFragment.class.getSimpleName());
-        if (mSplashFragment == null) {
+        if (mSplashFragment != null) {
+            if (mSplashFragment.isAdded()) {
+                transaction.show(mSplashFragment).commitAllowingStateLoss();
+            } else {
+                transaction.remove(mSplashFragment).commitAllowingStateLoss();
+                mSplashFragment = SplashFragment.newInstance();
+                transaction.add(R.id.fl_content, mSplashFragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
+            }
+        } else {
             mSplashFragment = SplashFragment.newInstance();
-            mSplashFragment.setOnSplashListener((time, totalTime) -> {
-                if (time != 0) {
-                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                } else {
-                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                }
-            });
+            transaction.add(R.id.fl_content, mSplashFragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, mSplashFragment, SplashFragment.class.getSimpleName()).commitAllowingStateLoss();
+        mSplashFragment.setOnSplashListener((time, totalTime) -> {
+            if (time != 0) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            } else {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            }
+        });
     }
 
     private void addHeaderView() {

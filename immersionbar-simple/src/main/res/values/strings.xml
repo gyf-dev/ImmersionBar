@@ -9,6 +9,7 @@
     <string name="text_swipe_back">结合侧滑返回使用</string>
     <string name="text_fragment">结合fragment使用</string>
     <string name="text_dialog">结合Dialog使用</string>
+    <string name="text_popup">结合PopupWindow使用</string>
     <string name="text_drawer">结合侧边栏使用</string>
     <string name="text_coordinator">结合CoordinatorLayout使用</string>
     <string name="text_tab">结合TabLayout使用</string>

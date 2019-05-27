@@ -48,6 +48,16 @@
                 android:textColor="@android:color/black" />
 
             <TextView
+                android:id="@+id/mTvNavWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="NavigationBar Width（此宽度的意思是横屏下导航栏的宽度，理论上导航栏竖屏下高度和横屏下宽度值是一样的，但是有些手机会不一样，比如华为部分手机导航栏竖屏下高度和横屏下宽度就是不一样的）:"
+                android:textColor="@android:color/black" />
+
+            <TextView
                 android:id="@+id/mTvAction"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"

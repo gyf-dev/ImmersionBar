@@ -147,18 +147,20 @@ class ImmersionDelegate implements Runnable {
 
     @Override
     public void run() {
-        Activity activity = mImmersionBar.getActivity();
-        BarConfig barConfig = new BarConfig(activity);
-        mBarProperties.setStatusBarHeight(barConfig.getStatusBarHeight());
-        mBarProperties.setNavigationBar(barConfig.hasNavigationBar());
-        mBarProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
-        mBarProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
-        boolean notchScreen = NotchUtils.hasNotchScreen(activity);
-        mBarProperties.setNotchScreen(notchScreen);
-        if (notchScreen && mNotchHeight == 0) {
-            mNotchHeight = NotchUtils.getNotchHeight(activity);
-            mBarProperties.setNotchHeight(mNotchHeight);
+        if (mImmersionBar != null && mImmersionBar.getActivity() != null) {
+            Activity activity = mImmersionBar.getActivity();
+            BarConfig barConfig = new BarConfig(activity);
+            mBarProperties.setStatusBarHeight(barConfig.getStatusBarHeight());
+            mBarProperties.setNavigationBar(barConfig.hasNavigationBar());
+            mBarProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
+            mBarProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
+            boolean notchScreen = NotchUtils.hasNotchScreen(activity);
+            mBarProperties.setNotchScreen(notchScreen);
+            if (notchScreen && mNotchHeight == 0) {
+                mNotchHeight = NotchUtils.getNotchHeight(activity);
+                mBarProperties.setNotchHeight(mNotchHeight);
+            }
+            mOnBarListener.onBarChange(mBarProperties);
         }
-        mOnBarListener.onBarChange(mBarProperties);
     }
 }

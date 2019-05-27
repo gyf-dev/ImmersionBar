@@ -1553,7 +1553,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
 
     /**
-     * Bar Info 监听，比如横竖屏切换
+     * Bar监听，第一次调用和横竖屏切换都会触发此方法，比如可以解决横竖屏切换，横屏情况下，刘海屏遮挡布局的问题
      * Sets on bar listener.
      *
      * @param onBarListener the on bar listener
@@ -2313,13 +2313,13 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setTitleBar(final Activity activity, final View... view) {
+    public static synchronized void setTitleBar(final Activity activity, final View... view) {
+        if (activity == null) {
+            return;
+        }
         for (final View v : view) {
-            if (activity == null) {
-                return;
-            }
             if (v == null) {
-                return;
+                continue;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 final int statusBarHeight = getStatusBarHeight(activity);
@@ -2328,6 +2328,7 @@ public final class ImmersionBar implements ImmersionCallback {
                     fitsHeight = 0;
                 }
                 if (fitsHeight != statusBarHeight) {
+                    v.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                     ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
                     if (layoutParams == null) {
                         layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -2345,7 +2346,6 @@ public final class ImmersionBar implements ImmersionCallback {
                                         v.getPaddingRight(),
                                         v.getPaddingBottom());
                                 v.setLayoutParams(finalLayoutParams);
-                                v.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                             }
                         });
                     } else {
@@ -2353,7 +2353,6 @@ public final class ImmersionBar implements ImmersionCallback {
                         v.setPadding(v.getPaddingLeft(), v.getPaddingTop() + statusBarHeight - fitsHeight,
                                 v.getPaddingRight(), v.getPaddingBottom());
                         v.setLayoutParams(layoutParams);
-                        v.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                     }
                 }
             }
@@ -2382,12 +2381,12 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param view     the view
      */
     public static void setTitleBarMarginTop(Activity activity, View... view) {
+        if (activity == null) {
+            return;
+        }
         for (View v : view) {
-            if (activity == null) {
-                return;
-            }
             if (v == null) {
-                return;
+                continue;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 int statusBarHeight = getStatusBarHeight(activity);
@@ -2396,6 +2395,7 @@ public final class ImmersionBar implements ImmersionCallback {
                     fitsHeight = 0;
                 }
                 if (fitsHeight != statusBarHeight) {
+                    v.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                     ViewGroup.LayoutParams lp = v.getLayoutParams();
                     if (lp == null) {
                         lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -2406,7 +2406,6 @@ public final class ImmersionBar implements ImmersionCallback {
                             layoutParams.rightMargin,
                             layoutParams.bottomMargin);
                     v.setLayoutParams(layoutParams);
-                    v.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                 }
             }
         }
@@ -2447,13 +2446,13 @@ public final class ImmersionBar implements ImmersionCallback {
                 fitsHeight = 0;
             }
             if (fitsHeight != statusBarHeight) {
+                view.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
                 ViewGroup.LayoutParams lp = view.getLayoutParams();
                 if (lp == null) {
                     lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
                 }
                 lp.height = statusBarHeight;
                 view.setLayoutParams(lp);
-                view.setTag(R.id.immersion_fits_layout_overlap, statusBarHeight);
             }
         }
     }

@@ -113,7 +113,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
             switch (view.getId()) {
                 case R.id.btn_full:
                     mDialogWindow.setGravity(Gravity.TOP);
-                    mDialogWindow.setWindowAnimations(R.style.RightDialog);
+                    mDialogWindow.setWindowAnimations(R.style.RightAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     ImmersionBar.with(this, mAlertDialog)
                             .titleBar(toolbar)
@@ -124,7 +124,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     break;
                 case R.id.btn_top:
                     mDialogWindow.setGravity(Gravity.TOP);
-                    mDialogWindow.setWindowAnimations(R.style.TopDialog);
+                    mDialogWindow.setWindowAnimations(R.style.TopAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
                     ImmersionBar.with(this, mAlertDialog)
                             .titleBar(toolbar)
@@ -134,7 +134,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     break;
                 case R.id.btn_bottom:
                     mDialogWindow.setGravity(Gravity.BOTTOM);
-                    mDialogWindow.setWindowAnimations(R.style.BottomDialog);
+                    mDialogWindow.setWindowAnimations(R.style.BottomAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
                     ImmersionBar.with(this, mAlertDialog)
                             .navigationBarColor(R.color.cool_green_normal)
@@ -142,7 +142,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     break;
                 case R.id.btn_left:
                     mDialogWindow.setGravity(Gravity.TOP | Gravity.START);
-                    mDialogWindow.setWindowAnimations(R.style.LeftDialog);
+                    mDialogWindow.setWindowAnimations(R.style.LeftAnimation);
                     mDialogWindow.setLayout(widthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
                     ImmersionBar.with(this, mAlertDialog)
                             .titleBar(toolbar)
@@ -153,7 +153,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     break;
                 case R.id.btn_right:
                     mDialogWindow.setGravity(Gravity.TOP | Gravity.END);
-                    mDialogWindow.setWindowAnimations(R.style.RightDialog);
+                    mDialogWindow.setWindowAnimations(R.style.RightAnimation);
                     mDialogWindow.setLayout(widthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
                     ImmersionBar.with(this, mAlertDialog)
                             .titleBar(toolbar)

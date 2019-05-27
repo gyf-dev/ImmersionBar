@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        app:title="结合PopupWindow使用"
+        app:titleTextColor="@android:color/white" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:padding="10dp"
+                android:text="重点（必读）：因为popupWindow和Activity同属于一个Window，所以这里只是简单设置下即可实现沉浸式，重点是popupWindow.setClippingEnabled(false)这个方法，还有沉浸式模式下如果popup底部有输入框，软键盘弹起将会覆盖输入框，即使设置了soft相关属性也是不起作用的，如果底部有输入框，还是使用DialogFragment来实现吧或者不让PopupWindow实现沉浸式，即删除setClippingEnabled方法或者设置为true，具体参考demo演示。"
+                android:textColor="@color/btn3"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_full"
+                style="@style/btn"
+                android:text="全屏" />
+
+            <Button
+                android:id="@+id/btn_top"
+                style="@style/btn"
+                android:text="顶部半屏" />
+
+            <Button
+                android:id="@+id/btn_bottom"
+                style="@style/btn"
+                android:text="底部半屏" />
+
+            <Button
+                android:id="@+id/btn_left"
+                style="@style/btn"
+                android:text="左边半屏" />
+
+            <Button
+                android:id="@+id/btn_right"
+                style="@style/btn"
+                android:text="右边半屏" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

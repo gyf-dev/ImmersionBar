@@ -25,7 +25,7 @@ public class RightDialogFragment extends BaseDialogFragment {
     public void onStart() {
         super.onStart();
         mWindow.setGravity(Gravity.TOP | Gravity.END);
-        mWindow.setWindowAnimations(R.style.RightDialog);
+        mWindow.setWindowAnimations(R.style.RightAnimation);
         mWindow.setLayout(mWidthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 

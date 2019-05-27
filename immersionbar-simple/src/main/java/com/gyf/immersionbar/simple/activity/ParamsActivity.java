@@ -30,6 +30,8 @@ public class ParamsActivity extends BaseActivity {
     TextView mTvHasNav;
     @BindView(R.id.mTvNav)
     TextView mTvNav;
+    @BindView(R.id.mTvNavWidth)
+    TextView mTvNavWidth;
     @BindView(R.id.mTvAction)
     TextView mTvAction;
     @BindView(R.id.mTvHasNotch)
@@ -78,6 +80,7 @@ public class ParamsActivity extends BaseActivity {
         mTvStatus.setText(getText(getTitle(mTvStatus) + ImmersionBar.getStatusBarHeight(this)));
         mTvHasNav.setText(getText(getTitle(mTvHasNav) + ImmersionBar.hasNavigationBar(this)));
         mTvNav.setText(getText(getTitle(mTvNav) + ImmersionBar.getNavigationBarHeight(this)));
+        mTvNavWidth.setText(getText(getTitle(mTvNavWidth) + ImmersionBar.getNavigationBarWidth(this)));
         mTvAction.setText(getText(getTitle(mTvAction) + ImmersionBar.getActionBarHeight(this)));
         mTvHasNotch.post(() -> mTvHasNotch.setText(getText(getTitle(mTvHasNotch) + ImmersionBar.hasNotchScreen(this))));
         mTvNotchHeight.post(() -> mTvNotchHeight.setText(getText(getTitle(mTvNotchHeight) + ImmersionBar.getNotchHeight(this))));

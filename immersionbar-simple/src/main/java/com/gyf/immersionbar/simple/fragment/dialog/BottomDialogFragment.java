@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
-import com.gyf.immersionbar.simple.activity.DialogActivity;
 
 /**
  * 底部DialogFragment
@@ -20,7 +19,7 @@ public class BottomDialogFragment extends BaseDialogFragment {
     public void onStart() {
         super.onStart();
         mWindow.setGravity(Gravity.BOTTOM);
-        mWindow.setWindowAnimations(R.style.BottomDialog);
+        mWindow.setWindowAnimations(R.style.BottomAnimation);
         mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, mWidthAndHeight[1] / 2);
     }
 

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.simple.R;
-import com.gyf.immersionbar.simple.activity.DialogActivity;
 
 import butterknife.BindView;
 
@@ -26,7 +25,7 @@ public class LeftDialogFragment extends BaseDialogFragment {
     public void onStart() {
         super.onStart();
         mWindow.setGravity(Gravity.TOP | Gravity.START);
-        mWindow.setWindowAnimations(R.style.LeftDialog);
+        mWindow.setWindowAnimations(R.style.LeftAnimation);
         mWindow.setLayout(mWidthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 

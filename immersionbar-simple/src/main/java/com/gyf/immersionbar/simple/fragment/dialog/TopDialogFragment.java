@@ -25,7 +25,7 @@ public class TopDialogFragment extends BaseDialogFragment {
     public void onStart() {
         super.onStart();
         mWindow.setGravity(Gravity.TOP);
-        mWindow.setWindowAnimations(R.style.TopDialog);
+        mWindow.setWindowAnimations(R.style.TopAnimation);
         mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, mWidthAndHeight[1] / 2);
     }
 

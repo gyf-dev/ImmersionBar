@@ -26,12 +26,10 @@
         <!-- 适配全面屏 -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.4" />
-        <!-- 适配华为(hua wei)刘海屏 -->
+            android:value="2.4" /> <!-- 适配华为(hua wei)刘海屏 -->
         <meta-data
             android:name="android.notch_support"
-            android:value="true" />
-        <!-- 适配小米(xiao mi)刘海屏 -->
+            android:value="true" /> <!-- 适配小米(xiao mi)刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
@@ -150,6 +148,10 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activity.PopupActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activity.BlogActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
         <activity
@@ -171,6 +173,7 @@
         <service
             android:name=".service.NetworkService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <receiver android:name=".receiver.NetworkBroadCastReceiver" />
     </application>
 
