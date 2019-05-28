@@ -182,6 +182,12 @@
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
 
+## 在PopupWindow中实现沉浸式，具体实现参考demo
+   重点是调用以下方法，但是此方法会导致有导航栏的手机底部布局会被导航栏覆盖，还有底部输入框无法根据软键盘弹出而弹出，具体适配请参考demo。
+   ```java
+       popupWindow.setClippingEnabled(false);
+   ```
+
 ## 状态栏与布局顶部重叠解决方案，六种方案根据不同需求任选其一
 - ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
 
