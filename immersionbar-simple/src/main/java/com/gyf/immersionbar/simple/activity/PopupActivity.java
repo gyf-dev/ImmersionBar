@@ -49,7 +49,7 @@ public class PopupActivity extends BaseActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //这里适配横竖屏切换
+        //适配横竖屏切换
         updatePopupWindow();
         updatePopupView();
     }
@@ -216,7 +216,6 @@ public class PopupActivity extends BaseActivity {
                 rlContent.setLayoutParams(layoutParams);
             });
         }
-
     }
 
     /**

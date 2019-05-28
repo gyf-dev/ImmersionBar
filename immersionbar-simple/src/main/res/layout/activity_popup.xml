@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="2dp"
                 android:padding="10dp"
-                android:text="重点（必读）：因为popupWindow和Activity同属于一个Window，所以这里只是简单设置下即可实现沉浸式，重点是popupWindow.setClippingEnabled(false)这个方法，还有沉浸式模式下如果popup底部有输入框，软键盘弹起将会覆盖输入框，即使设置了soft相关属性也是不起作用的，如果底部有输入框，还是使用DialogFragment来实现吧或者不让PopupWindow实现沉浸式，即删除setClippingEnabled方法或者设置为true，具体参考demo演示。"
+                android:text="重点（必读）：因为popupWindow和Activity同属于一个Window，所以这里只是简单设置下即可实现沉浸式，重点是popupWindow.setClippingEnabled(false)这个方法，此方法会导致有导航栏的手机底部被导航栏覆盖，demo有适配。还有沉浸式模式下如果popup底部有输入框，软键盘弹起将会覆盖输入框，即使设置了soft相关属性也是不起作用的。如果底部有输入框，还是使用DialogFragment来实现吧或者不让PopupWindow实现沉浸式，即删除setClippingEnabled方法或者设置为true，具体参考demo演示。"
                 android:textColor="@color/btn3"
                 android:textSize="16sp" />
 

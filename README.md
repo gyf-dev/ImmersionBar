@@ -103,21 +103,22 @@
                  .removeSupportView(toolbar)  //移除指定view支持
                  .removeSupportAllView() //移除全部view支持
                  .navigationBarEnable(true)   //是否可以修改导航栏颜色，默认为true
-                 .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4和emui3.1手机导航栏颜色，默认为true
+                 .navigationBarWithKitkatEnable(true)  //是否可以修改安卓4.4和emui3.x手机导航栏颜色，默认为true
+                 .navigationBarWithEMUI3Enable(true) //是否可以修改emui3.x手机导航栏颜色，默认为true
                  .keyboardEnable(true)  //解决软键盘与底部输入框冲突问题，默认为false，还有一个重载方法，可以指定软键盘mode
                  .keyboardMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)  //单独指定软键盘模式
-                 .setOnKeyboardListener(new OnKeyboardListener() {    //软键盘监听回调
+                 .setOnKeyboardListener(new OnKeyboardListener() {    //软键盘监听回调，keyboardEnable为true才会回调此方法
                        @Override
                        public void onKeyboardChange(boolean isPopup, int keyboardHeight) {
                            LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
                        }
                   })
                  .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，目前只支持华为和小米手机
-                 .setOnBarListener(OnBarListener) //第一次调用和横竖屏切换都会触发，建议用来做刘海屏遮挡布局控件的问题
+                 .setOnBarListener(OnBarListener) //第一次调用和横竖屏切换都会触发，可以用来做刘海屏遮挡布局控件的问题
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
-                 .init();  //必须调用方可沉浸式
+                 .init();  //必须调用方可应用以上所配置的参数
     ```
 ## 在Activity中实现沉浸式
 
@@ -181,7 +182,7 @@
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
 
-## 状态栏与布局顶部重叠解决方案，六种方案任选其一
+## 状态栏与布局顶部重叠解决方案，六种方案根据不同需求任选其一
 - ① 使用dimen自定义状态栏高度，不建议使用，因为设备状态栏高度并不是固定的
 
     在values-v19/dimens.xml文件下

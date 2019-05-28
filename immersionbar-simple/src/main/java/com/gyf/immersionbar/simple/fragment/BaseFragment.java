@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 可以使用沉浸式的Fragment基类
+ * 没有使用沉浸式的Fragment基类
  *
  * @author geyifeng
  * @date 2017/4/7
