@@ -42,27 +42,32 @@ public class NetworkService extends JobIntentService {
 
     private void registerNetwork(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
-                @Override
-                public void onAvailable(Network network) {
-                    super.onAvailable(network);
-                    getNetworkEvent().setAvailable(true);
-                    EventBus.getDefault().post(mNetworkEvent);
-                }
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                    @Override
+                    public void onAvailable(Network network) {
+                        super.onAvailable(network);
+                        getNetworkEvent().setAvailable(true);
+                        EventBus.getDefault().post(mNetworkEvent);
+                    }
 
-                @Override
-                public void onLost(Network network) {
-                    super.onLost(network);
-                    getNetworkEvent().setAvailable(false);
-                    EventBus.getDefault().post(mNetworkEvent);
-                }
-            });
+                    @Override
+                    public void onLost(Network network) {
+                        super.onLost(network);
+                        getNetworkEvent().setAvailable(false);
+                        EventBus.getDefault().post(mNetworkEvent);
+                    }
+                });
+            } else {
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+                mReceiver = new NetworkBroadCastReceiver();
+                LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, filter);
+            }
         } else {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            mReceiver = new NetworkBroadCastReceiver();
-            LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, filter);
+            getNetworkEvent().setAvailable(false);
+            EventBus.getDefault().post(mNetworkEvent);
         }
     }
 

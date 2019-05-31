@@ -54,7 +54,7 @@ public class AppManager {
         View localView = activity.getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (localView != null && imm != null) {
-            imm.hideSoftInputFromWindow(localView.getWindowToken(), 2);
+            imm.hideSoftInputFromWindow(localView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }

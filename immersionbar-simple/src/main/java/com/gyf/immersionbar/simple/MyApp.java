@@ -3,6 +3,7 @@ package com.gyf.immersionbar.simple;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.gyf.immersionbar.simple.service.NetworkService;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -15,6 +16,12 @@ public class MyApp extends Application {
 
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

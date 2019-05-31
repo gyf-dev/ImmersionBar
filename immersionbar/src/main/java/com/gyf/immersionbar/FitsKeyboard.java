@@ -17,8 +17,8 @@ import android.widget.FrameLayout;
  */
 class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
 
-    private final int mStatusBarHeight;
-    private final int mActionBarHeight;
+    private int mStatusBarHeight;
+    private int mActionBarHeight;
     private ImmersionBar mImmersionBar;
     private Activity mActivity;
     private Window mWindow;
@@ -60,6 +60,19 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(this);
                 mIsAddListener = true;
             }
+        }
+    }
+
+    /**
+     * 为啥要更新？因为横竖屏切换状态栏高度有可能不一样
+     * Update bar config.
+     *
+     * @param barConfig the bar config
+     */
+    void updateBarConfig(BarConfig barConfig) {
+        mStatusBarHeight = barConfig.getStatusBarHeight();
+        if (mImmersionBar != null && mImmersionBar.isActionBarBelowLOLLIPOP()) {
+            mActionBarHeight = barConfig.getActionBarHeight();
         }
     }
 
@@ -130,6 +143,9 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 }
                 if (mImmersionBar.getBarParams().onKeyboardListener != null) {
                     mImmersionBar.getBarParams().onKeyboardListener.onKeyboardChange(isPopup, keyboardHeight);
+                }
+                if (!isPopup && mImmersionBar.getBarParams().barHide != BarHide.FLAG_SHOW_BAR) {
+                    mImmersionBar.setBar();
                 }
             }
         }

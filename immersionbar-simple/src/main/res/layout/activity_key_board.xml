@@ -25,6 +25,7 @@
 
 
     <EditText
+        android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="我是输入框" />

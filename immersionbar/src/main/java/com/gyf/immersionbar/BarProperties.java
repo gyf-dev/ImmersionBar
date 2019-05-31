@@ -44,6 +44,10 @@ public class BarProperties {
      * 刘海屏高度
      */
     private int notchHeight;
+    /**
+     * ActionBar高度
+     */
+    private int actionBarHeight;
 
     public boolean isPortrait() {
         return portrait;
@@ -115,5 +119,13 @@ public class BarProperties {
 
     void setNotchHeight(int notchHeight) {
         this.notchHeight = notchHeight;
+    }
+
+    public int getActionBarHeight() {
+        return actionBarHeight;
+    }
+
+    void setActionBarHeight(int actionBarHeight) {
+        this.actionBarHeight = actionBarHeight;
     }
 }

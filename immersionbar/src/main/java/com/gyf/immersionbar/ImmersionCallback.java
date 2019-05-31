@@ -6,5 +6,5 @@ package com.gyf.immersionbar;
  * @author geyifeng
  * @date 2019 /4/11 5:04 PM
  */
-interface ImmersionCallback extends OnNavigationBarListener {
+interface ImmersionCallback extends OnNavigationBarListener, Runnable {
 }

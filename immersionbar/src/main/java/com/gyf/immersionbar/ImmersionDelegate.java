@@ -63,9 +63,13 @@ class ImmersionDelegate implements Runnable {
     }
 
     void onResume() {
-        if (mImmersionBar != null && OSUtils.isEMUI3_x()) {
-            if (mImmersionBar.initialized() && !mImmersionBar.isFragment() && mImmersionBar.getBarParams().navigationBarWithEMUI3Enable) {
+        if (mImmersionBar != null && !mImmersionBar.isFragment() && mImmersionBar.initialized()) {
+            if (OSUtils.isEMUI3_x() && mImmersionBar.getBarParams().navigationBarWithEMUI3Enable) {
                 reinitialize();
+            } else {
+                if (mImmersionBar.getBarParams().barHide != BarHide.FLAG_SHOW_BAR) {
+                    mImmersionBar.setBar();
+                }
             }
         }
     }
@@ -154,6 +158,7 @@ class ImmersionDelegate implements Runnable {
             mBarProperties.setNavigationBar(barConfig.hasNavigationBar());
             mBarProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
             mBarProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
+            mBarProperties.setActionBarHeight(barConfig.getActionBarHeight());
             boolean notchScreen = NotchUtils.hasNotchScreen(activity);
             mBarProperties.setNotchScreen(notchScreen);
             if (notchScreen && mNotchHeight == 0) {

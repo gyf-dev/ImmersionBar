@@ -16,9 +16,7 @@ open class BaseKotlinActivity(@LayoutRes val layoutResID: Int) : AppCompatActivi
         super.onCreate(savedInstanceState)
         AppManager.getInstance().addActivity(this)
         setContentView(layoutResID)
-        if (isImmersionBarEnabled()) {
-            initImmersionBar()
-        }
+        initImmersionBar()
         //初始化数据
         initData()
         //view与数据绑定
@@ -31,8 +29,6 @@ open class BaseKotlinActivity(@LayoutRes val layoutResID: Int) : AppCompatActivi
         super.onDestroy()
         AppManager.getInstance().removeActivity(this)
     }
-
-    open fun isImmersionBarEnabled() = true
 
     open fun initImmersionBar() {
         immersionBar()

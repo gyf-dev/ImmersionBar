@@ -1,19 +1,19 @@
 ![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
-[![version](https://img.shields.io/badge/version-3.0.0--beta04-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
+[![version](https://img.shields.io/badge/version-3.0.0--beta05-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
 
-## 直接看效果图，最下面有各个版本的效果图
+## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
 
 ## 使用 
 > android studio
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta04'
+   implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta05'
    // fragment快速实现（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta04'
+   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta05'
    // kotlin扩展（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0-beta04'
+   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0-beta05'
    ```
 ## 2.x版本使用说明
 #### [点我查看2.x版本使用说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_2.x.md)
@@ -22,7 +22,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.0.0beta04.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta04.apk) 
+#### [点我下载immersionBar-3.0.0beta05.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta05.apk) 
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
@@ -224,7 +224,7 @@
        </LinearLayout>
     ```
   
-- ② 使用系统的fitsSystemWindows属性，使用该属性不会导致输入框与软键盘冲突问题，不要再Fragment使用该属性
+- ② 使用系统的fitsSystemWindows属性，使用该属性不会导致输入框与软键盘冲突问题，不要再Fragment使用该属性，只适合纯色状态栏
 
    ```xml
        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -242,7 +242,7 @@
    ```
    - 注意：ImmersionBar一定要在设置完布局以后使用，
 
-- ③ 使用ImmersionBar的fitsSystemWindows(boolean fits)方法
+- ③ 使用ImmersionBar的fitsSystemWindows(boolean fits)方法，只适合纯色状态栏
 
     ```java
         ImmersionBar.with(this)
@@ -250,7 +250,7 @@
             .statusBarColor(R.color.colorPrimary)
             .init();
     ```
-- ④ 使用ImmersionBar的statusBarView(View view)方法
+- ④ 使用ImmersionBar的statusBarView(View view)方法，可以用来适配渐变色状态栏、侧滑返回
 
     在标题栏的上方增加View标签，高度指定为0dp
     ```xml
@@ -283,7 +283,7 @@
          //或者
          //ImmersionBar.setStatusBarView(this,view);
      ```   
-- ⑤ 使用ImmersionBar的titleBar(View view)方法，原理是设置paddingTop
+- ⑤ 使用ImmersionBar的titleBar(View view)方法，原理是设置paddingTop，可以用来适配渐变色状态栏、侧滑返回
     ```java
              ImmersionBar.with(this)
                    .titleBar(view) //可以为任意view，如果是自定义xml实现标题栏的话，标题栏根节点不能为RelativeLayout或者ConstraintLayout，以及其子类
@@ -291,7 +291,7 @@
              //或者
              //ImmersionBar.setTitleBar(this, view);
      ```
-- ⑥ 使用ImmersionBar的titleBarMarginTop(View view)方法，原理是设置marginTop
+- ⑥ 使用ImmersionBar的titleBarMarginTop(View view)方法，原理是设置marginTop，只适合纯色状态栏
     ```java
              ImmersionBar.with(this)
                    .titleBarMarginTop(view)  //可以为任意view

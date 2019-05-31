@@ -19,6 +19,9 @@ import java.util.Random;
 public class Utils {
 
     public static Integer[] getWidthAndHeight(Window window) {
+        if (window == null) {
+            return null;
+        }
         Integer[] integer = new Integer[2];
         DisplayMetrics dm = new DisplayMetrics();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

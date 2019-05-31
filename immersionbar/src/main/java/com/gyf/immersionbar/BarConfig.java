@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 
 import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
@@ -53,12 +54,18 @@ class BarConfig {
     }
 
     @TargetApi(14)
-    private int getActionBarHeight(Context context) {
+    private int getActionBarHeight(Activity activity) {
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            TypedValue tv = new TypedValue();
-            context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-            result = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
+            View actionBar = activity.getWindow().findViewById(R.id.action_bar_container);
+            if (actionBar != null) {
+                result = actionBar.getMeasuredHeight();
+            }
+            if (result == 0) {
+                TypedValue tv = new TypedValue();
+                activity.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+                result = TypedValue.complexToDimensionPixelSize(tv.data, activity.getResources().getDisplayMetrics());
+            }
         }
         return result;
     }
@@ -145,7 +152,8 @@ class BarConfig {
                 } else {
                     float densityOne = context.getResources().getDisplayMetrics().density;
                     float densityTwo = Resources.getSystem().getDisplayMetrics().density;
-                    return Math.round(sizeOne * densityTwo / densityOne);
+                    float f = sizeOne * densityTwo / densityOne;
+                    return (int) ((f >= 0) ? (f + 0.5f) : (f - 0.5f));
                 }
             }
         } catch (Resources.NotFoundException ignored) {

@@ -90,7 +90,7 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * ActionBar的高度
      */
-    private int mActionBarHeight;
+    private int mActionBarHeight = 0;
     /**
      * 软键盘监听相关
      */
@@ -100,13 +100,17 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     private Map<String, BarParams> mTagMap = new HashMap<>();
     /**
-     * 当前是以哪种方式适配的
+     * 当前顶部布局和状态栏重叠是以哪种方式适配的
      */
     private int mFitsStatusBarType = FLAG_FITS_DEFAULT;
     /**
      * 是否已经调用过init()方法了
      */
     private boolean mInitialized = false;
+    /**
+     * ActionBar是否是在LOLLIPOP下设备使用
+     */
+    private boolean mIsActionBarBelowLOLLIPOP = false;
 
     private boolean mKeyboardTempEnable = false;
 
@@ -1574,6 +1578,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
     /**
      * 是否可以修改导航栏颜色，默认为true
+     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
      * Navigation bar enable immersion bar.
      *
      * @param navigationBarEnable the enable
@@ -1586,17 +1591,28 @@ public final class ImmersionBar implements ImmersionCallback {
 
     /**
      * 是否可以修改4.4设备导航栏颜色，默认为true
+     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
      *
      * @param navigationBarWithKitkatEnable the navigation bar with kitkat enable
      * @return the immersion bar
      */
     public ImmersionBar navigationBarWithKitkatEnable(boolean navigationBarWithKitkatEnable) {
         mBarParams.navigationBarWithKitkatEnable = navigationBarWithKitkatEnable;
+        if (OSUtils.isEMUI3_x()) {
+            if (mBarParams.navigationBarWithEMUI3Enable) {
+                mBarParams.navigationBarWithKitkatEnable = true;
+            } else {
+                if (mBarParams.navigationBarWithKitkatEnable) {
+                    mBarParams.navigationBarWithKitkatEnable = false;
+                }
+            }
+        }
         return this;
     }
 
     /**
-     * 是否能修改华为emui3.1导航栏颜色，默认为true
+     * 是否能修改华为emui3.1导航栏颜色，默认为true，
+     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
      * Navigation bar with emui 3 enable immersion bar.
      *
      * @param navigationBarWithEMUI3Enable the navigation bar with emui 3 1 enable
@@ -1652,6 +1668,9 @@ public final class ImmersionBar implements ImmersionCallback {
             ImmersionBar immersionBar = with(mActivity);
             if (immersionBar != null) {
                 immersionBar.mBarParams.keyboardEnable = immersionBar.mKeyboardTempEnable;
+                if (immersionBar.mBarParams.barHide != BarHide.FLAG_SHOW_BAR) {
+                    immersionBar.setBar();
+                }
             }
         }
         mInitialized = false;
@@ -1665,10 +1684,7 @@ public final class ImmersionBar implements ImmersionCallback {
         adjustDarkModeParams();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //获得Bar相关信息
-            mBarConfig = new BarConfig(mActivity);
-            if (!initialized()) {
-                mActionBarHeight = mBarConfig.getActionBarHeight();
-            }
+            updateBarConfig();
             //如果在Fragment中使用，让Activity同步Fragment的BarParams参数
             if (mIsFragment) {
                 ImmersionBar immersionBar = with(mActivity);
@@ -1691,7 +1707,7 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * 初始化状态栏和导航栏
      */
-    private void setBar() {
+    void setBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //防止系统栏隐藏时内容区域大小发生变化
             int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -1921,20 +1937,43 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     void fitsWindows() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mBarConfig = new BarConfig(mActivity);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_x()) {
                 //android 5.0以上解决状态栏和布局重叠问题
                 fitsWindowsAboveLOLLIPOP();
             } else {
-                //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
+                //android 5.0以下解决状态栏和布局重叠问题
                 fitsWindowsBelowLOLLIPOP();
-                //解决华为emui3.1或者3.0导航栏手动隐藏的问题
-                if (!mIsFragment && OSUtils.isEMUI3_x()) {
-                    fitsWindowsEMUI();
-                }
             }
             //适配状态栏与布局重叠问题
             fitsLayoutOverlap();
+        }
+    }
+
+    /**
+     * android 5.0以下解决状态栏和布局重叠问题
+     */
+    private void fitsWindowsBelowLOLLIPOP() {
+        if (mBarParams.isSupportActionBar) {
+            mIsActionBarBelowLOLLIPOP = true;
+            mContentView.post(this);
+        } else {
+            mIsActionBarBelowLOLLIPOP = false;
+            postFitsWindowsBelowLOLLIPOP();
+        }
+    }
+
+    @Override
+    public void run() {
+        postFitsWindowsBelowLOLLIPOP();
+    }
+
+    private void postFitsWindowsBelowLOLLIPOP() {
+        updateBarConfig();
+        //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
+        fitsWindowsKITKAT();
+        //解决华为emui3.1或者3.0导航栏手动隐藏的问题
+        if (!mIsFragment && OSUtils.isEMUI3_x()) {
+            fitsWindowsEMUI();
         }
     }
 
@@ -1943,6 +1982,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * Fits windows above lollipop.
      */
     private void fitsWindowsAboveLOLLIPOP() {
+        updateBarConfig();
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mActionBarHeight, 0, 0);
@@ -1963,7 +2003,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * 解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
      * Fits windows below lollipop.
      */
-    private void fitsWindowsBelowLOLLIPOP() {
+    private void fitsWindowsKITKAT() {
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
             if (mBarParams.isSupportActionBar) {
                 setPadding(0, mActionBarHeight, 0, 0);
@@ -2015,6 +2055,19 @@ public final class ImmersionBar implements ImmersionCallback {
         } else {
             EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
             navigationBarView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 更新BarConfig
+     */
+    private void updateBarConfig() {
+        mBarConfig = new BarConfig(mActivity);
+        if (!initialized() || mIsActionBarBelowLOLLIPOP) {
+            mActionBarHeight = mBarConfig.getActionBarHeight();
+        }
+        if (mFitsKeyboard != null) {
+            mFitsKeyboard.updateBarConfig(mBarConfig);
         }
     }
 
@@ -2224,6 +2277,15 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     boolean initialized() {
         return mInitialized;
+    }
+
+    /**
+     * ActionBar是否是在LOLLIPOP下设备使用
+     *
+     * @return boolean
+     */
+    boolean isActionBarBelowLOLLIPOP() {
+        return mIsActionBarBelowLOLLIPOP;
     }
 
     /**
