@@ -153,6 +153,10 @@ public class BarParams implements Cloneable {
      */
     public View statusBarView;
     /**
+     * 是否可以解决标题栏与状态栏重叠问题
+     */
+    public boolean fitsLayoutOverlapEnable = true;
+    /**
      * flymeOS状态栏字体变色
      * The Flyme os status bar font color.
      */

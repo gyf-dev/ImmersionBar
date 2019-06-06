@@ -90,12 +90,12 @@ class RequestManagerRetriever implements Handler.Callback {
         if (activity instanceof FragmentActivity) {
             SupportRequestManagerFragment fragment = getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + dialog.toString(), true);
             if (fragment != null) {
-                fragment.get(activity, dialog).destroy();
+                fragment.get(activity, dialog).onDestroy();
             }
         } else {
-            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(),mTag +  dialog.toString(), true);
+            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(), mTag + dialog.toString(), true);
             if (fragment != null) {
-                fragment.get(activity, dialog).destroy();
+                fragment.get(activity, dialog).onDestroy();
             }
         }
     }

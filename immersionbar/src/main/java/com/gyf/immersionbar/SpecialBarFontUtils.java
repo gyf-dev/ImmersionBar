@@ -1,5 +1,6 @@
 package com.gyf.immersionbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.lang.reflect.Method;
  * @author gyf
  * @date 2017 /05/30
  */
-public class FlymeOSStatusBarFontUtils {
+class SpecialBarFontUtils {
     private static Method mSetStatusBarColorIcon;
     private static Method mSetStatusBarDarkIcon;
     private static Field mStatusBarColorFiled;
@@ -55,7 +56,7 @@ public class FlymeOSStatusBarFontUtils {
      * @param level 级别
      * @return boolean boolean
      */
-    public static boolean isBlackColor(int color, int level) {
+    static boolean isBlackColor(int color, int level) {
         int grey = toGrey(color);
         return grey < level;
     }
@@ -67,7 +68,7 @@ public class FlymeOSStatusBarFontUtils {
      * @return the int
      * @return　灰度值
      */
-    public static int toGrey(int rgb) {
+    static int toGrey(int rgb) {
         int blue = rgb & 0x000000FF;
         int green = (rgb & 0x0000FF00) >> 8;
         int red = (rgb & 0x00FF0000) >> 16;
@@ -225,6 +226,29 @@ public class FlymeOSStatusBarFontUtils {
         } else {
             if (flag) {
                 setStatusBarDarkIcon(activity.getWindow(), dark);
+            }
+        }
+    }
+
+    @SuppressLint("PrivateApi")
+    static void setMIUIBarDark(Window window, String key, boolean dark) {
+        if (window != null) {
+            Class<? extends Window> clazz = window.getClass();
+            try {
+                int darkModeFlag;
+                Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField(key);
+                darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (dark) {
+                    //状态栏透明且黑色字体
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);
+                } else {
+                    //清除黑色字体
+                    extraFlagField.invoke(window, 0, darkModeFlag);
+                }
+            } catch (Exception ignored) {
+
             }
         }
     }

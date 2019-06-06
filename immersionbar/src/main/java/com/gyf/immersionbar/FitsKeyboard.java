@@ -1,8 +1,8 @@
 package com.gyf.immersionbar;
 
-import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -17,10 +17,7 @@ import android.widget.FrameLayout;
  */
 class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
 
-    private int mStatusBarHeight;
-    private int mActionBarHeight;
     private ImmersionBar mImmersionBar;
-    private Activity mActivity;
     private Window mWindow;
     private View mDecorView;
     private View mContentView;
@@ -29,28 +26,37 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     private int mTempKeyboardHeight;
     private boolean mIsAddListener;
 
-    FitsKeyboard(ImmersionBar immersionBar, Activity activity, Window window) {
+    FitsKeyboard(ImmersionBar immersionBar) {
         mImmersionBar = immersionBar;
-        mActivity = activity;
-        mWindow = window;
+        mWindow = immersionBar.getWindow();
         mDecorView = mWindow.getDecorView();
         FrameLayout frameLayout = mDecorView.findViewById(android.R.id.content);
-        mChildView = frameLayout.getChildAt(0);
-        if (mChildView != null) {
-            if (mChildView instanceof DrawerLayout) {
-                mChildView = ((DrawerLayout) mChildView).getChildAt(0);
+        if (immersionBar.isDialogFragment()) {
+            Fragment supportFragment = immersionBar.getSupportFragment();
+            if (supportFragment != null) {
+                mChildView = supportFragment.getView();
+            } else {
+                android.app.Fragment fragment = immersionBar.getFragment();
+                if (fragment != null) {
+                    mChildView = fragment.getView();
+                }
             }
+        } else {
+            mChildView = frameLayout.getChildAt(0);
             if (mChildView != null) {
-                mPaddingLeft = mChildView.getPaddingLeft();
-                mPaddingTop = mChildView.getPaddingTop();
-                mPaddingRight = mChildView.getPaddingRight();
-                mPaddingBottom = mChildView.getPaddingBottom();
+                if (mChildView instanceof DrawerLayout) {
+                    mChildView = ((DrawerLayout) mChildView).getChildAt(0);
+                }
             }
         }
+        if (mChildView != null) {
+            mPaddingLeft = mChildView.getPaddingLeft();
+            mPaddingTop = mChildView.getPaddingTop();
+            mPaddingRight = mChildView.getPaddingRight();
+            mPaddingBottom = mChildView.getPaddingBottom();
+        }
         mContentView = mChildView != null ? mChildView : frameLayout;
-        BarConfig barConfig = new BarConfig(mActivity);
-        mStatusBarHeight = barConfig.getStatusBarHeight();
-        mActionBarHeight = barConfig.getActionBarHeight();
+
     }
 
     void enable(int mode) {
@@ -60,19 +66,6 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(this);
                 mIsAddListener = true;
             }
-        }
-    }
-
-    /**
-     * 为啥要更新？因为横竖屏切换状态栏高度有可能不一样
-     * Update bar config.
-     *
-     * @param barConfig the bar config
-     */
-    void updateBarConfig(BarConfig barConfig) {
-        mStatusBarHeight = barConfig.getStatusBarHeight();
-        if (mImmersionBar != null && mImmersionBar.isActionBarBelowLOLLIPOP()) {
-            mActionBarHeight = barConfig.getActionBarHeight();
         }
     }
 
@@ -99,7 +92,8 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     @Override
     public void onGlobalLayout() {
         if (mImmersionBar != null && mImmersionBar.getBarParams() != null && mImmersionBar.getBarParams().keyboardEnable) {
-            int bottom = 0, keyboardHeight, navigationBarHeight = ImmersionBar.getNavigationBarHeight(mActivity);
+            BarConfig barConfig = mImmersionBar.getBarConfig();
+            int bottom = 0, keyboardHeight, navigationBarHeight = barConfig.isNavigationAtBottom() ? barConfig.getNavigationBarHeight() : barConfig.getNavigationBarWidth();
             boolean isPopup = false;
             Rect rect = new Rect();
             //获取当前窗口可视区域大小
@@ -110,10 +104,10 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 if (!ImmersionBar.checkFitsSystemWindows(mWindow.getDecorView().findViewById(android.R.id.content))) {
                     if (mChildView != null) {
                         if (mImmersionBar.getBarParams().isSupportActionBar) {
-                            keyboardHeight += mActionBarHeight + mStatusBarHeight;
+                            keyboardHeight += mImmersionBar.getActionBarHeight() + barConfig.getStatusBarHeight();
                         }
                         if (mImmersionBar.getBarParams().fits) {
-                            keyboardHeight += mStatusBarHeight;
+                            keyboardHeight += barConfig.getStatusBarHeight();
                         }
                         if (keyboardHeight > navigationBarHeight) {
                             bottom = keyboardHeight + mPaddingBottom;
