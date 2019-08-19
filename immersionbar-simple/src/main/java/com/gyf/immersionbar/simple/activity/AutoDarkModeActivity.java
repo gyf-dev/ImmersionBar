@@ -39,7 +39,7 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
                 .fitsSystemWindows(true)
                 .statusBarColorInt(Color.BLACK)
                 .navigationBarColorInt(Color.BLACK)
-                .autoDarkModeEnable(true, 0.2f)
+                .autoDarkModeEnable(true)
                 .init();
     }
 

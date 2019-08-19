@@ -1,6 +1,5 @@
 package com.gyf.immersionbar;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +25,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -2302,6 +2298,7 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar statusBarAlpha(@FloatRange(from = 0f, to = 1f) float statusAlpha) {
         mBarParams.statusBarAlpha = statusAlpha;
+        mBarParams.statusBarTempAlpha = statusAlpha;
         return this;
     }
 
@@ -2313,6 +2310,7 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar navigationBarAlpha(@FloatRange(from = 0f, to = 1f) float navigationAlpha) {
         mBarParams.navigationBarAlpha = navigationAlpha;
+        mBarParams.navigationBarTempAlpha = navigationAlpha;
         return this;
     }
 
@@ -2324,7 +2322,9 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar barAlpha(@FloatRange(from = 0f, to = 1f) float barAlpha) {
         mBarParams.statusBarAlpha = barAlpha;
+        mBarParams.statusBarTempAlpha = barAlpha;
         mBarParams.navigationBarAlpha = barAlpha;
+        mBarParams.navigationBarTempAlpha = barAlpha;
         return this;
     }
 
@@ -2335,7 +2335,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar autoDarkModeEnable(boolean isEnable) {
-        return this.autoDarkModeEnable(isEnable, 0f);
+        return this.autoDarkModeEnable(isEnable, 0.2f);
     }
 
     /**
@@ -2362,7 +2362,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar autoStatusBarDarkModeEnable(boolean isEnable) {
-        return this.autoStatusBarDarkModeEnable(isEnable, 0f);
+        return this.autoStatusBarDarkModeEnable(isEnable, 0.2f);
     }
 
     /**
@@ -2387,7 +2387,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar autoNavigationBarDarkModeEnable(boolean isEnable) {
-        return this.autoNavigationBarDarkModeEnable(isEnable, 0f);
+        return this.autoNavigationBarDarkModeEnable(isEnable, 0.2f);
     }
 
     /**
@@ -2411,7 +2411,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar statusBarDarkFont(boolean isDarkFont) {
-        return statusBarDarkFont(isDarkFont, 0f);
+        return statusBarDarkFont(isDarkFont, 0.2f);
     }
 
     /**
@@ -2427,8 +2427,8 @@ public final class ImmersionBar implements ImmersionCallback {
         if (isDarkFont && !isSupportStatusBarDarkFont()) {
             mBarParams.statusBarAlpha = statusAlpha;
         } else {
-            mBarParams.flymeOSStatusBarFontColor = 0;
-            mBarParams.statusBarAlpha = 0f;
+            mBarParams.flymeOSStatusBarFontColor = mBarParams.flymeOSStatusBarFontTempColor;
+            mBarParams.statusBarAlpha = mBarParams.statusBarTempAlpha;
         }
         return this;
     }
@@ -2441,7 +2441,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarDarkIcon(boolean isDarkIcon) {
-        return navigationBarDarkIcon(isDarkIcon, 0f);
+        return navigationBarDarkIcon(isDarkIcon, 0.2f);
     }
 
     /**
@@ -2457,7 +2457,7 @@ public final class ImmersionBar implements ImmersionCallback {
         if (isDarkIcon && !isSupportNavigationIconDark()) {
             mBarParams.navigationBarAlpha = navigationAlpha;
         } else {
-            mBarParams.navigationBarAlpha = 0f;
+            mBarParams.navigationBarAlpha = mBarParams.navigationBarTempAlpha;
         }
         return this;
     }
@@ -2471,6 +2471,7 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar flymeOSStatusBarFontColor(@ColorRes int flymeOSStatusBarFontColor) {
         mBarParams.flymeOSStatusBarFontColor = ContextCompat.getColor(mActivity, flymeOSStatusBarFontColor);
+        mBarParams.flymeOSStatusBarFontTempColor = mBarParams.flymeOSStatusBarFontColor;
         return this;
     }
 
@@ -2483,6 +2484,7 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar flymeOSStatusBarFontColor(String flymeOSStatusBarFontColor) {
         mBarParams.flymeOSStatusBarFontColor = Color.parseColor(flymeOSStatusBarFontColor);
+        mBarParams.flymeOSStatusBarFontTempColor = mBarParams.flymeOSStatusBarFontColor;
         return this;
     }
 
@@ -2495,6 +2497,7 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public ImmersionBar flymeOSStatusBarFontColorInt(@ColorInt int flymeOSStatusBarFontColor) {
         mBarParams.flymeOSStatusBarFontColor = flymeOSStatusBarFontColor;
+        mBarParams.flymeOSStatusBarFontTempColor = mBarParams.flymeOSStatusBarFontColor;
         return this;
     }
 
@@ -2507,12 +2510,8 @@ public final class ImmersionBar implements ImmersionCallback {
     public ImmersionBar hideBar(BarHide barHide) {
         mBarParams.barHide = barHide;
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || OSUtils.isEMUI3_x()) {
-            if ((mBarParams.barHide == BarHide.FLAG_HIDE_NAVIGATION_BAR) ||
-                    (mBarParams.barHide == BarHide.FLAG_HIDE_BAR)) {
-                mBarParams.hideNavigationBar = true;
-            } else {
-                mBarParams.hideNavigationBar = false;
-            }
+            mBarParams.hideNavigationBar = (mBarParams.barHide == BarHide.FLAG_HIDE_NAVIGATION_BAR) ||
+                    (mBarParams.barHide == BarHide.FLAG_HIDE_BAR);
         }
         return this;
     }

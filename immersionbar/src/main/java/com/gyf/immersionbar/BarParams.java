@@ -39,12 +39,17 @@ public class BarParams implements Cloneable {
      */
     @FloatRange(from = 0f, to = 1f)
     public float statusBarAlpha = 0.0f;
+
+    @FloatRange(from = 0f, to = 1f)
+    public float statusBarTempAlpha = 0.0f;
     /**
      * 导航栏透明度
      * The Navigation bar alpha.
      */
     @FloatRange(from = 0f, to = 1f)
     public float navigationBarAlpha = 0.0f;
+    @FloatRange(from = 0f, to = 1f)
+    public float navigationBarTempAlpha = 0.0f;
     /**
      * 有导航栏的情况，全屏显示
      * The Full screen.
@@ -162,6 +167,8 @@ public class BarParams implements Cloneable {
      */
     @ColorInt
     public int flymeOSStatusBarFontColor;
+    @ColorInt
+    public int flymeOSStatusBarFontTempColor;
     /**
      * 结合actionBar使用
      * The Is support action bar.
