@@ -38,8 +38,8 @@ public class WhiteBarActivity extends BaseActivity {
     protected void setListener() {
         btn.setOnClickListener(v -> {
             ImmersionBar.with(this)
-                    .statusBarDarkFont(true, 0.2f)
-                    .navigationBarDarkIcon(true, 0.2f)
+                    .statusBarDarkFont(true)
+                    .navigationBarDarkIcon(true)
                     .init();
             text.setText("A：对于状态栏重点在于statusBarDarkFont(true,0.2f)这个方法，" +
                     "原理：如果当前设备支持状态栏字体变色，会设置状态栏字体为黑色，" +
