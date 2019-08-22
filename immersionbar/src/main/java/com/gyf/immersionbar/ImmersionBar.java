@@ -2966,7 +2966,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
     /**
      * 是否可以修改导航栏颜色，默认为true
-     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
+     * 优先级 navigationBarEnable  > navigationBarWithKitkatEnable > navigationBarWithEMUI3Enable
      * Navigation bar enable immersion bar.
      *
      * @param navigationBarEnable the enable
@@ -2979,28 +2979,19 @@ public final class ImmersionBar implements ImmersionCallback {
 
     /**
      * 是否可以修改4.4设备导航栏颜色，默认为true
-     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
+     * 优先级 navigationBarEnable  > navigationBarWithKitkatEnable > navigationBarWithEMUI3Enable
      *
      * @param navigationBarWithKitkatEnable the navigation bar with kitkat enable
      * @return the immersion bar
      */
     public ImmersionBar navigationBarWithKitkatEnable(boolean navigationBarWithKitkatEnable) {
         mBarParams.navigationBarWithKitkatEnable = navigationBarWithKitkatEnable;
-        if (OSUtils.isEMUI3_x()) {
-            if (mBarParams.navigationBarWithEMUI3Enable) {
-                mBarParams.navigationBarWithKitkatEnable = true;
-            } else {
-                if (mBarParams.navigationBarWithKitkatEnable) {
-                    mBarParams.navigationBarWithKitkatEnable = false;
-                }
-            }
-        }
         return this;
     }
 
     /**
      * 是否能修改华为emui3.1导航栏颜色，默认为true，
-     * 优先级 navigationBarEnable > navigationBarWithEMUI3Enable > navigationBarWithKitkatEnable
+     * 优先级 navigationBarEnable  > navigationBarWithKitkatEnable > navigationBarWithEMUI3Enable
      * Navigation bar with emui 3 enable immersion bar.
      *
      * @param navigationBarWithEMUI3Enable the navigation bar with emui 3 1 enable
