@@ -22,7 +22,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.0.0beta06.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta06.apk)
+#### [点我下载immersionBar-3.0.0beta07.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta07.apk)
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
