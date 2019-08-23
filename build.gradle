@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.3.41'
-    ext.immersionbar_version = '3.0.0-beta06'
+    ext.immersionbar_version = '3.0.0-beta07'
     repositories {
         google()
         jcenter()
