@@ -1,6 +1,6 @@
 ![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
-[![version](https://img.shields.io/badge/version-3.0.0--beta07-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
+[![version](https://img.shields.io/badge/version-3.0.0-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
 
 ## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
@@ -9,11 +9,11 @@
 > android studio
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta07'
+   implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
    // fragment快速实现（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta07'
+   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
    // kotlin扩展（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0-beta07'
+   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
    ```
 ## 2.x版本使用说明
 #### [点我查看2.x版本使用说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_2.x.md)
@@ -22,7 +22,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.0.0beta07.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0beta07.apk)
+#### [点我下载immersionBar-3.0.0beta07.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionBar-3.0.0.apk)
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
