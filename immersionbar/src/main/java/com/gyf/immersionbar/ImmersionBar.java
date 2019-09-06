@@ -138,7 +138,19 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull Fragment fragment) {
-        return getRetriever().get(fragment);
+        return getRetriever().get(fragment, false);
+    }
+
+    /**
+     * 在Fragment使用
+     * With immersion bar.
+     *
+     * @param fragment the fragment
+     * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull Fragment fragment, boolean isOnly) {
+        return getRetriever().get(fragment, isOnly);
     }
 
     /**
@@ -149,7 +161,19 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull android.app.Fragment fragment) {
-        return getRetriever().get(fragment);
+        return getRetriever().get(fragment, false);
+    }
+
+    /**
+     * 在Fragment使用
+     * With immersion bar. fragment实例对象是否唯一，默认是false，不唯一
+     *
+     * @param fragment the fragment
+     * @param isOnly   the is only
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull android.app.Fragment fragment, boolean isOnly) {
+        return getRetriever().get(fragment, isOnly);
     }
 
     /**
@@ -160,7 +184,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull DialogFragment dialogFragment) {
-        return getRetriever().get(dialogFragment);
+        return getRetriever().get(dialogFragment, false);
     }
 
     /**
@@ -171,7 +195,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull android.app.DialogFragment dialogFragment) {
-        return getRetriever().get(dialogFragment);
+        return getRetriever().get(dialogFragment, false);
     }
 
     /**
@@ -945,17 +969,17 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param view      the view
      */
     public static void setTitleBar(final Activity activity, int fixHeight, View... view) {
-        if (activity == null) {
-            return;
-        }
-        if (fixHeight < 0) {
-            fixHeight = 0;
-        }
-        for (final View v : view) {
-            if (v == null) {
-                continue;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (activity == null) {
+                return;
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (fixHeight < 0) {
+                fixHeight = 0;
+            }
+            for (final View v : view) {
+                if (v == null) {
+                    continue;
+                }
                 final int statusBarHeight = fixHeight;
                 Integer fitsHeight = (Integer) v.getTag(R.id.immersion_fits_layout_overlap);
                 if (fitsHeight == null) {
@@ -1041,17 +1065,17 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param view      the view
      */
     public static void setTitleBarMarginTop(Activity activity, int fixHeight, View... view) {
-        if (activity == null) {
-            return;
-        }
-        if (fixHeight < 0) {
-            fixHeight = 0;
-        }
-        for (View v : view) {
-            if (v == null) {
-                continue;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (activity == null) {
+                return;
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (fixHeight < 0) {
+                fixHeight = 0;
+            }
+            for (View v : view) {
+                if (v == null) {
+                    continue;
+                }
                 Integer fitsHeight = (Integer) v.getTag(R.id.immersion_fits_layout_overlap);
                 if (fitsHeight == null) {
                     fitsHeight = 0;
@@ -1122,17 +1146,17 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param view      the view
      */
     public static void setStatusBarView(Activity activity, int fixHeight, View... view) {
-        if (activity == null) {
-            return;
-        }
-        if (fixHeight < 0) {
-            fixHeight = 0;
-        }
-        if (view == null) {
-            return;
-        }
-        for (View v : view) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (activity == null) {
+                return;
+            }
+            if (fixHeight < 0) {
+                fixHeight = 0;
+            }
+            for (View v : view) {
+                if (v == null) {
+                    continue;
+                }
                 Integer fitsHeight = (Integer) v.getTag(R.id.immersion_fits_layout_overlap);
                 if (fitsHeight == null) {
                     fitsHeight = 0;

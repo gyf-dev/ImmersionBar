@@ -18,8 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * The type Request manager retriever.
+ *
  * @author geyifeng
- * @date 2019/4/12 4:21 PM
+ * @date 2019 /4/12 4:21 PM
  */
 class RequestManagerRetriever implements Handler.Callback {
 
@@ -34,6 +36,11 @@ class RequestManagerRetriever implements Handler.Callback {
         private static final RequestManagerRetriever INSTANCE = new RequestManagerRetriever();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     static RequestManagerRetriever getInstance() {
         return Holder.INSTANCE;
     }
@@ -45,55 +52,104 @@ class RequestManagerRetriever implements Handler.Callback {
     private final Map<android.app.FragmentManager, RequestManagerFragment> mPendingFragments = new HashMap<>();
     private final Map<FragmentManager, SupportRequestManagerFragment> mPendingSupportFragments = new HashMap<>();
 
+    /**
+     * Get immersion bar.
+     *
+     * @param activity the activity
+     * @return the immersion bar
+     */
     public ImmersionBar get(Activity activity) {
         checkNotNull(activity, "activity is null");
+        String tag = mTag + System.identityHashCode(activity);
         if (activity instanceof FragmentActivity) {
-            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + System.identityHashCode(activity)).get(activity);
+            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag).get(activity);
         } else {
-            return getFragment(activity.getFragmentManager(), mTag + System.identityHashCode(activity)).get(activity);
+            return getFragment(activity.getFragmentManager(), tag).get(activity);
         }
     }
 
-    public ImmersionBar get(Fragment fragment) {
+    /**
+     * Get immersion bar.
+     *
+     * @param fragment the fragment
+     * @param isOnly   the is only
+     * @return the immersion bar
+     */
+    public ImmersionBar get(Fragment fragment, boolean isOnly) {
         checkNotNull(fragment, "fragment is null");
         checkNotNull(fragment.getActivity(), "fragment.getActivity() is null");
         if (fragment instanceof DialogFragment) {
             checkNotNull(((DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
-        return getSupportFragment(fragment.getChildFragmentManager(), mTag + System.identityHashCode(fragment)).get(fragment);
+        String tag = mTag;
+        if (isOnly) {
+            tag += fragment.getClass().getName();
+        } else {
+            tag += System.identityHashCode(fragment);
+        }
+        return getSupportFragment(fragment.getChildFragmentManager(), tag).get(fragment);
     }
 
+
+    /**
+     * Get immersion bar.
+     *
+     * @param fragment the fragment
+     * @param isOnly   the is only
+     * @return the immersion bar
+     */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public ImmersionBar get(android.app.Fragment fragment) {
+    public ImmersionBar get(android.app.Fragment fragment, boolean isOnly) {
         checkNotNull(fragment, "fragment is null");
         checkNotNull(fragment.getActivity(), "fragment.getActivity() is null");
         if (fragment instanceof android.app.DialogFragment) {
             checkNotNull(((android.app.DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
-        return getFragment(fragment.getChildFragmentManager(), mTag + System.identityHashCode(fragment)).get(fragment);
+        String tag = mTag;
+        if (isOnly) {
+            tag += fragment.getClass().getName();
+        } else {
+            tag += System.identityHashCode(fragment);
+        }
+        return getFragment(fragment.getChildFragmentManager(), tag).get(fragment);
     }
 
+    /**
+     * Get immersion bar.
+     *
+     * @param activity the activity
+     * @param dialog   the dialog
+     * @return the immersion bar
+     */
     public ImmersionBar get(Activity activity, Dialog dialog) {
         checkNotNull(activity, "activity is null");
         checkNotNull(dialog, "dialog is null");
+        String tag = mTag + System.identityHashCode(dialog);
         if (activity instanceof FragmentActivity) {
-            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + System.identityHashCode(dialog)).get(activity, dialog);
+            return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag).get(activity, dialog);
         } else {
-            return getFragment(activity.getFragmentManager(), mTag + System.identityHashCode(dialog)).get(activity, dialog);
+            return getFragment(activity.getFragmentManager(), tag).get(activity, dialog);
         }
     }
 
+    /**
+     * Destroy.
+     *
+     * @param activity the activity
+     * @param dialog   the dialog
+     */
     public void destroy(Activity activity, Dialog dialog) {
         if (activity == null || dialog == null) {
             return;
         }
+        String tag = mTag + System.identityHashCode(dialog);
         if (activity instanceof FragmentActivity) {
-            SupportRequestManagerFragment fragment = getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), mTag + System.identityHashCode(dialog), true);
+            SupportRequestManagerFragment fragment = getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag, true);
             if (fragment != null) {
                 fragment.get(activity, dialog).onDestroy();
             }
         } else {
-            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(), mTag + System.identityHashCode(dialog), true);
+            RequestManagerFragment fragment = getFragment(activity.getFragmentManager(), tag, true);
             if (fragment != null) {
                 fragment.get(activity, dialog).onDestroy();
             }
