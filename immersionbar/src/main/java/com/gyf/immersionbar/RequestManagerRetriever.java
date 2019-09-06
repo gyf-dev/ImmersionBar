@@ -135,6 +135,24 @@ class RequestManagerRetriever implements Handler.Callback {
     /**
      * Destroy.
      *
+     * @param fragment the fragment
+     */
+    public void destroy(Fragment fragment, boolean isOnly) {
+        if (fragment == null) {
+            return;
+        }
+        String tag = mTag;
+        if (isOnly) {
+            tag += fragment.getClass().getName();
+        } else {
+            tag += System.identityHashCode(fragment);
+        }
+        getSupportFragment(fragment.getChildFragmentManager(), tag, true);
+    }
+
+    /**
+     * Destroy.
+     *
      * @param activity the activity
      * @param dialog   the dialog
      */
