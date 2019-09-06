@@ -1,1 +1,1 @@
-include ':immersionbar', ':immersionbar-ktx', ':immersionbar-components', ':immersionbar-simple'
+include ':immersionbar', ':immersionbar-ktx', ':immersionbar-components', ':immersionbar-sample'

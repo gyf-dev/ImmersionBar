@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.gyf.immersionbar.sample">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:name="com.gyf.immersionbar.sample.MyApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
+        tools:replace="android:allowBackup">
+        <!-- 适配全面屏 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" /> <!-- 适配华为(hua wei)刘海屏 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" /> <!-- 适配小米(xiao mi)刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/SplashAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.PicAndColorActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.PicActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.ColorActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.BackActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentOneActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentTwoActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentThreeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentFourActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FragmentFiveActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.OverActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over1Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over2Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over3Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over4Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over5Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.Over6Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.KeyBoardActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.CoordinatorActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.TabLayoutActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.TabLayout2Activity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.FlymeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.ShapeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.ActionBarActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:theme="@style/ActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.WhiteBarActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.AutoDarkModeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.WebActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.DialogActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.PopupActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.BlogActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.AllEditActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.LoginActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.AssetsActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.ParamsActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.KotlinActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+
+        <service
+            android:name="com.gyf.immersionbar.sample.service.NetworkService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name="com.gyf.immersionbar.sample.receiver.NetworkBroadCastReceiver" />
+    </application>
+
+</manifest>
