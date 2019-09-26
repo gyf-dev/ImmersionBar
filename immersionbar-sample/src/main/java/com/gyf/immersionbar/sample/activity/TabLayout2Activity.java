@@ -1,10 +1,10 @@
 package com.gyf.immersionbar.sample.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

@@ -2,8 +2,8 @@ package com.gyf.immersionbar.sample.activity
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -85,7 +85,7 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
 
     private val TextView.title get() = text.toString().split("   ")[0] + "   "
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         initView()
     }

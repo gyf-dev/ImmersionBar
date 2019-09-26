@@ -1,7 +1,7 @@
 package com.gyf.immersionbar.sample.model;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.bean.FunBean;
