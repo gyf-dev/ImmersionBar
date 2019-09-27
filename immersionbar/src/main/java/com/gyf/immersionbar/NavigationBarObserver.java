@@ -10,8 +10,11 @@ import android.provider.Settings;
 
 import java.util.ArrayList;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
-import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO;
 
 /**
  * 导航栏显示隐藏处理，目前只支持emui和miui带有导航栏的手机
@@ -23,7 +26,8 @@ final class NavigationBarObserver extends ContentObserver {
 
     private ArrayList<OnNavigationBarListener> mListeners;
     private Application mApplication;
-    private Boolean mIsRegister = false;
+    private boolean mIsRegister = false;
+    private boolean mIsDefault = false;
 
     static NavigationBarObserver getInstance() {
         return NavigationBarObserverInstance.INSTANCE;
@@ -37,15 +41,22 @@ final class NavigationBarObserver extends ContentObserver {
         this.mApplication = application;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null
                 && mApplication.getContentResolver() != null && !mIsRegister) {
-            Uri uri = null;
-            if (OSUtils.isMIUI()) {
-                uri = Settings.Global.getUriFor(IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW);
-            } else if (OSUtils.isEMUI()) {
+            Uri uri;
+            if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
                 if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    uri = Settings.System.getUriFor(IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW);
+                    uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI);
                 } else {
-                    uri = Settings.Global.getUriFor(IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW);
+                    uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI);
                 }
+            } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
+                uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI);
+            } else if (OSUtils.isVivo()) {
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO);
+            } else if (OSUtils.isOppo()) {
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO);
+            } else {
+                mIsDefault = true;
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT);
             }
             if (uri != null) {
                 mApplication.getContentResolver().registerContentObserver(uri, true, this);
@@ -59,18 +70,29 @@ final class NavigationBarObserver extends ContentObserver {
         super.onChange(selfChange);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
                 && mListeners != null && !mListeners.isEmpty()) {
-            int show = 0;
-            if (OSUtils.isMIUI()) {
-                show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW, 0);
-            } else if (OSUtils.isEMUI()) {
+            int show;
+            if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
                 if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW, 0);
+                    show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0);
                 } else {
-                    show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW, 0);
+                    show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0);
                 }
+            } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
+                show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI, 0);
+            } else if (OSUtils.isVivo()) {
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO, 0);
+            } else if (OSUtils.isOppo()) {
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO, 0);
+            } else {
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT, 0);
             }
+
             for (OnNavigationBarListener onNavigationBarListener : mListeners) {
-                onNavigationBarListener.onNavigationBarChange(show != 1);
+                if (mIsDefault) {
+                    onNavigationBarListener.onNavigationBarChange(show != 2);
+                } else {
+                    onNavigationBarListener.onNavigationBarChange(show != 1);
+                }
             }
         }
     }

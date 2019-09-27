@@ -58,11 +58,17 @@ public class NotchUtils {
      * @return the boolean
      */
     public static boolean hasNotchScreen(Activity activity) {
-        return activity != null && (hasNotchAtXiaoMi(activity) ||
-                hasNotchAtHuaWei(activity) ||
-                hasNotchAtOPPO(activity) ||
-                hasNotchAtVIVO(activity) ||
-                hasNotchAtAndroidP(activity));
+        if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return hasNotchAtAndroidP(activity);
+            } else {
+                return hasNotchAtXiaoMi(activity) ||
+                        hasNotchAtHuaWei(activity) ||
+                        hasNotchAtOPPO(activity) ||
+                        hasNotchAtVIVO(activity);
+            }
+        }
+        return false;
     }
 
     /**
@@ -73,11 +79,17 @@ public class NotchUtils {
      * @return the boolean
      */
     public static boolean hasNotchScreen(View view) {
-        return view != null && (hasNotchAtXiaoMi(view.getContext()) ||
-                hasNotchAtHuaWei(view.getContext()) ||
-                hasNotchAtOPPO(view.getContext()) ||
-                hasNotchAtVIVO(view.getContext()) ||
-                hasNotchAtAndroidP(view));
+        if (view != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return hasNotchAtAndroidP(view);
+            } else {
+                return hasNotchAtXiaoMi(view.getContext()) ||
+                        hasNotchAtHuaWei(view.getContext()) ||
+                        hasNotchAtOPPO(view.getContext()) ||
+                        hasNotchAtVIVO(view.getContext());
+            }
+        }
+        return false;
     }
 
     /**
@@ -143,16 +155,19 @@ public class NotchUtils {
      * @param context the context
      * @return the int
      */
+
+    @SuppressLint("PrivateApi")
     private static boolean hasNotchAtXiaoMi(Context context) {
         int result = 0;
-        if ("Xiaomi".equals(Build.MANUFACTURER)) {
+        if (OSUtils.isXiaoMi()) {
             try {
                 ClassLoader classLoader = context.getClassLoader();
-                @SuppressLint("PrivateApi")
                 Class<?> aClass = classLoader.loadClass(SYSTEM_PROPERTIES);
                 Method method = aClass.getMethod("getInt", String.class, int.class);
-                result = (Integer) method.invoke(aClass, NOTCH_XIAO_MI, 0);
-
+                Object o = method.invoke(aClass, NOTCH_XIAO_MI, 0);
+                if (o != null) {
+                    result = (Integer) o;
+                }
             } catch (NoSuchMethodException ignored) {
             } catch (IllegalAccessException ignored) {
             } catch (InvocationTargetException ignored) {
@@ -169,16 +184,19 @@ public class NotchUtils {
      * @param context the context
      * @return the boolean
      */
+    @SuppressLint("PrivateApi")
     private static boolean hasNotchAtHuaWei(Context context) {
         boolean result = false;
-        try {
-            ClassLoader classLoader = context.getClassLoader();
-            Class<?> aClass = classLoader.loadClass(NOTCH_HUA_WEI);
-            Method get = aClass.getMethod("hasNotchInScreen");
-            result = (boolean) get.invoke(aClass);
-        } catch (ClassNotFoundException ignored) {
-        } catch (NoSuchMethodException ignored) {
-        } catch (Exception ignored) {
+        if (OSUtils.isHuaWei()) {
+            try {
+                ClassLoader classLoader = context.getClassLoader();
+                Class<?> aClass = classLoader.loadClass(NOTCH_HUA_WEI);
+                Method get = aClass.getMethod("hasNotchInScreen");
+                result = (boolean) get.invoke(aClass);
+            } catch (ClassNotFoundException ignored) {
+            } catch (NoSuchMethodException ignored) {
+            } catch (Exception ignored) {
+            }
         }
         return result;
     }
@@ -190,17 +208,19 @@ public class NotchUtils {
      * @param context the context
      * @return the boolean
      */
+    @SuppressLint("PrivateApi")
     private static boolean hasNotchAtVIVO(Context context) {
         boolean result = false;
-        try {
-            ClassLoader classLoader = context.getClassLoader();
-            @SuppressLint("PrivateApi")
-            Class<?> aClass = classLoader.loadClass(NOTCH_VIVO);
-            Method method = aClass.getMethod("isFeatureSupport", int.class);
-            result = (boolean) method.invoke(aClass, 0x00000020);
-        } catch (ClassNotFoundException ignored) {
-        } catch (NoSuchMethodException ignored) {
-        } catch (Exception ignored) {
+        if (OSUtils.isVivo()) {
+            try {
+                ClassLoader classLoader = context.getClassLoader();
+                Class<?> aClass = classLoader.loadClass(NOTCH_VIVO);
+                Method method = aClass.getMethod("isFeatureSupport", int.class);
+                result = (boolean) method.invoke(aClass, 0x00000020);
+            } catch (ClassNotFoundException ignored) {
+            } catch (NoSuchMethodException ignored) {
+            } catch (Exception ignored) {
+            }
         }
         return result;
     }
@@ -213,11 +233,14 @@ public class NotchUtils {
      * @return the boolean
      */
     private static boolean hasNotchAtOPPO(Context context) {
-        try {
-            return context.getPackageManager().hasSystemFeature(NOTCH_OPPO);
-        } catch (Exception ignored) {
-            return false;
+        if (OSUtils.isOppo()) {
+            try {
+                return context.getPackageManager().hasSystemFeature(NOTCH_OPPO);
+            } catch (Exception ignored) {
+                return false;
+            }
         }
+        return false;
     }
 
     /**

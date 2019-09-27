@@ -14,12 +14,14 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
-import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO;
 
 /**
  * The type Bar config.
@@ -101,21 +103,24 @@ class BarConfig {
     @TargetApi(14)
     private boolean hasNavBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            //判断小米手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW, 0) != 0) {
+            //判断华为手机是否隐藏了导航栏，隐藏了，直接返回false
+            if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0) != 0) {
                 return false;
             }
-            //判断华为手机是否隐藏了导航栏，隐藏了，直接返回false
-            if (OSUtils.isEMUI()) {
-                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    if (Settings.System.getInt(activity.getContentResolver(), IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW, 0) != 0) {
-                        return false;
-                    }
-                } else {
-                    if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW, 0) != 0) {
-                        return false;
-                    }
-                }
+            //判断小米手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI, 0) != 0) {
+                return false;
+            }
+            //判断VIVO手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Secure.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO, 0) != 0) {
+                return false;
+            }
+            //判断华为EMUI_3.x手机是否隐藏了导航栏，隐藏了，直接返回false
+            if (Settings.System.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0) != 0) {
+                return false;
+            }
+            if (Settings.Secure.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT, 0) == 2) {
+                return false;
             }
         }
         //其他手机根据屏幕真实高度与显示高度是否相同来判断

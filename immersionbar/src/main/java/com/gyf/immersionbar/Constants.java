@@ -30,13 +30,25 @@ class Constants {
      */
     static final String IMMERSION_NAVIGATION_BAR_WIDTH = "navigation_bar_width";
     /**
-     * MIUI导航栏显示隐藏标识位
+     * 小米导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
-    static final String IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW = "force_fsg_nav_bar";
+    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI = "force_fsg_nav_bar";
     /**
-     * EMUI导航栏显示隐藏标识位
+     * 华为导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
-    static final String IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW = "navigationbar_is_min";
+    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI = "navigationbar_is_min";
+    /**
+     * VIVO导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
+     */
+    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO = "navigation_gesture_on";
+    /**
+     * OPPO导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
+     */
+    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO = "navigation_gesture_on";
+    /**
+     * 默认手势导航 0-三按钮导航，1-双按钮导航，2-手势导航
+     */
+    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT = "navigation_mode";
     /**
      * MIUI状态栏字体黑色与白色标识位
      */

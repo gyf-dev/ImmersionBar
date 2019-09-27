@@ -10,7 +10,7 @@ import android.provider.Settings;
 
 import java.util.ArrayList;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI;
 
 /**
  * 华为Emui3状态栏监听器
@@ -36,7 +36,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
         this.mApplication = application;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null
                 && mApplication.getContentResolver() != null && !mIsRegister) {
-            Uri uri = Settings.System.getUriFor(IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW);
+            Uri uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI);
             if (uri != null) {
                 mApplication.getContentResolver().registerContentObserver(uri, true, this);
                 mIsRegister = true;
@@ -49,7 +49,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
         super.onChange(selfChange);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
                 && mCallbacks != null && !mCallbacks.isEmpty()) {
-            int show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW, 0);
+            int show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0);
             for (ImmersionCallback callback : mCallbacks) {
                 callback.onNavigationBarChange(show != 1);
             }
