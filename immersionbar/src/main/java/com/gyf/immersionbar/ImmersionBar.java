@@ -35,10 +35,10 @@ import static com.gyf.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
 import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE;
 import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
 import static com.gyf.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
-import static com.gyf.immersionbar.Constants.IMMERSION_ID_NAVIGATION_BAR_VIEW;
-import static com.gyf.immersionbar.Constants.IMMERSION_ID_STATUS_BAR_VIEW;
-import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_DARK;
-import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_STATUS_BAR_DARK;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
 
 /**
  * android 4.4以上沉浸式以及bar的管理
@@ -355,10 +355,10 @@ public final class ImmersionBar implements ImmersionCallback {
     private void setSpecialBarDarkMode() {
         if (OSUtils.isMIUI6Later()) {
             //修改miui状态栏字体颜色
-            SpecialBarFontUtils.setMIUIBarDark(mWindow, IMMERSION_MIUI_STATUS_BAR_DARK, mBarParams.statusBarDarkFont);
+            SpecialBarFontUtils.setMIUIBarDark(mWindow, IMMERSION_STATUS_BAR_DARK_MIUI, mBarParams.statusBarDarkFont);
             //修改miui导航栏图标为黑色
             if (mBarParams.navigationBarEnable) {
-                SpecialBarFontUtils.setMIUIBarDark(mWindow, IMMERSION_MIUI_NAVIGATION_BAR_DARK, mBarParams.navigationBarDarkIcon);
+                SpecialBarFontUtils.setMIUIBarDark(mWindow, IMMERSION_NAVIGATION_BAR_DARK_MIUI, mBarParams.navigationBarDarkIcon);
             }
         }
         // 修改Flyme OS状态栏字体颜色
@@ -457,7 +457,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * 设置一个可以自定义颜色的状态栏
      */
     private void setupStatusBarView() {
-        View statusBarView = mDecorView.findViewById(IMMERSION_ID_STATUS_BAR_VIEW);
+        View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
         if (statusBarView == null) {
             statusBarView = new View(mActivity);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
@@ -465,7 +465,7 @@ public final class ImmersionBar implements ImmersionCallback {
             params.gravity = Gravity.TOP;
             statusBarView.setLayoutParams(params);
             statusBarView.setVisibility(View.VISIBLE);
-            statusBarView.setId(IMMERSION_ID_STATUS_BAR_VIEW);
+            statusBarView.setId(IMMERSION_STATUS_BAR_VIEW_ID);
             mDecorView.addView(statusBarView);
         }
         if (mBarParams.statusBarColorEnabled) {
@@ -481,10 +481,10 @@ public final class ImmersionBar implements ImmersionCallback {
      * 设置一个可以自定义颜色的导航栏
      */
     private void setupNavBarView() {
-        View navigationBarView = mDecorView.findViewById(IMMERSION_ID_NAVIGATION_BAR_VIEW);
+        View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (navigationBarView == null) {
             navigationBarView = new View(mActivity);
-            navigationBarView.setId(IMMERSION_ID_NAVIGATION_BAR_VIEW);
+            navigationBarView.setId(IMMERSION_NAVIGATION_BAR_VIEW_ID);
             mDecorView.addView(navigationBarView);
         }
 
@@ -663,7 +663,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * Register emui 3 x.
      */
     private void fitsWindowsEMUI() {
-        View navigationBarView = mDecorView.findViewById(IMMERSION_ID_NAVIGATION_BAR_VIEW);
+        View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
             if (navigationBarView != null) {
                 EMUI3NavigationBarObserver.getInstance().addOnNavigationBarListener(this);
@@ -687,7 +687,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
     @Override
     public void onNavigationBarChange(boolean show) {
-        View navigationBarView = mDecorView.findViewById(IMMERSION_ID_NAVIGATION_BAR_VIEW);
+        View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (navigationBarView != null) {
             mBarConfig = new BarConfig(mActivity);
             int bottom = mContentView.getPaddingBottom(), right = mContentView.getPaddingRight();

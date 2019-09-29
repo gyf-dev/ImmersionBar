@@ -10,14 +10,14 @@ import android.provider.Settings;
 
 import java.util.ArrayList;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 /**
- * 导航栏显示隐藏处理，目前只支持emui和miui带有导航栏的手机
+ * 导航栏显示隐藏处理，目前支持华为、小米、VOVO、Android 10带有导航栏的手机
  *
  * @author geyifeng
  * @date 2019/4/10 6:02 PM
@@ -44,19 +44,19 @@ final class NavigationBarObserver extends ContentObserver {
             Uri uri;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
                 if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI);
+                    uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_EMUI);
                 } else {
-                    uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI);
+                    uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_EMUI);
                 }
             } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
-                uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI);
+                uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_MIUI);
             } else if (OSUtils.isVivo()) {
-                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO);
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_VIVO);
             } else if (OSUtils.isOppo()) {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO);
             } else {
                 mIsDefault = true;
-                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT);
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_DEFAULT);
             }
             if (uri != null) {
                 mApplication.getContentResolver().registerContentObserver(uri, true, this);
@@ -73,18 +73,18 @@ final class NavigationBarObserver extends ContentObserver {
             int show;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
                 if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0);
+                    show = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
                 } else {
-                    show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0);
+                    show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
                 }
             } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
-                show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI, 0);
+                show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_MIUI, 0);
             } else if (OSUtils.isVivo()) {
-                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO, 0);
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0);
             } else if (OSUtils.isOppo()) {
                 show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO, 0);
             } else {
-                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT, 0);
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, 0);
             }
 
             for (OnNavigationBarListener onNavigationBarListener : mListeners) {

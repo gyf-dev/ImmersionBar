@@ -8,11 +8,11 @@ class Constants {
     /**
      * android 4.4或者emui3状态栏ID识位
      */
-    static final int IMMERSION_ID_STATUS_BAR_VIEW = R.id.immersion_status_bar_view;
+    static final int IMMERSION_STATUS_BAR_VIEW_ID = R.id.immersion_status_bar_view;
     /**
      * android 4.4或者emui3导航栏ID识位
      */
-    static final int IMMERSION_ID_NAVIGATION_BAR_VIEW = R.id.immersion_navigation_bar_view;
+    static final int IMMERSION_NAVIGATION_BAR_VIEW_ID = R.id.immersion_navigation_bar_view;
     /**
      * 状态栏高度标识位
      */
@@ -32,15 +32,15 @@ class Constants {
     /**
      * 小米导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
-    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI = "force_fsg_nav_bar";
+    static final String IMMERSION_NAVIGATION_BAR_MODE_MIUI = "force_fsg_nav_bar";
     /**
      * 华为导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
-    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI = "navigationbar_is_min";
+    static final String IMMERSION_NAVIGATION_BAR_MODE_EMUI = "navigationbar_is_min";
     /**
      * VIVO导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
-    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO = "navigation_gesture_on";
+    static final String IMMERSION_NAVIGATION_BAR_MODE_VIVO = "navigation_gesture_on";
     /**
      * OPPO导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
@@ -48,15 +48,15 @@ class Constants {
     /**
      * 默认手势导航 0-三按钮导航，1-双按钮导航，2-手势导航
      */
-    static final String IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT = "navigation_mode";
+    static final String IMMERSION_NAVIGATION_BAR_MODE_DEFAULT = "navigation_mode";
     /**
      * MIUI状态栏字体黑色与白色标识位
      */
-    static final String IMMERSION_MIUI_STATUS_BAR_DARK = "EXTRA_FLAG_STATUS_BAR_DARK_MODE";
+    static final String IMMERSION_STATUS_BAR_DARK_MIUI = "EXTRA_FLAG_STATUS_BAR_DARK_MODE";
     /**
      * MIUI导航栏图标黑色与白色标识位
      */
-    static final String IMMERSION_MIUI_NAVIGATION_BAR_DARK = "EXTRA_FLAG_NAVIGATION_BAR_DARK_MODE";
+    static final String IMMERSION_NAVIGATION_BAR_DARK_MIUI = "EXTRA_FLAG_NAVIGATION_BAR_DARK_MODE";
 
     /**
      * 自动改变字体颜色的临界值标识位

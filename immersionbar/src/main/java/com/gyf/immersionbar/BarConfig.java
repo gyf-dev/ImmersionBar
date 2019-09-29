@@ -3,6 +3,7 @@ package com.gyf.immersionbar;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -14,14 +15,14 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 /**
  * The type Bar config.
@@ -103,23 +104,25 @@ class BarConfig {
     @TargetApi(14)
     private boolean hasNavBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            ContentResolver resolver = activity.getContentResolver();
             //判断华为手机是否隐藏了导航栏，隐藏了，直接返回false
-            if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0) != 0) {
-                return false;
-            }
-            //判断小米手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Global.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_MIUI, 0) != 0) {
-                return false;
-            }
-            //判断VIVO手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Secure.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_VIVO, 0) != 0) {
+            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) != 0) {
                 return false;
             }
             //判断华为EMUI_3.x手机是否隐藏了导航栏，隐藏了，直接返回false
-            if (Settings.System.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_EMUI, 0) != 0) {
+            if (Settings.System.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) != 0) {
                 return false;
             }
-            if (Settings.Secure.getInt(activity.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_DEFAULT, 0) == 2) {
+            //判断小米手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_MIUI, 0) != 0) {
+                return false;
+            }
+            //判断VIVO手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0) != 0) {
+                return false;
+            }
+            //android 10以上机型
+            if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, 0) == 2) {
                 return false;
             }
         }
