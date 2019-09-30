@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.FloatRange;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -276,6 +278,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     void onResume() {
+        updateBarConfig();
         if (!mIsFragment && mInitialized && mBarParams != null) {
             if (OSUtils.isEMUI3_x() && mBarParams.navigationBarWithEMUI3Enable) {
                 init();
@@ -288,6 +291,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     void onConfigurationChanged(Configuration newConfig) {
+        updateBarConfig();
         if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             if (mInitialized && !mIsFragment && mBarParams.navigationBarWithKitkatEnable) {
                 init();
@@ -307,7 +311,9 @@ public final class ImmersionBar implements ImmersionCallback {
         adjustDarkModeParams();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //获得Bar相关信息
-            updateBarConfig();
+            if (!mInitialized || mIsFragment) {
+                updateBarConfig();
+            }
             if (mParentBar != null) {
                 //如果在Fragment中使用，让Activity同步Fragment的BarParams参数
                 if (mIsFragment) {
@@ -589,7 +595,6 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     private void postFitsWindowsBelowLOLLIPOP() {
-        updateBarConfig();
         //解决android4.4有导航栏的情况下，activity底部被导航栏遮挡的问题和android 5.0以下解决状态栏和布局重叠问题
         fitsWindowsKITKAT();
         //解决华为emui3.1或者3.0导航栏手动隐藏的问题
@@ -603,7 +608,6 @@ public final class ImmersionBar implements ImmersionCallback {
      * Fits windows above lollipop.
      */
     private void fitsWindowsAboveLOLLIPOP() {
-        updateBarConfig();
         if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
             setPadding(0, 0, 0, 0);
             return;
@@ -761,7 +765,7 @@ public final class ImmersionBar implements ImmersionCallback {
     private void fitsLayoutOverlap() {
         int fixHeight = 0;
         if (mBarParams.fitsLayoutOverlapEnable) {
-            fixHeight = getStatusBarHeight(mActivity);
+            fixHeight = mBarConfig.getStatusBarHeight();
         }
         switch (mFitsStatusBarType) {
             case FLAG_FITS_TITLE:
