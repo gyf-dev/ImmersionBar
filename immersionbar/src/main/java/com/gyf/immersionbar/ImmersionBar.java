@@ -6,6 +6,12 @@ import android.app.Dialog;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -14,18 +20,11 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +36,10 @@ import static com.gyf.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
 import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE;
 import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
 import static com.gyf.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
-import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
 
 /**
  * android 4.4以上沉浸式以及bar的管理
@@ -517,12 +516,16 @@ public final class ImmersionBar implements ImmersionCallback {
      * 调整深色亮色模式参数
      */
     private void adjustDarkModeParams() {
-        if (mBarParams.autoStatusBarDarkModeEnable && mBarParams.statusBarColor != Color.TRANSPARENT) {
-            boolean statusBarDarkFont = mBarParams.statusBarColor > IMMERSION_BOUNDARY_COLOR;
+        int statusBarColor = ColorUtils.blendARGB(mBarParams.statusBarColor,
+                mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha);
+        if (mBarParams.autoStatusBarDarkModeEnable && statusBarColor != Color.TRANSPARENT) {
+            boolean statusBarDarkFont = statusBarColor > IMMERSION_BOUNDARY_COLOR;
             statusBarDarkFont(statusBarDarkFont, mBarParams.autoStatusBarDarkModeAlpha);
         }
-        if (mBarParams.autoNavigationBarDarkModeEnable && mBarParams.navigationBarColor != Color.TRANSPARENT) {
-            boolean navigationBarDarkIcon = mBarParams.navigationBarColor > IMMERSION_BOUNDARY_COLOR;
+        int navigationBarColor = ColorUtils.blendARGB(mBarParams.navigationBarColor,
+                mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha);
+        if (mBarParams.autoNavigationBarDarkModeEnable && navigationBarColor != Color.TRANSPARENT) {
+            boolean navigationBarDarkIcon = navigationBarColor > IMMERSION_BOUNDARY_COLOR;
             navigationBarDarkIcon(navigationBarDarkIcon, mBarParams.autoNavigationBarDarkModeAlpha);
         }
     }

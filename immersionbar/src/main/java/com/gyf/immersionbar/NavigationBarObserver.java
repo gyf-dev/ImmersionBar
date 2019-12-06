@@ -89,7 +89,7 @@ final class NavigationBarObserver extends ContentObserver {
 
             for (OnNavigationBarListener onNavigationBarListener : mListeners) {
                 if (mIsDefault) {
-                    onNavigationBarListener.onNavigationBarChange(show != 2);
+                    onNavigationBarListener.onNavigationBarChange(show == 0);
                 } else {
                     onNavigationBarListener.onNavigationBarChange(show != 1);
                 }
