@@ -48,6 +48,11 @@ public class NotchUtils {
      * The constant NOTCH_OPPO.
      */
     private static final String NOTCH_OPPO = "com.oppo.feature.screen.heteromorphism";
+    /**
+     * Lenovo刘海
+     * The Notch lenovo.
+     */
+    private static final String NOTCH_LENOVO = "config_screen_has_notch";
 
 
     /**
@@ -65,7 +70,8 @@ public class NotchUtils {
                 return hasNotchAtXiaoMi(activity) ||
                         hasNotchAtHuaWei(activity) ||
                         hasNotchAtOPPO(activity) ||
-                        hasNotchAtVIVO(activity);
+                        hasNotchAtVIVO(activity) ||
+                        hasNotchAtLenovo(activity);
             }
         }
         return false;
@@ -243,6 +249,25 @@ public class NotchUtils {
         return false;
     }
 
+
+    /**
+     * Lenovo刘海屏判断
+     * Has notch at lenovo boolean.
+     *
+     * @param context the context
+     * @return the boolean
+     */
+    private static boolean hasNotchAtLenovo(Context context) {
+        if (OSUtils.isOppo()) {
+            int resourceId = context.getResources().getIdentifier(NOTCH_LENOVO,
+                    "bool", "android");
+            if (resourceId > 0) {
+                return context.getResources().getBoolean(resourceId);
+            }
+        }
+        return false;
+    }
+
     /**
      * 获得刘海屏高度
      * Notch height int.
@@ -283,6 +308,9 @@ public class NotchUtils {
                     notchHeight = statusBarHeight;
                 }
             }
+            if (hasNotchAtLenovo(activity)) {
+                notchHeight = getLenovoNotchHeight(activity);
+            }
         }
         return notchHeight;
     }
@@ -294,7 +322,8 @@ public class NotchUtils {
      * @return the xiao mi notch height
      */
     private static int getXiaoMiNotchHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("notch_height", "dimen", "android");
+        int resourceId = context.getResources().getIdentifier("notch_height",
+                "dimen", "android");
         if (resourceId > 0) {
             return context.getResources().getDimensionPixelSize(resourceId);
         } else {
@@ -321,6 +350,24 @@ public class NotchUtils {
             return ret;
         } catch (Exception ignored) {
             return ret;
+        }
+    }
+
+    /**
+     * 获得联想刘海屏高度
+     * <p>
+     * Gets lenovo notch height.
+     *
+     * @param context the context
+     * @return the lenovo notch height
+     */
+    private static int getLenovoNotchHeight(Context context) {
+        int resourceId = context.getResources().getIdentifier("notch_h", "dimen",
+                "android");
+        if (resourceId > 0) {
+            return context.getResources().getDimensionPixelSize(resourceId);
+        } else {
+            return 0;
         }
     }
 
