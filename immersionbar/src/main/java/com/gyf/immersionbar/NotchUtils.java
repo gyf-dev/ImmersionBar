@@ -276,6 +276,9 @@ public class NotchUtils {
      * @return the int
      */
     public static int getNotchHeight(Activity activity) {
+        if (hasNotchScreen(activity)) {
+            return 0;
+        }
         int notchHeight = 0;
         int statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         DisplayCutout displayCutout = getDisplayCutout(activity);
@@ -313,6 +316,24 @@ public class NotchUtils {
             }
         }
         return notchHeight;
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param activity the activity
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final Activity activity, final NotchCallback callback) {
+        activity.getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (callback != null) {
+                    callback.onNotchHeight(getNotchHeight(activity));
+                }
+            }
+        });
     }
 
     /**

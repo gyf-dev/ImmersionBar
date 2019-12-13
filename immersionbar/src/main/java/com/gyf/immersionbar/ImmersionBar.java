@@ -1556,11 +1556,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the int
      */
     public static int getNotchHeight(@NonNull Activity activity) {
-        if (hasNotchScreen(activity)) {
-            return NotchUtils.getNotchHeight(activity);
-        } else {
-            return 0;
-        }
+        return NotchUtils.getNotchHeight(activity);
     }
 
     public static int getNotchHeight(@NonNull Fragment fragment) {
@@ -1575,6 +1571,24 @@ public final class ImmersionBar implements ImmersionCallback {
             return 0;
         }
         return getNotchHeight(fragment.getActivity());
+    }
+
+    public static void getNotchHeight(@NonNull Activity activity, NotchCallback callback) {
+        NotchUtils.getNotchHeight(activity, callback);
+    }
+
+    public static void getNotchHeight(@NonNull Fragment fragment, NotchCallback callback) {
+        if (fragment.getActivity() == null) {
+            return;
+        }
+        getNotchHeight(fragment.getActivity(), callback);
+    }
+
+    public static void getNotchHeight(@NonNull android.app.Fragment fragment, NotchCallback callback) {
+        if (fragment.getActivity() == null) {
+            return;
+        }
+        getNotchHeight(fragment.getActivity(), callback);
     }
 
     /**
