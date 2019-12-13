@@ -50,6 +50,16 @@ public class OSUtils {
     }
 
     /**
+     * 是否是Samsung手机
+     * Is samsung boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isSamsung() {
+        return Build.MANUFACTURER.toLowerCase().contains("samsung");
+    }
+
+    /**
      * 是否是Vivo手机
      * Is vivo boolean.
      *

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 /**
@@ -53,7 +54,9 @@ final class NavigationBarObserver extends ContentObserver {
             } else if (OSUtils.isVivo()) {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_VIVO);
             } else if (OSUtils.isOppo()) {
-                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO);
+                uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_OPPO);
+            } else if (OSUtils.isSamsung()) {
+                uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG);
             } else {
                 mIsDefault = true;
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_DEFAULT);
@@ -82,7 +85,9 @@ final class NavigationBarObserver extends ContentObserver {
             } else if (OSUtils.isVivo()) {
                 show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0);
             } else if (OSUtils.isOppo()) {
-                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_HIDE_SHOW_OPPO, 0);
+                show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_OPPO, 0);
+            } else if (OSUtils.isSamsung()) {
+                show = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, 0);
             } else {
                 show = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, 0);
             }

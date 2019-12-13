@@ -19,6 +19,8 @@ import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
@@ -120,6 +122,14 @@ class BarConfig {
             if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0) != 0) {
                 return false;
             }
+            //判断OPPO手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_OPPO, 0) != 0) {
+                return false;
+            }
+            //判断SAMSUNG手机是否开启了全面屏，开启了，直接返回false
+            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, 0) != 0) {
+                return false;
+            }
         }
         //其他手机根据屏幕真实高度与显示高度是否相同来判断
         WindowManager windowManager = activity.getWindowManager();
@@ -149,8 +159,6 @@ class BarConfig {
             if (resourceId > 0) {
                 int sizeOne = context.getResources().getDimensionPixelSize(resourceId);
                 int sizeTwo = Resources.getSystem().getDimensionPixelSize(resourceId);
-
-                boolean b = !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && !key.equals(IMMERSION_STATUS_BAR_HEIGHT));
 
                 if (sizeTwo >= sizeOne && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                         !key.equals(IMMERSION_STATUS_BAR_HEIGHT))) {
