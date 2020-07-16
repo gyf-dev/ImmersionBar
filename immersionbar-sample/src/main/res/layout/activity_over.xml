@@ -6,12 +6,12 @@
     android:background="@color/darker_gray"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:title="解决布局顶部和状态栏重叠问题"
-        app:titleTextColor="@android:color/white" />
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:title="解决布局顶部和状态栏重叠问题"
+            app:titleTextColor="@android:color/white" />
 
     <TextView
         android:id="@+id/text"

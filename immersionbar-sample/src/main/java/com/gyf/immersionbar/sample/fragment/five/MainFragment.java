@@ -1,10 +1,10 @@
 package com.gyf.immersionbar.sample.fragment.five;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.sample.R;
 

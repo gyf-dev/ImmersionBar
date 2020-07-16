@@ -1,10 +1,11 @@
 package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;

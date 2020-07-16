@@ -15,12 +15,12 @@
             android:layout_height="180dp"
             android:scaleType="centerCrop" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:title="我是弹出的Dialog"
-            app:titleTextColor="@android:color/white" />
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:title="我是弹出的Dialog"
+                app:titleTextColor="@android:color/white" />
     </FrameLayout>
 
     <LinearLayout

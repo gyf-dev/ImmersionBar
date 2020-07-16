@@ -11,14 +11,14 @@
         android:scaleType="centerCrop"
         tools:src="@mipmap/test" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_content"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingStart="40dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="40dp"
-        android:paddingBottom="10dp" />
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_content"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingStart="40dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="10dp" />
 </FrameLayout>

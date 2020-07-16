@@ -1,6 +1,6 @@
 package com.gyf.immersionbar.sample.fragment.dialog;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;

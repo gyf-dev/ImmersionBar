@@ -6,13 +6,13 @@
     android:background="@android:color/darker_gray"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimary"
-        app:title="结合侧滑返回使用"
-        app:titleTextColor="@android:color/white" />
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="结合侧滑返回使用"
+            app:titleTextColor="@android:color/white" />
 
     <ImageView
         android:layout_width="wrap_content"

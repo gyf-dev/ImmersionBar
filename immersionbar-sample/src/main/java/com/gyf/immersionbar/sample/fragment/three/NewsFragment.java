@@ -1,8 +1,9 @@
 package com.gyf.immersionbar.sample.fragment.three;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.fragment.BaseFragment;

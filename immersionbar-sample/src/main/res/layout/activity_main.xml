@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <FrameLayout
-        android:id="@+id/fl_content"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+    <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,32 +21,32 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/mRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/mRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:alpha="0"
-                    android:background="@drawable/shape_main"
-                    app:title="沉浸式（ImmersionBar）"
-                    app:titleTextColor="@android:color/white" />
+                <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:alpha="0"
+                        android:background="@drawable/shape_main"
+                        app:title="沉浸式（ImmersionBar）"
+                        app:titleTextColor="@android:color/white" />
             </FrameLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:text="我是底部"
-                android:textColor="@color/black" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="我是底部"
+                    android:textColor="@color/black" />
         </LinearLayout>
     </FrameLayout>
 
     <include layout="@layout/drawer_left" />
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

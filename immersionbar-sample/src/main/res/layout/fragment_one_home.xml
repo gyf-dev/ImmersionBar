@@ -13,10 +13,10 @@
         gyf:tr_head_height="100dp"
         gyf:tr_wave_height="180dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 

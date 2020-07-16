@@ -2,9 +2,10 @@ package com.gyf.immersionbar.sample.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.OnSplashListener;

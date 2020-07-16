@@ -27,12 +27,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:title="图片状态栏 + 彩色导航栏"
-                app:titleTextColor="@android:color/white"/>
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    app:title="图片状态栏 + 彩色导航栏"
+                    app:titleTextColor="@android:color/white" />
         </LinearLayout>
     </FrameLayout>
 

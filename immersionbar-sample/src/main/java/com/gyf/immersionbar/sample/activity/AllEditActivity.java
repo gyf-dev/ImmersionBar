@@ -1,7 +1,8 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;

@@ -16,12 +16,12 @@
             android:layout_height="0dp"
             android:background="@color/colorPrimary" />
 
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:title="修改Flyme OS状态栏字体颜色"
-            app:titleTextColor="@android:color/white" />
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:title="修改Flyme OS状态栏字体颜色"
+                app:titleTextColor="@android:color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -32,26 +32,26 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:digits="0123456789abcdefABCDEF"
-                android:hint="请输入6位字体颜色,只针对FlymeOS4+设备"
-                android:maxLength="6" />
+                    android:id="@+id/et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789abcdefABCDEF"
+                    android:hint="请输入6位字体颜色,只针对FlymeOS4+设备"
+                    android:maxLength="6" />
 
             <Button
-                android:id="@+id/btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:text="修改" />
-        </android.support.design.widget.TextInputLayout>
+                    android:id="@+id/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:text="修改" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 </LinearLayout>
