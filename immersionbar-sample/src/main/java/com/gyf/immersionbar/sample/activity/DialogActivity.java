@@ -60,7 +60,10 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(R.id.toolbar).keyboardEnable(true).init();
+        ImmersionBar.with(this)
+                .titleBar(R.id.toolbar)
+                .keyboardEnable(true)
+                .init();
     }
 
     @Override

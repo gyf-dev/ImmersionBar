@@ -34,12 +34,12 @@ import butterknife.Unbinder;
  * @date 2017 /8/26
  */
 public abstract class BaseDialogFragment extends DialogFragment {
-
+    protected static final String TAG = BaseDialogFragment.class.getSimpleName();
+    public Integer[] mWidthAndHeight;
     protected Activity mActivity;
     protected View mRootView;
     protected Window mWindow;
     private Unbinder unbinder;
-    public Integer[] mWidthAndHeight;
 
     @Override
     public void onAttach(Context context) {
@@ -62,6 +62,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
         dialog.setCanceledOnTouchOutside(true);
         mWindow = dialog.getWindow();
         mWidthAndHeight = Utils.getWidthAndHeight(mWindow);
+        ImmersionBar.with(getActivity(), dialog)
+                .navigationBarColor(R.color.cool_green_normal)
+                .init();
     }
 
     @Nullable

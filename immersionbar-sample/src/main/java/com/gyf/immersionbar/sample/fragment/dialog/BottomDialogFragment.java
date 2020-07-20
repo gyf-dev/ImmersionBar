@@ -1,6 +1,7 @@
 package com.gyf.immersionbar.sample.fragment.dialog;
 
 import android.content.res.Configuration;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 
@@ -14,13 +15,13 @@ import com.gyf.immersionbar.sample.R;
  * @date 2017/7/28
  */
 public class BottomDialogFragment extends BaseDialogFragment {
-
     @Override
     public void onStart() {
         super.onStart();
         mWindow.setGravity(Gravity.BOTTOM);
         mWindow.setWindowAnimations(R.style.BottomAnimation);
         mWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, mWidthAndHeight[1] / 2);
+        Log.e(TAG, mWidthAndHeight[0] + ":" + mWidthAndHeight[1]);
     }
 
     @Override
@@ -31,7 +32,12 @@ public class BottomDialogFragment extends BaseDialogFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).navigationBarColor(R.color.cool_green_normal).init();
+        ImmersionBar.with(this)
+                .transparentStatusBar()
+                .transparentNavigationBar()
+                .navigationBarDarkIcon(true)
+                .navigationBarColor(R.color.cool_green_normal)
+                .init();
     }
 
     @Override
