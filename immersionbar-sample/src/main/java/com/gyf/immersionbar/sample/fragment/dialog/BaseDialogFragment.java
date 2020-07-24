@@ -63,6 +63,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
         mWindow = dialog.getWindow();
         mWidthAndHeight = Utils.getWidthAndHeight(mWindow);
         ImmersionBar.with(getActivity(), dialog)
+                .statusBarColor(R.color.colorPrimary)
                 .navigationBarColor(R.color.cool_green_normal)
                 .init();
     }

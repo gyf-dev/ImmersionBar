@@ -141,7 +141,8 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setWindowAnimations(R.style.BottomAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
                     ImmersionBar.with(this, mAlertDialog)
-                            .navigationBarColor(R.color.cool_green_normal)
+                            .statusBarColor(R.color.colorPrimary)
+                            .navigationBarColor(R.color.colorPrimaryDark)
                             .init();
                     break;
                 case R.id.btn_left:
