@@ -10,9 +10,10 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Display;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewConfiguration;
 
 import static com.gyf.immersionbar.Constants.IMMERSION_EMUI_NAVIGATION_BAR_HIDE_SHOW;
 import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_HIDE_SHOW;
@@ -40,7 +41,8 @@ class BarConfig {
     /**
      * Instantiates a new Bar config.
      *
-     * @param activity the activity
+     * @param activity
+     *         the activity
      */
     BarConfig(Activity activity) {
         Resources res = activity.getResources();
@@ -98,6 +100,15 @@ class BarConfig {
         return result;
     }
 
+    /**
+     * 修改：判断是否有导航栏等方式
+     *
+     * @param activity
+     *
+     * @return
+     *
+     * @author Michael Lee 2020-10-16
+     */
     @TargetApi(14)
     private boolean hasNavBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -118,43 +129,53 @@ class BarConfig {
                 }
             }
         }
-        //其他手机根据屏幕真实高度与显示高度是否相同来判断
-        WindowManager windowManager = activity.getWindowManager();
-        Display d = windowManager.getDefaultDisplay();
 
-        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            d.getRealMetrics(realDisplayMetrics);
+        // 判断是否拥有物理按键
+        boolean hasMenuKey = ViewConfiguration.get(activity)
+                .hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap
+                .deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) {
+            return true;
         }
 
-        int realHeight = realDisplayMetrics.heightPixels;
-        int realWidth = realDisplayMetrics.widthPixels;
+        ///判断获取navigation_bar_height是否为0
+        Resources resources = activity.getResources();
+        int resourceId = resources.getIdentifier(
+                activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                        ? IMMERSION_NAVIGATION_BAR_HEIGHT : IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE
+                , "dimen", "android");
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        d.getMetrics(displayMetrics);
-
-        int displayHeight = displayMetrics.heightPixels;
-        int displayWidth = displayMetrics.widthPixels;
-
-        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+        return resourceId > 0 && resources.getDimensionPixelSize(resourceId) == 0;
     }
 
+    /**
+     * 修改：获取导航栏真实高度
+     *
+     * @param context
+     * @param key
+     *
+     * @return 分四种情况：
+     * 1、固定展示导航栏：返回导航栏高度
+     * 2、可隐藏可展示的导航栏（手势展示），返回导航栏高度
+     * 3、隐藏的导航栏（全面屏手势）或无导航栏，返回0
+     * 4、一个小横条的导航栏（Google官方全面屏样式），返回小横条高度
+     *
+     * @author Michael Lee 2020-10-16
+     */
     private int getInternalDimensionSize(Context context, String key) {
         int result = 0;
         try {
             int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
             if (resourceId > 0) {
                 int sizeOne = context.getResources().getDimensionPixelSize(resourceId);
-                int sizeTwo = Resources.getSystem().getDimensionPixelSize(resourceId);
-
-                if (sizeTwo >= sizeOne) {
-                    return sizeTwo;
-                } else {
-                    float densityOne = context.getResources().getDisplayMetrics().density;
-                    float densityTwo = Resources.getSystem().getDisplayMetrics().density;
-                    float f = sizeOne * densityTwo / densityOne;
-                    return (int) ((f >= 0) ? (f + 0.5f) : (f - 0.5f));
-                }
+                //从系统的配置来获取总是会返回导航栏高度，所以去掉
+                //下面代码是适配屏幕缩放，从app这里获取出来的是app内缩放的尺寸
+                float densityOne = context.getResources().getDisplayMetrics().density;
+                float densityTwo = Resources.getSystem().getDisplayMetrics().density;
+                float f = sizeOne * densityTwo / densityOne;
+                return (int) ((f >= 0) ? (f + 0.5f) : (f - 0.5f));
             }
         } catch (Resources.NotFoundException ignored) {
             return 0;
@@ -176,9 +197,9 @@ class BarConfig {
     }
 
     /**
-     * Should a navigation bar appear at the bottom of the screen in the current
-     * device configuration? A navigation bar may appear on the right side of
-     * the screen in certain configurations.
+     * Should a navigation bar appear at the bottom of the screen in the current device
+     * configuration? A navigation bar may appear on the right side of the screen in certain
+     * configurations.
      *
      * @return True if navigation should appear at the bottom of the screen, False otherwise.
      */
@@ -216,7 +237,8 @@ class BarConfig {
     /**
      * Get the height of the system navigation bar.
      *
-     * @return The height of the navigation bar (in pixels). If the device does not have soft navigation keys, this will always return 0.
+     * @return The height of the navigation bar (in pixels). If the device does not have soft
+     * navigation keys, this will always return 0.
      */
     int getNavigationBarHeight() {
         return mNavigationBarHeight;
@@ -225,7 +247,8 @@ class BarConfig {
     /**
      * Get the width of the system navigation bar when it is placed vertically on the screen.
      *
-     * @return The width of the navigation bar (in pixels). If the device does not have soft navigation keys, this will always return 0.
+     * @return The width of the navigation bar (in pixels). If the device does not have soft
+     * navigation keys, this will always return 0.
      */
     int getNavigationBarWidth() {
         return mNavigationBarWidth;
