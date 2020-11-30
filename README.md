@@ -155,13 +155,13 @@
    | onInvisible()：当前Fragment不可见的时候调用 | ❌ | ✅ |
     
 #### 在Activity使用ImmersionBar
-  - 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentThreeActivity.java)这个类
-  - 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentFourActivity.java)这个类
+  - 第一种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentThreeActivity.java)这个类
+  - 第二种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentFourActivity.java)这个类
 #### 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
-  - 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/five/BaseFiveFragment.java)这个类
+  - 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/fragment/five/BaseFiveFragment.java)这个类
 
 ## 在Dialog中实现沉浸式，具体实现参考demo
-- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/dialog/BaseDialogFragment.java)这个类
+- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/fragment/dialog/BaseDialogFragment.java)这个类
    ```java
        ImmersionBar.with(this).init();
    ```
