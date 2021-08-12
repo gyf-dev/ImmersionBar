@@ -42,7 +42,7 @@ public class PopupActivity extends BaseActivity {
         ImmersionBar.with(this)
                 .titleBar(R.id.toolbar)
                 //华为手机能手动隐藏导航栏，所以也要做些适配
-                .setOnNavigationBarListener(show -> updatePopupView())
+                .setOnNavigationBarListener((show, type) -> updatePopupView())
                 .init();
     }
 

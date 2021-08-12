@@ -10,7 +10,7 @@ public interface OnNavigationBarListener {
     /**
      * On navigation bar change.
      *
-     * @param show the show
+     * @param type the NavigationBarType
      */
-    void onNavigationBarChange(boolean show);
+    void onNavigationBarChange(boolean show, NavigationBarType type);
 }

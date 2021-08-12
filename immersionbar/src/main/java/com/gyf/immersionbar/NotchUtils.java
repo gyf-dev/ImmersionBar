@@ -8,9 +8,9 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.view.DisplayCutout;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowInsets;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -54,6 +54,7 @@ public class NotchUtils {
      */
     private static final String NOTCH_LENOVO = "config_screen_has_notch";
 
+    private static final String NOTCH_MEIZU = "flyme.config.FlymeFeature";
 
     /**
      * 判断是否是刘海屏
@@ -71,7 +72,8 @@ public class NotchUtils {
                         hasNotchAtHuaWei(activity) ||
                         hasNotchAtOPPO(activity) ||
                         hasNotchAtVIVO(activity) ||
-                        hasNotchAtLenovo(activity);
+                        hasNotchAtLenovo(activity) ||
+                        hasNotchAtMeiZu();
             }
         }
         return false;
@@ -128,18 +130,7 @@ public class NotchUtils {
      * @return the display cutout
      */
     private static DisplayCutout getDisplayCutout(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (activity != null) {
-                Window window = activity.getWindow();
-                if (window != null) {
-                    WindowInsets windowInsets = window.getDecorView().getRootWindowInsets();
-                    if (windowInsets != null) {
-                        return windowInsets.getDisplayCutout();
-                    }
-                }
-            }
-        }
-        return null;
+        return getDisplayCutout(activity.getWindow().getDecorView());
     }
 
     private static DisplayCutout getDisplayCutout(View view) {
@@ -258,11 +249,29 @@ public class NotchUtils {
      * @return the boolean
      */
     private static boolean hasNotchAtLenovo(Context context) {
-        if (OSUtils.isOppo()) {
-            int resourceId = context.getResources().getIdentifier(NOTCH_LENOVO,
-                    "bool", "android");
+        if (OSUtils.isLenovo()) {
+            int resourceId = context.getResources().getIdentifier(NOTCH_LENOVO, "bool", "android");
             if (resourceId > 0) {
                 return context.getResources().getBoolean(resourceId);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 魅族刘海屏判断
+     * Has notch at meizu boolean.
+     *
+     * @return the boolean
+     */
+    private static boolean hasNotchAtMeiZu() {
+        if (OSUtils.isMeizu()) {
+            try {
+                Class<?> clazz = Class.forName(NOTCH_MEIZU);
+                Field field = clazz.getDeclaredField("IS_FRINGE_DEVICE");
+                return (boolean) field.get(null);
+            } catch (Exception e) {
+                return false;
             }
         }
         return false;
@@ -276,7 +285,7 @@ public class NotchUtils {
      * @return the int
      */
     public static int getNotchHeight(Activity activity) {
-        if (hasNotchScreen(activity)) {
+        if (!hasNotchScreen(activity)) {
             return 0;
         }
         int notchHeight = 0;
@@ -313,6 +322,9 @@ public class NotchUtils {
             }
             if (hasNotchAtLenovo(activity)) {
                 notchHeight = getLenovoNotchHeight(activity);
+            }
+            if (hasNotchAtMeiZu()) {
+                notchHeight = getMeizuNotchHeight(activity);
             }
         }
         return notchHeight;
@@ -376,20 +388,34 @@ public class NotchUtils {
 
     /**
      * 获得联想刘海屏高度
-     * <p>
      * Gets lenovo notch height.
      *
      * @param context the context
      * @return the lenovo notch height
      */
     private static int getLenovoNotchHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("notch_h", "dimen",
-                "android");
+        int resourceId = context.getResources().getIdentifier("notch_h", "dimen", "android");
         if (resourceId > 0) {
             return context.getResources().getDimensionPixelSize(resourceId);
         } else {
             return 0;
         }
+    }
+
+    /**
+     * 获得魅族刘海屏高度
+     * Gets meizu notch height.
+     *
+     * @param context the context
+     * @return the meizu notch height
+     */
+    private static int getMeizuNotchHeight(Context context) {
+        int notchHeight = 0;
+        int resourceId = context.getResources().getIdentifier("fringe_height", "dimen", "android");
+        if (resourceId > 0) {
+            notchHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return notchHeight;
     }
 
     /**

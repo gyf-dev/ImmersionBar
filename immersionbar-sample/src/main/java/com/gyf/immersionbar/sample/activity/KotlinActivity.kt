@@ -2,14 +2,14 @@ package com.gyf.immersionbar.sample.activity
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.gyf.immersionbar.ktx.*
 import com.gyf.immersionbar.sample.R
 import kotlinx.android.synthetic.main.activity_params.*
@@ -27,13 +27,15 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
         immersionBar {
             titleBar(mToolbar)
             navigationBarColor(R.color.btn13)
-            setOnNavigationBarListener {
+            setOnNavigationBarListener { show, _ ->
                 initView()
-                val text = "导航栏${if (it) {
-                    "显示了"
-                } else {
-                    "隐藏了"
-                }}"
+                val text = "导航栏${
+                    if (show) {
+                        "显示了"
+                    } else {
+                        "隐藏了"
+                    }
+                }"
                 Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
             }
         }

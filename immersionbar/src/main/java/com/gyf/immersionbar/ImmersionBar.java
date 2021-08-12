@@ -693,7 +693,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     @Override
-    public void onNavigationBarChange(boolean show) {
+    public void onNavigationBarChange(boolean show, NavigationBarType type) {
         View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (navigationBarView != null) {
             mBarConfig = new BarConfig(mActivity);

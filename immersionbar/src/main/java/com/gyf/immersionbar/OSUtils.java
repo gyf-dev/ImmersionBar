@@ -70,6 +70,24 @@ public class OSUtils {
     }
 
     /**
+     * 是否是Lenovo手机
+     *
+     * @return the boolean
+     */
+    public static boolean isLenovo() {
+        return Build.MANUFACTURER.toLowerCase().contains("lenovo");
+    }
+
+    /**
+     * 是否是魅族
+     *
+     * @return the boolean
+     */
+    public static boolean isMeizu() {
+        return Build.MANUFACTURER.toLowerCase().contains("meizu");
+    }
+
+    /**
      * 判断是否为miui
      * Is miui boolean.
      *
@@ -192,9 +210,9 @@ public class OSUtils {
         if (!version.isEmpty()) {
             try {
                 if (version.toLowerCase().contains("os")) {
-                    num = Integer.valueOf(version.substring(9, 10));
+                    num = Integer.parseInt(version.substring(9, 10));
                 } else {
-                    num = Integer.valueOf(version.substring(6, 7));
+                    num = Integer.parseInt(version.substring(6, 7));
                 }
                 return num >= 4;
             } catch (NumberFormatException e) {
@@ -216,9 +234,9 @@ public class OSUtils {
         if (!version.isEmpty()) {
             try {
                 if (version.toLowerCase().contains("os")) {
-                    num = Integer.valueOf(version.substring(9, 10));
+                    num = Integer.parseInt(version.substring(9, 10));
                 } else {
-                    num = Integer.valueOf(version.substring(6, 7));
+                    num = Integer.parseInt(version.substring(6, 7));
                 }
                 return num == 5;
             } catch (NumberFormatException e) {

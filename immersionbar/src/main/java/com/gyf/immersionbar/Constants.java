@@ -38,7 +38,7 @@ class Constants {
      */
     static final String IMMERSION_NAVIGATION_BAR_MODE_EMUI = "navigationbar_is_min";
     /**
-     * VIVO导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
+     * VIVO导航栏显示隐藏标识位 0-三按钮导航，1-经典三段式，2-全屏手势
      */
     static final String IMMERSION_NAVIGATION_BAR_MODE_VIVO = "navigation_gesture_on";
     /**
