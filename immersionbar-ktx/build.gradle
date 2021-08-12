@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
 
     buildTypes {
@@ -20,20 +19,11 @@ android {
 }
 
 dependencies {
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
     compileOnly project(':immersionbar')
 }
 
 repositories {
     mavenCentral()
-}
-
-publish {
-    userOrg = 'geyifeng'
-    groupId = 'com.gyf.immersionbar'
-    artifactId = 'immersionbar-ktx'
-    publishVersion = "$immersionbar_version"
-    desc = 'Android bar management'
-    website = 'https://github.com/gyf-dev/ImmersionBar'
 }

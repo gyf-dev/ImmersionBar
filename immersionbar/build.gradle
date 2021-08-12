@@ -1,12 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
     lintOptions {
         checkReleaseBuilds false
@@ -17,14 +16,5 @@ android {
 }
 
 dependencies {
-    compileOnly 'androidx.appcompat:appcompat:1.1.0'
-}
-
-publish {
-    userOrg = 'geyifeng'
-    groupId = 'com.gyf.immersionbar'
-    artifactId = 'immersionbar'
-    publishVersion = "$immersionbar_version"
-    desc = 'Android bar management'
-    website = 'https://github.com/gyf-dev/ImmersionBar'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
 }
