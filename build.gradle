@@ -1,3 +1,5 @@
+import java.util.function.Consumer
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -6,6 +8,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
     dependencies {
 
@@ -20,6 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
     tasks.withType(Javadoc) {
@@ -37,4 +41,21 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-//tasks.getByPath(":immersionbar-ktx:releaseAndroidJavadocs").enabled = false
+subprojects.forEach(new Consumer<Project>() {
+    @Override
+    void accept(Project project) {
+        ["com.android.library"].forEach(new Consumer<String>() {
+            @Override
+            void accept(String s) {
+                project.getPlugins().withId(s) {
+                    project.afterEvaluate {
+                        def file = new File(project.getProjectDir().parent, "maven-publish.gradle")
+                        if(file.exists()){
+                            project.apply from: file
+                        }
+                    }
+                }
+            }
+        })
+    }
+})
