@@ -12,20 +12,25 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.gyf.immersionbar.ktx.*
 import com.gyf.immersionbar.sample.R
-import kotlinx.android.synthetic.main.activity_params.*
+import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding
 
 /**
  * @author geyifeng
  * @date 2019/3/27 7:20 PM
  */
-class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
+class KotlinActivity : BaseKotlinActivity() {
 
     private var mIsHideStatusBar = false
 
+    private val viewBinding by lazy {
+        ActivityParamsBinding.inflate(layoutInflater).apply {
+            setContentView(root)
+        }
+    }
+
     override fun initImmersionBar() {
-//        super.initImmersionBar()
         immersionBar {
-            titleBar(mToolbar)
+            titleBar(viewBinding.mToolbar)
             navigationBarColor(R.color.btn13)
             setOnNavigationBarListener { show, _ ->
                 initView()
@@ -43,26 +48,28 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
 
     override fun initData() {
         super.initData()
-        mToolbar.title = intent.getCharSequenceExtra("title")
+        viewBinding.mToolbar.title = intent.getCharSequenceExtra("title")
     }
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
-        mTvStatus.text = "${mTvStatus.title}$statusBarHeight".content()
-        mTvHasNav.text = "${mTvHasNav.title}$hasNavigationBar".content()
-        mTvNav.text = "${mTvNav.title}$navigationBarHeight".content()
-        mTvNavWidth.text = "${mTvNavWidth.title}$navigationBarWidth".content()
-        mTvAction.text = "${mTvAction.title}$actionBarHeight".content()
-        mTvHasNotch.post { mTvHasNotch.text = "${mTvHasNotch.title}$hasNotchScreen".content() }
-        mTvNotchHeight.post { mTvNotchHeight.text = "${mTvNotchHeight.title}$notchHeight".content() }
-        mTvFits.text = "${mTvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
-        mTvStatusDark.text = "${mTvStatusDark.title}$isSupportStatusBarDarkFont".content()
-        mTvNavigationDark.text = "${mTvNavigationDark.title}$isSupportNavigationIconDark".content()
+        viewBinding.apply {
+            mTvStatus.text = "${mTvStatus.title}$statusBarHeight".content()
+            mTvHasNav.text = "${mTvHasNav.title}$hasNavigationBar".content()
+            mTvNav.text = "${mTvNav.title}$navigationBarHeight".content()
+            mTvNavWidth.text = "${mTvNavWidth.title}$navigationBarWidth".content()
+            mTvAction.text = "${mTvAction.title}$actionBarHeight".content()
+            mTvHasNotch.post { mTvHasNotch.text = "${mTvHasNotch.title}$hasNotchScreen".content() }
+            mTvNotchHeight.post { mTvNotchHeight.text = "${mTvNotchHeight.title}$notchHeight".content() }
+            mTvFits.text = "${mTvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
+            mTvStatusDark.text = "${mTvStatusDark.title}$isSupportStatusBarDarkFont".content()
+            mTvNavigationDark.text = "${mTvNavigationDark.title}$isSupportNavigationIconDark".content()
+        }
     }
 
     @SuppressLint("SetTextI18n")
     override fun setListener() {
-        mBtnStatus.setOnClickListener {
+        viewBinding.mBtnStatus.setOnClickListener {
             mIsHideStatusBar = if (!mIsHideStatusBar) {
                 hideStatusBar()
                 true
@@ -71,8 +78,8 @@ class KotlinActivity : BaseKotlinActivity(R.layout.activity_params) {
                 false
             }
         }
-        ViewCompat.setOnApplyWindowInsetsListener(mTvInsets) { _, windowInsetsCompat ->
-            mTvInsets.text = "${mTvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.mTvInsets) { _, windowInsetsCompat ->
+            viewBinding.mTvInsets.text = "${viewBinding.mTvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
             windowInsetsCompat.consumeSystemWindowInsets()
         }
     }
