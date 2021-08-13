@@ -49,6 +49,8 @@ public class ParamsActivity extends BaseActivity {
     TextView mTvNavigationDark;
     @BindView(R.id.mBtnStatus)
     Button mBtnStatus;
+    @BindView(R.id.mTvGesture)
+    TextView mTvGesture;
 
     private boolean mIsHideStatusBar = false;
 
@@ -88,6 +90,7 @@ public class ParamsActivity extends BaseActivity {
         mTvFits.setText(getText(getTitle(mTvFits) + ImmersionBar.checkFitsSystemWindows(findViewById(android.R.id.content))));
         mTvStatusDark.setText(getText(getTitle(mTvStatusDark) + ImmersionBar.isSupportStatusBarDarkFont()));
         mTvNavigationDark.setText(getText(getTitle(mTvNavigationDark) + ImmersionBar.isSupportNavigationIconDark()));
+        mTvGesture.setText(getText(getTitle(mTvGesture) + ImmersionBar.isGesture(this)));
     }
 
     @SuppressLint("SetTextI18n")

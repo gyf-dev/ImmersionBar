@@ -2,6 +2,7 @@ package com.gyf.immersionbar.ktx
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -126,8 +127,12 @@ val View.checkFitsSystemWindows get() = ImmersionBar.checkFitsSystemWindows(this
 // 导航栏是否在底部
 val Activity.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
 val Fragment.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
-
 val android.app.Fragment.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
+
+// 是否是全面屏手势
+val Context.isGesture get() = ImmersionBar.isGesture(this)
+val Fragment.isGesture get() = ImmersionBar.isGesture(this)
+val android.app.Fragment.isGesture get() = ImmersionBar.isGesture(this)
 
 // statusBarView扩展
 fun Activity.fitsStatusBarView(view: View) = ImmersionBar.setStatusBarView(this, view)

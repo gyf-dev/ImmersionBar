@@ -3,6 +3,7 @@ package com.gyf.immersionbar;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -1610,6 +1611,43 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public static void showStatusBar(@NonNull Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    /**
+     * 是否是手势
+     *
+     * @param context Context
+     * @return the boolean
+     */
+    public static boolean isGesture(Context context) {
+        return GestureUtils.getGestureBean(context).isGesture;
+    }
+
+    /**
+     * 是否是手势
+     *
+     * @param fragment Fragment
+     * @return the boolean
+     */
+    public static boolean isGesture(Fragment fragment) {
+        Context context = fragment.getContext();
+        if (context == null) return false;
+        return isGesture(context);
+    }
+
+    /**
+     * 是否是手势
+     *
+     * @param fragment android.app.Fragment
+     * @return the boolean
+     */
+    public static boolean isGesture(android.app.Fragment fragment) {
+        Context context = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            context = fragment.getContext();
+        }
+        if (context == null) return false;
+        return isGesture(context);
     }
 
     /**

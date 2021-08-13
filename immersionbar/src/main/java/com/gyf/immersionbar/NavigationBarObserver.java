@@ -50,9 +50,9 @@ final class NavigationBarObserver extends ContentObserver {
                 }
             } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
                 uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_MIUI);
-            } else if (OSUtils.isVivo()) {
+            } else if (OSUtils.isVivo() || OSUtils.isFuntouchOrOriginOs()) {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_VIVO);
-            } else if (OSUtils.isOppo()) {
+            } else if (OSUtils.isOppo() || OSUtils.isColorOs()) {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_OPPO);
             } else if (OSUtils.isSamsung()) {
                 uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG);
@@ -69,78 +69,10 @@ final class NavigationBarObserver extends ContentObserver {
     @Override
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
-                && mListeners != null && !mListeners.isEmpty()) {
-            NavigationBarType navigationBarType = NavigationBarType.UNKNOWN;
-            int type;
-            boolean show = true;
-            if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
-                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    type = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
-                } else {
-                    type = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
-                }
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
-                type = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_MIUI, 0);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            } else if (OSUtils.isVivo()) {
-                type = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.SMALL;
-                    show = false;
-                } else if (type == 2) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            } else if (OSUtils.isOppo()) {
-                type = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_OPPO, 0);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1 || type == 2 || type == 3) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            } else if (OSUtils.isSamsung()) {
-                type = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, 0);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            } else {
-                type = Settings.Secure.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, 0);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    show = true;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.DOUBLE;
-                    show = true;
-                } else if (type == 2) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    show = false;
-                }
-            }
+        if (mListeners != null && !mListeners.isEmpty()) {
+            GestureUtils.GestureBean bean = GestureUtils.getGestureBean(mApplication);
             for (OnNavigationBarListener onNavigationBarListener : mListeners) {
-                onNavigationBarListener.onNavigationBarChange(show, navigationBarType);
+                onNavigationBarListener.onNavigationBarChange(!bean.isGesture, bean.type);
             }
         }
     }

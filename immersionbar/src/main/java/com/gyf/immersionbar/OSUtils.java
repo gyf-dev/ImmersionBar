@@ -50,16 +50,6 @@ public class OSUtils {
     }
 
     /**
-     * 是否是Samsung手机
-     * Is samsung boolean.
-     *
-     * @return the boolean
-     */
-    public static boolean isSamsung() {
-        return Build.MANUFACTURER.toLowerCase().contains("samsung");
-    }
-
-    /**
      * 是否是Vivo手机
      * Is vivo boolean.
      *
@@ -67,6 +57,16 @@ public class OSUtils {
      */
     public static boolean isVivo() {
         return Build.MANUFACTURER.toLowerCase().contains("vivo");
+    }
+
+    /**
+     * 是否是Samsung手机
+     * Is samsung boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isSamsung() {
+        return Build.MANUFACTURER.toLowerCase().contains("samsung");
     }
 
     /**
@@ -94,7 +94,7 @@ public class OSUtils {
      * @return the boolean
      */
     public static boolean isMIUI() {
-        String property = getSystemProperty(KEY_MIUI_VERSION_NAME, "");
+        String property = getSystemProperty(KEY_MIUI_VERSION_NAME);
         return !TextUtils.isEmpty(property);
     }
 
@@ -109,7 +109,7 @@ public class OSUtils {
         int num;
         if ((!version.isEmpty())) {
             try {
-                num = Integer.valueOf(version.substring(1));
+                num = Integer.parseInt(version.substring(1));
                 return num >= 6;
             } catch (NumberFormatException e) {
                 return false;
@@ -126,7 +126,7 @@ public class OSUtils {
      * @return the miui version
      */
     public static String getMIUIVersion() {
-        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, "") : "";
+        return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME) : "";
     }
 
     /**
@@ -136,7 +136,7 @@ public class OSUtils {
      * @return the boolean
      */
     public static boolean isEMUI() {
-        String property = getSystemProperty(KEY_EMUI_VERSION_NAME, "");
+        String property = getSystemProperty(KEY_EMUI_VERSION_NAME);
         return !TextUtils.isEmpty(property);
     }
 
@@ -147,7 +147,7 @@ public class OSUtils {
      * @return the emui version
      */
     public static String getEMUIVersion() {
-        return isEMUI() ? getSystemProperty(KEY_EMUI_VERSION_NAME, "") : "";
+        return isEMUI() ? getSystemProperty(KEY_EMUI_VERSION_NAME) : "";
     }
 
     /**
@@ -172,10 +172,7 @@ public class OSUtils {
      */
     public static boolean isEMUI3_0() {
         String property = getEMUIVersion();
-        if (property.contains("EmotionUI_3.0")) {
-            return true;
-        }
-        return false;
+        return property.contains("EmotionUI_3.0");
     }
 
     /**
@@ -186,6 +183,28 @@ public class OSUtils {
      */
     public static boolean isEMUI3_x() {
         return OSUtils.isEMUI3_0() || OSUtils.isEMUI3_1();
+    }
+
+    /**
+     * 判断是否为ColorOs
+     * Is emui boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isColorOs() {
+        String property = getSystemProperty("ro.build.version.opporom");
+        return !TextUtils.isEmpty(property);
+    }
+
+    /**
+     * 判断是否为FuntouchOs或者是否为OriginOs
+     * Is emui boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isFuntouchOrOriginOs() {
+        String property = getSystemProperty("ro.vivo.os.version");
+        return !TextUtils.isEmpty(property);
     }
 
     /**
@@ -253,22 +272,22 @@ public class OSUtils {
      * @return the flyme os version
      */
     public static String getFlymeOSVersion() {
-        return isFlymeOS() ? getSystemProperty(KEY_DISPLAY, "") : "";
+        return isFlymeOS() ? getSystemProperty(KEY_DISPLAY) : "";
     }
 
     private static String getFlymeOSFlag() {
-        return getSystemProperty(KEY_DISPLAY, "");
+        return getSystemProperty(KEY_DISPLAY);
     }
 
     @SuppressLint("PrivateApi")
-    private static String getSystemProperty(String key, String defaultValue) {
+    private static String getSystemProperty(String key) {
         try {
             Class<?> clz = Class.forName("android.os.SystemProperties");
             Method method = clz.getMethod("get", String.class, String.class);
-            return (String) method.invoke(clz, key, defaultValue);
+            return (String) method.invoke(clz, key, "");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return defaultValue;
+        return "";
     }
 }

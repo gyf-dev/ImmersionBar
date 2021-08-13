@@ -82,6 +82,14 @@
                 android:textColor="@android:color/black" />
 
             <TextView
+                android:id="@+id/mTvGesture"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="是否有全面屏手势："
+                android:textColor="@android:color/black" />
+
+            <TextView
                 android:id="@+id/mTvInsets"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"

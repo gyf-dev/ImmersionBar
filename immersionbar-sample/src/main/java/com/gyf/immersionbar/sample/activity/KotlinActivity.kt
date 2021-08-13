@@ -64,6 +64,7 @@ class KotlinActivity : BaseKotlinActivity() {
             mTvFits.text = "${mTvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
             mTvStatusDark.text = "${mTvStatusDark.title}$isSupportStatusBarDarkFont".content()
             mTvNavigationDark.text = "${mTvNavigationDark.title}$isSupportNavigationIconDark".content()
+            mTvGesture.text = "${mTvGesture.title}$isGesture".content()
         }
     }
 
