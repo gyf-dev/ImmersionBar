@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -540,7 +541,29 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the int
      */
     private int hideBar(int uiFlags) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowInsetsController controller = mContentView.getWindowInsetsController();
+            switch (mBarParams.barHide) {
+                case FLAG_HIDE_BAR:
+                    controller.hide(WindowInsets.Type.statusBars());
+                    controller.hide(WindowInsets.Type.navigationBars());
+                    break;
+                case FLAG_HIDE_STATUS_BAR:
+                    controller.hide(WindowInsets.Type.statusBars());
+                    break;
+                case FLAG_HIDE_NAVIGATION_BAR:
+                    controller.hide(WindowInsets.Type.navigationBars());
+                    break;
+                case FLAG_SHOW_BAR:
+                    controller.show(WindowInsets.Type.statusBars());
+                    controller.show(WindowInsets.Type.navigationBars());
+                    break;
+                default:
+                    break;
+            }
+            controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            return uiFlags;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             switch (mBarParams.barHide) {
                 case FLAG_HIDE_BAR:
                     uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -560,8 +583,10 @@ public final class ImmersionBar implements ImmersionCallback {
                 default:
                     break;
             }
+            return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        } else {
+            return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         }
-        return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     }
 
     /**
