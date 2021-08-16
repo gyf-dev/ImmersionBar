@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
  * @author geyifeng
  * @date 2017 /5/12
  */
+@Deprecated
 public abstract class SimpleImmersionFragment extends Fragment implements SimpleImmersionOwner {
 
     /**

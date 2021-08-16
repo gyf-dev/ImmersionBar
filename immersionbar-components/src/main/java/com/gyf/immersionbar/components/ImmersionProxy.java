@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
  * @author geyifeng
  * @date 2018/11/15 12:53 PM
  */
+@Deprecated
 public class ImmersionProxy {
     /**
      * 要操作的Fragment对象

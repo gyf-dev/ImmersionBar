@@ -7,6 +7,7 @@ package com.gyf.immersionbar.components;
  * @author geyifeng
  * @date 2018 /11/15 12:52 PM
  */
+@Deprecated
 public interface SimpleImmersionOwner {
 
     /**
