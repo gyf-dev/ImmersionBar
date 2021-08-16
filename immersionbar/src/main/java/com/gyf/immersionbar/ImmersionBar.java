@@ -418,6 +418,9 @@ public final class ImmersionBar implements ImmersionCallback {
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         //设置状态栏颜色
         if (mBarParams.statusBarColorEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                mWindow.setStatusBarContrastEnforced(false);
+            }
             mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));
         } else {
@@ -426,6 +429,9 @@ public final class ImmersionBar implements ImmersionCallback {
         }
         //设置导航栏颜色
         if (mBarParams.navigationBarEnable) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                mWindow.setNavigationBarContrastEnforced(false);
+            }
             mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                     mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));
         } else {

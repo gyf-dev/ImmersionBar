@@ -258,9 +258,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     if (ImmersionBar.hasNavigationBar(this)) {
                         BarParams barParams = ImmersionBar.with(this).getBarParams();
                         if (barParams.fullScreen) {
-                            ImmersionBar.with(this).fullScreen(false).navigationBarColor(R.color.colorPrimary).init();
+                            ImmersionBar.with(this).fullScreen(false).navigationBarColor(R.color.colorPrimary).navigationBarDarkIcon(false).init();
                         } else {
-                            ImmersionBar.with(this).fullScreen(true).transparentNavigationBar().init();
+                            ImmersionBar.with(this).fullScreen(true).transparentNavigationBar().navigationBarDarkIcon(true).init();
                         }
                     } else {
                         Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
