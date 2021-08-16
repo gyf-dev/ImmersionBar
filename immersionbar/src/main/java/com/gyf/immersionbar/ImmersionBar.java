@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -743,10 +744,26 @@ public final class ImmersionBar implements ImmersionCallback {
      * 设置状态栏字体颜色，android6.0以上
      */
     private int setStatusBarDarkFont(int uiFlags) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBarParams.statusBarDarkFont) {
-            return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (mBarParams.statusBarDarkFont) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController controller = mContentView.getWindowInsetsController();
+                controller.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+                return uiFlags;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                return uiFlags;
+            }
         } else {
-            return uiFlags;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController controller = mContentView.getWindowInsetsController();
+                controller.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+                return uiFlags;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return uiFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                return uiFlags;
+            }
         }
     }
 
@@ -755,10 +772,26 @@ public final class ImmersionBar implements ImmersionCallback {
      * Sets dark navigation icon.
      */
     private int setNavigationIconDark(int uiFlags) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBarParams.navigationBarDarkIcon) {
-            return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        if (mBarParams.navigationBarDarkIcon) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController controller = mContentView.getWindowInsetsController();
+                controller.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+                return uiFlags;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            } else {
+                return uiFlags;
+            }
         } else {
-            return uiFlags;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController controller = mContentView.getWindowInsetsController();
+                controller.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+                return uiFlags;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return uiFlags & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            } else {
+                return uiFlags;
+            }
         }
     }
 

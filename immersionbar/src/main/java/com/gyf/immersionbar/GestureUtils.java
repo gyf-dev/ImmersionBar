@@ -106,7 +106,7 @@ class GestureUtils {
 
     static class GestureBean {
         /**
-         * 是否显示
+         * 是否有手势操作
          */
         public boolean isGesture = false;
         /**
