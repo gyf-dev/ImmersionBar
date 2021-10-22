@@ -29,11 +29,12 @@ repositories {
     mavenCentral()
 }
 
-// ./gradlew -q :immersionbar-components:publish
+// ./gradlew -q :immersionbar-ktx:publish
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
+                from components.release
                 pom {
                     name = 'ImmersionBar'
                     description = 'Android bar management'

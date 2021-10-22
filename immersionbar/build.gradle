@@ -26,6 +26,7 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
+                from components.release
                 pom {
                     name = 'ImmersionBar'
                     description = 'Android bar management'
