@@ -1,0 +1,28 @@
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                repositories {
+                    maven {
+                        def mavenPropertyFile = rootProject.file("maven.properties")
+                        def properties = new Properties()
+
+                        if (mavenPropertyFile.exists()) {
+                            properties.load(new FileInputStream(mavenPropertyFile))
+                        }
+
+                        credentials {
+                            username = properties.getProperty("gpr.usr")
+                            password = properties.getProperty("gpr.key")
+                        }
+                        url = properties.getProperty("gpr.url")
+                    }
+                }
+            }
+        }
+    }
+}

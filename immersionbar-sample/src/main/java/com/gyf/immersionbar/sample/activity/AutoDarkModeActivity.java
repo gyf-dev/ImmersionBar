@@ -2,11 +2,11 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.support.design.animation.ArgbEvaluatorCompat;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.animation.ArgbEvaluatorCompat;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 

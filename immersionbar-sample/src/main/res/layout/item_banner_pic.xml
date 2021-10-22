@@ -8,7 +8,7 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="4dp"
@@ -20,5 +20,5 @@
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             tools:src="@mipmap/test" />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

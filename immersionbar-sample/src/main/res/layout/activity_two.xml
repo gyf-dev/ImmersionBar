@@ -10,7 +10,7 @@
         android:layout_height="@dimen/status_bar_height"
         android:background="@color/btn3" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

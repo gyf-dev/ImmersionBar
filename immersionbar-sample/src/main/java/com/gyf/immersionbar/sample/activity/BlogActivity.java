@@ -2,7 +2,7 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.ViewParent;

@@ -9,20 +9,23 @@
 > android studio
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+   implementation 'com.gyf.immersionbar:immersionbar:4.0.0'
    // fragment快速实现（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+   implementation 'com.gyf.immersionbar:immersionbar-components:4.0.0'
    // kotlin扩展（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
+   implementation 'com.gyf.immersionbar:immersionbar-ktx:4.0.0'
    ```
 ## 2.x版本使用说明
 #### [点我查看2.x版本使用说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_2.x.md)
+
+## 3.x版本使用说明
+#### [点我查看3.x版本使用说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_3.x.md)
 
 ## 版本说明
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.0.0.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.0.0.apk)
+#### [点我下载immersionBar-3.0.0.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-4.0.0.apk)
 
 ## 关于使用AndroidX支持库
 - 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
@@ -215,7 +218,7 @@
                android:layout_height="@dimen/status_bar_height"
                android:background="@color/colorPrimary" />
        
-           <android.support.v7.widget.Toolbar
+           <androidx.appcompat.widget.Toolbar
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:background="@color/colorPrimary"
@@ -266,7 +269,7 @@
                    android:layout_height="0dp"
                    android:background="@color/colorPrimary" />
            
-               <android.support.v7.widget.Toolbar
+               <androidx.appcompat.widget.Toolbar
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:background="@color/colorPrimary"

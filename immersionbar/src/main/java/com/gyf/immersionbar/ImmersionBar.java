@@ -6,18 +6,21 @@ import android.app.Dialog;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.FloatRange;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v4.widget.DrawerLayout;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IdRes;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,8 @@ import static com.gyf.immersionbar.Constants.IMMERSION_ID_NAVIGATION_BAR_VIEW;
 import static com.gyf.immersionbar.Constants.IMMERSION_ID_STATUS_BAR_VIEW;
 import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_NAVIGATION_BAR_DARK;
 import static com.gyf.immersionbar.Constants.IMMERSION_MIUI_STATUS_BAR_DARK;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * android 4.4以上沉浸式以及bar的管理

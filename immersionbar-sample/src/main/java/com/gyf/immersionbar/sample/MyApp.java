@@ -3,7 +3,8 @@ package com.gyf.immersionbar.sample;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.MultiDex;
 
 import com.gyf.immersionbar.sample.service.NetworkService;
 import com.tencent.bugly.crashreport.CrashReport;

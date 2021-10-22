@@ -2,8 +2,8 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;

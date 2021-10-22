@@ -1,9 +1,10 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.FragmentTransaction;
 
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.fragment.two.CategoryTwoFragment;

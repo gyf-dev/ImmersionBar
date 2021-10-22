@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
+apply from: rootProject.file('./gradle/maven.gradle')
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 30
     }
 
     buildTypes {
@@ -20,8 +20,8 @@ android {
 }
 
 dependencies {
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+    compileOnly 'androidx.appcompat:appcompat:1.3.1'
     compileOnly project(':immersionbar')
 }
 
@@ -29,11 +29,31 @@ repositories {
     mavenCentral()
 }
 
-publish {
-    userOrg = 'geyifeng'
-    groupId = 'com.gyf.immersionbar'
-    artifactId = 'immersionbar-ktx'
-    publishVersion = "$immersionbar_version"
-    desc = 'Android bar management'
-    website = 'https://github.com/gyf-dev/ImmersionBar'
+// ./gradlew -q :immersionbar-components:publish
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = 'ImmersionBar'
+                    description = 'Android bar management'
+                    url = 'https://github.com/gyf-dev/ImmersionBar'
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = "geyifeng"
+                        }
+                    }
+                }
+                groupId = 'com.gyf.immersionbar'
+                artifactId = 'immersionbar-ktx'
+                version = "$immersionbar_version"
+            }
+        }
+    }
 }

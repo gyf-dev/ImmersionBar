@@ -2,12 +2,13 @@ package com.gyf.immersionbar;
 
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.FrameLayout;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 /**
  * 适配软键盘弹出问题
