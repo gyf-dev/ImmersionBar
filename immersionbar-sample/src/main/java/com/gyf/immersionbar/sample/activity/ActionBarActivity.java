@@ -1,7 +1,6 @@
 package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +11,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.utils.Utils;
 
+import androidx.appcompat.app.ActionBar;
 import butterknife.BindView;
 
 /**

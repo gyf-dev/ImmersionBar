@@ -1,6 +1,5 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -12,6 +11,7 @@ import com.gyf.immersionbar.sample.fragment.four.HomeFourFragment;
 import com.gyf.immersionbar.sample.fragment.four.MineFourFragment;
 import com.gyf.immersionbar.sample.fragment.four.ServiceFourFragment;
 
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 
 /**

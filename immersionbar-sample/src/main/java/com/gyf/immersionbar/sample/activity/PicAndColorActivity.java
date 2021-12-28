@@ -1,6 +1,5 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -12,6 +11,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.utils.Utils;
 
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.OnClick;
 

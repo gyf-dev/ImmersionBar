@@ -6,14 +6,15 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.JobIntentService;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.gyf.immersionbar.sample.event.NetworkEvent;
 import com.gyf.immersionbar.sample.receiver.NetworkBroadCastReceiver;
 
 import org.greenrobot.eventbus.EventBus;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * @author geyifeng

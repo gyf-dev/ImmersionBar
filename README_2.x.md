@@ -240,7 +240,7 @@
                android:layout_height="@dimen/status_bar_height"
                android:background="@color/colorPrimary" />
        
-           <android.support.v7.widget.Toolbar
+           <androidx.appcompat.widget.Toolbar
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:background="@color/colorPrimary"
@@ -291,7 +291,7 @@
                    android:layout_height="0dp"
                    android:background="@color/colorPrimary" />
            
-               <android.support.v7.widget.Toolbar
+               <androidx.appcompat.widget.Toolbar
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:background="@color/colorPrimary"

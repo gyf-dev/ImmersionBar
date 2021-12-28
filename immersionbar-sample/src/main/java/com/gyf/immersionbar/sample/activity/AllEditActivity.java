@@ -1,6 +1,5 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
 import com.gyf.immersionbar.ImmersionBar;
@@ -9,6 +8,7 @@ import com.gyf.immersionbar.sample.adapter.EditAdapter;
 
 import java.util.ArrayList;
 
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**

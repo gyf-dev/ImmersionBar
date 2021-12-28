@@ -2,11 +2,6 @@ package com.gyf.immersionbar.sample.fragment.three;
 
 import android.graphics.Color;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +20,11 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**

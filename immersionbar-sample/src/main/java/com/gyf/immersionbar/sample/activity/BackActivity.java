@@ -1,12 +1,12 @@
 package com.gyf.immersionbar.sample.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
 
+import androidx.annotation.Nullable;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**

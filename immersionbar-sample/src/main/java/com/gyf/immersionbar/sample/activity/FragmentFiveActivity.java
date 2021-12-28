@@ -1,13 +1,13 @@
 package com.gyf.immersionbar.sample.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.fragment.five.MainFragment;
 
+import androidx.annotation.Nullable;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;

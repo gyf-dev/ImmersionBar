@@ -2,8 +2,6 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -15,6 +13,8 @@ import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.utils.Utils;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;

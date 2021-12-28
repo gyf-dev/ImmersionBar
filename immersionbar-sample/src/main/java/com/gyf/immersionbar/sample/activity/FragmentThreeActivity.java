@@ -1,9 +1,5 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -17,6 +13,10 @@ import com.gyf.immersionbar.sample.view.CustomViewPager;
 
 import java.util.ArrayList;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**

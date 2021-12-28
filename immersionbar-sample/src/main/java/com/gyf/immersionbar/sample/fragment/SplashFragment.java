@@ -2,7 +2,6 @@ package com.gyf.immersionbar.sample.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ import com.gyf.immersionbar.sample.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -34,7 +34,7 @@ public class SplashFragment extends BaseFragment implements Observer<Long> {
 
     private static String mKey = "TotalTime";
 
-    private long mTotalTime = 3;
+    private long mTotalTime = 1;
 
     private Disposable mSubscribe;
     private OnSplashListener mOnSplashListener;

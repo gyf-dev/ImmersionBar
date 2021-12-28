@@ -1,7 +1,5 @@
 package com.gyf.immersionbar.sample.adapter;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -9,6 +7,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.bean.FunBean;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * @author geyifeng

@@ -2,9 +2,6 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -15,6 +12,9 @@ import android.widget.Toast;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 
 /**

@@ -1,7 +1,5 @@
 package com.gyf.immersionbar.sample.activity;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -14,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 
 /**
