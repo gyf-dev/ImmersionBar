@@ -138,6 +138,9 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 if (mImmersionBar.getBarParams().onKeyboardListener != null) {
                     mImmersionBar.getBarParams().onKeyboardListener.onKeyboardChange(isPopup, keyboardHeight);
                 }
+                if(!isPopup){
+                    mImmersionBar.fitsParentBarKeyboard();
+                }
                 if (!isPopup && mImmersionBar.getBarParams().barHide != BarHide.FLAG_SHOW_BAR) {
                     mImmersionBar.setBar();
                 }

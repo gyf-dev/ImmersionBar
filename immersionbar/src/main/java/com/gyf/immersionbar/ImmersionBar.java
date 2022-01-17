@@ -57,6 +57,10 @@ public final class ImmersionBar implements ImmersionCallback {
     private ViewGroup mDecorView;
     private ViewGroup mContentView;
     private ImmersionBar mParentBar;
+    /**
+     *  是否修复ParentBar  Keyboard
+     */
+    private boolean isFitsParentBarKeyboard = false;
 
     /**
      * 是否是在Activity里使用
@@ -853,6 +857,17 @@ public final class ImmersionBar implements ImmersionCallback {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * 修复parent keyboard
+     */
+    public void fitsParentBarKeyboard() {
+        if (isFitsParentBarKeyboard) {
+            if (mParentBar != null && mParentBar.mFitsKeyboard != null) {
+                mParentBar.mFitsKeyboard.disable();
             }
         }
     }
