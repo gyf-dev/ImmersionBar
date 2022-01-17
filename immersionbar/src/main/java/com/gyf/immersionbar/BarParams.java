@@ -222,6 +222,12 @@ public class BarParams implements Cloneable {
      */
     OnBarListener onBarListener;
 
+    /**
+     *  是否修复ParentBar  Keyboard
+     */
+     boolean isFitsParentBarKeyboard = false;
+
+
     @Override
     protected BarParams clone() {
         BarParams barParams = null;

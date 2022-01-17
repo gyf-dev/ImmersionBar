@@ -36,6 +36,7 @@ public class FullDialogFragment extends BaseDialogFragment {
                 .titleBar(toolbar)
                 .statusBarDarkFont(true)
                 .navigationBarColor(R.color.btn3)
+                .fitsParentBarKeyboard(true)
                 .keyboardEnable(true)
                 .init();
     }
