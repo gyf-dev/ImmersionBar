@@ -1,16 +1,17 @@
 package com.gyf.immersionbar;
 
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
-
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 /**
  * 手势utils
@@ -31,13 +32,14 @@ class GestureUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && context != null && context.getContentResolver() != null) {
             ContentResolver contentResolver = context.getContentResolver();
             NavigationBarType navigationBarType = NavigationBarType.UNKNOWN;
-            int type;
+            int type = -1;
             boolean isGesture = false;
+            boolean checkNavigation = false;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
                 if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    type = Settings.System.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
+                    type = Settings.System.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);
                 } else {
-                    type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
+                    type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);
                 }
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
@@ -47,16 +49,18 @@ class GestureUtils {
                     isGesture = true;
                 }
             } else if (OSUtils.isXiaoMi() || OSUtils.isMIUI()) {
-                type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_MIUI, 0);
+                type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_MIUI, -1);
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
                 } else if (type == 1) {
                     navigationBarType = NavigationBarType.GESTURES;
                     isGesture = true;
+                    int i = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE, -1);
+                    checkNavigation = i != 1;
                 }
             } else if (OSUtils.isVivo() || OSUtils.isFuntouchOrOriginOs()) {
-                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0);
+                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_VIVO, -1);
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
@@ -68,7 +72,7 @@ class GestureUtils {
                     isGesture = true;
                 }
             } else if (OSUtils.isOppo() || OSUtils.isColorOs()) {
-                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_OPPO, 0);
+                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_OPPO, -1);
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
@@ -77,7 +81,7 @@ class GestureUtils {
                     isGesture = true;
                 }
             } else if (OSUtils.isSamsung()) {
-                type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, 0);
+                type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, -1);
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
@@ -85,8 +89,9 @@ class GestureUtils {
                     navigationBarType = NavigationBarType.GESTURES;
                     isGesture = true;
                 }
-            } else {
-                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, 0);
+            }
+            if (type == -1) {
+                type = Settings.Secure.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_DEFAULT, -1);
                 if (type == 0) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
@@ -96,9 +101,11 @@ class GestureUtils {
                 } else if (type == 2) {
                     navigationBarType = NavigationBarType.GESTURES;
                     isGesture = true;
+                    checkNavigation = true;
                 }
             }
             gestureBean.isGesture = isGesture;
+            gestureBean.checkNavigation = checkNavigation;
             gestureBean.type = navigationBarType;
         }
         return gestureBean;
@@ -110,8 +117,21 @@ class GestureUtils {
          */
         public boolean isGesture = false;
         /**
+         * 需要校验导航栏高度，需要检查的机型，三星，原生
+         */
+        public boolean checkNavigation = false;
+        /**
          * 手势类型
          */
         public NavigationBarType type;
+
+        @Override
+        public String toString() {
+            return "GestureBean{" +
+                    "isGesture=" + isGesture +
+                    ", checkNavigation=" + checkNavigation +
+                    ", type=" + type +
+                    '}';
+        }
     }
 }

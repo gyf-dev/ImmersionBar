@@ -1,5 +1,16 @@
 package com.gyf.immersionbar;
 
+import static com.gyf.immersionbar.Constants.FLAG_FITS_DEFAULT;
+import static com.gyf.immersionbar.Constants.FLAG_FITS_STATUS;
+import static com.gyf.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
+import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE;
+import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
+import static com.gyf.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,8 +22,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -35,17 +44,6 @@ import androidx.fragment.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static com.gyf.immersionbar.Constants.FLAG_FITS_DEFAULT;
-import static com.gyf.immersionbar.Constants.FLAG_FITS_STATUS;
-import static com.gyf.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
-import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE;
-import static com.gyf.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
-import static com.gyf.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
-import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
 
 /**
  * android 4.4以上沉浸式以及bar的管理
@@ -1484,6 +1482,16 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarHeight(fragment.getActivity());
     }
 
+    @TargetApi(14)
+    public static int getNavigationBarHeight(@NonNull Context context) {
+        GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
+        if (bean.isGesture && !bean.checkNavigation) {
+            return 0;
+        } else {
+            return BarConfig.getNavigationBarHeightInternal(context);
+        }
+    }
+
     /**
      * Gets navigation bar width.
      * 获得导航栏的宽度
@@ -1569,6 +1577,11 @@ public final class ImmersionBar implements ImmersionCallback {
             return 0;
         }
         return getStatusBarHeight(fragment.getActivity());
+    }
+
+    @TargetApi(14)
+    public static int getStatusBarHeight(@NonNull Context context) {
+        return BarConfig.getInternalDimensionSize(context, Constants.IMMERSION_STATUS_BAR_HEIGHT);
     }
 
     /**

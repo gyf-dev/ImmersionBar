@@ -1,29 +1,24 @@
 package com.gyf.immersionbar;
 
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
+import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
-import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
+import androidx.annotation.NonNull;
 
 /**
  * The type Bar config.
@@ -79,13 +74,7 @@ class BarConfig {
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (hasNavBar((Activity) context)) {
-                String key;
-                if (mInPortrait) {
-                    key = IMMERSION_NAVIGATION_BAR_HEIGHT;
-                } else {
-                    key = IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
-                }
-                return getInternalDimensionSize(context, key);
+                return getNavigationBarHeightInternal(context);
             }
         }
         return result;
@@ -105,29 +94,8 @@ class BarConfig {
     @TargetApi(14)
     private boolean hasNavBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            ContentResolver resolver = activity.getContentResolver();
-            //判断华为手机是否隐藏了导航栏，隐藏了，直接返回false
-            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) != 0) {
-                return false;
-            }
-            //判断华为EMUI_3.x手机是否隐藏了导航栏，隐藏了，直接返回false
-            if (Settings.System.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) != 0) {
-                return false;
-            }
-            //判断小米手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_MIUI, 0) != 0) {
-                return false;
-            }
-            //判断VIVO手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_VIVO, 0) != 0) {
-                return false;
-            }
-            //判断OPPO手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Secure.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_OPPO, 0) != 0) {
-                return false;
-            }
-            //判断SAMSUNG手机是否开启了全面屏，开启了，直接返回false
-            if (Settings.Global.getInt(resolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, 0) != 0) {
+            GestureUtils.GestureBean gestureBean = GestureUtils.getGestureBean(activity);
+            if (!gestureBean.checkNavigation && gestureBean.isGesture) {
                 return false;
             }
         }
@@ -142,17 +110,15 @@ class BarConfig {
 
         int realHeight = realDisplayMetrics.heightPixels;
         int realWidth = realDisplayMetrics.widthPixels;
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         d.getMetrics(displayMetrics);
 
         int displayHeight = displayMetrics.heightPixels;
         int displayWidth = displayMetrics.widthPixels;
-
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
 
-    private int getInternalDimensionSize(Context context, String key) {
+    static int getInternalDimensionSize(Context context, String key) {
         int result = 0;
         try {
             int resourceId = Resources.getSystem().getIdentifier(key, "dimen", "android");
@@ -243,5 +209,21 @@ class BarConfig {
      */
     int getNavigationBarWidth() {
         return mNavigationBarWidth;
+    }
+
+    /**
+     * 获得导航栏高度
+     *
+     * @param context
+     * @return
+     */
+    static int getNavigationBarHeightInternal(@NonNull Context context) {
+        String key;
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            key = IMMERSION_NAVIGATION_BAR_HEIGHT;
+        } else {
+            key = IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
+        }
+        return getInternalDimensionSize(context, key);
     }
 }

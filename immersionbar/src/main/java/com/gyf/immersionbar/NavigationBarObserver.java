@@ -1,5 +1,12 @@
 package com.gyf.immersionbar;
 
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
+
 import android.app.Application;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -9,13 +16,6 @@ import android.os.Looper;
 import android.provider.Settings;
 
 import java.util.ArrayList;
-
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 /**
  * 导航栏显示隐藏处理，目前支持华为、小米、VOVO、Android 10带有导航栏的手机
@@ -55,7 +55,12 @@ final class NavigationBarObserver extends ContentObserver {
             } else if (OSUtils.isOppo() || OSUtils.isColorOs()) {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_OPPO);
             } else if (OSUtils.isSamsung()) {
-                uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG);
+                int i = Settings.Global.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, -1);
+                if (i == -1) {
+                    uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_DEFAULT);
+                } else {
+                    uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG);
+                }
             } else {
                 uri = Settings.Secure.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_DEFAULT);
             }
@@ -71,8 +76,19 @@ final class NavigationBarObserver extends ContentObserver {
         super.onChange(selfChange);
         if (mListeners != null && !mListeners.isEmpty()) {
             GestureUtils.GestureBean bean = GestureUtils.getGestureBean(mApplication);
+            boolean show;
+            if (bean.isGesture) {
+                if (bean.checkNavigation) {
+                    int navigationBarHeight = BarConfig.getNavigationBarHeightInternal(mApplication);
+                    show = navigationBarHeight > 0;
+                } else {
+                    show = false;
+                }
+            } else {
+                show = true;
+            }
             for (OnNavigationBarListener onNavigationBarListener : mListeners) {
-                onNavigationBarListener.onNavigationBarChange(!bean.isGesture, bean.type);
+                onNavigationBarListener.onNavigationBarChange(show, bean.type);
             }
         }
     }

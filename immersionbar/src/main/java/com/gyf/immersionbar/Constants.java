@@ -33,6 +33,11 @@ class Constants {
      * 小米导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
     static final String IMMERSION_NAVIGATION_BAR_MODE_MIUI = "force_fsg_nav_bar";
+
+    /**
+     * 小米导航栏手势导航情况下，是否隐藏手势提示线,0：显示 1：隐藏
+     */
+    static final String IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE = "hide_gesture_line";
     /**
      * 华为导航栏显示隐藏标识位 0-三按钮导航，1-手势导航
      */
