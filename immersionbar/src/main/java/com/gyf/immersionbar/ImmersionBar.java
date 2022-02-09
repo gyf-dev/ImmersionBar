@@ -1453,6 +1453,11 @@ public final class ImmersionBar implements ImmersionCallback {
         return hasNavigationBar(fragment.getActivity());
     }
 
+    @TargetApi(14)
+    public static boolean hasNavigationBar(@NonNull Context context) {
+        return getNavigationBarHeight(context) > 0;
+    }
+
     /**
      * Gets navigation bar height.
      * 获得导航栏的高度
