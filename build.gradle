@@ -6,9 +6,9 @@ buildscript {
     ext.kotlin_version = '1.6.10'
     ext.immersionbar_version = '3.0.0'
     repositories {
+        mavenCentral()
         google()
         jcenter()
-        mavenCentral()
     }
     dependencies {
 
@@ -49,7 +49,7 @@ subprojects.forEach(new Consumer<Project>() {
             void accept(String s) {
                 project.getPlugins().withId(s) {
                     project.afterEvaluate {
-                        def file = new File(project.getProjectDir().parent, "gradle/maven-publish.gradle")
+                        def file = new File(project.getProjectDir().parent, "gradle/publish-mavencentral.gradle")
                         if(file.exists()){
                             project.apply from: file
                         }

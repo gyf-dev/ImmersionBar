@@ -1,0 +1,142 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
+    exclude "**/R.class"  //排除`R.class`
+    exclude "**/BuildConfig.class"  //排除`BuildConfig.class`
+}
+//第 1 处
+ext["signing.keyId"] = '' //签名的密钥后8位
+ext["signing.password"] = ''  //签名设置的密码
+ext["signing.secretKeyRingFile"] = '' //生成的secring.gpg文件目录
+ext["ossrhUsername"] = ''  //sonatype用户名
+ext["ossrhPassword"] = ''  //sonatype密码
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+}
+
+// 库信息
+def LIB_GROUP_ID = "com.geyifeng"
+
+def LIB_ARTIFACT_ID = project.name
+
+def LIB_VERSION_NAME = "3.0.0"
+
+def LIB_NAME = project.name
+
+def LIB_DESC = "Android" + project.name + "sdk"
+
+def LIB_SITE_URL = "https://github.com/gyf-dev/ImmersionBar"
+
+// 开源协议
+def LICENSE_NAME = 'The Apache License, Version 2.0'
+
+def LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+// 开发者信息
+def DEVELOPER_ID = 'gyf-dev'
+
+def DEVELOPER_NAME = 'gyf-dev'
+
+def DEVELOPER_EMAIL = 'gyf.dev@gmail.com'
+
+// SCM信息
+def SCM_CONNECTION = 'git@github.com:gyf-dev/ImmersionBar.git'
+
+def SCM_URL = "https://github.com/gyf-dev/ImmersionBar/tree/master"
+
+// 上传地址
+def NEXUS_URL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+def NEXUS_SNAPSHOTS_URL = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+
+publishing {
+    publications {
+        upload(MavenPublication) {
+            println("publish-maven Log-------> LIB_GROUP_ID: $LIB_GROUP_ID; LIB_ARTIFACT_ID: $LIB_ARTIFACT_ID; LIB_VERSION_NAME: $LIB_VERSION_NAME")
+            // The coordinates of the library, being set from variables that
+
+            //第 2 处
+            groupId LIB_GROUP_ID
+            artifactId LIB_ARTIFACT_ID
+            version LIB_VERSION_NAME
+
+            // Two artifacts, the `aar` and the sources
+            from components.release
+            artifact androidSourcesJar
+
+            // Self-explanatory metadata for the most part
+            pom {
+                //第 3 处
+                name = LIB_NAME
+                description = LIB_DESC //项目描述
+                // If your project has a dedicated site, use its URL here
+                url = LIB_SITE_URL //项目github链接
+                licenses {
+                    license {
+                        //协议类型，一般默认Apache License2.0的话不用改：
+                        name = LICENSE_NAME
+                        url = LICENSE_URL
+                    }
+                }
+                developers {
+                    developer {
+                        //第 4 处
+                        id = DEVELOPER_ID //你的sonatype用户名
+                        name = DEVELOPER_NAME //你的sonatype用户名
+                        email = DEVELOPER_EMAIL //你的sonatype注册邮箱
+                    }
+                }
+                // Version control info, if you're using GitHub, follow the format as seen here
+                scm {
+                    //第 5 处
+                    //修改成你的Git地址：
+                    connection = 'scm:' + SCM_CONNECTION
+                    developerConnection = 'scm:' + SCM_CONNECTION
+                    //分支地址：
+                    url = SCM_URL
+                }
+                // A slightly hacky fix so that your POM will include any transitive dependencies
+                // that your library builds upon
+//                withXml {
+//                    def dependenciesNode = asNode().appendNode('dependencies')
+//
+//                    project.configurations.implementation.allDependencies.each {
+//                        println "-----------------------"
+//                        println it
+//                        def dependencyNode = dependenciesNode.appendNode('dependency')
+//                        dependencyNode.appendNode('groupId', it.group)
+//                        dependencyNode.appendNode('artifactId', it.name)
+//                        dependencyNode.appendNode('version', it.version)
+//                    }
+//                }
+            }
+        }
+    }
+    repositories {
+        // The repository to publish to, Sonatype/MavenCentral
+        maven {
+            //第 6 处
+            url = version.endsWith('SNAPSHOT') ? NEXUS_SNAPSHOTS_URL : NEXUS_URL
+            // The username and password we've fetched earlier
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+signing {
+    sign publishing.publications
+}
