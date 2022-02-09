@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -347,18 +348,30 @@ public final class ImmersionBar implements ImmersionCallback {
             uiFlags = setStatusBarDarkFont(uiFlags);
             //android 8.0以上设置导航栏图标为暗色
             uiFlags = setNavigationIconDark(uiFlags);
+            //适配android 11以上
+            setBarDarkFont();
         } else {
             //初始化5.0以下，4.4以上沉浸式
             initBarBelowLOLLIPOP();
         }
         //隐藏状态栏或者导航栏
-        uiFlags = hideBar(uiFlags);
+        uiFlags = hideBarBelowR(uiFlags);
+        //应用flag
         mDecorView.setSystemUiVisibility(uiFlags);
+        //适配小米和魅族状态栏黑白
         setSpecialBarDarkMode();
-        adapterR();
+        //适配android 11以上
+        hideBarAboveR();
         //导航栏显示隐藏监听，目前只支持带有导航栏的华为和小米手机
         if (mBarParams.onNavigationBarListener != null) {
             NavigationBarObserver.getInstance().register(mActivity.getApplication());
+        }
+    }
+
+    private void setBarDarkFont() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            setStatusBarDarkFontAboveR();
+            setNavigationIconDarkAboveR();
         }
     }
 
@@ -548,10 +561,11 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param uiFlags the ui flags
      * @return the int
      */
-    private int hideBar(int uiFlags) {
+    private int hideBarBelowR(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return uiFlags;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             switch (mBarParams.barHide) {
                 case FLAG_HIDE_BAR:
                     uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -571,10 +585,8 @@ public final class ImmersionBar implements ImmersionCallback {
                 default:
                     break;
             }
-            return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        } else {
-            return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         }
+        return uiFlags | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     }
 
     /**
@@ -756,18 +768,14 @@ public final class ImmersionBar implements ImmersionCallback {
      * 设置状态栏字体颜色，android6.0以上
      */
     private int setStatusBarDarkFont(int uiFlags) {
-        if (mBarParams.statusBarDarkFont) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (mBarParams.statusBarDarkFont) {
                 return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             } else {
                 return uiFlags;
             }
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return uiFlags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            } else {
-                return uiFlags;
-            }
+            return uiFlags;
         }
     }
 
@@ -776,76 +784,80 @@ public final class ImmersionBar implements ImmersionCallback {
      * Sets dark navigation icon.
      */
     private int setNavigationIconDark(int uiFlags) {
-        if (mBarParams.navigationBarDarkIcon) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                return uiFlags;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (mBarParams.navigationBarDarkIcon) {
                 return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             } else {
                 return uiFlags;
             }
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                return uiFlags;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return uiFlags & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-            } else {
-                return uiFlags;
-            }
+            return uiFlags;
         }
     }
 
-    /**
-     * 适配M以上机型
-     */
-    private void adapterR() {
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void setStatusBarDarkFontAboveR() {
+        WindowInsetsController windowInsetsController = mContentView.getWindowInsetsController();
+        if (mBarParams.statusBarDarkFont) {
+            if (mWindow != null) {
+                unsetSystemUiFlag(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+            windowInsetsController.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+        } else {
+            windowInsetsController.setSystemBarsAppearance(
+                    0,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void setNavigationIconDarkAboveR() {
+        WindowInsetsController controller = mContentView.getWindowInsetsController();
+        if (mBarParams.navigationBarDarkIcon) {
+            controller.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+        } else {
+            controller.setSystemBarsAppearance(
+                    0,
+                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+        }
+    }
+
+    private void hideBarAboveR() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            setStatusBarDarkFontAboutR();
-            setNavigationIconDarkAboutR();
-            hideBarAboutR();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    private void setStatusBarDarkFontAboutR() {
-        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-        if (controller != null) {
-            controller.setAppearanceLightStatusBars(mBarParams.statusBarDarkFont);
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    private void setNavigationIconDarkAboutR() {
-        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-        if (controller != null) {
-            controller.setAppearanceLightNavigationBars(mBarParams.navigationBarDarkIcon);
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    private void hideBarAboutR() {
-        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-        if (controller != null) {
-            switch (mBarParams.barHide) {
-                case FLAG_HIDE_BAR:
-                    controller.hide(WindowInsetsCompat.Type.statusBars());
-                    controller.hide(WindowInsetsCompat.Type.navigationBars());
-                    break;
-                case FLAG_HIDE_STATUS_BAR:
-                    controller.hide(WindowInsetsCompat.Type.statusBars());
-                    break;
-                case FLAG_HIDE_NAVIGATION_BAR:
-                    controller.hide(WindowInsetsCompat.Type.navigationBars());
-                    break;
-                case FLAG_SHOW_BAR:
-                    controller.show(WindowInsetsCompat.Type.statusBars());
-                    controller.show(WindowInsetsCompat.Type.navigationBars());
-                    break;
-                default:
-                    break;
+            WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
+            if (controller != null) {
+                switch (mBarParams.barHide) {
+                    case FLAG_HIDE_BAR:
+                        controller.hide(WindowInsetsCompat.Type.statusBars());
+                        controller.hide(WindowInsetsCompat.Type.navigationBars());
+                        break;
+                    case FLAG_HIDE_STATUS_BAR:
+                        controller.hide(WindowInsetsCompat.Type.statusBars());
+                        break;
+                    case FLAG_HIDE_NAVIGATION_BAR:
+                        controller.hide(WindowInsetsCompat.Type.navigationBars());
+                        break;
+                    case FLAG_SHOW_BAR:
+                        controller.show(WindowInsetsCompat.Type.statusBars());
+                        controller.show(WindowInsetsCompat.Type.navigationBars());
+                        break;
+                    default:
+                        break;
+                }
+                controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
-            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
+    }
+
+    protected void unsetSystemUiFlag(int systemUiFlag) {
+        View decorView = mWindow.getDecorView();
+        decorView.setSystemUiVisibility(
+                decorView.getSystemUiVisibility()
+                        & ~systemUiFlag);
     }
 
     /**
