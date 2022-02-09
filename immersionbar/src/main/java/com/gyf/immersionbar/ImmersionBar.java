@@ -355,7 +355,7 @@ public final class ImmersionBar implements ImmersionCallback {
         uiFlags = hideBar(uiFlags);
         mDecorView.setSystemUiVisibility(uiFlags);
         setSpecialBarDarkMode();
-        adapterM();
+        adapterR();
         //导航栏显示隐藏监听，目前只支持带有导航栏的华为和小米手机
         if (mBarParams.onNavigationBarListener != null) {
             NavigationBarObserver.getInstance().register(mActivity.getApplication());
@@ -798,54 +798,53 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * 适配M以上机型
      */
-    private void adapterM() {
-        setStatusBarDarkFontAboutM();
-        setNavigationIconDarkAboutM();
-        hideBarAboutM();
-    }
-
-    private void setStatusBarDarkFontAboutM() {
+    private void adapterR() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-            if (controller != null) {
-                controller.setAppearanceLightStatusBars(mBarParams.statusBarDarkFont);
-            }
+            setStatusBarDarkFontAboutR();
+            setNavigationIconDarkAboutR();
+            hideBarAboutR();
         }
     }
 
-    private void setNavigationIconDarkAboutM() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-            if (controller != null) {
-                controller.setAppearanceLightNavigationBars(mBarParams.navigationBarDarkIcon);
-            }
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void setStatusBarDarkFontAboutR() {
+        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
+        if (controller != null) {
+            controller.setAppearanceLightStatusBars(mBarParams.statusBarDarkFont);
         }
     }
 
-    private void hideBarAboutM() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
-            if (controller != null) {
-                switch (mBarParams.barHide) {
-                    case FLAG_HIDE_BAR:
-                        controller.hide(WindowInsetsCompat.Type.statusBars());
-                        controller.hide(WindowInsetsCompat.Type.navigationBars());
-                        break;
-                    case FLAG_HIDE_STATUS_BAR:
-                        controller.hide(WindowInsetsCompat.Type.statusBars());
-                        break;
-                    case FLAG_HIDE_NAVIGATION_BAR:
-                        controller.hide(WindowInsetsCompat.Type.navigationBars());
-                        break;
-                    case FLAG_SHOW_BAR:
-                        controller.show(WindowInsetsCompat.Type.statusBars());
-                        controller.show(WindowInsetsCompat.Type.navigationBars());
-                        break;
-                    default:
-                        break;
-                }
-                controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void setNavigationIconDarkAboutR() {
+        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
+        if (controller != null) {
+            controller.setAppearanceLightNavigationBars(mBarParams.navigationBarDarkIcon);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void hideBarAboutR() {
+        WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
+        if (controller != null) {
+            switch (mBarParams.barHide) {
+                case FLAG_HIDE_BAR:
+                    controller.hide(WindowInsetsCompat.Type.statusBars());
+                    controller.hide(WindowInsetsCompat.Type.navigationBars());
+                    break;
+                case FLAG_HIDE_STATUS_BAR:
+                    controller.hide(WindowInsetsCompat.Type.statusBars());
+                    break;
+                case FLAG_HIDE_NAVIGATION_BAR:
+                    controller.hide(WindowInsetsCompat.Type.navigationBars());
+                    break;
+                case FLAG_SHOW_BAR:
+                    controller.show(WindowInsetsCompat.Type.statusBars());
+                    controller.show(WindowInsetsCompat.Type.navigationBars());
+                    break;
+                default:
+                    break;
             }
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
     }
 
