@@ -6,6 +6,9 @@ import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE_TYPE;
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_OLD;
 import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 import android.content.ContentResolver;
@@ -65,7 +68,7 @@ class GestureUtils {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
                 } else if (type == 1) {
-                    navigationBarType = NavigationBarType.SMALL;
+                    navigationBarType = NavigationBarType.GESTURES_THREE_STAGE;
                     isGesture = true;
                 } else if (type == 2) {
                     navigationBarType = NavigationBarType.GESTURES;
@@ -82,12 +85,30 @@ class GestureUtils {
                 }
             } else if (OSUtils.isSamsung()) {
                 type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG, -1);
-                if (type == 0) {
-                    navigationBarType = NavigationBarType.CLASSIC;
-                    isGesture = false;
-                } else if (type == 1) {
-                    navigationBarType = NavigationBarType.GESTURES;
-                    isGesture = true;
+                if (type != -1) {
+                    if (type == 0) {
+                        navigationBarType = NavigationBarType.CLASSIC;
+                        isGesture = false;
+                    } else if (type == 1) {
+                        isGesture = true;
+                        int gestureType = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE_TYPE, 1);
+                        if (gestureType == 1) {
+                            navigationBarType = NavigationBarType.GESTURES;
+                        } else {
+                            navigationBarType = NavigationBarType.GESTURES_THREE_STAGE;
+                        }
+                        int hide = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE, 1);
+                        checkNavigation = hide == 1;
+                    }
+                } else {
+                    type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_OLD, -1);
+                    if (type == 0) {
+                        navigationBarType = NavigationBarType.CLASSIC;
+                        isGesture = false;
+                    } else if (type == 1) {
+                        navigationBarType = NavigationBarType.GESTURES;
+                        isGesture = true;
+                    }
                 }
             }
             if (type == -1) {
@@ -117,7 +138,7 @@ class GestureUtils {
          */
         public boolean isGesture = false;
         /**
-         * 需要校验导航栏高度，需要检查的机型，三星，原生
+         * 需要校验导航栏高度，需要检查的机型，小米，三星，原生
          */
         public boolean checkNavigation = false;
         /**

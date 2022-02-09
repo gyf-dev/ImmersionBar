@@ -1521,6 +1521,16 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarWidth(fragment.getActivity());
     }
 
+    @TargetApi(14)
+    public static int getNavigationBarWidth(@NonNull Context context) {
+        GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
+        if (bean.isGesture && !bean.checkNavigation) {
+            return 0;
+        } else {
+            return BarConfig.getNavigationBarWidthInternal(context);
+        }
+    }
+
     /**
      * Is navigation at bottom boolean.
      * 判断导航栏是否在底部

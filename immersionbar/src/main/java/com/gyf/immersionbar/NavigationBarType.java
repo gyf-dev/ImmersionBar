@@ -14,9 +14,9 @@ public enum NavigationBarType {
      */
     GESTURES(1),
     /**
-     * 三段式，小按钮
+     * 手势导航，三段式，小按钮
      */
-    SMALL(2),
+    GESTURES_THREE_STAGE(2),
     /**
      * 两个按钮
      */

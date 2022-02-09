@@ -226,4 +226,8 @@ class BarConfig {
         }
         return getInternalDimensionSize(context, key);
     }
+
+    static int getNavigationBarWidthInternal(@NonNull Context context) {
+        return getInternalDimensionSize(context, IMMERSION_NAVIGATION_BAR_WIDTH);
+    }
 }
