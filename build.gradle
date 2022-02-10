@@ -4,7 +4,7 @@ import java.util.function.Consumer
 
 buildscript {
     ext.kotlin_version = '1.6.10'
-    ext.immersionbar_version = '3.0.0'
+    ext.immersionbar_version = '3.1.1'
     repositories {
         mavenCentral()
         google()
@@ -21,9 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
-        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
     tasks.withType(Javadoc) {

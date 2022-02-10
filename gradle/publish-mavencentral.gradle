@@ -27,11 +27,11 @@ if (secretPropsFile.exists()) {
 }
 
 // 库信息
-def LIB_GROUP_ID = "com.geyifeng"
+def LIB_GROUP_ID = "com.geyifeng.immersionbar"
 
 def LIB_ARTIFACT_ID = project.name
 
-def LIB_VERSION_NAME = "3.0.0"
+def LIB_VERSION_NAME = immersionbar_version
 
 def LIB_NAME = project.name
 

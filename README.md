@@ -6,15 +6,25 @@
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
 
 ## 使用 
-> android studio
+> 3.1.1以上版本(mavenCentral)
+   ```groovy
+   // 基础依赖包，必须要依赖
+   implementation 'com.geyifeng.immersionbar:immersionbar:3.1.1'
+   // kotlin扩展（可选）
+   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.1.1'
+   // fragment快速实现（可选）已废弃
+   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.1.1'
+   ```
+> 3.0.0版本(jcenter)
    ```groovy
    // 基础依赖包，必须要依赖
    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
-   // fragment快速实现（可选）
-   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
    // kotlin扩展（可选）
    implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
+   // fragment快速实现（可选）
+   implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
    ```
+
 ## 2.x版本使用说明
 #### [点我查看2.x版本使用说明](https://github.com/gyf-dev/ImmersionBar/blob/master/README_2.x.md)
 
@@ -372,6 +382,8 @@
     
     
 ## 混淆规则(proguard-rules.pro)
+#### 3.1.1以上版本无需混淆
+#### 3.0.0以下版本混淆规制
    ```
     -keep class com.gyf.immersionbar.* {*;} 
     -dontwarn com.gyf.immersionbar.**

@@ -6,6 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 31
+
+        consumerProguardFiles "consumer-rules.pro"
     }
     lintOptions {
         checkReleaseBuilds false
