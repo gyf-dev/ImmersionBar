@@ -5,7 +5,7 @@
 ## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
 
-## 使用 
+## 使用（gyf替换为geyifeng） 
 > 3.1.1以上版本(mavenCentral)
    ```groovy
    // 基础依赖包，必须要依赖
