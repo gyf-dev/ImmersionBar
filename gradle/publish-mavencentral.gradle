@@ -35,7 +35,7 @@ def LIB_VERSION_NAME = immersionbar_version
 
 def LIB_NAME = project.name
 
-def LIB_DESC = "Android" + project.name + "sdk"
+def LIB_DESC = "Android " + project.name + " sdk"
 
 def LIB_SITE_URL = "https://github.com/gyf-dev/ImmersionBar"
 
