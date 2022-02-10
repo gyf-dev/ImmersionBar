@@ -32,25 +32,14 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.0.0.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.0.0.apk)
-
-## 关于使用AndroidX支持库
-- 如果你的项目中使用了AndroidX支持库，请在你的gradle.properties加入如下配置，如果已经配置了，请忽略
-    ```groovy
-       android.useAndroidX=true
-       android.enableJetifier=true
-    ```
+#### [点我下载immersionBar-3.1.1.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.1.1.apk)
 
 ## 关于全面屏与刘海
 #### 关于全面屏
    在manifest加入如下配置，四选其一，或者都写
-   
-   ① 在manifest的Application节点下加入
-   ```xml
-      <meta-data 
-        android:name="android.max_aspect"
-        android:value="2.4" />
-   ```
+
+   ① 升级targetSdkVersion为25以上版本
+
    ② 在manifest的Application节点中加入
    ```xml
       android:resizeableActivity="true"
@@ -59,8 +48,13 @@
    ```xml
       android:maxAspectRatio="2.4"
    ```
-   ④ 升级targetSdkVersion为25以上版本
-   
+   ④ 在manifest的Application节点下加入
+   ```xml
+      <meta-data 
+        android:name="android.max_aspect"
+        android:value="2.4" />
+   ```
+
 #### 关于刘海屏 
   在manifest的Application节点下加入，vivo和oppo没有找到相关配置信息
    ```xml
