@@ -400,9 +400,13 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     private void fitsNotchScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !mInitialized) {
-            WindowManager.LayoutParams lp = mWindow.getAttributes();
-            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-            mWindow.setAttributes(lp);
+            try {
+                WindowManager.LayoutParams lp = mWindow.getAttributes();
+                lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                mWindow.setAttributes(lp);
+            } catch (Exception e) {
+
+            }
         }
     }
 
