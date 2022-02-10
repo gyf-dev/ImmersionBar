@@ -55,7 +55,7 @@ import java.util.Set;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public final class ImmersionBar implements ImmersionCallback {
 
-    private Activity mActivity;
+    private final Activity mActivity;
     private Fragment mSupportFragment;
     private android.app.Fragment mFragment;
     private Dialog mDialog;
@@ -64,10 +64,6 @@ public final class ImmersionBar implements ImmersionCallback {
     private ViewGroup mContentView;
     private ImmersionBar mParentBar;
 
-    /**
-     * 是否是在Activity里使用
-     */
-    private boolean mIsActivity = false;
     /**
      * 是否是在Fragment里使用
      */
@@ -107,7 +103,7 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * 用户使用tag增加的bar参数的集合
      */
-    private Map<String, BarParams> mTagMap = new HashMap<>();
+    private final Map<String, BarParams> mTagMap = new HashMap<>();
     /**
      * 当前顶部布局和状态栏重叠是以哪种方式适配的
      */
@@ -133,7 +129,18 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull Activity activity) {
-        return getRetriever().get(activity);
+        return getRetriever().get(activity, false);
+    }
+
+    /**
+     * 在Activity使用
+     *
+     * @param activity the activity
+     * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull Activity activity, boolean isOnly) {
+        return getRetriever().get(activity, isOnly);
     }
 
     /**
@@ -195,6 +202,17 @@ public final class ImmersionBar implements ImmersionCallback {
 
     /**
      * 在DialogFragment使用
+     *
+     * @param dialogFragment the dialog fragment
+     * @param isOnly         the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull DialogFragment dialogFragment, boolean isOnly) {
+        return getRetriever().get(dialogFragment, isOnly);
+    }
+
+    /**
+     * 在DialogFragment使用
      * With immersion bar.
      *
      * @param dialogFragment the dialog fragment
@@ -202,6 +220,17 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     public static ImmersionBar with(@NonNull android.app.DialogFragment dialogFragment) {
         return getRetriever().get(dialogFragment, false);
+    }
+
+    /**
+     * 在DialogFragment使用
+     *
+     * @param dialogFragment the dialog fragment
+     * @param isOnly         the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull android.app.DialogFragment dialogFragment, boolean isOnly) {
+        return getRetriever().get(dialogFragment, isOnly);
     }
 
     /**
@@ -213,28 +242,19 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull Activity activity, @NonNull Dialog dialog) {
-        return getRetriever().get(activity, dialog);
+        return getRetriever().get(activity, dialog, false);
     }
 
     /**
-     * 非必须调用
-     * Destroy.
+     * 在dialog里使用
      *
-     * @param fragment the fragment
-     */
-    public static void destroy(@NonNull Fragment fragment) {
-        getRetriever().destroy(fragment, false);
-    }
-
-    /**
-     * 非必须调用
-     * Destroy.
-     *
-     * @param fragment the fragment
+     * @param activity the activity
+     * @param dialog   the dialog
      * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @return the immersion bar
      */
-    public static void destroy(@NonNull Fragment fragment, boolean isOnly) {
-        getRetriever().destroy(fragment, isOnly);
+    public static ImmersionBar with(@NonNull Activity activity, @NonNull Dialog dialog, boolean isOnly) {
+        return getRetriever().get(activity, dialog, isOnly);
     }
 
     /**
@@ -244,7 +264,18 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param dialog   the dialog
      */
     public static void destroy(@NonNull Activity activity, @NonNull Dialog dialog) {
-        getRetriever().destroy(activity, dialog);
+        getRetriever().destroy(activity, dialog, false);
+    }
+
+    /**
+     * 在Dialog里销毁，不包括DialogFragment
+     *
+     * @param activity the activity
+     * @param dialog   the dialog
+     * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     */
+    public static void destroy(@NonNull Activity activity, @NonNull Dialog dialog, boolean isOnly) {
+        getRetriever().destroy(activity, dialog, isOnly);
     }
 
     /**
@@ -1796,7 +1827,6 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      */
     ImmersionBar(Activity activity) {
-        mIsActivity = true;
         mActivity = activity;
         initCommonParameter(mActivity.getWindow());
     }

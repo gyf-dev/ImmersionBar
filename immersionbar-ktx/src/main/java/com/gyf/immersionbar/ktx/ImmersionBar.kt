@@ -14,67 +14,99 @@ import com.gyf.immersionbar.ImmersionBar
  */
 
 // 初始化ImmersionBar
-inline fun Activity.immersionBar(block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this).apply { block(this) }.init()
+@JvmOverloads
+inline fun Activity.immersionBar(isOnly: Boolean = false, block: ImmersionBar.() -> Unit) =
+    ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
-inline fun Fragment.immersionBar(block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this).apply { block(this) }.init()
+@JvmOverloads
+inline fun Fragment.immersionBar(isOnly: Boolean = false, block: ImmersionBar.() -> Unit) =
+    ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
-inline fun android.app.Fragment.immersionBar(block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this).apply { block(this) }.init()
+@JvmOverloads
+inline fun android.app.Fragment.immersionBar(
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
-inline fun DialogFragment.immersionBar(block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this).apply { block(this) }.init()
+@JvmOverloads
+inline fun DialogFragment.immersionBar(isOnly: Boolean = false, block: ImmersionBar.() -> Unit) =
+    ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
-inline fun android.app.DialogFragment.immersionBar(block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this).apply { block(this) }.init()
+@JvmOverloads
+inline fun android.app.DialogFragment.immersionBar(
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
-inline fun Dialog.immersionBar(activity: Activity, block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(activity, this).apply { block(this) }.init()
+@JvmOverloads
+inline fun Dialog.immersionBar(
+    activity: Activity,
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = ImmersionBar.with(activity, this, isOnly).apply { block(this) }.init()
 
-inline fun Activity.immersionBar(dialog: Dialog, block: ImmersionBar.() -> Unit) =
-    ImmersionBar.with(this, dialog).apply { block(this) }.init()
+@JvmOverloads
+inline fun Activity.immersionBar(
+    dialog: Dialog,
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = ImmersionBar.with(this, dialog, isOnly).apply { block(this) }.init()
 
-inline fun Fragment.immersionBar(dialog: Dialog, block: ImmersionBar.() -> Unit) =
-    activity?.run { ImmersionBar.with(this, dialog).apply { block(this) }.init() }
-        ?: Unit
+@JvmOverloads
+inline fun Fragment.immersionBar(
+    dialog: Dialog,
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = activity?.run { ImmersionBar.with(this, dialog, isOnly).apply { block(this) }.init() } ?: Unit
 
-inline fun android.app.Fragment.immersionBar(dialog: Dialog, block: ImmersionBar.() -> Unit) =
-    activity?.run { ImmersionBar.with(this, dialog).apply { block(this) }.init() }
-        ?: Unit
+@JvmOverloads
+inline fun android.app.Fragment.immersionBar(
+    dialog: Dialog,
+    isOnly: Boolean = false,
+    block: ImmersionBar.() -> Unit
+) = activity?.run { ImmersionBar.with(this, dialog, isOnly).apply { block(this) }.init() } ?: Unit
 
-fun Activity.immersionBar() = immersionBar { }
+@JvmOverloads
+fun Activity.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
-fun Fragment.immersionBar() = immersionBar { }
+@JvmOverloads
+fun Fragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
-fun android.app.Fragment.immersionBar() = immersionBar { }
+@JvmOverloads
+fun android.app.Fragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
-fun DialogFragment.immersionBar() = immersionBar { }
+@JvmOverloads
+fun DialogFragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
-fun android.app.DialogFragment.immersionBar() = immersionBar { }
+@JvmOverloads
+fun android.app.DialogFragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
-fun Dialog.immersionBar(activity: Activity) = immersionBar(activity) {}
+@JvmOverloads
+fun Dialog.immersionBar(activity: Activity, isOnly: Boolean = false) =
+    immersionBar(activity, isOnly) {}
 
-fun Activity.immersionBar(dialog: Dialog) = immersionBar(dialog) {}
+@JvmOverloads
+fun Activity.immersionBar(dialog: Dialog, isOnly: Boolean = false) = immersionBar(dialog, isOnly) {}
 
-fun Fragment.immersionBar(dialog: Dialog) = immersionBar(dialog) {}
+@JvmOverloads
+fun Fragment.immersionBar(dialog: Dialog, isOnly: Boolean = false) = immersionBar(dialog, isOnly) {}
 
-fun android.app.Fragment.immersionBar(dialog: Dialog) = immersionBar(dialog) {}
+@JvmOverloads
+fun android.app.Fragment.immersionBar(dialog: Dialog, isOnly: Boolean = false) =
+    immersionBar(dialog, isOnly) {}
 
 // dialog销毁
-fun Activity.destroyImmersionBar(dialog: Dialog) = ImmersionBar.destroy(this, dialog)
-
-fun Fragment.destroyImmersionBar(dialog: Dialog) =
-    activity?.run { ImmersionBar.destroy(this, dialog) }
-        ?: Unit
-
-fun android.app.Fragment.destroyImmersionBar(dialog: Dialog) =
-    activity?.run { ImmersionBar.destroy(this, dialog) }
-        ?: Unit
-
-// Fragment销毁
 @JvmOverloads
-fun Fragment.destroyImmersionBar(isOnly: Boolean = false) = ImmersionBar.destroy(this, isOnly)
+fun Activity.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
+    ImmersionBar.destroy(this, dialog, isOnly)
+
+@JvmOverloads
+fun Fragment.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
+    activity?.run { ImmersionBar.destroy(this, dialog, isOnly) } ?: Unit
+
+@JvmOverloads
+fun android.app.Fragment.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
+    activity?.run { ImmersionBar.destroy(this, dialog, isOnly) } ?: Unit
 
 // 状态栏扩展
 val Activity.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
@@ -146,8 +178,10 @@ fun android.app.Fragment.fitsTitleBar(vararg view: View) = ImmersionBar.setTitle
 
 fun Activity.fitsTitleBarMarginTop(vararg view: View) =
     ImmersionBar.setTitleBarMarginTop(this, *view)
+
 fun Fragment.fitsTitleBarMarginTop(vararg view: View) =
     ImmersionBar.setTitleBarMarginTop(this, *view)
+
 fun android.app.Fragment.fitsTitleBarMarginTop(vararg view: View) =
     ImmersionBar.setTitleBarMarginTop(this, *view)
 

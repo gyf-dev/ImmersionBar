@@ -2,16 +2,16 @@ package com.gyf.immersionbar;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 /**
  * @author geyifeng
  * @date 2019/4/11 6:43 PM
  */
-public final class SupportRequestManagerFragment extends Fragment {
+public final class RequestBarManagerFragment extends Fragment {
 
     private ImmersionDelegate mDelegate;
 

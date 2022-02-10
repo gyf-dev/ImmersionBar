@@ -2,8 +2,6 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -174,7 +176,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Integer[] widthAndHeight = Utils.getWidthAndHeight(getWindow());
         if (mAlertDialog != null) {
