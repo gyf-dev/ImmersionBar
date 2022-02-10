@@ -2,8 +2,10 @@ package com.gyf.immersionbar;
 
 import android.graphics.Rect;
 import android.os.Build;
+
 import androidx.fragment.app.Fragment;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -89,6 +91,10 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
         }
     }
 
+    void resetKeyboardHeight() {
+        mTempKeyboardHeight = 0;
+    }
+
     @Override
     public void onGlobalLayout() {
         if (mImmersionBar != null && mImmersionBar.getBarParams() != null && mImmersionBar.getBarParams().keyboardEnable) {
@@ -140,6 +146,9 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
                 }
                 if (!isPopup && mImmersionBar.getBarParams().barHide != BarHide.FLAG_SHOW_BAR) {
                     mImmersionBar.setBar();
+                }
+                if (!isPopup) {
+                    mImmersionBar.fitsParentBarKeyboard();
                 }
             }
         }

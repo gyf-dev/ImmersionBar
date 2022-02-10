@@ -963,6 +963,13 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     }
 
+    void fitsParentBarKeyboard() {
+        if (mParentBar != null && mParentBar.mFitsKeyboard != null) {
+            mParentBar.mFitsKeyboard.disable();
+            mParentBar.mFitsKeyboard.resetKeyboardHeight();
+        }
+    }
+
     /**
      * Gets bar params.
      *

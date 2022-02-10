@@ -1,6 +1,6 @@
 ![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
-[![version](https://img.shields.io/badge/version-3.1.1-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
+[![version](https://img.shields.io/badge/version-3.2.0-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
 
 ## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
@@ -9,11 +9,11 @@
 > 3.1.1以上版本(mavenCentral)
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.geyifeng.immersionbar:immersionbar:3.1.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar:3.2.0'
    // kotlin扩展（可选）
-   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.1.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.0'
    // fragment快速实现（可选）已废弃
-   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.1.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.2.0'
    ```
 > 3.0.0版本(jcenter)
    ```groovy
@@ -29,7 +29,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.1.1.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.1.1.apk)
+#### [点我下载immersionBar-3.2.0.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.2.0.apk)
 
 ## 关于全面屏与刘海
 #### 关于全面屏
@@ -148,14 +148,14 @@
     
 #### 在Activity使用ImmersionBar
   - 第一种，当结合viewpager2使用的时候，请使用viewpager2的registerOnPageChangeCallback的方法监听沉浸式
-  - 第二种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentThreeActivity.java)这个类
-  - 第三种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentFourActivity.java)这个类
+  - 第二种，当结合viewpager使用的时候，请使用viewpager的addOnPageChangeListener的方法监听沉浸式，参考demo中[FragmentThreeActivity](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentThreeActivity.java)这个类
+  - 第三种，当使用show()和hide()来控制Fragment显示隐藏的时候，请在tab切换的时候使用ImmersionBar，参考demo中[FragmentFourActivity](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentFourActivity.java)这个类
 
 #### 使用Fragment第三方框架[Fragmentation](https://github.com/YoKeyword/Fragmentation)实现沉浸式
-  - 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/five/BaseFiveFragment.java)这个类
+  - 参考demo中[FragmentFiveActivity](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/activity/FragmentFiveActivity.java)和[BaseFiveFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/fragment/five/BaseFiveFragment.java)这个类
 
 ## 在Dialog中实现沉浸式，具体实现参考demo
-- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/blob/master/immersionbar-simple/src/main/java/com/gyf/immersionbar/simple/fragment/dialog/BaseDialogFragment.java)这个类
+- ①结合dialogFragment使用，可以参考demo中的[BaseDialogFragment](https://github.com/gyf-dev/ImmersionBar/tree/master/immersionbar-sample/src/main/java/com/gyf/immersionbar/sample/fragment/dialog/BaseDialogFragment.java)这个类
    ```java
        ImmersionBar.with(this).init();
    ```

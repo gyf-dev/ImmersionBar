@@ -118,7 +118,7 @@ val android.app.Fragment.notchHeight get() = ImmersionBar.getNotchHeight(this)
 // 是否支持状态栏字体变色
 val isSupportStatusBarDarkFont get() = ImmersionBar.isSupportStatusBarDarkFont()
 
-// 师傅支持导航栏图标
+// 是否支持导航栏图标
 val isSupportNavigationIconDark get() = ImmersionBar.isSupportNavigationIconDark()
 
 // 检查view是否使用了fitsSystemWindows
