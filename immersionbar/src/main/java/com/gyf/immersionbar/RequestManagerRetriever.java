@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,8 @@ import java.util.Map;
 class RequestManagerRetriever implements Handler.Callback {
 
     private final String mTag = ImmersionBar.class.getName() + ".";
+
+    private final String mNotOnly = ".tag.notOnly.";
 
     private final Handler mHandler;
 
@@ -68,10 +71,9 @@ class RequestManagerRetriever implements Handler.Callback {
     public ImmersionBar get(Activity activity, boolean isOnly) {
         checkNotNull(activity, "activity is null");
         String tag = mTag;
-        if (isOnly) {
-            tag += activity.getClass().getName();
-        } else {
-            tag += System.identityHashCode(activity);
+        tag += activity.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(activity) + mNotOnly;
         }
         if (activity instanceof FragmentActivity) {
             return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag).get(activity);
@@ -94,10 +96,9 @@ class RequestManagerRetriever implements Handler.Callback {
             checkNotNull(((DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
         String tag = mTag;
-        if (isOnly) {
-            tag += fragment.getClass().getName();
-        } else {
-            tag += System.identityHashCode(fragment);
+        tag += fragment.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(fragment) + mNotOnly;
         }
         return getSupportFragment(fragment.getChildFragmentManager(), tag).get(fragment);
     }
@@ -118,10 +119,9 @@ class RequestManagerRetriever implements Handler.Callback {
             checkNotNull(((android.app.DialogFragment) fragment).getDialog(), "fragment.getDialog() is null");
         }
         String tag = mTag;
-        if (isOnly) {
-            tag += fragment.getClass().getName();
-        } else {
-            tag += System.identityHashCode(fragment);
+        tag += fragment.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(fragment) + mNotOnly;
         }
         return getFragment(fragment.getChildFragmentManager(), tag).get(fragment);
     }
@@ -136,10 +136,9 @@ class RequestManagerRetriever implements Handler.Callback {
         checkNotNull(activity, "activity is null");
         checkNotNull(dialog, "dialog is null");
         String tag = mTag;
-        if (isOnly) {
-            tag += dialog.getClass().getName();
-        } else {
-            tag += System.identityHashCode(dialog);
+        tag += dialog.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(dialog) + mNotOnly;
         }
         if (activity instanceof FragmentActivity) {
             return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag).get(activity, dialog);
@@ -160,10 +159,9 @@ class RequestManagerRetriever implements Handler.Callback {
             return;
         }
         String tag = mTag;
-        if (isOnly) {
-            tag += dialog.getClass().getName();
-        } else {
-            tag += System.identityHashCode(dialog);
+        tag += dialog.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(dialog) + mNotOnly;
         }
         if (activity instanceof FragmentActivity) {
             getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag, true);
@@ -210,6 +208,21 @@ class RequestManagerRetriever implements Handler.Callback {
             if (fragment == null) {
                 if (destroy) {
                     return null;
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        for (android.app.Fragment fmFragment : fm.getFragments()) {
+                            if (fmFragment instanceof RequestBarManagerFragment) {
+                                String oldTag = fmFragment.getTag();
+                                if (oldTag == null) {
+                                    fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
+                                } else {
+                                    if (oldTag.contains(mNotOnly)) {
+                                        fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 fragment = new RequestBarManagerFragment();
                 mPendingFragments.put(fm, fragment);
@@ -239,6 +252,19 @@ class RequestManagerRetriever implements Handler.Callback {
             if (fragment == null) {
                 if (destroy) {
                     return null;
+                } else {
+                    for (Fragment fmFragment : fm.getFragments()) {
+                        if (fmFragment instanceof SupportRequestBarManagerFragment) {
+                            String oldTag = fmFragment.getTag();
+                            if (oldTag == null) {
+                                fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
+                            } else {
+                                if (oldTag.contains(mNotOnly)) {
+                                    fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
+                                }
+                            }
+                        }
+                    }
                 }
                 fragment = new SupportRequestBarManagerFragment();
                 mPendingSupportFragments.put(fm, fragment);
