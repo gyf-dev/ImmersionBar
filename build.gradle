@@ -4,7 +4,7 @@ import java.util.function.Consumer
 
 buildscript {
     ext.kotlin_version = '1.6.10'
-    ext.immersionbar_version = '3.2.0'
+    ext.immersionbar_version = '3.2.1'
     repositories {
         mavenCentral()
         google()

@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -35,9 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -380,7 +378,7 @@ public final class ImmersionBar implements ImmersionCallback {
             //android 8.0以上设置导航栏图标为暗色
             uiFlags = setNavigationIconDark(uiFlags);
             //适配android 11以上
-            setBarDarkFont();
+            setBarDarkFontAboveR();
         } else {
             //初始化5.0以下，4.4以上沉浸式
             initBarBelowLOLLIPOP();
@@ -399,7 +397,7 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     }
 
-    private void setBarDarkFont() {
+    private void setBarDarkFontAboveR() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             setStatusBarDarkFontAboveR();
             setNavigationIconDarkAboveR();
@@ -863,27 +861,27 @@ public final class ImmersionBar implements ImmersionCallback {
 
     private void hideBarAboveR() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsControllerCompat controller = ViewCompat.getWindowInsetsController(mContentView);
+            WindowInsetsController controller = mContentView.getWindowInsetsController();
             if (controller != null) {
                 switch (mBarParams.barHide) {
                     case FLAG_HIDE_BAR:
-                        controller.hide(WindowInsetsCompat.Type.statusBars());
-                        controller.hide(WindowInsetsCompat.Type.navigationBars());
+                        controller.hide(WindowInsets.Type.statusBars());
+                        controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_HIDE_STATUS_BAR:
-                        controller.hide(WindowInsetsCompat.Type.statusBars());
+                        controller.hide(WindowInsets.Type.statusBars());
                         break;
                     case FLAG_HIDE_NAVIGATION_BAR:
-                        controller.hide(WindowInsetsCompat.Type.navigationBars());
+                        controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_SHOW_BAR:
-                        controller.show(WindowInsetsCompat.Type.statusBars());
-                        controller.show(WindowInsetsCompat.Type.navigationBars());
+                        controller.show(WindowInsets.Type.statusBars());
+                        controller.show(WindowInsets.Type.navigationBars());
                         break;
                     default:
                         break;
                 }
-                controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
         }
     }
