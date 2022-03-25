@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.view.Surface;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import android.view.Surface;
 
 /**
  * @author geyifeng
@@ -65,6 +66,7 @@ class ImmersionDelegate implements Runnable {
 
     void onDestroy() {
         mBarProperties = null;
+        mOnBarListener = null;
         if (mImmersionBar != null) {
             mImmersionBar.onDestroy();
             mImmersionBar = null;

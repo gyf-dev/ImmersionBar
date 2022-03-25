@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 
 /**
@@ -46,8 +47,8 @@ public final class RequestBarManagerFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (mDelegate != null) {
             mDelegate.onDestroy();
             mDelegate = null;

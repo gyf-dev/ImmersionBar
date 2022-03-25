@@ -256,6 +256,45 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     /**
+     * 销毁Fragment
+     *
+     * @param fragment the Fragment
+     */
+    public static void destroy(@NonNull Fragment fragment) {
+        getRetriever().destroy(fragment, false);
+    }
+
+    /**
+     * 销毁Fragment
+     *
+     * @param fragment the Fragment
+     * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     */
+    public static void destroy(@NonNull Fragment fragment, boolean isOnly) {
+        getRetriever().destroy(fragment, isOnly);
+    }
+
+    /**
+     * 销毁Fragment
+     *
+     * @param fragment the android.app.Fragment
+     */
+    public static void destroy(@NonNull android.app.Fragment fragment) {
+        getRetriever().destroy(fragment, false);
+    }
+
+
+    /**
+     * 销毁Fragment
+     *
+     * @param fragment the android.app.Fragment
+     * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     */
+    public static void destroy(@NonNull android.app.Fragment fragment, boolean isOnly) {
+        getRetriever().destroy(fragment, isOnly);
+    }
+
+    /**
      * 在Dialog里销毁，不包括DialogFragment
      *
      * @param activity the activity

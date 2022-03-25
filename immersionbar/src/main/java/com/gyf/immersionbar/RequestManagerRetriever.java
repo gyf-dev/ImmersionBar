@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -145,6 +144,29 @@ class RequestManagerRetriever implements Handler.Callback {
         } else {
             return getFragment(activity.getFragmentManager(), tag).get(activity, dialog);
         }
+    }
+
+    public void destroy(Fragment fragment, boolean isOnly) {
+        if (fragment == null) return;
+        String tag = mTag;
+        tag += fragment.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(fragment) + mNotOnly;
+        }
+        getSupportFragment(fragment.getChildFragmentManager(), tag, true);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void destroy(android.app.Fragment fragment, boolean isOnly) {
+        if (fragment == null) {
+            return;
+        }
+        String tag = mTag;
+        tag += fragment.getClass().getName();
+        if (!isOnly) {
+            tag += System.identityHashCode(fragment) + mNotOnly;
+        }
+        getFragment(fragment.getChildFragmentManager(), tag, true);
     }
 
     /**
