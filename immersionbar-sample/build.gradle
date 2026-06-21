@@ -2,11 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    namespace 'com.gyf.immersionbar.sample'
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.gyf.immersionbar.sample"
         minSdkVersion 14
-        targetSdkVersion 31
+        targetSdkVersion 35
         versionCode 1
         versionName "$immersionbar_version"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,7 +31,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
@@ -40,7 +41,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 }

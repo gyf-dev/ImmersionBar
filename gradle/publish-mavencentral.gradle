@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from android.sourceSets.main.java.source
     exclude "**/R.class"  //排除`R.class`
     exclude "**/BuildConfig.class"  //排除`BuildConfig.class`

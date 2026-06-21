@@ -112,3 +112,9 @@ fabric.properties
 .idea/copyright/
 gradle/maven-publish.gradle
 gradle/maven-publish.properties
+
+.claude
+.git
+.gitnexus
+AGENTS.md
+CLAUDE.md

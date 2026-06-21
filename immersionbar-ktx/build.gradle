@@ -2,10 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'com.gyf.immersionbar.ktx'
     compileSdkVersion 31
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 31
     }
 
     buildTypes {
@@ -13,6 +13,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    publishing {
+        singleVariant('release')
     }
 
 }

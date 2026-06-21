@@ -1,19 +1,22 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.gyf.immersionbar'
     compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 31
 
         consumerProguardFiles "consumer-rules.pro"
     }
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+    publishing {
+        singleVariant('release')
     }
 }
 

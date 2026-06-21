@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.gyf.immersionbar.components'
     compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 31
     }
 
     buildTypes {
@@ -13,6 +13,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    publishing {
+        singleVariant('release')
     }
 
 }
