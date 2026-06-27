@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * 没有使用沉浸式的Fragment基类
@@ -28,7 +26,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected String mTag = this.getClass().getSimpleName();
 
-    private Unbinder unbinder;
     protected Activity mActivity;
     protected View mRootView;
     protected Toolbar toolbar;
@@ -63,19 +60,13 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+        initViewBinding(view);
         statusBarView = view.findViewById(R.id.status_bar_view);
         toolbar = view.findViewById(R.id.toolbar);
         fitsLayoutOverlap();
         initData();
         initView();
         setListener();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     @Override
@@ -87,6 +78,12 @@ public abstract class BaseFragment extends Fragment {
 
     protected void initDataBeforeView(Bundle savedInstanceState) {
 
+    }
+
+    /**
+     * 初始化ViewBinding
+     */
+    protected void initViewBinding(View view) {
     }
 
     /**

@@ -1,11 +1,12 @@
 package com.gyf.immersionbar.sample.fragment.dialog;
 
+import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.DialogBinding;
 
-import butterknife.BindView;
 
 /**
  * 全屏DialogFragment
@@ -15,9 +16,7 @@ import butterknife.BindView;
  */
 public class FullDialogFragment extends BaseDialogFragment {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
+    private DialogBinding binding;
     @Override
     public void onStart() {
         super.onStart();
@@ -33,10 +32,15 @@ public class FullDialogFragment extends BaseDialogFragment {
     protected void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this)
-                .titleBar(toolbar)
+                .titleBar(binding.toolbar)
                 .statusBarDarkFont(true)
                 .navigationBarColor(R.color.btn3)
                 .keyboardEnable(true)
                 .init();
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = DialogBinding.bind(view);
+    }
+
 }

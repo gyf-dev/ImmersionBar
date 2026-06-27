@@ -17,7 +17,6 @@ import com.gyf.immersionbar.OSUtils;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.utils.Utils;
 
-import butterknife.OnClick;
 
 /**
  * 结合popupWindow使用
@@ -59,7 +58,15 @@ public class PopupActivity extends BaseActivity {
      *
      * @param view the view
      */
-    @OnClick({R.id.btn_full, R.id.btn_top, R.id.btn_bottom, R.id.btn_left, R.id.btn_right})
+    @Override
+    protected void setListener() {
+        findViewById(R.id.btn_full).setOnClickListener(this::onViewClick);
+        findViewById(R.id.btn_top).setOnClickListener(this::onViewClick);
+        findViewById(R.id.btn_bottom).setOnClickListener(this::onViewClick);
+        findViewById(R.id.btn_left).setOnClickListener(this::onViewClick);
+        findViewById(R.id.btn_right).setOnClickListener(this::onViewClick);
+    }
+
     public void onViewClick(View view) {
         Integer[] widthAndHeight = Utils.getWidthAndHeight(getWindow());
         mCurPosition = view.getId();

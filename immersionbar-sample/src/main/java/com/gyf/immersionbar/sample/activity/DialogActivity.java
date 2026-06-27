@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityDialogBinding;
 import com.gyf.immersionbar.sample.fragment.dialog.BottomDialogFragment;
 import com.gyf.immersionbar.sample.fragment.dialog.FullDialogFragment;
 import com.gyf.immersionbar.sample.fragment.dialog.LeftDialogFragment;
@@ -27,8 +28,6 @@ import com.gyf.immersionbar.sample.fragment.dialog.RightDialogFragment;
 import com.gyf.immersionbar.sample.fragment.dialog.TopDialogFragment;
 import com.gyf.immersionbar.sample.utils.Utils;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author geyifeng
@@ -36,17 +35,7 @@ import butterknife.OnClick;
  */
 public class DialogActivity extends BaseActivity implements DialogInterface.OnDismissListener {
 
-    @BindView(R.id.btn_full_fragment)
-    Button btnFullFragment;
-    @BindView(R.id.btn_top_fragment)
-    Button btnTopFragment;
-    @BindView(R.id.btn_bottom_fragment)
-    Button btnBottomFragment;
-    @BindView(R.id.btn_left_fragment)
-    Button btnLeftFragment;
-    @BindView(R.id.btn_right_fragment)
-    Button btnRightFragment;
-
+    private ActivityDialogBinding binding;
     private AlertDialog mAlertDialog;
 
     private Window mDialogWindow;
@@ -66,29 +55,32 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
 
     @Override
     protected void setListener() {
-        btnFullFragment.setOnClickListener(v -> {
+        findViewById(R.id.btn_full).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_top).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_bottom).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_left).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_right).setOnClickListener(this::onClick);
+        binding.btnFullFragment.setOnClickListener(v -> {
             FullDialogFragment fullDialogFragment = new FullDialogFragment();
             fullDialogFragment.show(getSupportFragmentManager(), FullDialogFragment.class.getSimpleName());
         });
-        btnTopFragment.setOnClickListener(v -> {
+        binding.btnTopFragment.setOnClickListener(v -> {
             TopDialogFragment fullDialogFragment = new TopDialogFragment();
             fullDialogFragment.show(getSupportFragmentManager(), TopDialogFragment.class.getSimpleName());
         });
-        btnBottomFragment.setOnClickListener(v -> {
+        binding.btnBottomFragment.setOnClickListener(v -> {
             BottomDialogFragment fullDialogFragment = new BottomDialogFragment();
             fullDialogFragment.show(getSupportFragmentManager(), BottomDialogFragment.class.getSimpleName());
         });
-        btnLeftFragment.setOnClickListener(v -> {
+        binding.btnLeftFragment.setOnClickListener(v -> {
             LeftDialogFragment fullDialogFragment = new LeftDialogFragment();
             fullDialogFragment.show(getSupportFragmentManager(), LeftDialogFragment.class.getSimpleName());
         });
-        btnRightFragment.setOnClickListener(v -> {
+        binding.btnRightFragment.setOnClickListener(v -> {
             RightDialogFragment fullDialogFragment = new RightDialogFragment();
             fullDialogFragment.show(getSupportFragmentManager(), RightDialogFragment.class.getSimpleName());
         });
     }
-
-    @OnClick({R.id.btn_full, R.id.btn_top, R.id.btn_bottom, R.id.btn_left, R.id.btn_right})
     public void onClick(View view) {
         //弹出Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
@@ -97,7 +89,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
         mAlertDialog.show();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog, null);
         Toolbar toolbar = dialogView.findViewById(R.id.toolbar);
-        ImageView iv = dialogView.findViewById(R.id.mIv);
+        ImageView iv = dialogView.findViewById(R.id.iv);
         Glide.with(this).asBitmap().load(Utils.getPic())
                 .apply(new RequestOptions().placeholder(R.mipmap.test))
                 .into(iv);
@@ -204,4 +196,9 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
             }
         }
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityDialogBinding.bind(getContentView());
+    }
+
 }

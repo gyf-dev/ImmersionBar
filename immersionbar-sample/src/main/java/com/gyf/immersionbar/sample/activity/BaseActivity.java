@@ -2,14 +2,14 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
-
-import butterknife.ButterKnife;
 
 /**
  * Activity基类
@@ -30,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mActivity = this;
         setContentView(getLayoutId());
         //绑定控件
-        ButterKnife.bind(this);
+        initViewBinding();
         //初始化沉浸式
         initImmersionBar();
         //初始化数据
@@ -45,6 +45,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         AppManager.getInstance().removeActivity(this);
+    }
+
+    /**
+     * 初始化ViewBinding
+     */
+    protected void initViewBinding() {
+    }
+
+    protected View getContentView() {
+        ViewGroup content = findViewById(android.R.id.content);
+        return content.getChildAt(0);
     }
 
     /**

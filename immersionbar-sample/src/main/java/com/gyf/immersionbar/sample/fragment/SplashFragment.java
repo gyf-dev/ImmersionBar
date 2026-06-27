@@ -2,6 +2,7 @@ package com.gyf.immersionbar.sample.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import androidx.fragment.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,12 +10,12 @@ import android.widget.TextView;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.OnSplashListener;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.FragmentSplashBinding;
 import com.gyf.immersionbar.sample.utils.GlideUtils;
 import com.gyf.immersionbar.sample.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,11 +28,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SplashFragment extends BaseFragment implements Observer<Long> {
 
-    @BindView(R.id.iv_splash)
-    ImageView ivSplash;
-    @BindView(R.id.tv_time)
-    TextView tvTime;
-
+    private FragmentSplashBinding binding;
     private static String mKey = "TotalTime";
 
     private long mTotalTime = 3;
@@ -82,14 +79,14 @@ public class SplashFragment extends BaseFragment implements Observer<Long> {
     @Override
     protected void initView() {
         super.initView();
-        ImmersionBar.setTitleBar(mActivity, tvTime);
-        GlideUtils.load(Utils.getFullPic(), ivSplash, R.drawable.pic_all);
+        ImmersionBar.setTitleBar(mActivity, binding.tvTime);
+        GlideUtils.load(Utils.getFullPic(), binding.ivSplash, R.drawable.pic_all);
     }
 
     @Override
     protected void setListener() {
         super.setListener();
-        tvTime.setOnClickListener(v -> {
+        binding.tvTime.setOnClickListener(v -> {
             if (mOnSplashListener != null) {
                 mOnSplashListener.onTime(0, mTotalTime);
             }
@@ -144,7 +141,7 @@ public class SplashFragment extends BaseFragment implements Observer<Long> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onNext(Long aLong) {
-        tvTime.setText("我是" + aLong + "s欢迎页，点我可以关闭");
+        binding.tvTime.setText("我是" + aLong + "s欢迎页，点我可以关闭");
         if (mOnSplashListener != null) {
             mOnSplashListener.onTime(aLong, mTotalTime);
         }
@@ -167,4 +164,9 @@ public class SplashFragment extends BaseFragment implements Observer<Long> {
     public boolean isFinish() {
         return mIsFinish;
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = FragmentSplashBinding.bind(view);
+    }
+
 }

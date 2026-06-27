@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.NonNull;
+
 /**
  * Bar相关信息
  *
@@ -127,5 +129,22 @@ public class BarProperties {
 
     void setActionBarHeight(int actionBarHeight) {
         this.actionBarHeight = actionBarHeight;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "BarProperties{" +
+                "portrait=" + portrait +
+                ", landscapeLeft=" + landscapeLeft +
+                ", landscapeRight=" + landscapeRight +
+                ", notchScreen=" + notchScreen +
+                ", hasNavigationBar=" + hasNavigationBar +
+                ", statusBarHeight=" + statusBarHeight +
+                ", navigationBarHeight=" + navigationBarHeight +
+                ", navigationBarWidth=" + navigationBarWidth +
+                ", notchHeight=" + notchHeight +
+                ", actionBarHeight=" + actionBarHeight +
+                '}';
     }
 }

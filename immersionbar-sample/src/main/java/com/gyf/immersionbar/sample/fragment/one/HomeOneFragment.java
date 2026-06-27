@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.FragmentOneHomeBinding;
 import com.gyf.immersionbar.sample.activity.FragmentOneActivity;
 import com.gyf.immersionbar.sample.adapter.OneAdapter;
 import com.gyf.immersionbar.sample.fragment.BaseImmersionFragment;
@@ -29,7 +30,6 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
@@ -37,14 +37,9 @@ import butterknife.BindView;
  */
 public class HomeOneFragment extends BaseImmersionFragment {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.rv)
-    RecyclerView mRv;
-    @BindView(R.id.refreshLayout)
-    TwinklingRefreshLayout refreshLayout;
-    @BindView(R.id.llScan)
-    LinearLayout mLlScan;
+    private FragmentOneHomeBinding binding;
+        Toolbar mToolbar;
+        LinearLayout mLlScan;
     private OneAdapter mOneAdapter;
     private List<String> mItemList = new ArrayList<>();
     private List<String> mImages = new ArrayList<>();
@@ -65,13 +60,13 @@ public class HomeOneFragment extends BaseImmersionFragment {
 
     @Override
     protected void initView() {
-        refreshLayout.setEnableLoadmore(false);
+        binding.refreshLayout.setEnableLoadmore(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
-        mRv.setLayoutManager(linearLayoutManager);
+        binding.rv.setLayoutManager(linearLayoutManager);
         mOneAdapter = new OneAdapter();
         mOneAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        mRv.setAdapter(mOneAdapter);
+        binding.rv.setAdapter(mOneAdapter);
         addHeaderView();
         mOneAdapter.setPreLoadNumber(1);
         mOneAdapter.setNewData(mItemList);
@@ -79,7 +74,7 @@ public class HomeOneFragment extends BaseImmersionFragment {
 
     private void addHeaderView() {
         if (mImages != null && mImages.size() > 0) {
-            View headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) mRv.getParent(), false);
+            View headView = LayoutInflater.from(mActivity).inflate(R.layout.item_banner, (ViewGroup) binding.rv.getParent(), false);
             Banner banner = headView.findViewById(R.id.banner);
             banner.setImages(mImages)
                     .setImageLoader(new GlideImageLoader())
@@ -94,7 +89,7 @@ public class HomeOneFragment extends BaseImmersionFragment {
 
     @Override
     protected void setListener() {
-        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int totalDy = 0;
 
             @Override
@@ -118,15 +113,15 @@ public class HomeOneFragment extends BaseImmersionFragment {
             } else {
                 mOneAdapter.loadMoreComplete();
             }
-        }, 2000), mRv);
-        refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+        }, 2000), binding.rv);
+        binding.refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
                 new Handler().postDelayed(() -> {
                     mItemList.clear();
                     mItemList.addAll(newData());
                     mOneAdapter.setNewData(mItemList);
-                    refreshLayout.finishRefreshing();
+                    binding.refreshLayout.finishRefreshing();
                     if (mToolbar != null) {
                         mToolbar.setVisibility(View.VISIBLE);
                     }
@@ -179,4 +174,11 @@ public class HomeOneFragment extends BaseImmersionFragment {
                 .navigationBarColor(R.color.colorPrimary)
                 .init();
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = FragmentOneHomeBinding.bind(view);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mLlScan = view.findViewById(R.id.llScan);
+    }
+
 }

@@ -30,7 +30,7 @@ class KotlinActivity : BaseKotlinActivity() {
 
     override fun initImmersionBar() {
         immersionBar {
-            titleBar(viewBinding.mToolbar)
+            titleBar(viewBinding.toolbar)
             navigationBarColor(R.color.btn13)
             setOnNavigationBarListener { show, _ ->
                 initView()
@@ -48,29 +48,29 @@ class KotlinActivity : BaseKotlinActivity() {
 
     override fun initData() {
         super.initData()
-        viewBinding.mToolbar.title = intent.getCharSequenceExtra("title")
+        viewBinding.toolbar.title = intent.getCharSequenceExtra("title")
     }
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
         viewBinding.apply {
-            mTvStatus.text = "${mTvStatus.title}$statusBarHeight".content()
-            mTvHasNav.text = "${mTvHasNav.title}$hasNavigationBar".content()
-            mTvNav.text = "${mTvNav.title}$navigationBarHeight".content()
-            mTvNavWidth.text = "${mTvNavWidth.title}$navigationBarWidth".content()
-            mTvAction.text = "${mTvAction.title}$actionBarHeight".content()
-            mTvHasNotch.post { mTvHasNotch.text = "${mTvHasNotch.title}$hasNotchScreen".content() }
-            mTvNotchHeight.post { mTvNotchHeight.text = "${mTvNotchHeight.title}$notchHeight".content() }
-            mTvFits.text = "${mTvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
-            mTvStatusDark.text = "${mTvStatusDark.title}$isSupportStatusBarDarkFont".content()
-            mTvNavigationDark.text = "${mTvNavigationDark.title}$isSupportNavigationIconDark".content()
-            mTvGesture.text = "${mTvGesture.title}$isGesture".content()
+            tvStatus.text = "${tvStatus.title}$statusBarHeight".content()
+            tvHasNav.text = "${tvHasNav.title}$hasNavigationBar".content()
+            tvNav.text = "${tvNav.title}$navigationBarHeight".content()
+            tvNavWidth.text = "${tvNavWidth.title}$navigationBarWidth".content()
+            tvAction.text = "${tvAction.title}$actionBarHeight".content()
+            tvHasNotch.post { tvHasNotch.text = "${tvHasNotch.title}$hasNotchScreen".content() }
+            tvNotchHeight.post { tvNotchHeight.text = "${tvNotchHeight.title}$notchHeight".content() }
+            tvFits.text = "${tvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
+            tvStatusDark.text = "${tvStatusDark.title}$isSupportStatusBarDarkFont".content()
+            tvNavigationDark.text = "${tvNavigationDark.title}$isSupportNavigationIconDark".content()
+            tvGesture.text = "${tvGesture.title}$isGesture".content()
         }
     }
 
     @SuppressLint("SetTextI18n")
     override fun setListener() {
-        viewBinding.mBtnStatus.setOnClickListener {
+        viewBinding.btnStatus.setOnClickListener {
             mIsHideStatusBar = if (!mIsHideStatusBar) {
                 hideStatusBar()
                 true
@@ -79,8 +79,8 @@ class KotlinActivity : BaseKotlinActivity() {
                 false
             }
         }
-        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.mTvInsets) { _, windowInsetsCompat ->
-            viewBinding.mTvInsets.text = "${viewBinding.mTvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.tvInsets) { _, windowInsetsCompat ->
+            viewBinding.tvInsets.text = "${viewBinding.tvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
             windowInsetsCompat.consumeSystemWindowInsets()
         }
     }

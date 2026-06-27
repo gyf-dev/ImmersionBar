@@ -3,15 +3,14 @@ package com.gyf.immersionbar.sample.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,6 +30,7 @@ import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.adapter.BannerAdapter;
 import com.gyf.immersionbar.sample.adapter.MainAdapter;
 import com.gyf.immersionbar.sample.bean.FunBean;
+import com.gyf.immersionbar.sample.databinding.ActivityMainBinding;
 import com.gyf.immersionbar.sample.event.NetworkEvent;
 import com.gyf.immersionbar.sample.fragment.SplashFragment;
 import com.gyf.immersionbar.sample.model.DataUtils;
@@ -45,25 +45,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author geyifeng
  */
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener {
 
-    @BindView(R.id.drawer)
-    DrawerLayout drawer;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.iv_bg)
-    ImageView ivBg;
-    @BindView(R.id.tv_version)
-    TextView tvVersion;
-    @BindView(R.id.mRv)
-    RecyclerView mRv;
-
+    private ActivityMainBinding binding;
     /**
      * splash页面
      */
@@ -92,7 +80,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        drawer.removeDrawerListener(this);
+        binding.drawer.removeDrawerListener(this);
         EventBus.getDefault().unregister(this);
     }
 
@@ -104,7 +92,16 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(R.id.toolbar).setOnBarListener(this::adjustView).init();
+        ImmersionBar.with(this)
+                .titleBar(R.id.toolbar)
+                .setOnBarListener(barProperties -> {
+                    Log.d(mTag, "onBarChange: " + barProperties.toString());
+                    adjustView(barProperties);
+                })
+                .setOnNavigationBarListener((show, type) -> {
+                    Log.d(mTag, "onNavigationBarChange: " + show + " type: " + type);
+                })
+                .init();
     }
 
     @Override
@@ -116,14 +113,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        binding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         showSplash();
-        GlideUtils.loadBlurry(ivBg, Utils.getPic());
+        GlideUtils.loadBlurry(findViewById(R.id.iv_bg), Utils.getPic());
         mMainAdapter = new MainAdapter();
-        tvVersion.setText("当前版本：" + BuildConfig.VERSION_NAME);
+        binding.getRoot().<android.widget.TextView>findViewById(R.id.tv_version).setText("当前版本：" + BuildConfig.VERSION_NAME);
         mMainAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         mMainAdapter.isFirstOnly(false);
-        mRv.setAdapter(mMainAdapter);
+        binding.rv.setAdapter(mMainAdapter);
         mMainAdapter.setNewData(mMainData);
         addHeaderView();
         mBannerHeight = DensityUtil.dip2px(this, 180)
@@ -132,9 +129,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     protected void setListener() {
+        findViewById(R.id.ll_github).setOnClickListener(this::onClick);
+        findViewById(R.id.ll_jianshu).setOnClickListener(this::onClick);
         super.setListener();
-        drawer.addDrawerListener(this);
-        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.drawer.addDrawerListener(this);
+        binding.rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int totalDy = 0;
 
             @Override
@@ -156,9 +155,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 }
                 if (totalDy < mBannerHeight) {
                     float alpha = (float) totalDy / mBannerHeight;
-                    mToolbar.setAlpha(alpha);
+                    binding.toolbar.setAlpha(alpha);
                 } else {
-                    mToolbar.setAlpha(1);
+                    binding.toolbar.setAlpha(1);
                 }
 
             }
@@ -200,7 +199,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     intent = new Intent(this, PopupActivity.class);
                     break;
                 case 10:
-                    drawer.openDrawer(GravityCompat.START);
+                    binding.drawer.openDrawer(GravityCompat.START);
                     break;
                 case 11:
                     intent = new Intent(this, CoordinatorActivity.class);
@@ -285,8 +284,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         });
     }
 
-
-    @OnClick({R.id.ll_github, R.id.ll_jianshu})
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -331,9 +328,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
         mSplashFragment.setOnSplashListener((time, totalTime) -> {
             if (time != 0) {
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                binding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             } else {
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                binding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         });
     }
@@ -344,7 +341,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     }
 
     private void addBannerView() {
-        View bannerView = LayoutInflater.from(this).inflate(R.layout.item_main_banner, mRv, false);
+        View bannerView = LayoutInflater.from(this).inflate(R.layout.item_main_banner, binding.rv, false);
         mIvBanner = bannerView.findViewById(R.id.iv_banner);
         RecyclerView recyclerView = bannerView.findViewById(R.id.rv_content);
         ViewUtils.increaseViewHeightByStatusBarHeight(this, mIvBanner);
@@ -373,7 +370,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     }
 
     private void addNetworkView() {
-        mNetworkView = LayoutInflater.from(this).inflate(R.layout.item_network, mRv, false);
+        mNetworkView = LayoutInflater.from(this).inflate(R.layout.item_network, binding.rv, false);
         if (!Utils.isNetworkConnected(this)) {
             mMainAdapter.addHeaderView(mNetworkView);
         }
@@ -423,7 +420,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onDrawerClosed(@NonNull View view) {
-        GlideUtils.loadBlurry(ivBg, Utils.getPic());
+        GlideUtils.loadBlurry(findViewById(R.id.iv_bg), Utils.getPic());
     }
 
     @Override
@@ -433,8 +430,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawer(GravityCompat.START);
         } else {
             if (mSplashFragment != null) {
                 if (mSplashFragment.isFinish()) {
@@ -476,4 +473,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             }
         }
     }
+
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityMainBinding.bind(getContentView());
+    }
+
 }

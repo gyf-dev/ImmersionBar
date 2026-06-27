@@ -10,10 +10,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityPicColorBinding;
 import com.gyf.immersionbar.sample.utils.Utils;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author gyf
@@ -21,13 +20,7 @@ import butterknife.OnClick;
  */
 public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.seek_bar)
-    SeekBar seekBar;
-    @BindView(R.id.mIv)
-    ImageView mIv;
-
+    private ActivityPicColorBinding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_pic_color;
@@ -48,15 +41,16 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
         super.initView();
         Glide.with(this).asBitmap().load(Utils.getPic())
                 .apply(new RequestOptions().placeholder(R.mipmap.test))
-                .into(mIv);
+                .into(binding.iv);
     }
 
     @Override
     protected void setListener() {
-        seekBar.setOnSeekBarChangeListener(this);
+        findViewById(R.id.btn_status_color).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_navigation_color).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_color).setOnClickListener(this::onClick);
+        binding.seekBar.setOnSeekBarChangeListener(this);
     }
-
-    @OnClick({R.id.btn_status_color, R.id.btn_navigation_color, R.id.btn_color})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status_color:
@@ -83,7 +77,7 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
         ImmersionBar.with(this)
                 .statusBarColorTransform(R.color.orange)
                 .navigationBarColorTransform(R.color.tans)
-                .addViewSupportTransformColor(toolbar)
+                .addViewSupportTransformColor(binding.toolbar)
                 .barAlpha(alpha)
                 .init();
     }
@@ -97,4 +91,9 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityPicColorBinding.bind(getContentView());
+    }
+
 }

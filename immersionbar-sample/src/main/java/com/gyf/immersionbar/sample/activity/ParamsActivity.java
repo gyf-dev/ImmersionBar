@@ -15,43 +15,15 @@ import androidx.core.view.ViewCompat;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
  */
 public class ParamsActivity extends BaseActivity {
 
-    @BindView(R.id.mToolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.mTvStatus)
-    TextView mTvStatus;
-    @BindView(R.id.mTvHasNav)
-    TextView mTvHasNav;
-    @BindView(R.id.mTvNav)
-    TextView mTvNav;
-    @BindView(R.id.mTvNavWidth)
-    TextView mTvNavWidth;
-    @BindView(R.id.mTvAction)
-    TextView mTvAction;
-    @BindView(R.id.mTvHasNotch)
-    TextView mTvHasNotch;
-    @BindView(R.id.mTvInsets)
-    TextView mTvInsets;
-    @BindView(R.id.mTvNotchHeight)
-    TextView mTvNotchHeight;
-    @BindView(R.id.mTvFits)
-    TextView mTvFits;
-    @BindView(R.id.mTvStatusDark)
-    TextView mTvStatusDark;
-    @BindView(R.id.mTvNavigationDark)
-    TextView mTvNavigationDark;
-    @BindView(R.id.mBtnStatus)
-    Button mBtnStatus;
-    @BindView(R.id.mTvGesture)
-    TextView mTvGesture;
-
+    private ActivityParamsBinding binding;
     private boolean mIsHideStatusBar = false;
 
     @Override
@@ -62,7 +34,7 @@ public class ParamsActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(mToolbar)
+        ImmersionBar.with(this).titleBar(binding.toolbar)
                 .setOnNavigationBarListener((show, type) -> {
                     initView();
                     Toast.makeText(this, "导航栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
@@ -73,31 +45,31 @@ public class ParamsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        mToolbar.setTitle(getIntent().getCharSequenceExtra("title"));
+        binding.toolbar.setTitle(getIntent().getCharSequenceExtra("title"));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
         super.initView();
-        mTvStatus.setText(getText(getTitle(mTvStatus) + ImmersionBar.getStatusBarHeight(this)));
-        mTvHasNav.setText(getText(getTitle(mTvHasNav) + ImmersionBar.hasNavigationBar(this)));
-        mTvNav.setText(getText(getTitle(mTvNav) + ImmersionBar.getNavigationBarHeight(this)));
-        mTvNavWidth.setText(getText(getTitle(mTvNavWidth) + ImmersionBar.getNavigationBarWidth(this)));
-        mTvAction.setText(getText(getTitle(mTvAction) + ImmersionBar.getActionBarHeight(this)));
-        mTvHasNotch.post(() -> mTvHasNotch.setText(getText(getTitle(mTvHasNotch) + ImmersionBar.hasNotchScreen(this))));
-        mTvNotchHeight.post(() -> mTvNotchHeight.setText(getText(getTitle(mTvNotchHeight) + ImmersionBar.getNotchHeight(this))));
-        mTvFits.setText(getText(getTitle(mTvFits) + ImmersionBar.checkFitsSystemWindows(findViewById(android.R.id.content))));
-        mTvStatusDark.setText(getText(getTitle(mTvStatusDark) + ImmersionBar.isSupportStatusBarDarkFont()));
-        mTvNavigationDark.setText(getText(getTitle(mTvNavigationDark) + ImmersionBar.isSupportNavigationIconDark()));
-        mTvGesture.setText(getText(getTitle(mTvGesture) + ImmersionBar.isGesture(this)));
+        binding.tvStatus.setText(getText(getTitle(binding.tvStatus) + ImmersionBar.getStatusBarHeight(this)));
+        binding.tvHasNav.setText(getText(getTitle(binding.tvHasNav) + ImmersionBar.hasNavigationBar(this)));
+        binding.tvNav.setText(getText(getTitle(binding.tvNav) + ImmersionBar.getNavigationBarHeight(this)));
+        binding.tvNavWidth.setText(getText(getTitle(binding.tvNavWidth) + ImmersionBar.getNavigationBarWidth(this)));
+        binding.tvAction.setText(getText(getTitle(binding.tvAction) + ImmersionBar.getActionBarHeight(this)));
+        binding.tvHasNotch.post(() -> binding.tvHasNotch.setText(getText(getTitle(binding.tvHasNotch) + ImmersionBar.hasNotchScreen(this))));
+        binding.tvNotchHeight.post(() -> binding.tvNotchHeight.setText(getText(getTitle(binding.tvNotchHeight) + ImmersionBar.getNotchHeight(this))));
+        binding.tvFits.setText(getText(getTitle(binding.tvFits) + ImmersionBar.checkFitsSystemWindows(findViewById(android.R.id.content))));
+        binding.tvStatusDark.setText(getText(getTitle(binding.tvStatusDark) + ImmersionBar.isSupportStatusBarDarkFont()));
+        binding.tvNavigationDark.setText(getText(getTitle(binding.tvNavigationDark) + ImmersionBar.isSupportNavigationIconDark()));
+        binding.tvGesture.setText(getText(getTitle(binding.tvGesture) + ImmersionBar.isGesture(this)));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void setListener() {
         super.setListener();
-        mBtnStatus.setOnClickListener(v -> {
+        binding.btnStatus.setOnClickListener(v -> {
             if (!mIsHideStatusBar) {
                 ImmersionBar.hideStatusBar(getWindow());
                 mIsHideStatusBar = true;
@@ -107,8 +79,8 @@ public class ParamsActivity extends BaseActivity {
             }
         });
 
-        ViewCompat.setOnApplyWindowInsetsListener(mTvInsets, (view, windowInsetsCompat) -> {
-            mTvInsets.setText(getText(getTitle(mTvInsets) + windowInsetsCompat.getSystemWindowInsetTop()));
+        ViewCompat.setOnApplyWindowInsetsListener(binding.tvInsets, (view, windowInsetsCompat) -> {
+            binding.tvInsets.setText(getText(getTitle(binding.tvInsets) + windowInsetsCompat.getSystemWindowInsetTop()));
             return windowInsetsCompat.consumeSystemWindowInsets();
         });
     }
@@ -131,4 +103,9 @@ public class ParamsActivity extends BaseActivity {
         super.onConfigurationChanged(newConfig);
         initView();
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityParamsBinding.bind(getContentView());
+    }
+
 }

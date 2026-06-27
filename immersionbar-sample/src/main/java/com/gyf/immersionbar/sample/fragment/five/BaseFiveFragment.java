@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -26,7 +24,6 @@ import me.yokeyword.fragmentation.SupportFragment;
 public abstract class BaseFiveFragment extends SupportFragment {
     protected Activity mActivity;
     protected View mRootView;
-    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -44,7 +41,7 @@ public abstract class BaseFiveFragment extends SupportFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+        initViewBinding(view);
         View titleBar = view.findViewById(setTitleBar());
         ImmersionBar.setTitleBar(mActivity, titleBar);
         View statusBarView = view.findViewById(setStatusBarView());
@@ -79,12 +76,12 @@ public abstract class BaseFiveFragment extends SupportFragment {
         return true;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
 
+    /**
+     * 初始化ViewBinding
+     */
+    protected void initViewBinding(View view) {
+    }
 
     /**
      * Gets layout id.

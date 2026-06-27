@@ -63,9 +63,6 @@ dependencies {
     implementation project(':immersionbar')
     implementation project(':immersionbar-components')
     implementation project(':immersionbar-ktx')
-    //注解
-    implementation 'com.jakewharton:butterknife:10.2.3'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     //侧滑返回
     implementation 'me.imid.swipebacklayout.lib:library:1.3.0'
     //log日志

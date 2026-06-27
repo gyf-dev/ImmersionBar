@@ -1,14 +1,15 @@
 package com.gyf.immersionbar.sample.fragment.dialog;
 
 import android.content.res.Configuration;
+import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.ViewGroup;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.DialogBinding;
 
-import butterknife.BindView;
 
 /**
  * 右边DialogFragment
@@ -18,9 +19,7 @@ import butterknife.BindView;
  */
 public class RightDialogFragment extends BaseDialogFragment {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
+    private DialogBinding binding;
     @Override
     public void onStart() {
         super.onStart();
@@ -37,7 +36,7 @@ public class RightDialogFragment extends BaseDialogFragment {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        ImmersionBar.with(this).titleBar(toolbar)
+        ImmersionBar.with(this).titleBar(binding.toolbar)
                 .navigationBarColor(R.color.btn8)
                 .keyboardEnable(true)
                 .init();
@@ -48,4 +47,9 @@ public class RightDialogFragment extends BaseDialogFragment {
         super.onConfigurationChanged(newConfig);
         mWindow.setLayout(mWidthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = DialogBinding.bind(view);
+    }
+
 }

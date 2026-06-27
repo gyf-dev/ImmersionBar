@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityAutoStatusFontBinding;
 
-import butterknife.BindView;
 
 /**
  * 自动调整状态栏字体
@@ -20,14 +20,7 @@ import butterknife.BindView;
  */
 public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
-    @BindView(R.id.seek_bar)
-    SeekBar seekBar;
-
-    @BindView(R.id.toolbar)
-    View toolbar;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-
+    private ActivityAutoStatusFontBinding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_auto_status_font;
@@ -46,7 +39,7 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
     @SuppressLint("SetTextI18n")
     @Override
     protected void setListener() {
-        seekBar.setOnSeekBarChangeListener(this);
+        binding.seekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -55,8 +48,8 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
         Integer barColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.BLACK, Color.WHITE);
         Integer textColor = ArgbEvaluatorCompat.getInstance().evaluate(fraction, Color.WHITE, Color.BLACK);
 
-        toolbar.setBackgroundColor(barColor);
-        tvTitle.setTextColor(textColor);
+        binding.toolbar.setBackgroundColor(barColor);
+        binding.tvTitle.setTextColor(textColor);
 
         ImmersionBar.with(this)
                 .statusBarColorInt(barColor)
@@ -73,4 +66,9 @@ public class AutoDarkModeActivity extends BaseActivity implements SeekBar.OnSeek
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityAutoStatusFontBinding.bind(getContentView());
+    }
+
 }

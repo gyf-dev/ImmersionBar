@@ -2,13 +2,14 @@ package com.gyf.immersionbar.sample.fragment.four;
 
 import android.widget.ImageView;
 
+import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.FragmentTwoHomeBinding;
 import com.gyf.immersionbar.sample.fragment.BaseFragment;
 import com.gyf.immersionbar.sample.utils.Utils;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
@@ -16,9 +17,7 @@ import butterknife.BindView;
  */
 public class HomeFourFragment extends BaseFragment {
 
-    @BindView(R.id.mIv)
-    ImageView mIv;
-
+    private FragmentTwoHomeBinding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_two_home;
@@ -28,6 +27,11 @@ public class HomeFourFragment extends BaseFragment {
     protected void initView() {
         Glide.with(this).asBitmap().load(Utils.getPic())
                 .apply(new RequestOptions().placeholder(R.mipmap.test))
-                .into(mIv);
+                .into(binding.iv);
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = FragmentTwoHomeBinding.bind(view);
+    }
+
 }

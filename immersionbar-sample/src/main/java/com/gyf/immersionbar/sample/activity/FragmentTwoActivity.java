@@ -6,12 +6,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityFragmentTwoBinding;
 import com.gyf.immersionbar.sample.fragment.two.CategoryTwoFragment;
 import com.gyf.immersionbar.sample.fragment.two.HomeTwoFragment;
 import com.gyf.immersionbar.sample.fragment.two.MineTwoFragment;
 import com.gyf.immersionbar.sample.fragment.two.ServiceTwoFragment;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
@@ -19,16 +19,11 @@ import butterknife.BindView;
  */
 public class FragmentTwoActivity extends BaseActivity implements View.OnClickListener {
 
-    @BindView(R.id.content)
-    FrameLayout content;
-    @BindView(R.id.ll_home)
-    LinearLayout llHome;
-    @BindView(R.id.ll_category)
-    LinearLayout llCategory;
-    @BindView(R.id.ll_service)
-    LinearLayout llService;
-    @BindView(R.id.ll_mine)
-    LinearLayout llMine;
+    private ActivityFragmentTwoBinding binding;
+        LinearLayout llHome;
+        LinearLayout llCategory;
+        LinearLayout llService;
+        LinearLayout llMine;
     private HomeTwoFragment homeTwoFragment;
     private CategoryTwoFragment categoryTwoFragment;
     private ServiceTwoFragment serviceTwoFragment;
@@ -141,4 +136,13 @@ public class FragmentTwoActivity extends BaseActivity implements View.OnClickLis
         llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityFragmentTwoBinding.bind(getContentView());
+        llHome = findViewById(R.id.ll_home);
+        llCategory = findViewById(R.id.ll_category);
+        llService = findViewById(R.id.ll_service);
+        llMine = findViewById(R.id.ll_mine);
+    }
+
 }

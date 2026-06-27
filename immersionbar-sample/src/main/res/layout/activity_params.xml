@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/btn13"
@@ -24,7 +24,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/mTvStatus"
+            android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -32,7 +32,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvHasNav"
+            android:id="@+id/tvHasNav"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -40,7 +40,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvNav"
+            android:id="@+id/tvNav"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -48,7 +48,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvNavWidth"
+            android:id="@+id/tvNavWidth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -58,7 +58,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvAction"
+            android:id="@+id/tvAction"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -66,7 +66,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvHasNotch"
+            android:id="@+id/tvHasNotch"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -74,7 +74,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvNotchHeight"
+            android:id="@+id/tvNotchHeight"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -82,7 +82,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvGesture"
+            android:id="@+id/tvGesture"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -90,7 +90,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvInsets"
+            android:id="@+id/tvInsets"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -98,7 +98,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvFits"
+            android:id="@+id/tvFits"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -106,7 +106,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvStatusDark"
+            android:id="@+id/tvStatusDark"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -114,7 +114,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/mTvNavigationDark"
+            android:id="@+id/tvNavigationDark"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -122,7 +122,7 @@
                 android:textColor="@android:color/black" />
 
             <Button
-                android:id="@+id/mBtnStatus"
+        android:id="@+id/btnStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="46dp"
                 android:layout_marginBottom="20dp"

@@ -8,9 +8,8 @@ import android.widget.TextView;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityOver3Binding;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author geyifeng
@@ -18,11 +17,7 @@ import butterknife.OnClick;
  */
 public class Over3Activity extends BaseActivity {
 
-    @BindView(R.id.text)
-    TextView textView;
-    @BindView(R.id.btn)
-    Button button;
-
+    private ActivityOver3Binding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_over3;
@@ -41,26 +36,35 @@ public class Over3Activity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
-        textView.setText("使用ImmersionBar的fitsSystemWindows方法" +
+        binding.text.setText("使用ImmersionBar的fitsSystemWindows方法" +
                 "指定fitsSystemWindows为true，然后指定状态栏的颜色，不然状态栏为透明色，很难看，详情参看此页面的实现");
     }
 
     @SuppressLint("SetTextI18n")
-    @OnClick({R.id.btn})
+    @Override
+    protected void setListener() {
+        findViewById(R.id.btn).setOnClickListener(this::onClick);
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn:
                 BarParams barParams = ImmersionBar.with(this).getBarParams();
                 if (barParams.fits) {
                     ImmersionBar.with(this).fitsSystemWindows(false).transparentStatusBar().init();
-                    button.setText("fitsSystemWindows动态演示:false");
+                    binding.btn.setText("fitsSystemWindows动态演示:false");
                 } else {
                     ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.colorPrimary).init();
-                    button.setText("fitsSystemWindows动态演示:true");
+                    binding.btn.setText("fitsSystemWindows动态演示:true");
                 }
                 break;
             default:
                 break;
         }
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityOver3Binding.bind(getContentView());
+    }
+
 }

@@ -7,8 +7,8 @@ import android.widget.LinearLayout;
 
 
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityFragmentTwoBinding;
 
-import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -17,14 +17,11 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public class MainFragment extends BaseFiveFragment implements View.OnClickListener {
 
-    @BindView(R.id.ll_home)
-    LinearLayout llHome;
-    @BindView(R.id.ll_category)
-    LinearLayout llCategory;
-    @BindView(R.id.ll_service)
-    LinearLayout llService;
-    @BindView(R.id.ll_mine)
-    LinearLayout llMine;
+    private ActivityFragmentTwoBinding binding;
+        LinearLayout llHome;
+        LinearLayout llCategory;
+        LinearLayout llService;
+        LinearLayout llMine;
 
     private SupportFragment[] mFragments = new SupportFragment[4];
 
@@ -114,4 +111,13 @@ public class MainFragment extends BaseFiveFragment implements View.OnClickListen
         llMine.setSelected(false);
         linearLayout.setSelected(true);
     }
+    @Override
+    protected void initViewBinding(View view) {
+        binding = ActivityFragmentTwoBinding.bind(view);
+        llHome = view.findViewById(R.id.ll_home);
+        llCategory = view.findViewById(R.id.ll_category);
+        llService = view.findViewById(R.id.ll_service);
+        llMine = view.findViewById(R.id.ll_mine);
+    }
+
 }

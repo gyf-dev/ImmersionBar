@@ -22,7 +22,7 @@
                 android:layout_weight="1">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mRv"
+                    android:id="@+id/rv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:overScrollMode="never"

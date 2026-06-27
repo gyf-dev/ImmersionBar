@@ -2,6 +2,8 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import android.widget.ImageView;
@@ -13,10 +15,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityPicBinding;
 import com.gyf.immersionbar.sample.utils.Utils;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
@@ -24,36 +24,29 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * @date 2016/10/24
  */
 public class PicActivity extends SwipeBackActivity {
-    @BindView(R.id.text_view)
-    TextView textView;
-    @BindView(R.id.seek_bar)
-    SeekBar seekBar;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.mIv)
-    ImageView mIv;
 
+    private ActivityPicBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().addActivity(this);
         setContentView(R.layout.activity_pic);
-        ButterKnife.bind(this);
+        binding = ActivityPicBinding.bind(getContentView());
         ImmersionBar.with(this)
-                .titleBar(toolbar, false)
+                .titleBar(binding.toolbar, false)
                 .transparentBar()
                 .init();
         Glide.with(this).asBitmap().load(Utils.getFullPic())
                 .apply(new RequestOptions().placeholder(R.drawable.pic_all))
-                .into(mIv);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                .into(binding.iv);
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float alpha = (float) progress / 100;
-                textView.setText("透明度:" + alpha + "f");
+                binding.textView.setText("透明度:" + alpha + "f");
                 ImmersionBar.with(PicActivity.this)
-                        .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
+                        .addViewSupportTransformColor(binding.toolbar, R.color.colorPrimary)
                         .navigationBarColorTransform(R.color.orange)
                         .barAlpha(alpha)
                         .init();
@@ -75,5 +68,10 @@ public class PicActivity extends SwipeBackActivity {
     protected void onDestroy() {
         super.onDestroy();
         AppManager.getInstance().removeActivity(this);
+    }
+
+    private View getContentView() {
+        ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
+        return content.getChildAt(0);
     }
 }

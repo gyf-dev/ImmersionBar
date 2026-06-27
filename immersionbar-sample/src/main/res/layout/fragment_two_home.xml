@@ -20,7 +20,7 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
-                android:id="@+id/mIv"
+                android:id="@+id/iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />

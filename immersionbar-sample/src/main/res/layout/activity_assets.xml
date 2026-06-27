@@ -7,7 +7,7 @@
 
     <!--**************title start****************-->
     <RelativeLayout
-        android:id="@+id/mTitleBar"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#F56A3D">

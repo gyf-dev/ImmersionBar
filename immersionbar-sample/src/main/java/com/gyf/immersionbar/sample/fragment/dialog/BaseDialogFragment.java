@@ -23,8 +23,6 @@ import com.gyf.immersionbar.sample.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * DialogFragment 实现沉浸式的基类
@@ -37,7 +35,6 @@ public abstract class BaseDialogFragment extends DialogFragment {
     protected Activity mActivity;
     protected View mRootView;
     protected Window mWindow;
-    private Unbinder unbinder;
     public Integer[] mWidthAndHeight;
 
     @Override
@@ -74,7 +71,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+        initViewBinding(view);
         if (isImmersionBarEnabled()) {
             initImmersionBar();
         }
@@ -90,15 +87,15 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mWidthAndHeight = Utils.getWidthAndHeight(mWindow);
+    }
+
+    /**
+     * 初始化ViewBinding
+     */
+    protected void initViewBinding(View view) {
     }
 
     /**
@@ -136,7 +133,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * view与数据绑定
      */
     protected void initView() {
-        ImageView iv = mRootView.findViewById(R.id.mIv);
+        ImageView iv = mRootView.findViewById(R.id.iv);
         if (iv != null) {
             Glide.with(this).asBitmap().load(Utils.getPic())
                     .apply(new RequestOptions().placeholder(R.mipmap.test))

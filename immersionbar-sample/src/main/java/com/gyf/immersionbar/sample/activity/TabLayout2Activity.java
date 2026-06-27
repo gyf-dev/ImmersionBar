@@ -43,7 +43,7 @@ public class TabLayout2Activity extends SwipeBackActivity {
                 .init();
         Glide.with(this).asBitmap().load(Utils.getPic())
                 .apply(new RequestOptions().placeholder(R.mipmap.test))
-                .into((ImageView) findViewById(R.id.mIv));
+                .into((ImageView) findViewById(R.id.iv));
     }
 
     @Override

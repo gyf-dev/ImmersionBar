@@ -6,19 +6,16 @@ import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityFlymeBinding;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
  * @date 2017/5/31
  */
 public class FlymeActivity extends BaseActivity {
-    @BindView(R.id.et)
-    EditText et;
-    @BindView(R.id.btn)
-    Button btn;
 
+    private ActivityFlymeBinding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_flyme;
@@ -32,8 +29,8 @@ public class FlymeActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        btn.setOnClickListener(v -> {
-            String s = "#" + et.getText().toString();
+        binding.btn.setOnClickListener(v -> {
+            String s = "#" + binding.et.getText().toString();
             if (s.length() == 7) {
                 ImmersionBar.with(this).flymeOSStatusBarFontColor(s).init();
             } else {
@@ -41,4 +38,9 @@ public class FlymeActivity extends BaseActivity {
             }
         });
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityFlymeBinding.bind(getContentView());
+    }
+
 }

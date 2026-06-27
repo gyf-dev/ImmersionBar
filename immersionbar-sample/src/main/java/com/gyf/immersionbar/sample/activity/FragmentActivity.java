@@ -6,7 +6,6 @@ import android.view.View;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 
-import butterknife.OnClick;
 
 /**
  * @author geyifeng
@@ -24,8 +23,15 @@ public class FragmentActivity extends BaseActivity {
         super.initImmersionBar();
         ImmersionBar.with(this).titleBar(R.id.toolbar).init();
     }
+    @Override
+    protected void setListener() {
+        findViewById(R.id.btn_one).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_two).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_three).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_four).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_five).setOnClickListener(this::onClick);
+    }
 
-    @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three, R.id.btn_four, R.id.btn_five})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_one:

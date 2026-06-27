@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.gyf.immersionbar.sample.R;
+import com.gyf.immersionbar.sample.databinding.ActivityFragmentOneBinding;
 import com.gyf.immersionbar.sample.fragment.one.CategoryOneFragment;
 import com.gyf.immersionbar.sample.fragment.one.HomeOneFragment;
 import com.gyf.immersionbar.sample.fragment.one.MineOneFragment;
@@ -16,7 +17,6 @@ import com.gyf.immersionbar.sample.view.CustomViewPager;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 
 /**
  * @author geyifeng
@@ -24,16 +24,11 @@ import butterknife.BindView;
  */
 public class FragmentOneActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
-    @BindView(R.id.viewPager)
-    CustomViewPager viewPager;
-    @BindView(R.id.ll_home)
-    LinearLayout llHome;
-    @BindView(R.id.ll_category)
-    LinearLayout llCategory;
-    @BindView(R.id.ll_service)
-    LinearLayout llService;
-    @BindView(R.id.ll_mine)
-    LinearLayout llMine;
+    private ActivityFragmentOneBinding binding;
+        LinearLayout llHome;
+        LinearLayout llCategory;
+        LinearLayout llService;
+        LinearLayout llMine;
     private ArrayList<Fragment> mFragments;
 
     @Override
@@ -56,8 +51,8 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
-        viewPager.setOffscreenPageLimit(3);
+        binding.viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        binding.viewPager.setOffscreenPageLimit(3);
         llHome.setSelected(true);
     }
 
@@ -67,26 +62,26 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
         llCategory.setOnClickListener(this);
         llService.setOnClickListener(this);
         llMine.setOnClickListener(this);
-        viewPager.addOnPageChangeListener(this);
+        binding.viewPager.addOnPageChangeListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_home:
-                viewPager.setCurrentItem(0);
+                binding.viewPager.setCurrentItem(0);
                 tabSelected(llHome);
                 break;
             case R.id.ll_category:
-                viewPager.setCurrentItem(1);
+                binding.viewPager.setCurrentItem(1);
                 tabSelected(llCategory);
                 break;
             case R.id.ll_service:
-                viewPager.setCurrentItem(2);
+                binding.viewPager.setCurrentItem(2);
                 tabSelected(llService);
                 break;
             case R.id.ll_mine:
-                viewPager.setCurrentItem(3);
+                binding.viewPager.setCurrentItem(3);
                 tabSelected(llMine);
                 break;
             default:
@@ -147,4 +142,13 @@ public class FragmentOneActivity extends BaseActivity implements View.OnClickLis
             return mFragments.size();
         }
     }
+    @Override
+    protected void initViewBinding() {
+        binding = ActivityFragmentOneBinding.bind(getContentView());
+        llHome = findViewById(R.id.ll_home);
+        llCategory = findViewById(R.id.ll_category);
+        llService = findViewById(R.id.ll_service);
+        llMine = findViewById(R.id.ll_mine);
+    }
+
 }
