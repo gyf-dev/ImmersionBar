@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.gyf.immersionbar.ktx'
-    compileSdkVersion 31
+    compileSdkVersion 36
     defaultConfig {
         minSdkVersion 14
     }

@@ -110,7 +110,7 @@ class SpecialBarFontUtils {
     public static void setStatusBarDarkIcon(Window window, int color) {
         try {
             setStatusBarColor(window, color);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (Build.VERSION.SDK_INT > Version.LOLLIPOP_MR1) {
                 setStatusBarDarkIcon(window.getDecorView(), true);
             }
         } catch (Exception e) {
@@ -205,7 +205,7 @@ class SpecialBarFontUtils {
      * @param dark   是否深色 true为深色 false 为白色
      */
     public static void setStatusBarDarkIcon(Window window, boolean dark) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Version.M) {
             changeMeizuFlag(window.getAttributes(), "MEIZU_FLAG_DARK_STATUS_BAR_ICON", dark);
         } else {
             View decorView = window.getDecorView();

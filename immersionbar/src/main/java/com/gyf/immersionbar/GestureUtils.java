@@ -32,14 +32,14 @@ class GestureUtils {
      */
     public static GestureBean getGestureBean(Context context) {
         GestureBean gestureBean = new GestureBean();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && context != null && context.getContentResolver() != null) {
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && context != null && context.getContentResolver() != null) {
             ContentResolver contentResolver = context.getContentResolver();
             NavigationBarType navigationBarType = NavigationBarType.UNKNOWN;
             int type = -1;
             boolean isGesture = false;
             boolean checkNavigation = false;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
-                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Version.LOLLIPOP) {
                     type = Settings.System.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);
                 } else {
                     type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);

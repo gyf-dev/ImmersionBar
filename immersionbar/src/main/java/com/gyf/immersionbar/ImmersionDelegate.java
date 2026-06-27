@@ -87,7 +87,7 @@ class ImmersionDelegate implements Runnable {
      * @param configuration the configuration
      */
     private void barChanged(Configuration configuration) {
-        if (mImmersionBar != null && mImmersionBar.initialized() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (mImmersionBar != null && mImmersionBar.initialized() && Build.VERSION.SDK_INT >= Version.KITKAT) {
             mOnBarListener = mImmersionBar.getBarParams().onBarListener;
             if (mOnBarListener != null) {
                 final Activity activity = mImmersionBar.getActivity();

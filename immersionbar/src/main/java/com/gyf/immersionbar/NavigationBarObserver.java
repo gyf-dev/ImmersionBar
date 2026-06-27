@@ -43,13 +43,13 @@ final class NavigationBarObserver extends ContentObserver {
 
     void register(Application application) {
         this.mApplication = application;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && mApplication != null
                 && mApplication.getContentResolver() != null && !mIsRegister) {
             Uri uri;
             Uri uri1 = null;
             Uri uri2 = null;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
-                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Version.LOLLIPOP) {
                     uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_EMUI);
                 } else {
                     uri = Settings.Global.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_EMUI);

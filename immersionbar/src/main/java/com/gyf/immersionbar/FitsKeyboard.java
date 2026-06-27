@@ -62,7 +62,7 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     void enable(int mode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             mWindow.setSoftInputMode(mode);
             if (!mIsAddListener) {
                 mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -72,7 +72,7 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     void disable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mIsAddListener) {
+        if (Build.VERSION.SDK_INT >= Version.KITKAT && mIsAddListener) {
             if (mChildView != null) {
                 mContentView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
             } else {
@@ -85,7 +85,7 @@ class FitsKeyboard implements ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     void cancel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mIsAddListener) {
+        if (Build.VERSION.SDK_INT >= Version.KITKAT && mIsAddListener) {
             mDecorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             mIsAddListener = false;
         }

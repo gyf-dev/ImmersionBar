@@ -34,7 +34,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
 
     void register(Application application) {
         this.mApplication = application;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && mApplication != null
                 && mApplication.getContentResolver() != null && !mIsRegister) {
             Uri uri = Settings.System.getUriFor(IMMERSION_NAVIGATION_BAR_MODE_EMUI);
             if (uri != null) {
@@ -47,7 +47,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
     @Override
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
                 && mCallbacks != null && !mCallbacks.isEmpty()) {
             int type = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
             NavigationBarType navigationBarType = NavigationBarType.CLASSIC;

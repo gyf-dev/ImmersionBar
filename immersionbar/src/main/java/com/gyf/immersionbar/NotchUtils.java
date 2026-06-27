@@ -65,7 +65,7 @@ public class NotchUtils {
      */
     public static boolean hasNotchScreen(Activity activity) {
         if (activity != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Version.P) {
                 return hasNotchAtAndroidP(activity);
             } else {
                 return hasNotchAtXiaoMi(activity) ||
@@ -88,7 +88,7 @@ public class NotchUtils {
      */
     public static boolean hasNotchScreen(View view) {
         if (view != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Version.P) {
                 return hasNotchAtAndroidP(view);
             } else {
                 return hasNotchAtXiaoMi(view.getContext()) ||
@@ -134,7 +134,7 @@ public class NotchUtils {
     }
 
     private static DisplayCutout getDisplayCutout(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Version.P) {
             if (view != null) {
                 WindowInsets windowInsets = view.getRootWindowInsets();
                 if (windowInsets != null) {
@@ -291,7 +291,7 @@ public class NotchUtils {
         int notchHeight = 0;
         int statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         DisplayCutout displayCutout = getDisplayCutout(activity);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && displayCutout != null) {
+        if (Build.VERSION.SDK_INT >= Version.P && displayCutout != null) {
             if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 notchHeight = displayCutout.getSafeInsetTop();
             } else {

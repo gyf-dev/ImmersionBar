@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     namespace 'com.gyf.immersionbar.components'
-    compileSdkVersion 31
+    compileSdkVersion 36
 
     defaultConfig {
         minSdkVersion 14

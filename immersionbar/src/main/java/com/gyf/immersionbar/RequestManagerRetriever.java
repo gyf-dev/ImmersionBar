@@ -110,7 +110,7 @@ class RequestManagerRetriever implements Handler.Callback {
      * @param isOnly   the is only
      * @return the immersion bar
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(api = Version.JELLY_BEAN_MR1)
     public ImmersionBar get(android.app.Fragment fragment, boolean isOnly) {
         checkNotNull(fragment, "fragment is null");
         checkNotNull(fragment.getActivity(), "fragment.getActivity() is null");
@@ -156,7 +156,7 @@ class RequestManagerRetriever implements Handler.Callback {
         getSupportFragment(fragment.getChildFragmentManager(), tag, true);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(api = Version.JELLY_BEAN_MR1)
     public void destroy(android.app.Fragment fragment, boolean isOnly) {
         if (fragment == null) {
             return;
@@ -231,7 +231,7 @@ class RequestManagerRetriever implements Handler.Callback {
                 if (destroy) {
                     return null;
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (Build.VERSION.SDK_INT >= Version.O) {
                         for (android.app.Fragment fmFragment : fm.getFragments()) {
                             if (fmFragment instanceof RequestBarManagerFragment) {
                                 String oldTag = fmFragment.getTag();
