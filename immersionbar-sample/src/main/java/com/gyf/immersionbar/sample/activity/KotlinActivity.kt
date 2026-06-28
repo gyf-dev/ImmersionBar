@@ -5,25 +5,19 @@ import android.content.res.Configuration
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import com.gyf.immersionbar.ktx.actionBarHeight
+import com.gyf.immersionbar.BarProperties
 import com.gyf.immersionbar.ktx.checkFitsSystemWindows
-import com.gyf.immersionbar.ktx.hasNavigationBar
-import com.gyf.immersionbar.ktx.hasNotchScreen
 import com.gyf.immersionbar.ktx.hideStatusBar
 import com.gyf.immersionbar.ktx.immersionBar
-import com.gyf.immersionbar.ktx.isGesture
 import com.gyf.immersionbar.ktx.isSupportNavigationIconDark
 import com.gyf.immersionbar.ktx.isSupportStatusBarDarkFont
-import com.gyf.immersionbar.ktx.navigationBarHeight
-import com.gyf.immersionbar.ktx.navigationBarWidth
-import com.gyf.immersionbar.ktx.notchHeight
 import com.gyf.immersionbar.ktx.showStatusBar
-import com.gyf.immersionbar.ktx.statusBarHeight
 import com.gyf.immersionbar.sample.R
 import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding
 
@@ -34,6 +28,11 @@ import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding
 class KotlinActivity : BaseKotlinActivity() {
 
     private var mIsHideStatusBar = false
+
+    /**
+     * Bar最新快照，由setOnBarListener回调下发
+     */
+    private var mBarProperties: BarProperties? = null
 
     private val viewBinding by lazy {
         ActivityParamsBinding.inflate(layoutInflater).apply {
@@ -56,7 +55,6 @@ class KotlinActivity : BaseKotlinActivity() {
                 Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
             }
             setOnNavigationBarListener { show, _ ->
-                initView()
                 val text = "导航栏${
                     if (show) {
                         "显示了"
@@ -65,6 +63,11 @@ class KotlinActivity : BaseKotlinActivity() {
                     }
                 }"
                 Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
+            }
+            setOnBarListener {
+                Log.d("KotlinActivity", "onBarChange: $it")
+                mBarProperties = it
+                initView()
             }
         }
     }
@@ -76,22 +79,30 @@ class KotlinActivity : BaseKotlinActivity() {
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
+        // 等待setOnBarListener回调下发Bar快照后再刷新UI
+        val p = mBarProperties ?: return
         viewBinding.apply {
-            tvStatus.text = "${tvStatus.title}$statusBarHeight".content()
-            tvHasNav.text = "${tvHasNav.title}$hasNavigationBar".content()
-            tvNav.text = "${tvNav.title}$navigationBarHeight".content()
-            tvNavWidth.text = "${tvNavWidth.title}$navigationBarWidth".content()
-            tvAction.text = "${tvAction.title}$actionBarHeight".content()
-            tvHasNotch.post { tvHasNotch.text = "${tvHasNotch.title}$hasNotchScreen".content() }
-            tvNotchHeight.post {
-                tvNotchHeight.text = "${tvNotchHeight.title}$notchHeight".content()
-            }
+            tvPortrait.text = "${tvPortrait.title}${p.isPortrait}".content()
+            tvLandscapeLeft.text = "${tvLandscapeLeft.title}${p.isLandscapeLeft}".content()
+            tvLandscapeRight.text = "${tvLandscapeRight.title}${p.isLandscapeRight}".content()
+            tvStatus.text = "${tvStatus.title}${p.statusBarHeight}".content()
+            tvStatusVisible.text = "${tvStatusVisible.title}${p.isStatusBarVisible}".content()
+            tvHasNav.text = "${tvHasNav.title}${p.hasNavigationBar()}".content()
+            tvNavVisible.text = "${tvNavVisible.title}${p.isNavigationBarVisible}".content()
+            tvNavAtBottom.text = "${tvNavAtBottom.title}${p.isNavigationAtBottom}".content()
+            tvNavType.text = "${tvNavType.title}${p.navigationBarType}".content()
+            tvNav.text = "${tvNav.title}${p.navigationBarHeight}".content()
+            tvNavWidth.text = "${tvNavWidth.title}${p.navigationBarWidth}".content()
+            tvGesture.text = "${tvGesture.title}${p.isGestureNavigation}".content()
+            tvHasNotch.text = "${tvHasNotch.title}${p.isNotchScreen}".content()
+            tvNotchHeight.text = "${tvNotchHeight.title}${p.notchHeight}".content()
+            tvAction.text = "${tvAction.title}${p.actionBarHeight}".content()
+            // 以下信息不在BarProperties快照中，仍使用静态/扩展方法获取
             tvFits.text =
                 "${tvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
             tvStatusDark.text = "${tvStatusDark.title}$isSupportStatusBarDarkFont".content()
             tvNavigationDark.text =
                 "${tvNavigationDark.title}$isSupportNavigationIconDark".content()
-            tvGesture.text = "${tvGesture.title}$isGesture".content()
         }
     }
 

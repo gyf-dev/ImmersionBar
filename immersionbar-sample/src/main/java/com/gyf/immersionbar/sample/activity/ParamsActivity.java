@@ -5,12 +5,14 @@ import android.content.res.Configuration;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
+import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding;
@@ -23,6 +25,10 @@ public class ParamsActivity extends BaseActivity {
 
     private ActivityParamsBinding binding;
     private boolean mIsHideStatusBar = false;
+    /**
+     * Bar最新快照，由{@link ImmersionBar#setOnBarListener}回调下发
+     */
+    private BarProperties mBarProperties;
 
     @Override
     protected int getLayoutId() {
@@ -35,8 +41,12 @@ public class ParamsActivity extends BaseActivity {
         ImmersionBar.with(this).titleBar(binding.toolbar)
                 .setOnStatusBarListener(show -> Toast.makeText(ParamsActivity.this, "状态栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show())
                 .setOnNavigationBarListener((show, type) -> {
-                    initView();
                     Toast.makeText(this, "导航栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                })
+                .setOnBarListener(barProperties -> {
+                    Log.d(mTag, "onBarChange: " + barProperties.toString());
+                    mBarProperties = barProperties;
+                    initView();
                 })
                 .navigationBarColor(R.color.btn13).init();
     }
@@ -51,17 +61,30 @@ public class ParamsActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        binding.tvStatus.setText(getText(getTitle(binding.tvStatus) + ImmersionBar.getStatusBarHeight(this)));
-        binding.tvHasNav.setText(getText(getTitle(binding.tvHasNav) + ImmersionBar.hasNavigationBar(this)));
-        binding.tvNav.setText(getText(getTitle(binding.tvNav) + ImmersionBar.getNavigationBarHeight(this)));
-        binding.tvNavWidth.setText(getText(getTitle(binding.tvNavWidth) + ImmersionBar.getNavigationBarWidth(this)));
-        binding.tvAction.setText(getText(getTitle(binding.tvAction) + ImmersionBar.getActionBarHeight(this)));
-        binding.tvHasNotch.post(() -> binding.tvHasNotch.setText(getText(getTitle(binding.tvHasNotch) + ImmersionBar.hasNotchScreen(this))));
-        binding.tvNotchHeight.post(() -> binding.tvNotchHeight.setText(getText(getTitle(binding.tvNotchHeight) + ImmersionBar.getNotchHeight(this))));
+        // 等待setOnBarListener回调下发Bar快照后再刷新UI
+        if (mBarProperties == null) {
+            return;
+        }
+        BarProperties p = mBarProperties;
+        binding.tvPortrait.setText(getText(getTitle(binding.tvPortrait) + p.isPortrait()));
+        binding.tvLandscapeLeft.setText(getText(getTitle(binding.tvLandscapeLeft) + p.isLandscapeLeft()));
+        binding.tvLandscapeRight.setText(getText(getTitle(binding.tvLandscapeRight) + p.isLandscapeRight()));
+        binding.tvStatus.setText(getText(getTitle(binding.tvStatus) + p.getStatusBarHeight()));
+        binding.tvStatusVisible.setText(getText(getTitle(binding.tvStatusVisible) + p.isStatusBarVisible()));
+        binding.tvHasNav.setText(getText(getTitle(binding.tvHasNav) + p.hasNavigationBar()));
+        binding.tvNavVisible.setText(getText(getTitle(binding.tvNavVisible) + p.isNavigationBarVisible()));
+        binding.tvNavAtBottom.setText(getText(getTitle(binding.tvNavAtBottom) + p.isNavigationAtBottom()));
+        binding.tvNavType.setText(getText(getTitle(binding.tvNavType) + p.getNavigationBarType()));
+        binding.tvNav.setText(getText(getTitle(binding.tvNav) + p.getNavigationBarHeight()));
+        binding.tvNavWidth.setText(getText(getTitle(binding.tvNavWidth) + p.getNavigationBarWidth()));
+        binding.tvGesture.setText(getText(getTitle(binding.tvGesture) + p.isGestureNavigation()));
+        binding.tvHasNotch.setText(getText(getTitle(binding.tvHasNotch) + p.isNotchScreen()));
+        binding.tvNotchHeight.setText(getText(getTitle(binding.tvNotchHeight) + p.getNotchHeight()));
+        binding.tvAction.setText(getText(getTitle(binding.tvAction) + p.getActionBarHeight()));
+        // 以下信息不在BarProperties快照中，仍使用静态方法获取
         binding.tvFits.setText(getText(getTitle(binding.tvFits) + ImmersionBar.checkFitsSystemWindows(findViewById(android.R.id.content))));
         binding.tvStatusDark.setText(getText(getTitle(binding.tvStatusDark) + ImmersionBar.isSupportStatusBarDarkFont()));
         binding.tvNavigationDark.setText(getText(getTitle(binding.tvNavigationDark) + ImmersionBar.isSupportNavigationIconDark()));
-        binding.tvGesture.setText(getText(getTitle(binding.tvGesture) + ImmersionBar.isGesture(this)));
     }
 
     @SuppressLint("SetTextI18n")

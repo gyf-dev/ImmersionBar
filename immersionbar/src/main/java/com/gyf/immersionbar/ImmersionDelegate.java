@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.view.Surface;
+import android.view.View;
+import android.view.WindowInsets;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ class ImmersionDelegate implements Runnable {
 
     private ImmersionBar mImmersionBar;
     private BarProperties mBarProperties;
+    private BarProperties mLastBarProperties;
     private OnBarListener mOnBarListener;
     private int mNotchHeight;
 
@@ -42,12 +45,18 @@ class ImmersionDelegate implements Runnable {
                 }
             }
         }
+        //回传delegate引用，使运行时系统栏显隐变化能反向触发BarProperties快照刷新
+        if (mImmersionBar != null) {
+            mImmersionBar.setImmersionDelegate(this);
+        }
     }
 
     ImmersionDelegate(Activity activity, Dialog dialog) {
         if (mImmersionBar == null) {
             mImmersionBar = new ImmersionBar(activity, dialog);
         }
+        //回传delegate引用，使运行时系统栏显隐变化能反向触发BarProperties快照刷新
+        mImmersionBar.setImmersionDelegate(this);
     }
 
     public ImmersionBar get() {
@@ -66,6 +75,7 @@ class ImmersionDelegate implements Runnable {
 
     void onDestroy() {
         mBarProperties = null;
+        mLastBarProperties = null;
         mOnBarListener = null;
         if (mImmersionBar != null) {
             mImmersionBar.onDestroy();
@@ -78,6 +88,31 @@ class ImmersionDelegate implements Runnable {
             mImmersionBar.onConfigurationChanged(newConfig);
             barChanged(newConfig);
         }
+    }
+
+    /**
+     * 运行时系统栏显隐/导航模式变化时，重建BarProperties快照并按去重规则回调OnBarListener。
+     *
+     * <p>与{@link #onConfigurationChanged}不同，这并非配置变化，方向字段沿用上一次config快照即可；
+     * 其余字段（可见性、导航类型、是否手势、各项高度、刘海等）由{@link #run()}统一重新读取，
+     * 因此凡是会改变insets的运行时事件（hideBar/showBar、手势临时显隐、三键⇄手势切换）都能让快照保持实时。
+     *
+     * <p>首次config快照尚未建立（{@code mBarProperties == null}）时直接跳过，交由
+     * {@link #onActivityCreated}统一构建，避免方向字段缺失。
+     */
+    void refreshBarProperties() {
+        if (mImmersionBar == null || !mImmersionBar.initialized() || Build.VERSION.SDK_INT < Version.KITKAT) {
+            return;
+        }
+        mOnBarListener = mImmersionBar.getBarParams().onBarListener;
+        if (mOnBarListener == null) {
+            return;
+        }
+        final Activity activity = mImmersionBar.getActivity();
+        if (activity == null || mBarProperties == null) {
+            return;
+        }
+        activity.getWindow().getDecorView().post(this);
     }
 
     /**
@@ -121,6 +156,13 @@ class ImmersionDelegate implements Runnable {
             BarConfig barConfig = new BarConfig(activity);
             mBarProperties.setStatusBarHeight(barConfig.getStatusBarHeight());
             mBarProperties.setNavigationBar(barConfig.hasNavigationBar());
+            mBarProperties.setNavigationAtBottom(barConfig.isNavigationAtBottom());
+            //导航栏类型与是否手势导航（一次查询同时填两个字段）
+            GestureUtils.GestureBean gestureBean = GestureUtils.getGestureBean(activity);
+            mBarProperties.setNavigationBarType(gestureBean.type);
+            mBarProperties.setGestureNavigation(gestureBean.isGesture);
+            //系统栏可见性快照：配置变化时在此读取，运行时显隐另由refreshBarProperties触发重读，二者共同保证实时
+            setupBarVisibility(activity);
             mBarProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
             mBarProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
             mBarProperties.setActionBarHeight(barConfig.getActionBarHeight());
@@ -130,7 +172,36 @@ class ImmersionDelegate implements Runnable {
                 mNotchHeight = NotchUtils.getNotchHeight(activity);
                 mBarProperties.setNotchHeight(mNotchHeight);
             }
-            mOnBarListener.onBarChange(mBarProperties);
+            //仅当内容相对上次派发发生变化（或首次）时才回调，避免配置变化但Bar信息未变时的无谓回调
+            if (mLastBarProperties == null || !mLastBarProperties.equals(mBarProperties)) {
+                mLastBarProperties = new BarProperties(mBarProperties);
+                mOnBarListener.onBarChange(mBarProperties);
+            }
+        }
+    }
+
+    /**
+     * 取当前系统栏可见性快照并填入mBarProperties。
+     * 与{@link BarVisibilityObserver}保持一致：R+用WindowInsets，16~29用SystemUiVisibility的flag位，
+     * 取不到时保持默认（可见）。配置变化与运行时显隐（见{@link #refreshBarProperties()}）都会重新调用本方法。
+     *
+     * @param activity activity
+     */
+    private void setupBarVisibility(Activity activity) {
+        if (Build.VERSION.SDK_INT < Version.JELLY_BEAN) {
+            return;
+        }
+        View decorView = activity.getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            WindowInsets insets = decorView.getRootWindowInsets();
+            if (insets != null) {
+                mBarProperties.setStatusBarVisible(insets.isVisible(WindowInsets.Type.statusBars()));
+                mBarProperties.setNavigationBarVisible(insets.isVisible(WindowInsets.Type.navigationBars()));
+            }
+        } else {
+            int visibility = decorView.getSystemUiVisibility();
+            mBarProperties.setStatusBarVisible((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0);
+            mBarProperties.setNavigationBarVisible((visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0);
         }
     }
 }

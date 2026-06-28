@@ -64,8 +64,7 @@ final class BarVisibilityObserver {
         }
         if (mAnchorView == null) {
             mAnchorView = new View(mDecorView.getContext());
-            //0×0锚点，不绘制不占布局；插到index 0，先于可能消费insets的内容view收到分发
-            mDecorView.addView(mAnchorView, 0, new ViewGroup.LayoutParams(0, 0));
+            mDecorView.addView(mAnchorView, new ViewGroup.LayoutParams(0, 0));
         }
         if (Build.VERSION.SDK_INT >= Version.R) {
             enableInsetsListener();

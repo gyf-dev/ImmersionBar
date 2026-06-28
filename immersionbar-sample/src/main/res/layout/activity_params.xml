@@ -24,7 +24,31 @@
             android:orientation="vertical">
 
             <TextView
-            android:id="@+id/tvStatus"
+                android:id="@+id/tvPortrait"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="是否竖屏："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvLandscapeLeft"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="是否左横屏："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvLandscapeRight"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="是否右横屏："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -32,7 +56,15 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvHasNav"
+                android:id="@+id/tvStatusVisible"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="状态栏是否可见："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvHasNav"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -40,7 +72,31 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvNav"
+                android:id="@+id/tvNavVisible"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="导航栏是否可见："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvNavAtBottom"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="导航栏是否在底部："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvNavType"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="导航栏类型："
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvNav"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -48,7 +104,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvNavWidth"
+                android:id="@+id/tvNavWidth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -58,31 +114,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvAction"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:gravity="center"
-                android:text="ActionBar Height:"
-                android:textColor="@android:color/black" />
-
-            <TextView
-            android:id="@+id/tvHasNotch"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:gravity="center"
-                android:text="是否有刘海屏？"
-                android:textColor="@android:color/black" />
-
-            <TextView
-            android:id="@+id/tvNotchHeight"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:gravity="center"
-                android:text="刘海屏Height:"
-                android:textColor="@android:color/black" />
-
-            <TextView
-            android:id="@+id/tvGesture"
+                android:id="@+id/tvGesture"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -90,7 +122,31 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvInsets"
+                android:id="@+id/tvHasNotch"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="是否有刘海屏？"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvNotchHeight"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="刘海屏Height:"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvAction"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="ActionBar Height:"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvInsets"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -98,7 +154,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvFits"
+                android:id="@+id/tvFits"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -106,7 +162,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvStatusDark"
+                android:id="@+id/tvStatusDark"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -114,7 +170,7 @@
                 android:textColor="@android:color/black" />
 
             <TextView
-            android:id="@+id/tvNavigationDark"
+                android:id="@+id/tvNavigationDark"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
@@ -122,7 +178,7 @@
                 android:textColor="@android:color/black" />
 
             <Button
-        android:id="@+id/btnStatus"
+                android:id="@+id/btnStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="46dp"
                 android:layout_marginBottom="20dp"

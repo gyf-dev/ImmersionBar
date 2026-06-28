@@ -105,6 +105,11 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     private BarVisibilityObserver mBarVisibilityObserver = null;
     /**
+     * 持有此ImmersionBar的delegate，用于在运行时系统栏显隐变化时反向刷新BarProperties快照。
+     * 仅Activity/Fragment场景下由{@link ImmersionDelegate}回传，可能为null。
+     */
+    private ImmersionDelegate mImmersionDelegate = null;
+    /**
      * 记录上一次导航栏的真实可见性，用于在翻转时回调OnNavigationBarListener。
      * null表示尚未播种（首次同步只播种状态、不回调，避免init误报）。
      */
@@ -388,6 +393,9 @@ public final class ImmersionBar implements ImmersionCallback {
             }
         } else {
             fitsWindows();
+            if (mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID) != null) {
+                setupNavBarView();
+            }
         }
     }
 
@@ -946,11 +954,30 @@ public final class ImmersionBar implements ImmersionCallback {
             NavigationBarType type = GestureUtils.getGestureBean(mActivity).type;
             mBarParams.onNavigationBarListener.onNavigationBarChange(navigationVisible, type);
         }
+        //可见性翻转时同步刷新BarProperties快照并按去重回调OnBarListener，保证快照实时；首次播种不刷新
+        if (statusChanged || changed) {
+            if (mImmersionDelegate != null) {
+                mImmersionDelegate.refreshBarProperties();
+            }
+        }
+    }
+
+    /**
+     * 由{@link ImmersionDelegate}在构造后回传自身引用，使运行时系统栏显隐变化能反向刷新BarProperties快照。
+     *
+     * @param delegate 持有此ImmersionBar的delegate
+     */
+    void setImmersionDelegate(ImmersionDelegate delegate) {
+        mImmersionDelegate = delegate;
     }
 
     @Override
     public void onNavigationBarChange(boolean show, NavigationBarType type) {
         handleNavigationBarViewVisibility(show);
+        //导航模式切换（三键⇄手势）会改变导航类型/是否手势/高度等，刷新BarProperties快照并按去重回调OnBarListener
+        if (mImmersionDelegate != null) {
+            mImmersionDelegate.refreshBarProperties();
+        }
     }
 
     private void handleStatusBarViewVisibility(boolean statusVisible) {

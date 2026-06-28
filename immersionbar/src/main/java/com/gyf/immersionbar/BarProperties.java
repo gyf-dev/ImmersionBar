@@ -31,6 +31,26 @@ public class BarProperties {
      */
     private boolean hasNavigationBar;
     /**
+     * 导航栏是否在底部（false表示在侧边，如横屏三键导航在右侧）
+     */
+    private boolean navigationAtBottom;
+    /**
+     * 导航栏类型（经典三键/手势/三段式手势/两键/未知）
+     */
+    private NavigationBarType navigationBarType = NavigationBarType.UNKNOWN;
+    /**
+     * 是否为手势导航
+     */
+    private boolean gestureNavigation;
+    /**
+     * 状态栏当前是否可见（运行时显隐会实时刷新并通过OnBarListener回调）
+     */
+    private boolean statusBarVisible = true;
+    /**
+     * 导航栏当前是否可见（运行时显隐会实时刷新并通过OnBarListener回调）
+     */
+    private boolean navigationBarVisible = true;
+    /**
      * 状态栏高度，刘海屏横竖屏有可能状态栏高度不一样
      */
     private int statusBarHeight;
@@ -50,6 +70,32 @@ public class BarProperties {
      * ActionBar高度
      */
     private int actionBarHeight;
+
+    BarProperties() {
+    }
+
+    /**
+     * 拷贝构造，用于留存上一次派发的快照以做去重比较。
+     *
+     * @param other 源对象
+     */
+    BarProperties(BarProperties other) {
+        this.portrait = other.portrait;
+        this.landscapeLeft = other.landscapeLeft;
+        this.landscapeRight = other.landscapeRight;
+        this.notchScreen = other.notchScreen;
+        this.hasNavigationBar = other.hasNavigationBar;
+        this.navigationAtBottom = other.navigationAtBottom;
+        this.navigationBarType = other.navigationBarType;
+        this.gestureNavigation = other.gestureNavigation;
+        this.statusBarVisible = other.statusBarVisible;
+        this.navigationBarVisible = other.navigationBarVisible;
+        this.statusBarHeight = other.statusBarHeight;
+        this.navigationBarHeight = other.navigationBarHeight;
+        this.navigationBarWidth = other.navigationBarWidth;
+        this.notchHeight = other.notchHeight;
+        this.actionBarHeight = other.actionBarHeight;
+    }
 
     public boolean isPortrait() {
         return portrait;
@@ -89,6 +135,46 @@ public class BarProperties {
 
     void setNavigationBar(boolean hasNavigationBar) {
         this.hasNavigationBar = hasNavigationBar;
+    }
+
+    public boolean isNavigationAtBottom() {
+        return navigationAtBottom;
+    }
+
+    void setNavigationAtBottom(boolean navigationAtBottom) {
+        this.navigationAtBottom = navigationAtBottom;
+    }
+
+    public NavigationBarType getNavigationBarType() {
+        return navigationBarType;
+    }
+
+    void setNavigationBarType(NavigationBarType navigationBarType) {
+        this.navigationBarType = navigationBarType;
+    }
+
+    public boolean isGestureNavigation() {
+        return gestureNavigation;
+    }
+
+    void setGestureNavigation(boolean gestureNavigation) {
+        this.gestureNavigation = gestureNavigation;
+    }
+
+    public boolean isStatusBarVisible() {
+        return statusBarVisible;
+    }
+
+    void setStatusBarVisible(boolean statusBarVisible) {
+        this.statusBarVisible = statusBarVisible;
+    }
+
+    public boolean isNavigationBarVisible() {
+        return navigationBarVisible;
+    }
+
+    void setNavigationBarVisible(boolean navigationBarVisible) {
+        this.navigationBarVisible = navigationBarVisible;
     }
 
     public int getStatusBarHeight() {
@@ -140,11 +226,62 @@ public class BarProperties {
                 ", landscapeRight=" + landscapeRight +
                 ", notchScreen=" + notchScreen +
                 ", hasNavigationBar=" + hasNavigationBar +
+                ", navigationAtBottom=" + navigationAtBottom +
+                ", navigationBarType=" + navigationBarType +
+                ", gestureNavigation=" + gestureNavigation +
+                ", statusBarVisible=" + statusBarVisible +
+                ", navigationBarVisible=" + navigationBarVisible +
                 ", statusBarHeight=" + statusBarHeight +
                 ", navigationBarHeight=" + navigationBarHeight +
                 ", navigationBarWidth=" + navigationBarWidth +
                 ", notchHeight=" + notchHeight +
                 ", actionBarHeight=" + actionBarHeight +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BarProperties that = (BarProperties) o;
+        return portrait == that.portrait
+                && landscapeLeft == that.landscapeLeft
+                && landscapeRight == that.landscapeRight
+                && notchScreen == that.notchScreen
+                && hasNavigationBar == that.hasNavigationBar
+                && navigationAtBottom == that.navigationAtBottom
+                && gestureNavigation == that.gestureNavigation
+                && statusBarVisible == that.statusBarVisible
+                && navigationBarVisible == that.navigationBarVisible
+                && statusBarHeight == that.statusBarHeight
+                && navigationBarHeight == that.navigationBarHeight
+                && navigationBarWidth == that.navigationBarWidth
+                && notchHeight == that.notchHeight
+                && actionBarHeight == that.actionBarHeight
+                && navigationBarType == that.navigationBarType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (portrait ? 1 : 0);
+        result = 31 * result + (landscapeLeft ? 1 : 0);
+        result = 31 * result + (landscapeRight ? 1 : 0);
+        result = 31 * result + (notchScreen ? 1 : 0);
+        result = 31 * result + (hasNavigationBar ? 1 : 0);
+        result = 31 * result + (navigationAtBottom ? 1 : 0);
+        result = 31 * result + (gestureNavigation ? 1 : 0);
+        result = 31 * result + (statusBarVisible ? 1 : 0);
+        result = 31 * result + (navigationBarVisible ? 1 : 0);
+        result = 31 * result + (navigationBarType != null ? navigationBarType.hashCode() : 0);
+        result = 31 * result + statusBarHeight;
+        result = 31 * result + navigationBarHeight;
+        result = 31 * result + navigationBarWidth;
+        result = 31 * result + notchHeight;
+        result = 31 * result + actionBarHeight;
+        return result;
     }
 }
