@@ -135,8 +135,12 @@ class BarConfig {
                     //android 15以上优先用WindowInsets的实际宽度（横屏导航栏在侧边）
                     Insets navInsets = getNavigationBarInsets(window);
                     if (navInsets != null) {
-                        //insets可用时完全信任它：导航栏在底部时左右为0，不能回退到资源宽度
-                        return Math.max(navInsets.left, navInsets.right);
+                        int sideWidth = Math.max(navInsets.left, navInsets.right);
+                        //左右都为0说明导航栏当前在底部（竖屏），回退到资源里的横屏宽度，
+                        //保持与android 15以下"此宽度=横屏导航栏宽度"的语义一致
+                        if (sideWidth > 0) {
+                            return sideWidth;
+                        }
                     }
                 }
                 return getInternalDimensionSize(window.getContext(), IMMERSION_NAVIGATION_BAR_WIDTH);
