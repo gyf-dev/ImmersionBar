@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -101,6 +100,20 @@ public final class ImmersionBar implements ImmersionCallback {
      * 软键盘监听相关
      */
     private FitsKeyboard mFitsKeyboard = null;
+    /**
+     * 系统栏（状态栏/导航栏）运行时显隐监听，per-window。
+     */
+    private BarVisibilityObserver mBarVisibilityObserver = null;
+    /**
+     * 记录上一次导航栏的真实可见性，用于在翻转时回调OnNavigationBarListener。
+     * null表示尚未播种（首次同步只播种状态、不回调，避免init误报）。
+     */
+    private Boolean mNavigationBarVisible = null;
+    /**
+     * 记录上一次状态栏的真实可见性，用于在翻转时回调OnStatusBarListener。
+     * null表示尚未播种（首次同步只播种状态、不回调，避免init误报）。
+     */
+    private Boolean mStatusBarVisible = null;
     /**
      * 用户使用tag增加的bar参数的集合
      */
@@ -444,6 +457,22 @@ public final class ImmersionBar implements ImmersionCallback {
         if (mBarParams.onNavigationBarListener != null) {
             NavigationBarObserver.getInstance().register(mActivity.getApplication());
         }
+        //监听系统栏运行时显隐（hideBar等），按版本注册insets/systemUi监听，变化时回调onBarVisibilityChange
+        setupBarVisibilityObserver();
+    }
+
+    /**
+     * 创建并启用{@link BarVisibilityObserver}，监听系统栏运行时显隐。
+     * 仅API 16+有可用的运行时检测API，低版本no-op（仅保留URI模式切换监听）。
+     */
+    private void setupBarVisibilityObserver() {
+        if (Build.VERSION.SDK_INT < Version.JELLY_BEAN) {
+            return;
+        }
+        if (mBarVisibilityObserver == null) {
+            mBarVisibilityObserver = new BarVisibilityObserver(this);
+        }
+        mBarVisibilityObserver.enable();
     }
 
     private void setBarDarkFontAboveR() {
@@ -553,57 +582,13 @@ public final class ImmersionBar implements ImmersionCallback {
         setupStatusBarView();
         //创建假导航栏并按mBarParams上色
         setupNavBarView();
-        //监听系统栏显隐，让假栏视图跟随真实系统栏一起显示/隐藏
-        setupBarVisibilityListenerAboveAndroid15();
-        //setupXxxBarView按mBarParams开关把假栏置为VISIBLE，但此刻真实系统栏可能已是隐藏态
-        //（如重复点击“隐藏全部”，hide()是no-op不会触发insets回调来纠正）。
-        //这里立即用当前真实insets同步一次，避免假栏停留在错误的显示状态。
-        syncBarViewVisibilityAboveAndroid15(mDecorView.getRootWindowInsets());
-    }
-
-    /**
-     * android 15以上edge-to-edge下，假栏视图是手动addView的，不会随系统栏隐藏/显示自动消失或出现。
-     * 通过{@link View#setOnApplyWindowInsetsListener}监听WindowInsets变化，
-     * 用{@link WindowInsets#isVisible(int)}获取系统栏实时可见性，据此同步假栏视图的显隐。
-     */
-    @RequiresApi(api = Version.VANILLA_ICE_CREAM)
-    private void setupBarVisibilityListenerAboveAndroid15() {
-        mDecorView.setOnApplyWindowInsetsListener((v, insets) -> {
-            syncBarViewVisibilityAboveAndroid15(insets);
-            //返回默认派发结果，不拦截系统对子view的inset分发
-            return v.onApplyWindowInsets(insets);
-        });
-    }
-
-    /**
-     * 按真实系统栏可见性同步假栏视图的显隐。
-     * 供{@link #setupBarVisibilityListenerAboveAndroid15()}的insets回调与{@link #initBarAboveAndroid15()}重新初始化时共用，
-     * 后者用于解决“真实系统栏可见性未变化（如重复隐藏）时回调不触发、假栏被setupXxxBarView错误拉回显示”的问题。
-     *
-     * @param insets 当前WindowInsets，为null（视图未attach）时不处理
-     */
-    @RequiresApi(api = Version.VANILLA_ICE_CREAM)
-    private void syncBarViewVisibilityAboveAndroid15(WindowInsets insets) {
-        if (insets == null) {
-            return;
-        }
-        //状态栏隐藏时假状态栏一起隐藏，显示时重新按mBarParams上色并显示
-        View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
-        if (statusBarView != null) {
-            if (insets.isVisible(WindowInsets.Type.statusBars())) {
-                setupStatusBarView();
-            } else {
-                statusBarView.setVisibility(View.GONE);
-            }
-        }
-        //导航栏隐藏时假导航栏一起隐藏，显示时重新按mBarParams上色并显示（setupNavBarView内部已处理enable等条件）
-        View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
-        if (navigationBarView != null) {
-            if (insets.isVisible(WindowInsets.Type.navigationBars())) {
-                setupNavBarView();
-            } else {
-                navigationBarView.setVisibility(View.GONE);
-            }
+        //假栏跟随真实系统栏显隐，由BarVisibilityObserver统一监听后回调onBarVisibilityChange；
+        //此处立即用当前真实insets同步一次，避免setupXxxBarView刚把假栏置VISIBLE、但真实系统栏已是隐藏态时停留错误状态
+        //（如重复点击“隐藏全部”，hide()是no-op不触发监听回调来纠正）。
+        WindowInsets rootInsets = mDecorView.getRootWindowInsets();
+        if (rootInsets != null) {
+            onBarVisibilityChange(rootInsets.isVisible(WindowInsets.Type.statusBars()),
+                    rootInsets.isVisible(WindowInsets.Type.navigationBars()));
         }
     }
 
@@ -934,49 +919,91 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     }
 
+    /**
+     * 系统栏（状态栏/导航栏）真实可见性变化时的统一回调，由{@link BarVisibilityObserver}按版本监听后调用。
+     * 做两件事：
+     * 1）edge-to-edge下同步假栏视图显隐（隐藏时GONE，显示时重新按mBarParams上色）；
+     * 2）导航栏可见性翻转时回调{@link OnNavigationBarListener}。
+     * 首次同步只播种{@link #mNavigationBarVisible}、不回调，避免init时误报。
+     *
+     * @param statusVisible     状态栏当前是否可见
+     * @param navigationVisible 导航栏当前是否可见
+     */
+    void onBarVisibilityChange(boolean statusVisible, boolean navigationVisible) {
+        handleStatusBarViewVisibility(statusVisible);
+        handleNavigationBarViewVisibility(navigationVisible);
+
+        //状态栏真实可见性翻转时回调监听器；首次只播种、不回调
+        boolean statusChanged = mStatusBarVisible != null && mStatusBarVisible != statusVisible;
+        mStatusBarVisible = statusVisible;
+        if (statusChanged && mBarParams != null && mBarParams.onStatusBarListener != null) {
+            mBarParams.onStatusBarListener.onStatusBarChange(statusVisible);
+        }
+        //导航栏真实可见性翻转时回调监听器；首次只播种、不回调
+        boolean changed = mNavigationBarVisible != null && mNavigationBarVisible != navigationVisible;
+        mNavigationBarVisible = navigationVisible;
+        if (changed && mBarParams != null && mBarParams.onNavigationBarListener != null) {
+            NavigationBarType type = GestureUtils.getGestureBean(mActivity).type;
+            mBarParams.onNavigationBarListener.onNavigationBarChange(navigationVisible, type);
+        }
+    }
+
     @Override
     public void onNavigationBarChange(boolean show, NavigationBarType type) {
+        handleNavigationBarViewVisibility(show);
+    }
+
+    private void handleStatusBarViewVisibility(boolean statusVisible) {
+        View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
+        if (statusBarView == null) return;
+        if (statusVisible) {
+            setupStatusBarView();
+        } else {
+            statusBarView.setVisibility(View.GONE);
+        }
+    }
+
+    private void handleNavigationBarViewVisibility(boolean show) {
         View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
-        if (navigationBarView != null) {
-            mBarConfig = new BarConfig(mActivity);
-            int bottom = mContentView.getPaddingBottom(), right = mContentView.getPaddingRight();
-            if (!show) {
-                //导航键隐藏了
-                navigationBarView.setVisibility(View.GONE);
+        if (navigationBarView == null) return;
+        mBarConfig = new BarConfig(mActivity);
+        int bottom = mContentView.getPaddingBottom(), right = mContentView.getPaddingRight();
+        if (!show) {
+            //导航键隐藏了
+            navigationBarView.setVisibility(View.GONE);
+            bottom = 0;
+            right = 0;
+        } else {
+            //导航键显示了
+            navigationBarView.setVisibility(View.VISIBLE);
+            if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
                 bottom = 0;
                 right = 0;
             } else {
-                //导航键显示了
-                navigationBarView.setVisibility(View.VISIBLE);
-                if (checkFitsSystemWindows(mDecorView.findViewById(android.R.id.content))) {
-                    bottom = 0;
-                    right = 0;
-                } else {
-                    if (mNavigationBarHeight == 0) {
-                        mNavigationBarHeight = mBarConfig.getNavigationBarHeight();
+                if (mNavigationBarHeight == 0) {
+                    mNavigationBarHeight = mBarConfig.getNavigationBarHeight();
+                }
+                if (mNavigationBarWidth == 0) {
+                    mNavigationBarWidth = mBarConfig.getNavigationBarWidth();
+                }
+                if (!mBarParams.hideNavigationBar) {
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) navigationBarView.getLayoutParams();
+                    if (mBarConfig.isNavigationAtBottom()) {
+                        params.gravity = Gravity.BOTTOM;
+                        params.height = mNavigationBarHeight;
+                        bottom = !mBarParams.fullScreen ? mNavigationBarHeight : 0;
+                        right = 0;
+                    } else {
+                        params.gravity = Gravity.END;
+                        params.width = mNavigationBarWidth;
+                        bottom = 0;
+                        right = !mBarParams.fullScreen ? mNavigationBarWidth : 0;
                     }
-                    if (mNavigationBarWidth == 0) {
-                        mNavigationBarWidth = mBarConfig.getNavigationBarWidth();
-                    }
-                    if (!mBarParams.hideNavigationBar) {
-                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) navigationBarView.getLayoutParams();
-                        if (mBarConfig.isNavigationAtBottom()) {
-                            params.gravity = Gravity.BOTTOM;
-                            params.height = mNavigationBarHeight;
-                            bottom = !mBarParams.fullScreen ? mNavigationBarHeight : 0;
-                            right = 0;
-                        } else {
-                            params.gravity = Gravity.END;
-                            params.width = mNavigationBarWidth;
-                            bottom = 0;
-                            right = !mBarParams.fullScreen ? mNavigationBarWidth : 0;
-                        }
-                        navigationBarView.setLayoutParams(params);
-                    }
+                    navigationBarView.setLayoutParams(params);
                 }
             }
-            setPadding(0, mContentView.getPaddingTop(), right, bottom);
         }
+        setPadding(0, mContentView.getPaddingTop(), right, bottom);
     }
 
     /**
@@ -1013,16 +1040,19 @@ public final class ImmersionBar implements ImmersionCallback {
 
     @RequiresApi(api = Version.R)
     private void setStatusBarDarkFontAboveR() {
-        WindowInsetsController windowInsetsController = mContentView.getWindowInsetsController();
+        WindowInsetsController controller = mContentView.getWindowInsetsController();
+        if (controller == null) {
+            return;
+        }
         if (mBarParams.statusBarDarkFont) {
             if (mWindow != null) {
                 unsetSystemUiFlag(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
-            windowInsetsController.setSystemBarsAppearance(
+            controller.setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
         } else {
-            windowInsetsController.setSystemBarsAppearance(
+            controller.setSystemBarsAppearance(
                     0,
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
         }
@@ -1031,6 +1061,9 @@ public final class ImmersionBar implements ImmersionCallback {
     @RequiresApi(api = Version.R)
     private void setNavigationIconDarkAboveR() {
         WindowInsetsController controller = mContentView.getWindowInsetsController();
+        if (controller == null) {
+            return;
+        }
         if (mBarParams.navigationBarDarkIcon) {
             controller.setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
@@ -1139,6 +1172,10 @@ public final class ImmersionBar implements ImmersionCallback {
             if (mFitsKeyboard != null) {
                 mFitsKeyboard.cancel();
                 mFitsKeyboard = null;
+            }
+            if (mBarVisibilityObserver != null) {
+                mBarVisibilityObserver.disable();
+                mBarVisibilityObserver = null;
             }
             EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
             NavigationBarObserver.getInstance().removeOnNavigationBarListener(mBarParams.onNavigationBarListener);
@@ -3397,6 +3434,26 @@ public final class ImmersionBar implements ImmersionCallback {
         return this;
     }
 
+    /**
+     * 状态栏显示隐藏监听器
+     * Sets on status bar listener.
+     *
+     * @param onStatusBarListener the on status bar listener
+     * @return the immersion bar
+     */
+    public ImmersionBar setOnStatusBarListener(@Nullable OnStatusBarListener onStatusBarListener) {
+        if (onStatusBarListener != null) {
+            if (mBarParams.onStatusBarListener == null) {
+                mBarParams.onStatusBarListener = onStatusBarListener;
+            }
+        } else {
+            if (mBarParams.onStatusBarListener != null) {
+                mBarParams.onStatusBarListener = null;
+            }
+        }
+        return this;
+    }
+
 
     /**
      * Bar监听，第一次调用和横竖屏切换都会触发此方法，比如可以解决横竖屏切换，横屏情况下，刘海屏遮挡布局的问题
@@ -3477,6 +3534,6 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     private static boolean isEmpty(String str) {
-        return str == null || str.trim().length() == 0;
+        return str == null || str.trim().isEmpty();
     }
 }

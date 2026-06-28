@@ -5,11 +5,9 @@ import android.content.res.Configuration;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
@@ -35,6 +33,7 @@ public class ParamsActivity extends BaseActivity {
     protected void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this).titleBar(binding.toolbar)
+                .setOnStatusBarListener(show -> Toast.makeText(ParamsActivity.this, "状态栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show())
                 .setOnNavigationBarListener((show, type) -> {
                     initView();
                     Toast.makeText(this, "导航栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
@@ -103,6 +102,7 @@ public class ParamsActivity extends BaseActivity {
         super.onConfigurationChanged(newConfig);
         initView();
     }
+
     @Override
     protected void initViewBinding() {
         binding = ActivityParamsBinding.bind(getContentView());

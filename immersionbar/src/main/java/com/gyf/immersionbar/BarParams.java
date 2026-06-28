@@ -218,6 +218,11 @@ public class BarParams implements Cloneable {
     OnNavigationBarListener onNavigationBarListener;
 
     /**
+     * 状态栏显示隐藏监听
+     */
+    OnStatusBarListener onStatusBarListener;
+
+    /**
      * 横竖屏监听
      */
     OnBarListener onBarListener;

@@ -10,7 +10,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import com.gyf.immersionbar.ktx.*
+import com.gyf.immersionbar.ktx.actionBarHeight
+import com.gyf.immersionbar.ktx.checkFitsSystemWindows
+import com.gyf.immersionbar.ktx.hasNavigationBar
+import com.gyf.immersionbar.ktx.hasNotchScreen
+import com.gyf.immersionbar.ktx.hideStatusBar
+import com.gyf.immersionbar.ktx.immersionBar
+import com.gyf.immersionbar.ktx.isGesture
+import com.gyf.immersionbar.ktx.isSupportNavigationIconDark
+import com.gyf.immersionbar.ktx.isSupportStatusBarDarkFont
+import com.gyf.immersionbar.ktx.navigationBarHeight
+import com.gyf.immersionbar.ktx.navigationBarWidth
+import com.gyf.immersionbar.ktx.notchHeight
+import com.gyf.immersionbar.ktx.showStatusBar
+import com.gyf.immersionbar.ktx.statusBarHeight
 import com.gyf.immersionbar.sample.R
 import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding
 
@@ -32,6 +45,16 @@ class KotlinActivity : BaseKotlinActivity() {
         immersionBar {
             titleBar(viewBinding.toolbar)
             navigationBarColor(R.color.btn13)
+            setOnStatusBarListener {
+                val text = "状态栏${
+                    if (it) {
+                        "显示了"
+                    } else {
+                        "隐藏了"
+                    }
+                }"
+                Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
+            }
             setOnNavigationBarListener { show, _ ->
                 initView()
                 val text = "导航栏${
@@ -60,10 +83,14 @@ class KotlinActivity : BaseKotlinActivity() {
             tvNavWidth.text = "${tvNavWidth.title}$navigationBarWidth".content()
             tvAction.text = "${tvAction.title}$actionBarHeight".content()
             tvHasNotch.post { tvHasNotch.text = "${tvHasNotch.title}$hasNotchScreen".content() }
-            tvNotchHeight.post { tvNotchHeight.text = "${tvNotchHeight.title}$notchHeight".content() }
-            tvFits.text = "${tvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
+            tvNotchHeight.post {
+                tvNotchHeight.text = "${tvNotchHeight.title}$notchHeight".content()
+            }
+            tvFits.text =
+                "${tvFits.title}${findViewById<View>(android.R.id.content).checkFitsSystemWindows}".content()
             tvStatusDark.text = "${tvStatusDark.title}$isSupportStatusBarDarkFont".content()
-            tvNavigationDark.text = "${tvNavigationDark.title}$isSupportNavigationIconDark".content()
+            tvNavigationDark.text =
+                "${tvNavigationDark.title}$isSupportNavigationIconDark".content()
             tvGesture.text = "${tvGesture.title}$isGesture".content()
         }
     }
@@ -80,7 +107,8 @@ class KotlinActivity : BaseKotlinActivity() {
             }
         }
         ViewCompat.setOnApplyWindowInsetsListener(viewBinding.tvInsets) { _, windowInsetsCompat ->
-            viewBinding.tvInsets.text = "${viewBinding.tvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
+            viewBinding.tvInsets.text =
+                "${viewBinding.tvInsets.title}${windowInsetsCompat.systemWindowInsetTop}".content()
             windowInsetsCompat.consumeSystemWindowInsets()
         }
     }
@@ -88,8 +116,14 @@ class KotlinActivity : BaseKotlinActivity() {
     private fun String.content(): SpannableString {
         val split = split("   ")
         return SpannableString(this).apply {
-            val colorSpan = ForegroundColorSpan(ContextCompat.getColor(this@KotlinActivity, R.color.btn3))
-            setSpan(colorSpan, this.length - split[1].length, this.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            val colorSpan =
+                ForegroundColorSpan(ContextCompat.getColor(this@KotlinActivity, R.color.btn3))
+            setSpan(
+                colorSpan,
+                this.length - split[1].length,
+                this.length,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
         }
     }
 

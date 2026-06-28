@@ -91,6 +91,9 @@ class ImmersionDelegate implements Runnable {
             mOnBarListener = mImmersionBar.getBarParams().onBarListener;
             if (mOnBarListener != null) {
                 final Activity activity = mImmersionBar.getActivity();
+                if (activity == null) {
+                    return;
+                }
                 if (mBarProperties == null) {
                     mBarProperties = new BarProperties();
                 }

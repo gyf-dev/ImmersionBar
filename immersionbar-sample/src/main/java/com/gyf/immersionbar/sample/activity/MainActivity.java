@@ -24,6 +24,7 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.OnStatusBarListener;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.BuildConfig;
 import com.gyf.immersionbar.sample.R;
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     Log.d(mTag, "onBarChange: " + barProperties.toString());
                     adjustView(barProperties);
                 })
+                .setOnStatusBarListener(show -> Log.d(mTag, "onStatusBarChange: " + show))
                 .setOnNavigationBarListener((show, type) -> {
                     Log.d(mTag, "onNavigationBarChange: " + show + " type: " + type);
                 })
