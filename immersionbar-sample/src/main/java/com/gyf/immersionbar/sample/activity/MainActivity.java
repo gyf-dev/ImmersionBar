@@ -136,8 +136,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         super.setListener();
         binding.drawer.addDrawerListener(this);
         binding.rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private int totalDy = 0;
-
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -151,17 +149,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                totalDy += dy;
-                if (totalDy < 0) {
-                    totalDy = 0;
-                }
-                if (totalDy < mBannerHeight) {
-                    float alpha = (float) totalDy / mBannerHeight;
+                int offset = recyclerView.computeVerticalScrollOffset();
+                if (offset < mBannerHeight) {
+                    float alpha = (float) offset / mBannerHeight;
                     binding.toolbar.setAlpha(alpha);
                 } else {
                     binding.toolbar.setAlpha(1);
                 }
-
             }
         });
         mMainAdapter.setOnItemClickListener((adapter, view, position) -> {
