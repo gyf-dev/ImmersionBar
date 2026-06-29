@@ -3,6 +3,8 @@ package com.gyf.immersionbar;
 import android.graphics.Color;
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+
 import android.view.View;
 import android.view.WindowManager;
 
@@ -235,5 +237,53 @@ public class BarParams implements Cloneable {
         } catch (CloneNotSupportedException ignored) {
         }
         return barParams;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "BarParams{" +
+                "statusBarColor=" + statusBarColor +
+                ", navigationBarColor=" + navigationBarColor +
+                ", defaultNavigationBarColor=" + defaultNavigationBarColor +
+                ", statusBarAlpha=" + statusBarAlpha +
+                ", statusBarTempAlpha=" + statusBarTempAlpha +
+                ", navigationBarAlpha=" + navigationBarAlpha +
+                ", navigationBarTempAlpha=" + navigationBarTempAlpha +
+                ", fullScreen=" + fullScreen +
+                ", hideNavigationBar=" + hideNavigationBar +
+                ", barHide=" + barHide +
+                ", statusBarDarkFont=" + statusBarDarkFont +
+                ", navigationBarDarkIcon=" + navigationBarDarkIcon +
+                ", autoStatusBarDarkModeEnable=" + autoStatusBarDarkModeEnable +
+                ", autoNavigationBarDarkModeEnable=" + autoNavigationBarDarkModeEnable +
+                ", autoStatusBarDarkModeAlpha=" + autoStatusBarDarkModeAlpha +
+                ", autoNavigationBarDarkModeAlpha=" + autoNavigationBarDarkModeAlpha +
+                ", statusBarColorEnabled=" + statusBarColorEnabled +
+                ", statusBarColorTransform=" + statusBarColorTransform +
+                ", navigationBarColorTransform=" + navigationBarColorTransform +
+                ", viewMap=" + viewMap +
+                ", viewAlpha=" + viewAlpha +
+                ", contentColor=" + contentColor +
+                ", contentColorTransform=" + contentColorTransform +
+                ", contentAlpha=" + contentAlpha +
+                ", fits=" + fits +
+                ", titleBarView=" + titleBarView +
+                ", statusBarView=" + statusBarView +
+                ", fitsLayoutOverlapEnable=" + fitsLayoutOverlapEnable +
+                ", flymeOSStatusBarFontColor=" + flymeOSStatusBarFontColor +
+                ", flymeOSStatusBarFontTempColor=" + flymeOSStatusBarFontTempColor +
+                ", isSupportActionBar=" + isSupportActionBar +
+                ", keyboardEnable=" + keyboardEnable +
+                ", keyboardMode=" + keyboardMode +
+                ", navigationBarEnable=" + navigationBarEnable +
+                ", navigationBarWithKitkatEnable=" + navigationBarWithKitkatEnable +
+                ", navigationBarWithEMUI3Enable=" + navigationBarWithEMUI3Enable +
+                ", barEnable=" + barEnable +
+                ", onKeyboardListener=" + onKeyboardListener +
+                ", onNavigationBarListener=" + onNavigationBarListener +
+                ", onStatusBarListener=" + onStatusBarListener +
+                ", onBarListener=" + onBarListener +
+                '}';
     }
 }

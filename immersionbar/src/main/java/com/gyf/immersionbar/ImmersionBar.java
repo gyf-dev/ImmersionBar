@@ -698,6 +698,7 @@ public final class ImmersionBar implements ImmersionCallback {
             statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     Color.TRANSPARENT, mBarParams.statusBarAlpha));
         }
+        statusBarView.bringToFront();
     }
 
     /**
@@ -725,6 +726,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
         if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable && !mBarParams.hideNavigationBar) {
             navigationBarView.setVisibility(View.VISIBLE);
+            navigationBarView.bringToFront();
         } else {
             navigationBarView.setVisibility(View.GONE);
         }
