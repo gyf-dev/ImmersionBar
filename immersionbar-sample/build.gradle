@@ -72,8 +72,8 @@ dependencies {
     //RecyclerView框架
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
     //图片加载框架
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.7'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.7'
     //下拉刷新上拉加载
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //圆形imageView

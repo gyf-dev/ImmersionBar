@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.view.View
+import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.gyf.immersionbar.ImmersionBar
@@ -113,28 +114,33 @@ val Activity.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
 val Fragment.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
 val android.app.Fragment.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
 val Context.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
+val Window.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
 
 // 导航栏扩展
 val Activity.navigationBarHeight get() = ImmersionBar.getNavigationBarHeight(this)
 val Fragment.navigationBarHeight get() = ImmersionBar.getNavigationBarHeight(this)
 val android.app.Fragment.navigationBarHeight get() = ImmersionBar.getNavigationBarHeight(this)
 val Context.navigationBarHeight get() = ImmersionBar.getNavigationBarHeight(this)
+val Window.navigationBarHeight get() = ImmersionBar.getNavigationBarHeight(this)
 
 val Activity.navigationBarWidth get() = ImmersionBar.getNavigationBarWidth(this)
 val Fragment.navigationBarWidth get() = ImmersionBar.getNavigationBarWidth(this)
 val android.app.Fragment.navigationBarWidth get() = ImmersionBar.getNavigationBarWidth(this)
 val Context.navigationBarWidth get() = ImmersionBar.getNavigationBarWidth(this)
+val Window.navigationBarWidth get() = ImmersionBar.getNavigationBarWidth(this)
 
 // ActionBar扩展
 val Activity.actionBarHeight get() = ImmersionBar.getActionBarHeight(this)
 val Fragment.actionBarHeight get() = ImmersionBar.getActionBarHeight(this)
 val android.app.Fragment.actionBarHeight get() = ImmersionBar.getActionBarHeight(this)
+val Window.actionBarHeight get() = ImmersionBar.getActionBarHeight(this)
 
 // 是否有导航栏
 val Activity.hasNavigationBar get() = ImmersionBar.hasNavigationBar(this)
 val Fragment.hasNavigationBar get() = ImmersionBar.hasNavigationBar(this)
 val android.app.Fragment.hasNavigationBar get() = ImmersionBar.hasNavigationBar(this)
 val Context.hasNavigationBar get() = ImmersionBar.hasNavigationBar(this)
+val Window.hasNavigationBar get() = ImmersionBar.hasNavigationBar(this)
 
 // 是否有刘海屏
 val Activity.hasNotchScreen get() = ImmersionBar.hasNotchScreen(this)
@@ -160,6 +166,7 @@ val View.checkFitsSystemWindows get() = ImmersionBar.checkFitsSystemWindows(this
 val Activity.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
 val Fragment.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
 val android.app.Fragment.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
+val Window.isNavigationAtBottom get() = ImmersionBar.isNavigationAtBottom(this)
 
 // 是否是全面屏手势
 val Context.isGesture get() = ImmersionBar.isGesture(this)

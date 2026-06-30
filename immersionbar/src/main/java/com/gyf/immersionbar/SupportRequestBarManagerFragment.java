@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
  * @author geyifeng
  * @date 2019/4/11 6:43 PM
  */
+@SuppressWarnings("all")
 public final class SupportRequestBarManagerFragment extends Fragment {
 
     private ImmersionDelegate mDelegate;

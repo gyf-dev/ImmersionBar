@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
  * @author geyifeng
  * @date 2019/4/11 6:43 PM
  */
+@SuppressWarnings("all")
 public final class RequestBarManagerFragment extends Fragment {
 
     private ImmersionDelegate mDelegate;

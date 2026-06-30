@@ -11,6 +11,7 @@ import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -52,6 +53,8 @@ import java.util.Set;
  * @author gyf
  * @date 2017 /05/09
  */
+@SuppressWarnings({"deprecation", "SameParameterValue"})
+@SuppressLint("UseRequiresApi")
 @TargetApi(Version.KITKAT)
 public final class ImmersionBar implements ImmersionCallback {
 
@@ -339,6 +342,7 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * 通过上面配置后初始化后方可成功调用
      */
+    @SuppressLint("ObsoleteSdkInt")
     public void init() {
         if (Build.VERSION.SDK_INT >= Version.KITKAT && mBarParams.barEnable) {
             //更新Bar的参数
@@ -403,6 +407,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * 更新Bar的参数
      * Update bar params.
      */
+    @SuppressLint("ObsoleteSdkInt")
     private void updateBarParams() {
         adjustDarkModeParams();
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
@@ -473,6 +478,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * 创建并启用{@link BarVisibilityObserver}，监听系统栏运行时显隐。
      * 仅API 16+有可用的运行时检测API，低版本no-op（仅保留URI模式切换监听）。
      */
+    @SuppressLint("ObsoleteSdkInt")
     private void setupBarVisibilityObserver() {
         if (Build.VERSION.SDK_INT < Version.JELLY_BEAN) {
             return;
@@ -519,7 +525,7 @@ public final class ImmersionBar implements ImmersionCallback {
                 WindowManager.LayoutParams lp = mWindow.getAttributes();
                 lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                 mWindow.setAttributes(lp);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }
@@ -757,6 +763,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param uiFlags the ui flags
      * @return the int
      */
+    @SuppressLint("ObsoleteSdkInt")
     private int hideBarBelowR(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Version.R) {
             return uiFlags;
@@ -788,6 +795,7 @@ public final class ImmersionBar implements ImmersionCallback {
     /**
      * 修正界面显示
      */
+    @SuppressLint("ObsoleteSdkInt")
     private void fitsWindows() {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             if (Build.VERSION.SDK_INT >= Version.LOLLIPOP && !OSUtils.isEMUI3_x()) {
@@ -849,6 +857,7 @@ public final class ImmersionBar implements ImmersionCallback {
             //android 15以上edge-to-edge下，内容会延伸到导航栏后面，需要额外处理导航栏方向的padding
             int right = 0, bottom = 0;
             if (mBarConfig.hasNavigationBar() && mBarParams.navigationBarEnable && !mBarParams.fullScreen) {
+                //noinspection StatementWithEmptyBody
                 if (mBarParams.hideNavigationBar) {
                     //导航栏被隐藏，无需让位
                 } else if (mBarConfig.isNavigationAtBottom()) {
@@ -1131,7 +1140,7 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     }
 
-    protected void unsetSystemUiFlag(int systemUiFlag) {
+    private void unsetSystemUiFlag(int systemUiFlag) {
         View decorView = mWindow.getDecorView();
         decorView.setSystemUiVisibility(
                 decorView.getSystemUiVisibility()
@@ -1170,7 +1179,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * Transform view.
      */
     private void transformView() {
-        if (mBarParams.viewMap.size() != 0) {
+        if (!mBarParams.viewMap.isEmpty()) {
             Set<Map.Entry<View, Map<Integer, Integer>>> entrySet = mBarParams.viewMap.entrySet();
             for (Map.Entry<View, Map<Integer, Integer>> entry : entrySet) {
                 View view = entry.getKey();
@@ -1215,6 +1224,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * 解决底部输入框与软键盘问题
      * Keyboard enable.
      */
+    @SuppressLint("ObsoleteSdkInt")
     private void fitsKeyboard() {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             if (!mIsFragment) {
@@ -1384,6 +1394,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param fixHeight the fix height
      * @param view      the view
      */
+    @SuppressLint("ObsoleteSdkInt")
     public static void setTitleBar(final Activity activity, int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             if (activity == null) {
@@ -1480,6 +1491,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param fixHeight the fix height
      * @param view      the view
      */
+    @SuppressLint("ObsoleteSdkInt")
     public static void setTitleBarMarginTop(Activity activity, int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             if (activity == null) {
@@ -1561,6 +1573,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param fixHeight the fix height
      * @param view      the view
      */
+    @SuppressLint("ObsoleteSdkInt")
     public static void setStatusBarView(Activity activity, int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             if (activity == null) {
@@ -1731,13 +1744,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the boolean
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return hasNavigationBar(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean hasNavigationBar(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.hasNavigationBar();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return false;
@@ -1745,7 +1766,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return hasNavigationBar(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return false;
@@ -1753,7 +1775,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return hasNavigationBar(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Context context) {
         return getNavigationBarHeight(context) > 0;
     }
@@ -1765,13 +1788,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the navigation bar height
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return getNavigationBarHeight(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarHeight(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.getNavigationBarHeight();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1779,7 +1810,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarHeight(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1787,7 +1819,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarHeight(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Context context) {
         GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
         if (bean.isGesture && !bean.checkNavigation) {
@@ -1804,13 +1837,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the navigation bar width
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return getNavigationBarWidth(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarWidth(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.getNavigationBarWidth();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1818,7 +1859,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarWidth(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1826,7 +1868,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getNavigationBarWidth(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Context context) {
         GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
         if (bean.isGesture && !bean.checkNavigation) {
@@ -1843,13 +1886,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the boolean
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return isNavigationAtBottom(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean isNavigationAtBottom(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.isNavigationAtBottom();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return false;
@@ -1857,7 +1908,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return isNavigationAtBottom(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return false;
@@ -1872,13 +1924,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the status bar height
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return getStatusBarHeight(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getStatusBarHeight(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.getStatusBarHeight();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1886,7 +1946,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getStatusBarHeight(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1894,7 +1955,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getStatusBarHeight(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Context context) {
         return BarConfig.getInternalDimensionSize(context, Constants.IMMERSION_STATUS_BAR_HEIGHT);
     }
@@ -1906,13 +1968,21 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @return the action bar height
      */
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull Activity activity) {
-        BarConfig config = new BarConfig(activity);
+        return getActionBarHeight(activity.getWindow());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getActionBarHeight(@NonNull Window window) {
+        BarConfig config = new BarConfig(window);
         return config.getActionBarHeight();
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -1920,7 +1990,8 @@ public final class ImmersionBar implements ImmersionCallback {
         return getActionBarHeight(fragment.getActivity());
     }
 
-    @TargetApi(14)
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull android.app.Fragment fragment) {
         if (fragment.getActivity() == null) {
             return 0;
@@ -2086,7 +2157,11 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     ImmersionBar(Fragment fragment) {
         mIsFragment = true;
-        mActivity = fragment.getActivity();
+        Activity activity = fragment.getActivity();
+        if (activity == null) {
+            throw new IllegalArgumentException("Fragment must be attached to an Activity.");
+        }
+        mActivity = activity;
         mSupportFragment = fragment;
         checkInitWithActivity();
         initCommonParameter(mActivity.getWindow());
@@ -2781,7 +2856,7 @@ public final class ImmersionBar implements ImmersionCallback {
             throw new IllegalArgumentException("View参数不能为空");
         }
         Map<Integer, Integer> map = mBarParams.viewMap.get(view);
-        if (map != null && map.size() != 0) {
+        if (map != null && !map.isEmpty()) {
             mBarParams.viewMap.remove(view);
         }
         return this;
@@ -2793,7 +2868,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public ImmersionBar removeSupportAllView() {
-        if (mBarParams.viewMap.size() != 0) {
+        if (!mBarParams.viewMap.isEmpty()) {
             mBarParams.viewMap.clear();
         }
         return this;
