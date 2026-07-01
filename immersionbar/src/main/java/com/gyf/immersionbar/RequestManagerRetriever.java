@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -139,11 +141,44 @@ class RequestManagerRetriever implements Handler.Callback {
         if (!isOnly) {
             tag += System.identityHashCode(dialog) + mNotOnly;
         }
+        bindDialogAutoDestroy(activity, dialog, isOnly);
         if (activity instanceof FragmentActivity) {
             return getSupportFragment(((FragmentActivity) activity).getSupportFragmentManager(), tag).get(activity, dialog);
         } else {
             return getFragment(activity.getFragmentManager(), tag).get(activity, dialog);
         }
+    }
+
+    /**
+     * 监听Dialog窗口detach，在Dialog消失时自动销毁，无需再手动调用destroy。
+     * decorView的attach状态监听是累加的，不会覆盖业务自己设置的dismiss监听。
+     *
+     * @param activity the activity
+     * @param dialog   the dialog
+     * @param isOnly   the is only
+     */
+    private void bindDialogAutoDestroy(final Activity activity, final Dialog dialog, final boolean isOnly) {
+        final Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        final View decorView = window.getDecorView();
+        if (decorView.getTag(R.id.immersion_dialog_auto_destroy) != null) {
+            return;
+        }
+        decorView.setTag(R.id.immersion_dialog_auto_destroy, Boolean.TRUE);
+        decorView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                v.removeOnAttachStateChangeListener(this);
+                v.setTag(R.id.immersion_dialog_auto_destroy, null);
+                destroy(activity, dialog, isOnly);
+            }
+        });
     }
 
     public void destroy(Fragment fragment, boolean isOnly) {

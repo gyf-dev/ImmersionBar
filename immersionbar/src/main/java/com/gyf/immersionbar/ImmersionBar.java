@@ -16,6 +16,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -280,10 +281,54 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     /**
+     * 在dialog里使用，自动从dialog解析所属Activity，无需再显式传入。
+     * With immersion bar.
+     *
+     * @param dialog the dialog
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull Dialog dialog) {
+        return getRetriever().get(getActivityFromDialog(dialog), dialog, false);
+    }
+
+    /**
+     * 在dialog里使用，自动从dialog解析所属Activity，无需再显式传入。
+     *
+     * @param dialog the dialog
+     * @param isOnly the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(@NonNull Dialog dialog, boolean isOnly) {
+        return getRetriever().get(getActivityFromDialog(dialog), dialog, isOnly);
+    }
+
+    /**
+     * 从Dialog解析其所属Activity。
+     * AlertDialog.Builder(context, theme)会把Activity包进ContextThemeWrapper，
+     * 故需沿ContextWrapper.getBaseContext()链解包；getOwnerActivity()并不可靠，常为null。
+     *
+     * @param dialog the dialog
+     * @return the activity
+     */
+    private static Activity getActivityFromDialog(@NonNull Dialog dialog) {
+        Context context = dialog.getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        throw new IllegalArgumentException("dialog must be created with an Activity context, " +
+                "or use ImmersionBar.with(activity, dialog) instead");
+    }
+
+    /**
      * 销毁Fragment
      *
      * @param fragment the Fragment
+     * @deprecated Fragment销毁时会跟随自身childFragmentManager自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull Fragment fragment) {
         getRetriever().destroy(fragment, false);
     }
@@ -293,7 +338,9 @@ public final class ImmersionBar implements ImmersionCallback {
      *
      * @param fragment the Fragment
      * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @deprecated Fragment销毁时会跟随自身childFragmentManager自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull Fragment fragment, boolean isOnly) {
         getRetriever().destroy(fragment, isOnly);
     }
@@ -302,7 +349,9 @@ public final class ImmersionBar implements ImmersionCallback {
      * 销毁Fragment
      *
      * @param fragment the android.app.Fragment
+     * @deprecated Fragment销毁时会跟随自身childFragmentManager自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull android.app.Fragment fragment) {
         getRetriever().destroy(fragment, false);
     }
@@ -313,7 +362,9 @@ public final class ImmersionBar implements ImmersionCallback {
      *
      * @param fragment the android.app.Fragment
      * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @deprecated Fragment销毁时会跟随自身childFragmentManager自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull android.app.Fragment fragment, boolean isOnly) {
         getRetriever().destroy(fragment, isOnly);
     }
@@ -323,7 +374,9 @@ public final class ImmersionBar implements ImmersionCallback {
      *
      * @param activity the activity
      * @param dialog   the dialog
+     * @deprecated 自{@link #with(Activity, Dialog)}起，Dialog消失时会自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull Activity activity, @NonNull Dialog dialog) {
         getRetriever().destroy(activity, dialog, false);
     }
@@ -334,7 +387,9 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param dialog   the dialog
      * @param isOnly   the is only fragment实例对象是否唯一，默认是false，不唯一，isOnly影响tag以何种形式生成
+     * @deprecated 自{@link #with(Activity, Dialog, boolean)}起，Dialog消失时会自动销毁，无需再手动调用本方法。
      */
+    @Deprecated
     public static void destroy(@NonNull Activity activity, @NonNull Dialog dialog, boolean isOnly) {
         getRetriever().destroy(activity, dialog, isOnly);
     }

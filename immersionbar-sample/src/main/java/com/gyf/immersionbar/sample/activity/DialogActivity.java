@@ -109,7 +109,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setGravity(Gravity.TOP);
                     mDialogWindow.setWindowAnimations(R.style.RightAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .titleBar(toolbar)
                             .navigationBarColor(R.color.btn3)
                             .statusBarDarkFont(true)
@@ -120,7 +120,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setGravity(Gravity.TOP);
                     mDialogWindow.setWindowAnimations(R.style.TopAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .titleBar(toolbar)
                             .navigationBarWithKitkatEnable(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                             .navigationBarColor(R.color.btn4)
@@ -130,7 +130,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setGravity(Gravity.BOTTOM);
                     mDialogWindow.setWindowAnimations(R.style.BottomAnimation);
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .navigationBarColor(R.color.cool_green_normal)
                             .init();
                     break;
@@ -138,7 +138,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setGravity(Gravity.TOP | Gravity.START);
                     mDialogWindow.setWindowAnimations(R.style.LeftAnimation);
                     mDialogWindow.setLayout(widthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .titleBar(toolbar)
                             .navigationBarWithKitkatEnable(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                             .navigationBarColor(R.color.btn11)
@@ -149,7 +149,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     mDialogWindow.setGravity(Gravity.TOP | Gravity.END);
                     mDialogWindow.setWindowAnimations(R.style.RightAnimation);
                     mDialogWindow.setLayout(widthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .titleBar(toolbar)
                             .navigationBarColor(R.color.btn8)
                             .keyboardEnable(true)
@@ -164,7 +164,6 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
     @Override
     public void onDismiss(DialogInterface dialog) {
         AppManager.getInstance().hideSoftKeyBoard(this);
-        ImmersionBar.destroy(this, mAlertDialog);
     }
 
     @Override
@@ -175,7 +174,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
             switch (mId) {
                 case R.id.btn_top:
                     mDialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, widthAndHeight[1] / 2);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .navigationBarWithKitkatEnable(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
                             .init();
                     break;
@@ -184,7 +183,7 @@ public class DialogActivity extends BaseActivity implements DialogInterface.OnDi
                     break;
                 case R.id.btn_left:
                     mDialogWindow.setLayout(widthAndHeight[0] / 2, ViewGroup.LayoutParams.MATCH_PARENT);
-                    ImmersionBar.with(this, mAlertDialog)
+                    ImmersionBar.with(mAlertDialog)
                             .navigationBarWithKitkatEnable(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
                             .init();
                     break;

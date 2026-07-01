@@ -40,6 +40,14 @@ inline fun android.app.DialogFragment.immersionBar(
 ) = ImmersionBar.with(this, isOnly).apply { block(this) }.init()
 
 @JvmOverloads
+inline fun Dialog.immersionBar(isOnly: Boolean = false, block: ImmersionBar.() -> Unit) =
+    ImmersionBar.with(this, isOnly).apply { block(this) }.init()
+
+@Deprecated(
+    message = "Dialog can resolve Activity automatically. Use dialog.immersionBar(isOnly, block) instead.",
+    replaceWith = ReplaceWith("immersionBar(isOnly, block)")
+)
+@JvmOverloads
 inline fun Dialog.immersionBar(
     activity: Activity,
     isOnly: Boolean = false,
@@ -83,6 +91,13 @@ fun DialogFragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) 
 fun android.app.DialogFragment.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) { }
 
 @JvmOverloads
+fun Dialog.immersionBar(isOnly: Boolean = false) = immersionBar(isOnly) {}
+
+@Deprecated(
+    message = "Dialog can resolve Activity automatically. Use dialog.immersionBar(isOnly) instead.",
+    replaceWith = ReplaceWith("immersionBar(isOnly)")
+)
+@JvmOverloads
 fun Dialog.immersionBar(activity: Activity, isOnly: Boolean = false) =
     immersionBar(activity, isOnly) {}
 
@@ -97,14 +112,23 @@ fun android.app.Fragment.immersionBar(dialog: Dialog, isOnly: Boolean = false) =
     immersionBar(dialog, isOnly) {}
 
 // dialog销毁
+@Deprecated(
+    message = "Dialog ImmersionBar is destroyed automatically when dialog is dismissed. Manual destroy is no longer required."
+)
 @JvmOverloads
 fun Activity.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
     ImmersionBar.destroy(this, dialog, isOnly)
 
+@Deprecated(
+    message = "Dialog ImmersionBar is destroyed automatically when dialog is dismissed. Manual destroy is no longer required."
+)
 @JvmOverloads
 fun Fragment.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
     activity?.run { ImmersionBar.destroy(this, dialog, isOnly) } ?: Unit
 
+@Deprecated(
+    message = "Dialog ImmersionBar is destroyed automatically when dialog is dismissed. Manual destroy is no longer required."
+)
 @JvmOverloads
 fun android.app.Fragment.destroyImmersionBar(dialog: Dialog, isOnly: Boolean = false) =
     activity?.run { ImmersionBar.destroy(this, dialog, isOnly) } ?: Unit
