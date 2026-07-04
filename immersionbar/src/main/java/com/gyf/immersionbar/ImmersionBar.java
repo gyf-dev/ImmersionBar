@@ -109,6 +109,11 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     private BarVisibilityObserver mBarVisibilityObserver = null;
     /**
+     * Dialog假状态栏/假导航栏的decorView布局监听，用于在Dialog窗口尺寸变化后按几何关系纠正假栏可见性与padding。
+     * 仅Dialog、API 30+场景创建，可能为null。
+     */
+    private View.OnLayoutChangeListener mFakeBarLayoutListener = null;
+    /**
      * 持有此ImmersionBar的delegate，用于在运行时系统栏显隐变化时反向刷新BarProperties快照。
      * 仅Activity/Fragment场景下由{@link ImmersionDelegate}回传，可能为null。
      */
@@ -748,7 +753,6 @@ public final class ImmersionBar implements ImmersionCallback {
                     mBarConfig.getStatusBarHeight());
             params.gravity = Gravity.TOP;
             statusBarView.setLayoutParams(params);
-            statusBarView.setVisibility(View.VISIBLE);
             statusBarView.setId(IMMERSION_STATUS_BAR_VIEW_ID);
             mDecorView.addView(statusBarView);
         }
@@ -759,7 +763,14 @@ public final class ImmersionBar implements ImmersionCallback {
             statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     Color.TRANSPARENT, mBarParams.statusBarAlpha));
         }
-        statusBarView.bringToFront();
+        if (needDrawFakeStatusBar()) {
+            statusBarView.setVisibility(View.VISIBLE);
+            statusBarView.bringToFront();
+        } else {
+            statusBarView.setVisibility(View.GONE);
+        }
+        //Dialog窗口尺寸可能在init之后的onStart等时机才确定（如底部半屏Dialog），布局变化后重新评估假状态栏可见性
+        registerFakeBarLayoutListener();
     }
 
     /**
@@ -785,12 +796,185 @@ public final class ImmersionBar implements ImmersionCallback {
         navigationBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                 mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));
 
-        if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable && !mBarParams.hideNavigationBar) {
+        boolean navBarViewEnable = mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable && !mBarParams.hideNavigationBar;
+        if (navBarViewEnable && needDrawFakeNavBar()) {
             navigationBarView.setVisibility(View.VISIBLE);
             navigationBarView.bringToFront();
         } else {
             navigationBarView.setVisibility(View.GONE);
         }
+        //Dialog窗口尺寸可能在init之后的onStart等时机才确定（如顶部/侧边半屏Dialog），布局变化后重新评估假导航栏可见性
+        registerFakeBarLayoutListener();
+    }
+
+    /**
+     * 判断是否需要为当前window绘制假导航栏。
+     * <p>假导航栏是按Gravity.BOTTOM/END加到{@link #mDecorView}上的子view，铺满整屏的Activity/Dialog没问题；
+     * 但顶部、侧边等未覆盖到系统导航栏的Dialog，其window并不与系统导航栏重叠，若仍绘制假栏，会因Gravity.BOTTOM/END
+     * 落在Dialog窗口自身的边缘（如屏幕中部），显示成一条错误的假导航栏。
+     * <p>Dialog的{@code getRootWindowInsets()}返回的是display级导航栏inset，无法反映半屏window的真实几何，
+     * 故这里改用几何判断：window的decorView边缘是否真正抵达屏幕上系统导航栏所在的区域。
+     * 非Dialog（Activity）window恒铺满，直接返回true保持原有行为。
+     *
+     * @return true表示需要绘制假导航栏
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    private boolean needDrawFakeNavBar() {
+        if (!mIsDialog || Build.VERSION.SDK_INT < Version.R) {
+            return true;
+        }
+        return windowReachesNavigationBar();
+    }
+
+    /**
+     * 用几何关系判断window的decorView是否抵达屏幕上系统导航栏所在的区域。
+     * <p>假导航栏按Gravity.BOTTOM（底部导航）或Gravity.END（侧边导航）贴在decorView边缘，
+     * 只有当decorView那条边缘落在屏幕对应的系统导航栏区域内时，假栏才会正确覆盖真实导航栏；
+     * 否则（如顶部半屏Dialog的底边在屏幕中部）会显示成一条错位的假栏。
+     *
+     * @return true表示window抵达了系统导航栏区域，需要绘制假栏；无法取得几何信息时保守返回true
+     */
+    @RequiresApi(api = Version.R)
+    private boolean windowReachesNavigationBar() {
+        int[] screenSize = getRealScreenSize();
+        if (screenSize == null) {
+            //取不到屏幕尺寸，保守绘制，交由后续布局回调纠正
+            return true;
+        }
+        int width = mDecorView.getWidth();
+        int height = mDecorView.getHeight();
+        if (width == 0 || height == 0) {
+            //decorView尚未布局，几何信息不可用，保守绘制，交由布局回调纠正
+            return true;
+        }
+        int[] location = new int[2];
+        mDecorView.getLocationOnScreen(location);
+        int windowBottom = location[1] + height;
+        int windowRight = location[0] + width;
+        if (mBarConfig.isNavigationAtBottom()) {
+            int navHeight = mBarConfig.getNavigationBarHeight();
+            //window底边越过“屏幕底 - 导航栏高”才算覆盖到底部导航栏
+            return windowBottom > screenSize[1] - navHeight;
+        }
+        //侧边导航栏假栏按Gravity.END绘制，需window右边缘抵达屏幕右侧导航栏区域
+        int navWidth = mBarConfig.getNavigationBarWidth();
+        return windowRight > screenSize[0] - navWidth;
+    }
+
+    /**
+     * 判断是否需要为当前window绘制假状态栏。
+     * <p>与{@link #needDrawFakeNavBar()}对称：假状态栏按Gravity.TOP贴在{@link #mDecorView}顶边，
+     * 底部半屏Dialog的顶边落在屏幕中部、并未与真实状态栏重叠，若仍绘制假状态栏会在窗口顶边显示成一条错误的色条。
+     * 非Dialog（Activity）window恒抵达屏幕顶部，直接返回true保持原有行为。
+     *
+     * @return true表示需要绘制假状态栏
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    private boolean needDrawFakeStatusBar() {
+        if (!mIsDialog || Build.VERSION.SDK_INT < Version.R) {
+            return true;
+        }
+        return windowReachesStatusBar();
+    }
+
+    /**
+     * 用几何关系判断window的decorView顶边是否抵达屏幕顶部状态栏所在的区域。
+     * 状态栏恒在屏幕顶部[0, statusBarHeight)，故只需判断decorView顶边是否落入该区间，无需真实屏幕尺寸。
+     *
+     * @return true表示window抵达了状态栏区域，需要绘制假栏；无法取得几何信息时保守返回true
+     */
+    @RequiresApi(api = Version.R)
+    private boolean windowReachesStatusBar() {
+        int width = mDecorView.getWidth();
+        int height = mDecorView.getHeight();
+        if (width == 0 || height == 0) {
+            //decorView尚未布局，几何信息不可用，保守绘制，交由布局回调纠正
+            return true;
+        }
+        int[] location = new int[2];
+        mDecorView.getLocationOnScreen(location);
+        int windowTop = location[1];
+        //window顶边落在屏幕顶部状态栏区域内才算覆盖到状态栏
+        return windowTop < mBarConfig.getStatusBarHeight();
+    }
+
+    /**
+     * 获取屏幕真实尺寸（含系统栏区域）。
+     *
+     * @return int[]{宽, 高}，取不到时返回null
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    private int[] getRealScreenSize() {
+        try {
+            android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
+            if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1) {
+                mWindow.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            } else {
+                mWindow.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            }
+            return new int[]{metrics.widthPixels, metrics.heightPixels};
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 为Dialog的decorView注册布局监听，在Dialog窗口尺寸变化（如onStart设置Gravity/尺寸）后重新评估假状态栏/假导航栏可见性与padding。
+     * <p>{@link BarVisibilityObserver}只在系统栏显隐翻转时回调，Dialog窗口resize时系统栏可见性不变，其去重逻辑会跳过；
+     * 且init时（onViewCreated）Dialog窗口尚未resize，几何信息不准，故用decorView的布局回调在resize后纠正。
+     * <p>仅Dialog、API 30+需要；Activity窗口恒铺满，无需监听。监听只创建一次，重复调用安全。
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    private void registerFakeBarLayoutListener() {
+        if (!mIsDialog || Build.VERSION.SDK_INT < Version.R) {
+            return;
+        }
+        if (mFakeBarLayoutListener == null) {
+            mFakeBarLayoutListener = (v, l, t, r, b, ol, ot, or, ob) -> updateFakeBarByGeometry();
+            mDecorView.addOnLayoutChangeListener(mFakeBarLayoutListener);
+        }
+    }
+
+    /**
+     * 依据当前几何关系纠正假状态栏/假导航栏view的可见性与内容区padding。
+     * <p>init时Dialog窗口尚未resize（decorView为0×0），{@link #needDrawFakeStatusBar()}/{@link #needDrawFakeNavBar()}
+     * 只能保守返回true，会绘制假栏并预留状态栏/导航栏高度的padding；窗口resize、布局完成后几何才有效，这里重新评估：
+     * 半屏Dialog未抵达真实系统栏时（如底部半屏Dialog顶边在屏幕中部、顶部半屏Dialog底边在屏幕中部），
+     * 隐藏对应假栏view并通过{@link #fitsWindows()}撤销那份多余的padding（否则会显示错位色条或留出错误空白）。
+     * <p>{@link View#setPadding}与{@link View#setVisibility}对相同值均为no-op，故每次布局回调重复执行会收敛，不会形成回环。
+     */
+    private void updateFakeBarByGeometry() {
+        View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
+        if (statusBarView != null) {
+            boolean shouldShow = needDrawFakeStatusBar();
+            if (shouldShow) {
+                if (statusBarView.getVisibility() != View.VISIBLE) {
+                    statusBarView.setVisibility(View.VISIBLE);
+                    statusBarView.bringToFront();
+                }
+            } else {
+                if (statusBarView.getVisibility() != View.GONE) {
+                    statusBarView.setVisibility(View.GONE);
+                }
+            }
+        }
+        View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
+        if (navigationBarView != null) {
+            boolean navBarViewEnable = mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable && !mBarParams.hideNavigationBar;
+            boolean shouldShow = navBarViewEnable && needDrawFakeNavBar();
+            if (shouldShow) {
+                if (navigationBarView.getVisibility() != View.VISIBLE) {
+                    navigationBarView.setVisibility(View.VISIBLE);
+                    navigationBarView.bringToFront();
+                }
+            } else {
+                if (navigationBarView.getVisibility() != View.GONE) {
+                    navigationBarView.setVisibility(View.GONE);
+                }
+            }
+        }
+        //窗口resize后几何已确定，重新计算内容区padding，撤销init时保守预留的状态栏/导航栏padding
+        fitsWindows();
     }
 
     /**
@@ -911,7 +1095,10 @@ public final class ImmersionBar implements ImmersionCallback {
         if (isEdgeToEdgeEnforced()) {
             //android 15以上edge-to-edge下，内容会延伸到导航栏后面，需要额外处理导航栏方向的padding
             int right = 0, bottom = 0;
-            if (mBarConfig.hasNavigationBar() && mBarParams.navigationBarEnable && !mBarParams.fullScreen) {
+            //hasNavigationBar是display级判断，半屏Dialog即便没抵达系统导航栏也为true；再用needDrawFakeNavBar几何判断，
+            //避免为顶部/侧边半屏Dialog预留导航栏高度的padding而在其底部/侧边留出错误空白
+            if (mBarConfig.hasNavigationBar() && mBarParams.navigationBarEnable && !mBarParams.fullScreen
+                    && needDrawFakeNavBar()) {
                 //noinspection StatementWithEmptyBody
                 if (mBarParams.hideNavigationBar) {
                     //导航栏被隐藏，无需让位
@@ -1060,6 +1247,10 @@ public final class ImmersionBar implements ImmersionCallback {
         View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (navigationBarView == null) return;
         mBarConfig = new BarConfig(mActivity);
+        //Dialog窗口未覆盖到系统导航栏方向时（如顶部/侧边半屏Dialog），不显示假导航栏，否则会落在窗口边缘显示成错误的一条
+        if (show && !needDrawFakeNavBar()) {
+            show = false;
+        }
         int bottom = mContentView.getPaddingBottom(), right = mContentView.getPaddingRight();
         if (!show) {
             //导航键隐藏了
@@ -1269,6 +1460,10 @@ public final class ImmersionBar implements ImmersionCallback {
             if (mBarVisibilityObserver != null) {
                 mBarVisibilityObserver.disable();
                 mBarVisibilityObserver = null;
+            }
+            if (mFakeBarLayoutListener != null) {
+                mDecorView.removeOnLayoutChangeListener(mFakeBarLayoutListener);
+                mFakeBarLayoutListener = null;
             }
             EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
             NavigationBarObserver.getInstance().removeOnNavigationBarListener(mBarParams.onNavigationBarListener);
