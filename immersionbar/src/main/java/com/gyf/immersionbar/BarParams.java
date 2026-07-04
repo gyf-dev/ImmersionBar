@@ -229,6 +229,22 @@ public class BarParams implements Cloneable {
      */
     OnBarListener onBarListener;
 
+    /**
+     * 清理可能持有页面生命周期对象的引用。
+     */
+    void clear() {
+        NavigationBarObserver.getInstance().removeOnNavigationBarListener(onNavigationBarListener);
+        onKeyboardListener = null;
+        onNavigationBarListener = null;
+        onStatusBarListener = null;
+        onBarListener = null;
+        titleBarView = null;
+        statusBarView = null;
+        if (viewMap != null) {
+            viewMap.clear();
+        }
+    }
+
     @Override
     protected BarParams clone() {
         BarParams barParams = null;

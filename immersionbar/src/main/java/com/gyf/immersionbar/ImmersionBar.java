@@ -59,7 +59,7 @@ import java.util.Set;
 @TargetApi(Version.KITKAT)
 public final class ImmersionBar implements ImmersionCallback {
 
-    private final Activity mActivity;
+    private Activity mActivity;
     private Fragment mSupportFragment;
     private android.app.Fragment mFragment;
     private Dialog mDialog;
@@ -404,6 +404,10 @@ public final class ImmersionBar implements ImmersionCallback {
      */
     @SuppressLint("ObsoleteSdkInt")
     public void init() {
+        if (mActivity == null || mWindow == null || mDecorView == null
+                || mContentView == null || mBarParams == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Version.KITKAT && mBarParams.barEnable) {
             //更新Bar的参数
             updateBarParams();
@@ -423,20 +427,65 @@ public final class ImmersionBar implements ImmersionCallback {
      * 内部方法无需调用
      */
     void onDestroy() {
-        //取消监听
         cancelListener();
-        if (mIsDialog && mParentBar != null) {
-            mParentBar.mBarParams.keyboardEnable = mParentBar.mKeyboardTempEnable;
-            if (mParentBar.mBarParams.barHide != BarHide.FLAG_SHOW_BAR) {
-                mParentBar.setBar();
-            }
-        }
+        restoreDialogParentBar();
+        clearBarParamsReferences();
+        clearWindowReferences();
+        clearOwnerReferences();
+        clearRuntimeReferences();
         mInitialized = false;
     }
 
+    private void restoreDialogParentBar() {
+        if (mIsDialog && mParentBar != null && mParentBar.mBarParams != null) {
+            BarParams parentParams = mParentBar.mBarParams;
+            parentParams.keyboardEnable = mParentBar.mKeyboardTempEnable;
+            if (parentParams.barHide != BarHide.FLAG_SHOW_BAR) {
+                mParentBar.setBar();
+            }
+        }
+    }
+
+    private void clearBarParamsReferences() {
+        if (mBarParams != null) {
+            mBarParams.clear();
+        }
+        for (BarParams barParams : mTagMap.values()) {
+            if (barParams != null) {
+                barParams.clear();
+            }
+        }
+        mTagMap.clear();
+        mBarParams = null;
+        mBarConfig = null;
+    }
+
+    private void clearWindowReferences() {
+        mWindow = null;
+        mDecorView = null;
+        mContentView = null;
+    }
+
+    private void clearOwnerReferences() {
+        mParentBar = null;
+        mSupportFragment = null;
+        mFragment = null;
+        mDialog = null;
+        mActivity = null;
+    }
+
+    private void clearRuntimeReferences() {
+        mImmersionDelegate = null;
+        mNavigationBarVisible = null;
+        mStatusBarVisible = null;
+    }
+
     void onResume() {
+        if (mActivity == null || mBarParams == null) {
+            return;
+        }
         updateBarConfig();
-        if (!mIsFragment && mInitialized && mBarParams != null) {
+        if (!mIsFragment && mInitialized) {
             if (OSUtils.isEMUI3_x() && mBarParams.navigationBarWithEMUI3Enable) {
                 init();
             } else {
@@ -448,6 +497,9 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     void onConfigurationChanged(Configuration newConfig) {
+        if (mActivity == null || mDecorView == null || mBarParams == null) {
+            return;
+        }
         updateBarConfig();
         if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT == Version.KITKAT) {
             if (mInitialized && !mIsFragment && mBarParams.navigationBarWithKitkatEnable) {
@@ -1064,6 +1116,9 @@ public final class ImmersionBar implements ImmersionCallback {
 
     @Override
     public void run() {
+        if (mContentView == null || mBarParams == null) {
+            return;
+        }
         postFitsWindowsBelowLOLLIPOP();
     }
 
@@ -1191,6 +1246,9 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param navigationVisible 导航栏当前是否可见
      */
     void onBarVisibilityChange(boolean statusVisible, boolean navigationVisible) {
+        if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null) {
+            return;
+        }
         handleStatusBarViewVisibility(statusVisible);
         handleNavigationBarViewVisibility(navigationVisible);
 
@@ -1226,6 +1284,9 @@ public final class ImmersionBar implements ImmersionCallback {
 
     @Override
     public void onNavigationBarChange(boolean show, NavigationBarType type) {
+        if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null) {
+            return;
+        }
         handleNavigationBarViewVisibility(show);
         //导航模式切换（三键⇄手势）会改变导航类型/是否手势/高度等，刷新BarProperties快照并按去重回调OnBarListener
         if (mImmersionDelegate != null) {
@@ -1425,7 +1486,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * Transform view.
      */
     private void transformView() {
-        if (!mBarParams.viewMap.isEmpty()) {
+        if (mBarParams != null && !mBarParams.viewMap.isEmpty()) {
             Set<Map.Entry<View, Map<Integer, Integer>>> entrySet = mBarParams.viewMap.entrySet();
             for (Map.Entry<View, Map<Integer, Integer>> entry : entrySet) {
                 View view = entry.getKey();
@@ -1452,22 +1513,25 @@ public final class ImmersionBar implements ImmersionCallback {
      * Cancel listener.
      */
     private void cancelListener() {
-        if (mActivity != null) {
-            if (mFitsKeyboard != null) {
-                mFitsKeyboard.cancel();
-                mFitsKeyboard = null;
-            }
-            if (mBarVisibilityObserver != null) {
-                mBarVisibilityObserver.disable();
-                mBarVisibilityObserver = null;
-            }
+        if (mFitsKeyboard != null) {
+            mFitsKeyboard.cancel();
+            mFitsKeyboard = null;
+        }
+        if (mBarVisibilityObserver != null) {
+            mBarVisibilityObserver.disable();
+            mBarVisibilityObserver = null;
+        }
+        if (mContentView != null) {
+            mContentView.removeCallbacks(this);
+        }
+        if (mDecorView != null) {
+            mDecorView.removeCallbacks(this);
             if (mFakeBarLayoutListener != null) {
                 mDecorView.removeOnLayoutChangeListener(mFakeBarLayoutListener);
-                mFakeBarLayoutListener = null;
             }
-            EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
-            NavigationBarObserver.getInstance().removeOnNavigationBarListener(mBarParams.onNavigationBarListener);
         }
+        mFakeBarLayoutListener = null;
+        EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
     }
 
     /**
@@ -1567,6 +1631,7 @@ public final class ImmersionBar implements ImmersionCallback {
         return mPaddingBottom;
     }
 
+    @Nullable
     Activity getActivity() {
         return mActivity;
     }
