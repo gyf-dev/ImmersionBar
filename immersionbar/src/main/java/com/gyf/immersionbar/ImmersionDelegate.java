@@ -155,15 +155,15 @@ class ImmersionDelegate implements Runnable {
             Activity activity = mImmersionBar.getActivity();
             BarConfig barConfig = new BarConfig(activity);
             mBarProperties.setStatusBarHeight(barConfig.getStatusBarHeight());
+            mBarProperties.setStatusBarVisible(barConfig.isStatusBarVisible());
             mBarProperties.setNavigationBar(barConfig.hasNavigationBar());
             mBarProperties.setNavigationAtBottom(barConfig.isNavigationAtBottom());
             //导航栏类型与是否手势导航（一次查询同时填两个字段）
             GestureUtils.GestureBean gestureBean = GestureUtils.getGestureBean(activity);
             mBarProperties.setNavigationBarType(gestureBean.type);
             mBarProperties.setGestureNavigation(gestureBean.isGesture);
-            //系统栏可见性快照：配置变化时在此读取，运行时显隐另由refreshBarProperties触发重读，二者共同保证实时
-            setupBarVisibility(activity);
             mBarProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
+            mBarProperties.setNavigationBarVisible(barConfig.isNavigationBarVisible());
             mBarProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
             mBarProperties.setActionBarHeight(barConfig.getActionBarHeight());
             boolean notchScreen = NotchUtils.hasNotchScreen(activity);
@@ -177,31 +177,6 @@ class ImmersionDelegate implements Runnable {
                 mLastBarProperties = new BarProperties(mBarProperties);
                 mOnBarListener.onBarChange(mBarProperties);
             }
-        }
-    }
-
-    /**
-     * 取当前系统栏可见性快照并填入mBarProperties。
-     * 与{@link BarVisibilityObserver}保持一致：R+用WindowInsets，16~29用SystemUiVisibility的flag位，
-     * 取不到时保持默认（可见）。配置变化与运行时显隐（见{@link #refreshBarProperties()}）都会重新调用本方法。
-     *
-     * @param activity activity
-     */
-    private void setupBarVisibility(Activity activity) {
-        if (Build.VERSION.SDK_INT < Version.JELLY_BEAN) {
-            return;
-        }
-        View decorView = activity.getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT >= Version.R) {
-            WindowInsets insets = decorView.getRootWindowInsets();
-            if (insets != null) {
-                mBarProperties.setStatusBarVisible(insets.isVisible(WindowInsets.Type.statusBars()));
-                mBarProperties.setNavigationBarVisible(insets.isVisible(WindowInsets.Type.navigationBars()));
-            }
-        } else {
-            int visibility = decorView.getSystemUiVisibility();
-            mBarProperties.setStatusBarVisible((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0);
-            mBarProperties.setNavigationBarVisible((visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0);
         }
     }
 }

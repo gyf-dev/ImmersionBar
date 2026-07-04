@@ -6,7 +6,6 @@ import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
 import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -33,9 +32,11 @@ import androidx.annotation.RequiresApi;
 class BarConfig {
 
     private final int mStatusBarHeight;
+    private final boolean mStatusBarVisible;
     private final int mActionBarHeight;
     private final boolean mHasNavigationBar;
     private final int mNavigationBarHeight;
+    private final boolean mNavigationBarVisible;
     private final int mNavigationBarWidth;
     private final boolean mInPortrait;
     private final float mSmallestWidthDp;
@@ -62,8 +63,10 @@ class BarConfig {
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         mSmallestWidthDp = getSmallestWidthDp(window);
         mStatusBarHeight = getStatusBarHeight(window);
+        mStatusBarVisible = isStatusBarVisible(window);
         mActionBarHeight = getActionBarHeight(window);
         mNavigationBarHeight = getNavigationBarHeight(window);
+        mNavigationBarVisible = isNavigationBarVisible(window);
         mNavigationBarWidth = getNavigationBarWidth(window);
         mHasNavigationBar = (mNavigationBarHeight > 0);
         mNavigationAtBottom = computeNavigationAtBottom(window);
@@ -91,12 +94,44 @@ class BarConfig {
     @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
     private int getStatusBarHeight(Window window) {
         if (Build.VERSION.SDK_INT >= Version.R) {
-            Insets statusInsets = getStatusBarInsets(window);
+            Insets statusInsets = getStatusBarInsetsIgnoringVisibility(window);
             if (statusInsets != null) {
                 return statusInsets.top;
             }
         }
         return getInternalDimensionSize(window.getContext(), IMMERSION_STATUS_BAR_HEIGHT);
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
+    private boolean isStatusBarVisible(Window window) {
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            WindowInsets insets = window.getDecorView().getRootWindowInsets();
+            if (insets != null) {
+                return insets.isVisible(WindowInsets.Type.statusBars());
+            }
+        } else if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
+            View decorView = window.getDecorView();
+            int visibility = decorView.getSystemUiVisibility();
+            return (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
+        }
+        return true;
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
+    private boolean isNavigationBarVisible(Window window) {
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            WindowInsets insets = window.getDecorView().getRootWindowInsets();
+            if (insets != null) {
+                return insets.isVisible(WindowInsets.Type.navigationBars());
+            }
+        } else if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
+            View decorView = window.getDecorView();
+            int visibility = decorView.getSystemUiVisibility();
+            return (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+        }
+        return true;
     }
 
     private int getActionBarHeight(Window window) {
@@ -207,23 +242,23 @@ class BarConfig {
 
     /**
      * 获取系统状态栏的WindowInsets（API 30+，挖孔屏等机型下比资源status_bar_height更可靠的状态栏尺寸来源）。
-     * 与{@link #getNavigationBarInsets(Window)}对称：优先WindowMetrics，其次decorView的rootWindowInsets。
+     * 使用getInsetsIgnoringVisibility以获取状态栏的实际物理尺寸，无论其是否被隐藏。
      *
      * @param window window
      * @return 状态栏insets，不可用时返回null
      */
     @RequiresApi(Version.R)
-    private static Insets getStatusBarInsets(Window window) {
+    private static Insets getStatusBarInsetsIgnoringVisibility(Window window) {
         WindowManager windowManager = window.getWindowManager();
         if (windowManager != null) {
             WindowInsets insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
-            return insets.getInsets(WindowInsets.Type.statusBars());
+            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars());
         }
         //回退：视图已attach时decorView也能拿到
         View decorView = window.getDecorView();
         WindowInsets insets = decorView.getRootWindowInsets();
         if (insets != null) {
-            return insets.getInsets(WindowInsets.Type.statusBars());
+            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars());
         }
         return null;
     }
@@ -287,6 +322,15 @@ class BarConfig {
     }
 
     /**
+     * Check if the system status bar is visible.
+     *
+     * @return True if the status bar is visible, False otherwise.
+     */
+    boolean isStatusBarVisible() {
+        return mStatusBarVisible;
+    }
+
+    /**
      * Get the height of the action bar.
      *
      * @return The height of the action bar (in pixels).
@@ -311,6 +355,15 @@ class BarConfig {
      */
     int getNavigationBarHeight() {
         return mNavigationBarHeight;
+    }
+
+    /**
+     * Check if the system navigation bar is visible.
+     *
+     * @return True if the navigation bar is visible, False otherwise.
+     */
+    boolean isNavigationBarVisible() {
+        return mNavigationBarVisible;
     }
 
     /**
