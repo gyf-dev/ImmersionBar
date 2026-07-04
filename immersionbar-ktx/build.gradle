@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
 
 android {
     namespace 'com.gyf.immersionbar.ktx'
@@ -28,7 +30,7 @@ android {
 }
 
 dependencies {
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly 'androidx.appcompat:appcompat:1.4.1'
+    compileOnly libs.kotlin.stdlib
+    compileOnly libs.androidx.appcompat
     compileOnly project(':immersionbar')
 }

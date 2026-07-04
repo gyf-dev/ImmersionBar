@@ -1,25 +1,11 @@
-import java.util.function.Consumer
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+}
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    ext.kotlin_version = '1.9.24'
-    ext.immersionbar_version = '3.2.2'
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        mavenCentral()
-        google()
-        jcenter()
-    }
-    dependencies {
-
-        classpath 'com.android.tools.build:gradle:8.6.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+ext.immersionbar_version = libs.versions.immersionbar.get()
 
 allprojects {
     repositories {
@@ -45,21 +31,13 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-subprojects.forEach(new Consumer<Project>() {
-    @Override
-    void accept(Project project) {
-        ["com.android.library"].forEach(new Consumer<String>() {
-            @Override
-            void accept(String s) {
-                project.getPlugins().withId(s) {
-                    project.afterEvaluate {
-                        def file = new File(project.getProjectDir().parent, "gradle/publish-mavencentral.gradle")
-                        if (file.exists()) {
-                            project.apply from: file
-                        }
-                    }
-                }
+subprojects { project ->
+    project.plugins.withId("com.android.library") {
+        project.afterEvaluate {
+            def file = new File(project.getProjectDir().parent, "gradle/publish-mavencentral.gradle")
+            if (file.exists()) {
+                project.apply from: file
             }
-        })
+        }
     }
-})
+}

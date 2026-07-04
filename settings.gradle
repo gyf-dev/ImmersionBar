@@ -1,1 +1,13 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'ImmersionBar'
+
 include ':immersionbar', ':immersionbar-ktx', ':immersionbar-components', ':immersionbar-sample'
