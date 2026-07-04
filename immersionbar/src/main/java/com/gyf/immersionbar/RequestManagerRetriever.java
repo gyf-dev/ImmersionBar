@@ -56,8 +56,8 @@ class RequestManagerRetriever implements Handler.Callback {
         mHandler = new Handler(Looper.getMainLooper(), this);
     }
 
-    private final Map<android.app.FragmentManager, RequestBarManagerFragment> mPendingFragments = new HashMap<>();
-    private final Map<FragmentManager, SupportRequestBarManagerFragment> mPendingSupportFragments = new HashMap<>();
+    private final Map<android.app.FragmentManager, Map<String, RequestBarManagerFragment>> mPendingFragments = new HashMap<>();
+    private final Map<FragmentManager, Map<String, SupportRequestBarManagerFragment>> mPendingSupportFragments = new HashMap<>();
 
     private final Map<String, RequestBarManagerFragment> mPendingRemoveFragments = new HashMap<>();
     private final Map<String, SupportRequestBarManagerFragment> mPendingSupportRemoveFragments = new HashMap<>();
@@ -232,12 +232,12 @@ class RequestManagerRetriever implements Handler.Callback {
         boolean handled = true;
         switch (msg.what) {
             case ID_REMOVE_FRAGMENT_MANAGER:
-                android.app.FragmentManager fm = (android.app.FragmentManager) msg.obj;
-                mPendingFragments.remove(fm);
+                PendingFragment pendingFragment = (PendingFragment) msg.obj;
+                removePendingFragment((android.app.FragmentManager) pendingFragment.fragmentManager, pendingFragment.tag);
                 break;
             case ID_REMOVE_SUPPORT_FRAGMENT_MANAGER:
-                FragmentManager supportFm = (FragmentManager) msg.obj;
-                mPendingSupportFragments.remove(supportFm);
+                PendingFragment pendingSupportFragment = (PendingFragment) msg.obj;
+                removePendingSupportFragment((FragmentManager) pendingSupportFragment.fragmentManager, pendingSupportFragment.tag);
                 break;
             case ID_REMOVE_FRAGMENT_MANAGER_REMOVE:
                 String tag = (String) msg.obj;
@@ -258,33 +258,74 @@ class RequestManagerRetriever implements Handler.Callback {
         return getFragment(fm, tag, false);
     }
 
+    private RequestBarManagerFragment getPendingFragment(android.app.FragmentManager fm, String tag) {
+        Map<String, RequestBarManagerFragment> pendingFragments = mPendingFragments.get(fm);
+        return pendingFragments == null ? null : pendingFragments.get(tag);
+    }
+
+    private void putPendingFragment(android.app.FragmentManager fm, String tag, RequestBarManagerFragment fragment) {
+        Map<String, RequestBarManagerFragment> pendingFragments = mPendingFragments.get(fm);
+        if (pendingFragments == null) {
+            pendingFragments = new HashMap<>();
+            mPendingFragments.put(fm, pendingFragments);
+        }
+        pendingFragments.put(tag, fragment);
+    }
+
+    private void removePendingFragment(android.app.FragmentManager fm, String tag) {
+        Map<String, RequestBarManagerFragment> pendingFragments = mPendingFragments.get(fm);
+        if (pendingFragments != null) {
+            pendingFragments.remove(tag);
+            if (pendingFragments.isEmpty()) {
+                mPendingFragments.remove(fm);
+            }
+        }
+    }
+
+    private SupportRequestBarManagerFragment getPendingSupportFragment(FragmentManager fm, String tag) {
+        Map<String, SupportRequestBarManagerFragment> pendingFragments = mPendingSupportFragments.get(fm);
+        return pendingFragments == null ? null : pendingFragments.get(tag);
+    }
+
+    private void putPendingSupportFragment(FragmentManager fm, String tag, SupportRequestBarManagerFragment fragment) {
+        Map<String, SupportRequestBarManagerFragment> pendingFragments = mPendingSupportFragments.get(fm);
+        if (pendingFragments == null) {
+            pendingFragments = new HashMap<>();
+            mPendingSupportFragments.put(fm, pendingFragments);
+        }
+        pendingFragments.put(tag, fragment);
+    }
+
+    private void removePendingSupportFragment(FragmentManager fm, String tag) {
+        Map<String, SupportRequestBarManagerFragment> pendingFragments = mPendingSupportFragments.get(fm);
+        if (pendingFragments != null) {
+            pendingFragments.remove(tag);
+            if (pendingFragments.isEmpty()) {
+                mPendingSupportFragments.remove(fm);
+            }
+        }
+    }
+
     private RequestBarManagerFragment getFragment(android.app.FragmentManager fm, String tag, boolean destroy) {
         RequestBarManagerFragment fragment = (RequestBarManagerFragment) fm.findFragmentByTag(tag);
         if (fragment == null) {
-            fragment = mPendingFragments.get(fm);
+            fragment = getPendingFragment(fm, tag);
             if (fragment == null) {
                 if (destroy) {
                     return null;
                 } else {
                     if (Build.VERSION.SDK_INT >= Version.O) {
                         for (android.app.Fragment fmFragment : fm.getFragments()) {
-                            if (fmFragment instanceof RequestBarManagerFragment) {
-                                String oldTag = fmFragment.getTag();
-                                if (oldTag == null) {
-                                    fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
-                                } else {
-                                    if (oldTag.contains(mNotOnly)) {
-                                        fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
-                                    }
-                                }
+                            if (fmFragment instanceof RequestBarManagerFragment && fmFragment.getTag() == null) {
+                                fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
                             }
                         }
                     }
                 }
                 fragment = new RequestBarManagerFragment();
-                mPendingFragments.put(fm, fragment);
+                putPendingFragment(fm, tag, fragment);
                 fm.beginTransaction().add(fragment, tag).commitAllowingStateLoss();
-                mHandler.obtainMessage(ID_REMOVE_FRAGMENT_MANAGER, fm).sendToTarget();
+                mHandler.obtainMessage(ID_REMOVE_FRAGMENT_MANAGER, new PendingFragment(fm, tag)).sendToTarget();
             }
         }
         if (destroy) {
@@ -305,28 +346,21 @@ class RequestManagerRetriever implements Handler.Callback {
     private SupportRequestBarManagerFragment getSupportFragment(FragmentManager fm, String tag, boolean destroy) {
         SupportRequestBarManagerFragment fragment = (SupportRequestBarManagerFragment) fm.findFragmentByTag(tag);
         if (fragment == null) {
-            fragment = mPendingSupportFragments.get(fm);
+            fragment = getPendingSupportFragment(fm, tag);
             if (fragment == null) {
                 if (destroy) {
                     return null;
                 } else {
                     for (Fragment fmFragment : fm.getFragments()) {
-                        if (fmFragment instanceof SupportRequestBarManagerFragment) {
-                            String oldTag = fmFragment.getTag();
-                            if (oldTag == null) {
-                                fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
-                            } else {
-                                if (oldTag.contains(mNotOnly)) {
-                                    fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
-                                }
-                            }
+                        if (fmFragment instanceof SupportRequestBarManagerFragment && fmFragment.getTag() == null) {
+                            fm.beginTransaction().remove(fmFragment).commitAllowingStateLoss();
                         }
                     }
                 }
                 fragment = new SupportRequestBarManagerFragment();
-                mPendingSupportFragments.put(fm, fragment);
+                putPendingSupportFragment(fm, tag, fragment);
                 fm.beginTransaction().add(fragment, tag).commitAllowingStateLoss();
-                mHandler.obtainMessage(ID_REMOVE_SUPPORT_FRAGMENT_MANAGER, fm).sendToTarget();
+                mHandler.obtainMessage(ID_REMOVE_SUPPORT_FRAGMENT_MANAGER, new PendingFragment(fm, tag)).sendToTarget();
             }
         }
         if (destroy) {
@@ -343,6 +377,16 @@ class RequestManagerRetriever implements Handler.Callback {
     private static <T> void checkNotNull(@Nullable T arg, @NonNull String message) {
         if (arg == null) {
             throw new NullPointerException(message);
+        }
+    }
+
+    private static class PendingFragment {
+        final Object fragmentManager;
+        final String tag;
+
+        PendingFragment(Object fragmentManager, String tag) {
+            this.fragmentManager = fragmentManager;
+            this.tag = tag;
         }
     }
 }

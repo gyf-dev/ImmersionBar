@@ -150,7 +150,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mScrollY += dy;
-                if (mScrollY < 0) {
+                if (!recyclerView.canScrollVertically(-1)) {
+                    mScrollY = 0;
+                } else if (mScrollY < 0) {
                     mScrollY = 0;
                 }
                 float alpha = Math.min(1f, (float) mScrollY / mBannerHeight);
@@ -448,6 +450,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNetworkEvent(NetworkEvent networkEvent) {
         if (mNetworkView != null) {

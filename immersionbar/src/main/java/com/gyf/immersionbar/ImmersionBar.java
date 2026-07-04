@@ -440,8 +440,10 @@ public final class ImmersionBar implements ImmersionCallback {
         if (mIsDialog && mParentBar != null && mParentBar.mBarParams != null) {
             BarParams parentParams = mParentBar.mBarParams;
             parentParams.keyboardEnable = mParentBar.mKeyboardTempEnable;
-            if (parentParams.barHide != BarHide.FLAG_SHOW_BAR) {
+            if (mParentBar.mInitialized && parentParams.barEnable) {
+                mParentBar.updateBarConfig();
                 mParentBar.setBar();
+                mParentBar.fitsKeyboard();
             }
         }
     }
