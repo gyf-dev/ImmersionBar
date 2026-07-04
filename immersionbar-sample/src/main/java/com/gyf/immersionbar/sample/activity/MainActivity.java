@@ -24,7 +24,6 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
-import com.gyf.immersionbar.OnStatusBarListener;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.BuildConfig;
 import com.gyf.immersionbar.sample.R;
@@ -65,6 +64,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private View mNetworkView;
 
     private int mBannerHeight;
+    private int mScrollY;
     private int mBannerPosition = -1;
 
     private long mFirstPressedTime;
@@ -149,13 +149,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int offset = recyclerView.computeVerticalScrollOffset();
-                if (offset < mBannerHeight) {
-                    float alpha = (float) offset / mBannerHeight;
-                    binding.toolbar.setAlpha(alpha);
-                } else {
-                    binding.toolbar.setAlpha(1);
+                mScrollY += dy;
+                if (mScrollY < 0) {
+                    mScrollY = 0;
                 }
+                float alpha = Math.min(1f, (float) mScrollY / mBannerHeight);
+                binding.toolbar.setAlpha(alpha);
             }
         });
         mMainAdapter.setOnItemClickListener((adapter, view, position) -> {
