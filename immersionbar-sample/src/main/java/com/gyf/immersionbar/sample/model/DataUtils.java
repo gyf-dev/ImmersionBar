@@ -45,6 +45,7 @@ public class DataUtils {
         funBeans.add(new FunBean(context.getString(R.string.text_full), ContextCompat.getDrawable(context, R.mipmap.icon_28)));
         funBeans.add(new FunBean(context.getString(R.string.text_bar_font_dark), ContextCompat.getDrawable(context, R.mipmap.icon_29)));
         funBeans.add(new FunBean(context.getString(R.string.text_bar_font_light), ContextCompat.getDrawable(context, R.mipmap.icon_30)));
+        funBeans.add(new FunBean(context.getString(R.string.text_compose), ContextCompat.getDrawable(context, R.mipmap.icon_30)));
         return funBeans;
     }
 }

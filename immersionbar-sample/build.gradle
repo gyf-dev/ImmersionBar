@@ -8,7 +8,7 @@ android {
     compileSdkVersion 35
     defaultConfig {
         applicationId "com.gyf.immersionbar.sample"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 35
         versionCode 1
         versionName "$immersionbar_version"
@@ -49,6 +49,10 @@ android {
     buildFeatures {
         buildConfig true
         viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
 }
 
@@ -61,6 +65,12 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.kotlin.stdlib
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.ui.tooling.preview
+    debugImplementation libs.androidx.compose.ui.tooling
     testImplementation libs.junit
     implementation project(':immersionbar')
     implementation project(':immersionbar-components')

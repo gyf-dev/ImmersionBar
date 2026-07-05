@@ -171,6 +171,9 @@
         <activity
             android:name="com.gyf.immersionbar.sample.activity.KotlinActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
+        <activity
+            android:name="com.gyf.immersionbar.sample.activity.ComposeActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden" />
 
         <service
             android:name="com.gyf.immersionbar.sample.service.NetworkService"

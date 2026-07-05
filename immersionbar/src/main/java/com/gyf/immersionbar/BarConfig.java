@@ -7,6 +7,7 @@ import static com.gyf.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -22,6 +23,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 /**
  * The type Bar config.
@@ -47,17 +49,44 @@ class BarConfig {
      *
      * @param activity the activity
      */
-    BarConfig(Activity activity) {
+    BarConfig(@NonNull Activity activity) {
         this(activity.getWindow());
     }
 
     /**
      * Instantiates a new Bar config.
-     * 以Window为核心，同时支持Activity和Dialog。
+     *
+     * @param fragment the fragment
+     */
+    BarConfig(@NonNull Fragment fragment) {
+        this(requireWindow(WindowUtils.getWindow(fragment)));
+    }
+
+    /**
+     * Instantiates a new Bar config.
+     *
+     * @param fragment the fragment
+     */
+    BarConfig(@NonNull android.app.Fragment fragment) {
+        this(requireWindow(WindowUtils.getWindow(fragment)));
+    }
+
+    /**
+     * Instantiates a new Bar config.
+     *
+     * @param dialog the dialog
+     */
+    BarConfig(@NonNull Dialog dialog) {
+        this(requireWindow(WindowUtils.getWindow(dialog)));
+    }
+
+    /**
+     * Instantiates a new Bar config.
+     * 以Window为核心，同时支持Activity、Fragment和Dialog。
      *
      * @param window the window
      */
-    BarConfig(Window window) {
+    BarConfig(@NonNull Window window) {
         Context context = window.getContext();
         Resources res = context.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
@@ -70,6 +99,14 @@ class BarConfig {
         mNavigationBarWidth = getNavigationBarWidth(window);
         mHasNavigationBar = (mNavigationBarHeight > 0);
         mNavigationAtBottom = computeNavigationAtBottom(window);
+    }
+
+    @NonNull
+    private static Window requireWindow(Window window) {
+        if (window == null) {
+            throw new IllegalArgumentException("Owner must be attached to a Window.");
+        }
+        return window;
     }
 
     /**

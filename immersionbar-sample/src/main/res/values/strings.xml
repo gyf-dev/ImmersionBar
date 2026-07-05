@@ -2,6 +2,7 @@
     <string name="app_name">ImmersionBar</string>
     <string name="text_params">Bar相关参数信息</string>
     <string name="text_params_kotlin">Bar相关参数信息(kotlin)</string>
+    <string name="text_compose">结合Compose使用</string>
     <string name="text_pic_color">图片状态栏 + 彩色导航栏</string>
     <string name="text_pic">全屏图片</string>
     <string name="text_color">彩色状态栏 + 彩色导航栏</string>

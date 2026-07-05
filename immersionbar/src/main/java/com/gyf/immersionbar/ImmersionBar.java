@@ -16,7 +16,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -293,7 +292,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull Dialog dialog) {
-        return getRetriever().get(getActivityFromDialog(dialog), dialog, false);
+        return getRetriever().get(ActivityUtils.getActivity(dialog), dialog, false);
     }
 
     /**
@@ -304,27 +303,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      */
     public static ImmersionBar with(@NonNull Dialog dialog, boolean isOnly) {
-        return getRetriever().get(getActivityFromDialog(dialog), dialog, isOnly);
-    }
-
-    /**
-     * 从Dialog解析其所属Activity。
-     * AlertDialog.Builder(context, theme)会把Activity包进ContextThemeWrapper，
-     * 故需沿ContextWrapper.getBaseContext()链解包；getOwnerActivity()并不可靠，常为null。
-     *
-     * @param dialog the dialog
-     * @return the activity
-     */
-    private static Activity getActivityFromDialog(@NonNull Dialog dialog) {
-        Context context = dialog.getContext();
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity) context;
-            }
-            context = ((ContextWrapper) context).getBaseContext();
-        }
-        throw new IllegalArgumentException("dialog must be created with an Activity context, " +
-                "or use ImmersionBar.with(activity, dialog) instead");
+        return getRetriever().get(ActivityUtils.getActivity(dialog), dialog, isOnly);
     }
 
     /**
@@ -1432,9 +1411,11 @@ public final class ImmersionBar implements ImmersionCallback {
                         controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_HIDE_STATUS_BAR:
+                        controller.show(WindowInsets.Type.navigationBars());
                         controller.hide(WindowInsets.Type.statusBars());
                         break;
                     case FLAG_HIDE_NAVIGATION_BAR:
+                        controller.show(WindowInsets.Type.statusBars());
                         controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_SHOW_BAR:
@@ -1451,9 +1432,7 @@ public final class ImmersionBar implements ImmersionCallback {
 
     private void unsetSystemUiFlag(int systemUiFlag) {
         View decorView = mWindow.getDecorView();
-        decorView.setSystemUiVisibility(
-                decorView.getSystemUiVisibility()
-                        & ~systemUiFlag);
+        decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() & ~systemUiFlag);
     }
 
     /**
@@ -1468,15 +1447,15 @@ public final class ImmersionBar implements ImmersionCallback {
         switch (mFitsStatusBarType) {
             case FLAG_FITS_TITLE:
                 //通过设置paddingTop重新绘制标题栏高度
-                setTitleBar(mActivity, fixHeight, mBarParams.titleBarView);
+                setTitleBar(fixHeight, mBarParams.titleBarView);
                 break;
             case FLAG_FITS_TITLE_MARGIN_TOP:
                 //通过设置marginTop重新绘制标题栏高度
-                setTitleBarMarginTop(mActivity, fixHeight, mBarParams.titleBarView);
+                setTitleBarMarginTop(fixHeight, mBarParams.titleBarView);
                 break;
             case FLAG_FITS_STATUS:
                 //通过状态栏高度动态设置状态栏布局
-                setStatusBarView(mActivity, fixHeight, mBarParams.statusBarView);
+                setStatusBarView(fixHeight, mBarParams.statusBarView);
                 break;
             default:
                 break;
@@ -1703,20 +1682,9 @@ public final class ImmersionBar implements ImmersionCallback {
         return OSUtils.isMIUI6Later() || Build.VERSION.SDK_INT >= Version.O;
     }
 
-    /**
-     * 为标题栏paddingTop和高度增加fixHeight的高度
-     * Sets title bar.
-     *
-     * @param activity  the activity
-     * @param fixHeight the fix height
-     * @param view      the view
-     */
     @SuppressLint("ObsoleteSdkInt")
-    public static void setTitleBar(final Activity activity, int fixHeight, View... view) {
+    public static void setTitleBar(int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
-            if (activity == null) {
-                return;
-            }
             if (fixHeight < 0) {
                 fixHeight = 0;
             }
@@ -1738,17 +1706,14 @@ public final class ImmersionBar implements ImmersionCallback {
                     if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT ||
                             layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
                         final ViewGroup.LayoutParams finalLayoutParams = layoutParams;
-                        final Integer finalFitsHeight = fitsHeight;
-                        v.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finalLayoutParams.height = v.getHeight() + statusBarHeight - finalFitsHeight;
-                                v.setPadding(v.getPaddingLeft(),
-                                        v.getPaddingTop() + statusBarHeight - finalFitsHeight,
-                                        v.getPaddingRight(),
-                                        v.getPaddingBottom());
-                                v.setLayoutParams(finalLayoutParams);
-                            }
+                        final int finalFitsHeight = fitsHeight;
+                        v.post(() -> {
+                            finalLayoutParams.height = v.getHeight() + statusBarHeight - finalFitsHeight;
+                            v.setPadding(v.getPaddingLeft(),
+                                    v.getPaddingTop() + statusBarHeight - finalFitsHeight,
+                                    v.getPaddingRight(),
+                                    v.getPaddingBottom());
+                            v.setLayoutParams(finalLayoutParams);
                         });
                     } else {
                         layoutParams.height += statusBarHeight - fitsHeight;
@@ -1768,52 +1733,37 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setTitleBar(final Activity activity, View... view) {
-        setTitleBar(activity, getStatusBarHeight(activity), view);
+    public static void setTitleBar(@NonNull Activity activity, View... view) {
+        setTitleBar(getStatusBarHeight(activity), view);
     }
 
-    public static void setTitleBar(Fragment fragment, int fixHeight, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBar(fragment.getActivity(), fixHeight, view);
+    public static void setTitleBar(@NonNull Fragment fragment, View... view) {
+        setTitleBar(getStatusBarHeight(fragment), view);
     }
 
-    public static void setTitleBar(Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBar(fragment.getActivity(), view);
+    public static void setTitleBar(@NonNull android.app.Fragment fragment, View... view) {
+        setTitleBar(getStatusBarHeight(fragment), view);
     }
 
-    public static void setTitleBar(android.app.Fragment fragment, int fixHeight, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBar(fragment.getActivity(), fixHeight, view);
+    public static void setTitleBar(@NonNull Context context, View... view) {
+        setTitleBar(getStatusBarHeight(context), view);
     }
 
-    public static void setTitleBar(android.app.Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBar(fragment.getActivity(), view);
+    public static void setTitleBar(@NonNull Window window, View... view) {
+        setTitleBar(getStatusBarHeight(window), view);
     }
 
-    /**
-     * 为标题栏marginTop增加fixHeight的高度
-     * Sets title bar margin top.
-     *
-     * @param activity  the activity
-     * @param fixHeight the fix height
-     * @param view      the view
-     */
+    public static void setTitleBar(@NonNull View target, View... view) {
+        setTitleBar(getStatusBarHeight(target), view);
+    }
+
+    public static void setTitleBar(@NonNull Dialog dialog, View... view) {
+        setTitleBar(getStatusBarHeight(dialog), view);
+    }
+
     @SuppressLint("ObsoleteSdkInt")
-    public static void setTitleBarMarginTop(Activity activity, int fixHeight, View... view) {
+    public static void setTitleBarMarginTop(int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
-            if (activity == null) {
-                return;
-            }
             if (fixHeight < 0) {
                 fixHeight = 0;
             }
@@ -1842,6 +1792,7 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     }
 
+
     /**
      * 为标题栏marginTop增加状态栏的高度
      * Sets title bar margin top.
@@ -1849,53 +1800,37 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setTitleBarMarginTop(Activity activity, View... view) {
-        setTitleBarMarginTop(activity, getStatusBarHeight(activity), view);
+    public static void setTitleBarMarginTop(@NonNull Activity activity, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(activity), view);
     }
 
-    public static void setTitleBarMarginTop(Fragment fragment, int fixHeight, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBarMarginTop(fragment.getActivity(), fixHeight, view);
+    public static void setTitleBarMarginTop(@NonNull Fragment fragment, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(fragment), view);
     }
 
-    public static void setTitleBarMarginTop(Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBarMarginTop(fragment.getActivity(), view);
+    public static void setTitleBarMarginTop(@NonNull android.app.Fragment fragment, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(fragment), view);
     }
 
-    public static void setTitleBarMarginTop(android.app.Fragment fragment, int fixHeight, View...
-            view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBarMarginTop(fragment.getActivity(), fixHeight, view);
+    public static void setTitleBarMarginTop(@NonNull Context context, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(context), view);
     }
 
-    public static void setTitleBarMarginTop(android.app.Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setTitleBarMarginTop(fragment.getActivity(), view);
+    public static void setTitleBarMarginTop(@NonNull Window window, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(window), view);
     }
 
-    /**
-     * 单独在标题栏的位置增加view，高度为fixHeight的高度
-     * Sets status bar view.
-     *
-     * @param activity  the activity
-     * @param fixHeight the fix height
-     * @param view      the view
-     */
+    public static void setTitleBarMarginTop(@NonNull View target, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(target), view);
+    }
+
+    public static void setTitleBarMarginTop(@NonNull Dialog dialog, View... view) {
+        setTitleBarMarginTop(getStatusBarHeight(dialog), view);
+    }
+
     @SuppressLint("ObsoleteSdkInt")
-    public static void setStatusBarView(Activity activity, int fixHeight, View... view) {
+    public static void setStatusBarView(int fixHeight, View... view) {
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
-            if (activity == null) {
-                return;
-            }
             if (fixHeight < 0) {
                 fixHeight = 0;
             }
@@ -1927,37 +1862,32 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity the activity
      * @param view     the view
      */
-    public static void setStatusBarView(Activity activity, View... view) {
-        setStatusBarView(activity, getStatusBarHeight(activity), view);
+    public static void setStatusBarView(@NonNull Activity activity, View... view) {
+        setStatusBarView(getStatusBarHeight(activity), view);
     }
 
-    public static void setStatusBarView(Fragment fragment, int fixHeight, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setStatusBarView(fragment.getActivity(), fixHeight, view);
+    public static void setStatusBarView(@NonNull Fragment fragment, View... view) {
+        setStatusBarView(getStatusBarHeight(fragment), view);
     }
 
-    public static void setStatusBarView(Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setStatusBarView(fragment.getActivity(), view);
+    public static void setStatusBarView(@NonNull android.app.Fragment fragment, View... view) {
+        setStatusBarView(getStatusBarHeight(fragment), view);
     }
 
-    public static void setStatusBarView(android.app.Fragment fragment, int fixHeight, View...
-            view) {
-        if (fragment == null) {
-            return;
-        }
-        setStatusBarView(fragment.getActivity(), fixHeight, view);
+    public static void setStatusBarView(@NonNull Context context, View... view) {
+        setStatusBarView(getStatusBarHeight(context), view);
     }
 
-    public static void setStatusBarView(android.app.Fragment fragment, View... view) {
-        if (fragment == null) {
-            return;
-        }
-        setStatusBarView(fragment.getActivity(), view);
+    public static void setStatusBarView(@NonNull Window window, View... view) {
+        setStatusBarView(getStatusBarHeight(window), view);
+    }
+
+    public static void setStatusBarView(@NonNull View target, View... view) {
+        setStatusBarView(getStatusBarHeight(target), view);
+    }
+
+    public static void setStatusBarView(@NonNull Dialog dialog, View... view) {
+        setStatusBarView(getStatusBarHeight(dialog), view);
     }
 
     /**
@@ -1967,49 +1897,81 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param activity        the activity
      * @param applySystemFits the apply system fits
      */
-    public static void setFitsSystemWindows(Activity activity, boolean applySystemFits) {
-        if (activity == null) {
-            return;
-        }
-        setFitsSystemWindows(((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0), applySystemFits);
+    public static void setFitsSystemWindows(@NonNull Activity activity, boolean applySystemFits) {
+        Window window = WindowUtils.getWindow(activity);
+        setFitsSystemWindows(window, applySystemFits);
     }
 
-    public static void setFitsSystemWindows(Activity activity) {
+    public static void setFitsSystemWindows(@NonNull Activity activity) {
         setFitsSystemWindows(activity, true);
     }
 
-    public static void setFitsSystemWindows(Fragment fragment, boolean applySystemFits) {
-        if (fragment == null) {
+    public static void setFitsSystemWindows(@NonNull Fragment fragment, boolean applySystemFits) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return;
         }
-        setFitsSystemWindows(fragment.getActivity(), applySystemFits);
+        setFitsSystemWindows(window, applySystemFits);
     }
 
-    public static void setFitsSystemWindows(Fragment fragment) {
-        if (fragment == null) {
-            return;
-        }
-        setFitsSystemWindows(fragment.getActivity());
+    public static void setFitsSystemWindows(@NonNull Fragment fragment) {
+        setFitsSystemWindows(fragment, true);
     }
 
-    public static void setFitsSystemWindows(android.app.Fragment fragment, boolean applySystemFits) {
-        if (fragment == null) {
+    public static void setFitsSystemWindows(@NonNull android.app.Fragment fragment, boolean applySystemFits) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return;
         }
-        setFitsSystemWindows(fragment.getActivity(), applySystemFits);
+        setFitsSystemWindows(window, applySystemFits);
     }
 
-    public static void setFitsSystemWindows(android.app.Fragment fragment) {
-        if (fragment == null) {
-            return;
-        }
-        setFitsSystemWindows(fragment.getActivity());
+    public static void setFitsSystemWindows(@NonNull android.app.Fragment fragment) {
+        setFitsSystemWindows(fragment, true);
     }
 
-    private static void setFitsSystemWindows(View view, boolean applySystemFits) {
-        if (view == null) {
+    public static void setFitsSystemWindows(@NonNull Context context, boolean applySystemFits) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
             return;
         }
+        setFitsSystemWindows(window, applySystemFits);
+    }
+
+    public static void setFitsSystemWindows(@NonNull Context context) {
+        setFitsSystemWindows(context, true);
+    }
+
+    public static void setFitsSystemWindows(@NonNull Window window, boolean applySystemFits) {
+        View contentView = window.getDecorView().findViewById(android.R.id.content);
+        if (contentView instanceof ViewGroup) {
+            setFitsSystemWindows(((ViewGroup) contentView).getChildAt(0), applySystemFits);
+        } else {
+            setFitsSystemWindows(contentView, applySystemFits);
+        }
+    }
+
+    public static void setFitsSystemWindows(@NonNull Window window) {
+        setFitsSystemWindows(window, true);
+    }
+
+    public static void setFitsSystemWindows(@NonNull View view) {
+        setFitsSystemWindows(view, true);
+    }
+
+    public static void setFitsSystemWindows(@NonNull Dialog dialog, boolean applySystemFits) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return;
+        }
+        setFitsSystemWindows(window, applySystemFits);
+    }
+
+    public static void setFitsSystemWindows(@NonNull Dialog dialog) {
+        setFitsSystemWindows(dialog, true);
+    }
+
+    public static void setFitsSystemWindows(@NonNull View view, boolean applySystemFits) {
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) view;
             if (viewGroup instanceof DrawerLayout) {
@@ -2064,38 +2026,43 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Activity activity) {
-        return hasNavigationBar(activity.getWindow());
+        return getBarProperties(activity).hasNavigationBar();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.hasNavigationBar();
+        return getBarProperties(window).hasNavigationBar();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean hasNavigationBar(@NonNull View view) {
+        return getBarProperties(view).hasNavigationBar();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean hasNavigationBar(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).hasNavigationBar();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return false;
-        }
-        return hasNavigationBar(fragment.getActivity());
+        return getBarProperties(fragment).hasNavigationBar();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return false;
-        }
-        return hasNavigationBar(fragment.getActivity());
+        return getBarProperties(fragment).hasNavigationBar();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean hasNavigationBar(@NonNull Context context) {
-        return getNavigationBarHeight(context) > 0;
+        return getBarProperties(context).hasNavigationBar();
     }
 
     /**
@@ -2108,43 +2075,43 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Activity activity) {
-        return getNavigationBarHeight(activity.getWindow());
+        return getBarProperties(activity).getNavigationBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.getNavigationBarHeight();
+        return getBarProperties(window).getNavigationBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarHeight(@NonNull View view) {
+        return getBarProperties(view).getNavigationBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarHeight(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).getNavigationBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getNavigationBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getNavigationBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getNavigationBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getNavigationBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarHeight(@NonNull Context context) {
-        GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
-        if (bean.isGesture && !bean.checkNavigation) {
-            return 0;
-        } else {
-            return BarConfig.getNavigationBarHeightInternal(context);
-        }
+        return getBarProperties(context).getNavigationBarHeight();
     }
 
     /**
@@ -2157,43 +2124,43 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Activity activity) {
-        return getNavigationBarWidth(activity.getWindow());
+        return getBarProperties(activity).getNavigationBarWidth();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.getNavigationBarWidth();
+        return getBarProperties(window).getNavigationBarWidth();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarWidth(@NonNull View view) {
+        return getBarProperties(view).getNavigationBarWidth();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getNavigationBarWidth(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).getNavigationBarWidth();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getNavigationBarWidth(fragment.getActivity());
+        return getBarProperties(fragment).getNavigationBarWidth();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getNavigationBarWidth(fragment.getActivity());
+        return getBarProperties(fragment).getNavigationBarWidth();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getNavigationBarWidth(@NonNull Context context) {
-        GestureUtils.GestureBean bean = GestureUtils.getGestureBean(context);
-        if (bean.isGesture && !bean.checkNavigation) {
-            return 0;
-        } else {
-            return BarConfig.getNavigationBarWidthInternal(context);
-        }
+        return getBarProperties(context).getNavigationBarWidth();
     }
 
     /**
@@ -2206,33 +2173,122 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull Activity activity) {
-        return isNavigationAtBottom(activity.getWindow());
+        return getBarProperties(activity).isNavigationAtBottom();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.isNavigationAtBottom();
+        return getBarProperties(window).isNavigationAtBottom();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean isNavigationAtBottom(@NonNull View view) {
+        return getBarProperties(view).isNavigationAtBottom();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean isNavigationAtBottom(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).isNavigationAtBottom();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return false;
-        }
-        return isNavigationAtBottom(fragment.getActivity());
+        return getBarProperties(fragment).isNavigationAtBottom();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static boolean isNavigationAtBottom(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return false;
-        }
-        return isNavigationAtBottom(fragment.getActivity());
+        return getBarProperties(fragment).isNavigationAtBottom();
     }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static boolean isNavigationAtBottom(@NonNull Context context) {
+        return getBarProperties(context).isNavigationAtBottom();
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param activity the activity
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull Activity activity) {
+        return BarPropertiesUtils.getBarProperties(activity);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param fragment the fragment
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull Fragment fragment) {
+        return BarPropertiesUtils.getBarProperties(fragment);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param fragment the fragment
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull android.app.Fragment fragment) {
+        return BarPropertiesUtils.getBarProperties(fragment);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param dialog the dialog
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull Dialog dialog) {
+        return BarPropertiesUtils.getBarProperties(dialog);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param view the view
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull View view) {
+        return BarPropertiesUtils.getBarProperties(view);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param context the context
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull Context context) {
+        return BarPropertiesUtils.getBarProperties(context);
+    }
+
+    /**
+     * 获取当前BarProperties快照。
+     *
+     * @param window the window
+     * @return BarProperties快照
+     */
+    @NonNull
+    public static BarProperties getBarProperties(@NonNull Window window) {
+        return BarPropertiesUtils.getBarProperties(window);
+    }
+
 
     /**
      * Gets status bar height.
@@ -2244,38 +2300,43 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Activity activity) {
-        return getStatusBarHeight(activity.getWindow());
+        return getBarProperties(activity).getStatusBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.getStatusBarHeight();
+        return getBarProperties(window).getStatusBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getStatusBarHeight(@NonNull View view) {
+        return getBarProperties(view).getStatusBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getStatusBarHeight(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).getStatusBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getStatusBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getStatusBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getStatusBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getStatusBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Context context) {
-        return BarConfig.getInternalDimensionSize(context, Constants.IMMERSION_STATUS_BAR_HEIGHT);
+        return getBarProperties(context).getStatusBarHeight();
     }
 
     /**
@@ -2288,34 +2349,44 @@ public final class ImmersionBar implements ImmersionCallback {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull Activity activity) {
-        return getActionBarHeight(activity.getWindow());
+        return getBarProperties(activity).getActionBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull Window window) {
-        BarConfig config = new BarConfig(window);
-        return config.getActionBarHeight();
+        return getBarProperties(window).getActionBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getActionBarHeight(@NonNull View view) {
+        return getBarProperties(view).getActionBarHeight();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getActionBarHeight(@NonNull Dialog dialog) {
+        return getBarProperties(dialog).getActionBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getActionBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getActionBarHeight();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getActionBarHeight(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
-            return 0;
-        }
-        return getActionBarHeight(fragment.getActivity());
+        return getBarProperties(fragment).getActionBarHeight();
     }
 
+    @SuppressLint("ObsoleteSdkInt")
+    @TargetApi(Version.ICE_CREAM_SANDWICH)
+    public static int getActionBarHeight(@NonNull Context context) {
+        return getBarProperties(context).getActionBarHeight();
+    }
     /**
      * 是否是刘海屏
      * Has notch screen boolean.
@@ -2325,21 +2396,43 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the boolean
      */
     public static boolean hasNotchScreen(@NonNull Activity activity) {
-        return NotchUtils.hasNotchScreen(activity);
+        Window window = WindowUtils.getWindow(activity);
+        return hasNotchScreen(window);
     }
 
     public static boolean hasNotchScreen(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return false;
         }
-        return hasNotchScreen(fragment.getActivity());
+        return hasNotchScreen(window);
     }
 
     public static boolean hasNotchScreen(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return false;
         }
-        return hasNotchScreen(fragment.getActivity());
+        return hasNotchScreen(window);
+    }
+
+    public static boolean hasNotchScreen(@NonNull Context context) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
+            return false;
+        }
+        return hasNotchScreen(window);
+    }
+
+    /**
+     * 是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param window the window
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(@NonNull Window window) {
+        return NotchUtils.hasNotchScreen(window);
     }
 
     /**
@@ -2350,7 +2443,19 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the boolean
      */
     public static boolean hasNotchScreen(@NonNull View view) {
-        return NotchUtils.hasNotchScreen(view);
+        Window window = WindowUtils.getWindow(view);
+        if (window == null) {
+            return false;
+        }
+        return hasNotchScreen(window);
+    }
+
+    public static boolean hasNotchScreen(@NonNull Dialog dialog) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return false;
+        }
+        return hasNotchScreen(window);
     }
 
     /**
@@ -2362,60 +2467,254 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the int
      */
     public static int getNotchHeight(@NonNull Activity activity) {
-        return NotchUtils.getNotchHeight(activity);
+        Window window = WindowUtils.getWindow(activity);
+        return getNotchHeight(window);
     }
 
     public static int getNotchHeight(@NonNull Fragment fragment) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return 0;
         }
-        return getNotchHeight(fragment.getActivity());
+        return getNotchHeight(window);
     }
 
     public static int getNotchHeight(@NonNull android.app.Fragment fragment) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
             return 0;
         }
-        return getNotchHeight(fragment.getActivity());
+        return getNotchHeight(window);
+    }
+
+    public static int getNotchHeight(@NonNull Context context) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
+            return 0;
+        }
+        return getNotchHeight(window);
+    }
+
+    public static int getNotchHeight(@NonNull Window window) {
+        return NotchUtils.getNotchHeight(window);
+    }
+
+    public static int getNotchHeight(@NonNull View view) {
+        Window window = WindowUtils.getWindow(view);
+        if (window == null) {
+            return 0;
+        }
+        return getNotchHeight(window);
+    }
+
+    public static int getNotchHeight(@NonNull Dialog dialog) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return 0;
+        }
+        return getNotchHeight(window);
     }
 
     public static void getNotchHeight(@NonNull Activity activity, NotchCallback callback) {
-        NotchUtils.getNotchHeight(activity, callback);
+        Window window = WindowUtils.getWindow(activity);
+        getNotchHeight(window, callback);
     }
 
     public static void getNotchHeight(@NonNull Fragment fragment, NotchCallback callback) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
             return;
         }
-        getNotchHeight(fragment.getActivity(), callback);
+        getNotchHeight(window, callback);
     }
 
     public static void getNotchHeight(@NonNull android.app.Fragment fragment, NotchCallback callback) {
-        if (fragment.getActivity() == null) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
             return;
         }
-        getNotchHeight(fragment.getActivity(), callback);
+        getNotchHeight(window, callback);
+    }
+
+    public static void getNotchHeight(@NonNull Context context, NotchCallback callback) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
+            return;
+        }
+        getNotchHeight(window, callback);
+    }
+
+    public static void getNotchHeight(@NonNull Window window, NotchCallback callback) {
+        NotchUtils.getNotchHeight(window, callback);
+    }
+
+    public static void getNotchHeight(@NonNull View view, NotchCallback callback) {
+        Window window = WindowUtils.getWindow(view);
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
+            return;
+        }
+        getNotchHeight(window, callback);
+    }
+
+    public static void getNotchHeight(@NonNull Dialog dialog, NotchCallback callback) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
+            return;
+        }
+        getNotchHeight(window, callback);
     }
 
     /**
      * 隐藏状态栏
      * Hide status bar.
      *
-     * @param window the window
+     * @param activity the activity
      */
+    public static void hideStatusBar(@NonNull Activity activity) {
+        Window window = WindowUtils.getWindow(activity);
+        hideStatusBar(window);
+    }
+
+    public static void hideStatusBar(@NonNull Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return;
+        }
+        hideStatusBar(window);
+    }
+
+    public static void hideStatusBar(@NonNull android.app.Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return;
+        }
+        hideStatusBar(window);
+    }
+
+    public static void hideStatusBar(@NonNull Context context) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
+            return;
+        }
+        hideStatusBar(window);
+    }
+
     public static void hideStatusBar(@NonNull Window window) {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    public static void hideStatusBar(@NonNull View view) {
+        Window window = WindowUtils.getWindow(view);
+        if (window == null) {
+            return;
+        }
+        hideStatusBar(window);
+    }
+
+    public static void hideStatusBar(@NonNull Dialog dialog) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return;
+        }
+        hideStatusBar(window);
     }
 
     /**
      * 显示状态栏
      * Show status bar.
      *
-     * @param window the window
+     * @param activity the activity
      */
+    public static void showStatusBar(@NonNull Activity activity) {
+        Window window = WindowUtils.getWindow(activity);
+        showStatusBar(window);
+    }
+
+    public static void showStatusBar(@NonNull Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return;
+        }
+        showStatusBar(window);
+    }
+
+    public static void showStatusBar(@NonNull android.app.Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return;
+        }
+        showStatusBar(window);
+    }
+
+    public static void showStatusBar(@NonNull Context context) {
+        Window window = WindowUtils.getWindow(context);
+        if (window == null) {
+            return;
+        }
+        showStatusBar(window);
+    }
+
     public static void showStatusBar(@NonNull Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    public static void showStatusBar(@NonNull View view) {
+        Window window = WindowUtils.getWindow(view);
+        if (window == null) {
+            return;
+        }
+        showStatusBar(window);
+    }
+
+    public static void showStatusBar(@NonNull Dialog dialog) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return;
+        }
+        showStatusBar(window);
+    }
+
+    /**
+     * 是否是手势
+     *
+     * @param activity Activity
+     * @return the boolean
+     */
+    public static boolean isGesture(@NonNull Activity activity) {
+        Window window = WindowUtils.getWindow(activity);
+        return isGesture(window);
+    }
+
+    public static boolean isGesture(@NonNull Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return false;
+        }
+        return isGesture(window);
+    }
+
+    public static boolean isGesture(@NonNull android.app.Fragment fragment) {
+        Window window = WindowUtils.getWindow(fragment);
+        if (window == null) {
+            return false;
+        }
+        return isGesture(window);
     }
 
     /**
@@ -2424,35 +2723,24 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param context Context
      * @return the boolean
      */
-    public static boolean isGesture(Context context) {
+    public static boolean isGesture(@NonNull Context context) {
         return GestureUtils.getGestureBean(context).isGesture;
     }
 
-    /**
-     * 是否是手势
-     *
-     * @param fragment Fragment
-     * @return the boolean
-     */
-    public static boolean isGesture(Fragment fragment) {
-        Context context = fragment.getContext();
-        if (context == null) return false;
-        return isGesture(context);
+    public static boolean isGesture(@NonNull Window window) {
+        return isGesture(window.getContext());
     }
 
-    /**
-     * 是否是手势
-     *
-     * @param fragment android.app.Fragment
-     * @return the boolean
-     */
-    public static boolean isGesture(android.app.Fragment fragment) {
-        Context context = null;
-        if (android.os.Build.VERSION.SDK_INT >= Version.M) {
-            context = fragment.getContext();
+    public static boolean isGesture(@NonNull View view) {
+        return isGesture(view.getContext());
+    }
+
+    public static boolean isGesture(@NonNull Dialog dialog) {
+        Window window = WindowUtils.getWindow(dialog);
+        if (window == null) {
+            return false;
         }
-        if (context == null) return false;
-        return isGesture(context);
+        return isGesture(window);
     }
 
     /**

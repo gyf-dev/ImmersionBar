@@ -2,13 +2,17 @@ package com.gyf.immersionbar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.DisplayCutout;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowInsets;
+
+import androidx.fragment.app.Fragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -64,15 +68,73 @@ public class NotchUtils {
      * @return the boolean
      */
     public static boolean hasNotchScreen(Activity activity) {
-        if (activity != null) {
+        if (activity == null) return false;
+        return hasNotchScreen(activity.getWindow());
+    }
+
+    /**
+     * 判断是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param fragment the fragment
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(Fragment fragment) {
+        return hasNotchScreen(WindowUtils.getWindow(fragment));
+    }
+
+    /**
+     * 判断是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param fragment the fragment
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(android.app.Fragment fragment) {
+        return hasNotchScreen(WindowUtils.getWindow(fragment));
+    }
+
+    /**
+     * 判断是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param context the context
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(Context context) {
+        return hasNotchScreen(WindowUtils.getWindow(context));
+    }
+
+    /**
+     * 判断是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param dialog the dialog
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(Dialog dialog) {
+        return hasNotchScreen(WindowUtils.getWindow(dialog));
+    }
+
+    /**
+     * 判断是否是刘海屏
+     * Has notch screen boolean.
+     *
+     * @param window the window
+     * @return the boolean
+     */
+    public static boolean hasNotchScreen(Window window) {
+        if (window != null) {
+            View decorView = window.getDecorView();
             if (Build.VERSION.SDK_INT >= Version.P) {
-                return hasNotchAtAndroidP(activity);
+                return hasNotchAtAndroidP(decorView);
             } else {
-                return hasNotchAtXiaoMi(activity) ||
-                        hasNotchAtHuaWei(activity) ||
-                        hasNotchAtOPPO(activity) ||
-                        hasNotchAtVIVO(activity) ||
-                        hasNotchAtLenovo(activity) ||
+                Context context = decorView.getContext();
+                return hasNotchAtXiaoMi(context) ||
+                        hasNotchAtHuaWei(context) ||
+                        hasNotchAtOPPO(context) ||
+                        hasNotchAtVIVO(context) ||
+                        hasNotchAtLenovo(context) ||
                         hasNotchAtMeiZu();
             }
         }
@@ -285,14 +347,88 @@ public class NotchUtils {
      * @return the int
      */
     public static int getNotchHeight(Activity activity) {
-        if (!hasNotchScreen(activity)) {
+        if (activity == null) {
             return 0;
         }
+        return getNotchHeight(activity.getWindow());
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param fragment the fragment
+     * @return the int
+     */
+    public static int getNotchHeight(Fragment fragment) {
+        return getNotchHeight(WindowUtils.getWindow(fragment));
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param fragment the fragment
+     * @return the int
+     */
+    public static int getNotchHeight(android.app.Fragment fragment) {
+        return getNotchHeight(WindowUtils.getWindow(fragment));
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param context the context
+     * @return the int
+     */
+    public static int getNotchHeight(Context context) {
+        return getNotchHeight(WindowUtils.getWindow(context));
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param view the view
+     * @return the int
+     */
+    public static int getNotchHeight(View view) {
+        return getNotchHeight(WindowUtils.getWindow(view));
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param dialog the dialog
+     * @return the int
+     */
+    public static int getNotchHeight(Dialog dialog) {
+        return getNotchHeight(WindowUtils.getWindow(dialog));
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Notch height int.
+     *
+     * @param window the window
+     * @return the int
+     */
+    public static int getNotchHeight(Window window) {
+        if (window == null) {
+            return 0;
+        }
+        if (!hasNotchScreen(window)) {
+            return 0;
+        }
+        View decorView = window.getDecorView();
+        Context context = decorView.getContext();
         int notchHeight = 0;
-        int statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
-        DisplayCutout displayCutout = getDisplayCutout(activity);
+        int statusBarHeight = ImmersionBar.getStatusBarHeight(window);
+        DisplayCutout displayCutout = getDisplayCutout(decorView);
         if (Build.VERSION.SDK_INT >= Version.P && displayCutout != null) {
-            if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 notchHeight = displayCutout.getSafeInsetTop();
             } else {
                 if (displayCutout.getSafeInsetLeft() == 0) {
@@ -302,29 +438,29 @@ public class NotchUtils {
                 }
             }
         } else {
-            if (hasNotchAtXiaoMi(activity)) {
-                notchHeight = getXiaoMiNotchHeight(activity);
+            if (hasNotchAtXiaoMi(context)) {
+                notchHeight = getXiaoMiNotchHeight(context);
             }
-            if (hasNotchAtHuaWei(activity)) {
-                notchHeight = getHuaWeiNotchSize(activity)[1];
+            if (hasNotchAtHuaWei(context)) {
+                notchHeight = getHuaWeiNotchSize(context)[1];
             }
-            if (hasNotchAtVIVO(activity)) {
-                notchHeight = dp2px(activity, 32);
+            if (hasNotchAtVIVO(context)) {
+                notchHeight = dp2px(context, 32);
                 if (notchHeight < statusBarHeight) {
                     notchHeight = statusBarHeight;
                 }
             }
-            if (hasNotchAtOPPO(activity)) {
+            if (hasNotchAtOPPO(context)) {
                 notchHeight = 80;
                 if (notchHeight < statusBarHeight) {
                     notchHeight = statusBarHeight;
                 }
             }
-            if (hasNotchAtLenovo(activity)) {
-                notchHeight = getLenovoNotchHeight(activity);
+            if (hasNotchAtLenovo(context)) {
+                notchHeight = getLenovoNotchHeight(context);
             }
             if (hasNotchAtMeiZu()) {
-                notchHeight = getMeizuNotchHeight(activity);
+                notchHeight = getMeizuNotchHeight(context);
             }
         }
         return notchHeight;
@@ -338,11 +474,89 @@ public class NotchUtils {
      * @param callback the callback
      */
     public static void getNotchHeight(final Activity activity, final NotchCallback callback) {
-        activity.getWindow().getDecorView().post(new Runnable() {
+        if (activity == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
+            return;
+        }
+        getNotchHeight(activity.getWindow(), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param fragment the fragment
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final Fragment fragment, final NotchCallback callback) {
+        getNotchHeight(WindowUtils.getWindow(fragment), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param fragment the fragment
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final android.app.Fragment fragment, final NotchCallback callback) {
+        getNotchHeight(WindowUtils.getWindow(fragment), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param context  the context
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final Context context, final NotchCallback callback) {
+        getNotchHeight(WindowUtils.getWindow(context), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param view     the view
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final View view, final NotchCallback callback) {
+        getNotchHeight(WindowUtils.getWindow(view), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param dialog   the dialog
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final Dialog dialog, final NotchCallback callback) {
+        getNotchHeight(WindowUtils.getWindow(dialog), callback);
+    }
+
+    /**
+     * 获得刘海屏高度
+     * Gets notch height.
+     *
+     * @param window   the window
+     * @param callback the callback
+     */
+    public static void getNotchHeight(final Window window, final NotchCallback callback) {
+        if (window == null) {
+            if (callback != null) {
+                callback.onNotchHeight(0);
+            }
+            return;
+        }
+        window.getDecorView().post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onNotchHeight(getNotchHeight(activity));
+                    callback.onNotchHeight(getNotchHeight(window));
                 }
             }
         });

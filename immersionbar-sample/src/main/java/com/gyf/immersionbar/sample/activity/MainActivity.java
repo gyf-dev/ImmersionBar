@@ -272,6 +272,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 case 29:
                     ImmersionBar.with(this).statusBarDarkFont(false).init();
                     break;
+                case 30:
+                    intent = new Intent(this, ComposeActivity.class);
+                    break;
                 default:
                     break;
             }
