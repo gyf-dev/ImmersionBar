@@ -75,6 +75,10 @@ dependencies {
     implementation project(':immersionbar')
     implementation project(':immersionbar-components')
     implementation project(':immersionbar-ktx')
+//    implementation libs.immersionbar
+//    implementation libs.immersionbar.components
+//    implementation libs.immersionbar.ktx
+
     //侧滑返回
     implementation libs.swipebacklayout
     //log日志

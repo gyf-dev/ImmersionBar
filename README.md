@@ -1,6 +1,6 @@
 ![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
-[![version](https://img.shields.io/badge/version-3.2.2-brightgreen.svg)](https://bintray.com/geyifeng/maven/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
+[![version](https://img.shields.io/badge/version-3.3.0-brightgreen.svg)](https://central.sonatype.com/artifact/com.geyifeng.immersionbar/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
 
 ## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
@@ -9,11 +9,11 @@
 > 3.1.1以上版本(mavenCentral)
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+   implementation 'com.geyifeng.immersionbar:immersionbar:3.3.0'
    // kotlin扩展（可选）
-   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.2'
+   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.3.0'
    // fragment快速实现（可选）已废弃
-   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.2.2'
+   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.3.0'
    ```
 > 3.0.0版本(jcenter)
    ```groovy
@@ -29,7 +29,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.2.2.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.2.2.apk)
+#### [点我下载immersionBar-3.3.0.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.3.0.apk)
 
 ## 关于全面屏与刘海
 #### 关于全面屏
@@ -114,8 +114,9 @@
                            LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
                        }
                   })
-                 .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，目前只支持华为和小米手机
-                 .setOnBarListener(OnBarListener) //第一次调用和横竖屏切换都会触发，可以用来做刘海屏遮挡布局控件的问题
+                 .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听
+                 .setOnStatusBarListener(onStatusBarListener) //状态栏显示隐藏监听
+                 .setOnBarListener(OnBarListener) //第一次调用、横竖屏切换、状态栏/导航栏显隐变化都会触发，可以用来获取BarProperties快照
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
@@ -159,19 +160,13 @@
    ```java
        ImmersionBar.with(this).init();
    ```
-- ②其他dialog，关闭dialog的时候必须调用销毁方法
+- ②其他dialog，3.3.0起支持自动从dialog解析Activity，关闭dialog时会自动销毁，无需再手动调用destroy
     ```java
-        ImmersionBar.with(this, dialog).init();
-    ```
-    销毁方法：
-    
-    java中
-    ```java
-        ImmersionBar.destroy(this, dialog);
+        ImmersionBar.with(dialog).init();
     ```
     kotlin中
     ```kotlin
-        destroyImmersionBar(dialog)
+        dialog.immersionBar()
     ```
    
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_dialog.gif"/>
@@ -320,6 +315,10 @@
     
 ## 状态栏和导航栏其它方法
 	
+- public static BarProperties getBarProperties(Activity activity)
+ 
+    获取当前系统栏信息快照，包含状态栏/导航栏高度、宽度、是否可见、是否手势导航、导航栏位置、导航栏类型、刘海屏信息、ActionBar高度等。
+    
 - public static boolean hasNavigationBar(Activity activity)
  
     判断是否存在导航栏
@@ -348,9 +347,17 @@
  
     是否是刘海屏
     
-- public static boolean getNotchHeight(Activity activity)
+- public static int getNotchHeight(Activity activity)
  
     获得刘海屏高度
+
+- public static void getNotchHeight(Activity activity, NotchCallback callback)
+
+    异步获得刘海屏高度
+
+- public static boolean isGesture(Activity activity)
+
+    判断当前是否为手势导航
     
 - public static boolean isSupportStatusBarDarkFont()
  
@@ -363,6 +370,10 @@
 - public static void hideStatusBar(Window window) 
  
     隐藏状态栏
+
+- public static void showStatusBar(Window window)
+
+    显示状态栏
     
     
 ## 混淆规则(proguard-rules.pro)

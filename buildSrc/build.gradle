@@ -1,0 +1,18 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
+    google()
+    gradlePluginPortal()
+}
+
+gradlePlugin {
+    plugins {
+        immersionbarPublishing {
+            id = 'immersionbar.publishing'
+            implementationClass = 'com.geyifeng.immersionbar.publishing.ImmersionBarPublishingPlugin'
+        }
+    }
+}
