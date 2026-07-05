@@ -164,9 +164,7 @@ class BarConfig {
                 return insets.isVisible(WindowInsets.Type.navigationBars());
             }
         } else if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
-            View decorView = window.getDecorView();
-            int visibility = decorView.getSystemUiVisibility();
-            return (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+            return hasNavBar(window);
         }
         return true;
     }
@@ -230,6 +228,9 @@ class BarConfig {
                 return false;
             }
         }
+        if (isNavigationBarHidden(window)) {
+            return false;
+        }
         if (Build.VERSION.SDK_INT >= Version.R) {
             Insets navInsets = getNavigationBarInsets(window);
             if (navInsets != null) {
@@ -252,6 +253,18 @@ class BarConfig {
         int displayHeight = displayMetrics.heightPixels;
         int displayWidth = displayMetrics.widthPixels;
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+    }
+
+    private boolean isNavigationBarHidden(Window window) {
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN && Build.VERSION.SDK_INT < Version.R) {
+            if (OSUtils.isEMUI3_x() && EMUI3NavigationBarObserver.getInstance().isNavigationBarHidden(window.getContext())) {
+                return true;
+            }
+            View decorView = window.getDecorView();
+            int visibility = decorView.getSystemUiVisibility();
+            return (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
+        }
+        return false;
     }
 
     /**

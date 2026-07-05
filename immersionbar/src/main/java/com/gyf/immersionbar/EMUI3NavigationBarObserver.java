@@ -1,6 +1,7 @@
 package com.gyf.immersionbar;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
@@ -49,15 +50,17 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
         super.onChange(selfChange);
         if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
                 && mCallbacks != null && !mCallbacks.isEmpty()) {
-            int type = Settings.System.getInt(mApplication.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0);
-            NavigationBarType navigationBarType = NavigationBarType.CLASSIC;
-            if (type == 1) {
-                navigationBarType = NavigationBarType.GESTURES;
-            }
+            boolean show = !isNavigationBarHidden(mApplication);
+            NavigationBarType navigationBarType = show ? NavigationBarType.CLASSIC : NavigationBarType.GESTURES;
             for (ImmersionCallback callback : mCallbacks) {
-                callback.onNavigationBarChange(type == 0, navigationBarType);
+                callback.onNavigationBarChange(show, navigationBarType);
             }
         }
+    }
+
+    boolean isNavigationBarHidden(Context context) {
+        return Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && context != null && context.getContentResolver() != null
+                && Settings.System.getInt(context.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) == 1;
     }
 
     void addOnNavigationBarListener(ImmersionCallback callback) {
