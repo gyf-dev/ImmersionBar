@@ -425,7 +425,7 @@ public class NotchUtils {
         View decorView = window.getDecorView();
         Context context = decorView.getContext();
         int notchHeight = 0;
-        int statusBarHeight = ImmersionBar.getStatusBarHeight(window);
+        int statusBarHeight = new BarConfig(window).getStatusBarHeight();
         DisplayCutout displayCutout = getDisplayCutout(decorView);
         if (Build.VERSION.SDK_INT >= Version.P && displayCutout != null) {
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
