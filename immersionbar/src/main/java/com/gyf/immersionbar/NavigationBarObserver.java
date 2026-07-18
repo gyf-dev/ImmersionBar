@@ -27,6 +27,7 @@ import java.util.ArrayList;
  * @author geyifeng
  * @date 2019/4/10 6:02 PM
  */
+@SuppressWarnings("deprecation")
 final class NavigationBarObserver extends ContentObserver {
 
     private ArrayList<OnNavigationBarListener> mListeners;

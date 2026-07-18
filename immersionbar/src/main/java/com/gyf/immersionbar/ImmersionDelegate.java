@@ -13,7 +13,8 @@ import androidx.fragment.app.Fragment;
  * @author geyifeng
  * @date 2019/4/12 4:01 PM
  */
-class ImmersionDelegate implements Runnable {
+@SuppressWarnings("deprecation")
+class ImmersionDelegate {
 
     private ImmersionBar mImmersionBar;
     private BarProperties mLastBarProperties;
@@ -83,10 +84,9 @@ class ImmersionDelegate implements Runnable {
     }
 
     /**
-     * 运行时系统栏显隐/导航模式变化时，投递{@link #run()}重建BarProperties快照并按去重规则回调监听器。
+     * 运行时系统栏显隐/导航模式变化时。
      *
      * <p>凡是会改变insets的运行时事件（hideBar/showBar、手势临时显隐、三键⇄手势切换）
-     * 都能通过{@link #run()}重新读取完整快照，让BarProperties保持实时。
      *
      * <p>首次快照尚未建立（{@code mBarProperties == null}）时直接跳过，交由
      * {@link #onActivityCreated}统一构建。
@@ -97,27 +97,18 @@ class ImmersionDelegate implements Runnable {
             return;
         }
         View decorView = immersionBar.getWindow().getDecorView();
-        decorView.post(this);
+        decorView.post(this::dispatchBarProperties);
     }
 
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void run() {
+    void dispatchBarProperties() {
         ImmersionBar immersionBar = mImmersionBar;
         if (immersionBar == null || !immersionBar.initialized() || Build.VERSION.SDK_INT < Version.KITKAT) {
-            return;
-        }
-        OnBarListener onBarListener = immersionBar.getBarParams().onBarListener;
-        if (onBarListener == null && !immersionBar.hasOnBarPropertiesChangedListeners()) {
             return;
         }
         BarProperties barProperties = BarPropertiesUtils.getBarProperties(immersionBar.getWindow());
         if (mLastBarProperties == null || !mLastBarProperties.equals(barProperties)) {
             mLastBarProperties = new BarProperties(barProperties);
-            if (onBarListener != null) {
-                onBarListener.onBarChange(barProperties);
-            }
             immersionBar.dispatchOnBarPropertiesChanged(barProperties);
         }
     }

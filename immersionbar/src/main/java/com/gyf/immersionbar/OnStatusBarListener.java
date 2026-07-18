@@ -5,7 +5,10 @@ package com.gyf.immersionbar;
  * 状态栏显示隐藏监听。
  *
  * @author geyifeng
+ * @deprecated 统一使用{@link OnBarPropertiesChangedListener}，通过{@link BarProperties#isStatusBarVisible()}
+ * 获取状态栏显隐。
  */
+@Deprecated
 public interface OnStatusBarListener {
     /**
      * On status bar change.

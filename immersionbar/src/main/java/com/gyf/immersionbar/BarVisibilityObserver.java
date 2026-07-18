@@ -29,6 +29,7 @@ import androidx.annotation.RequiresApi;
  *
  * @author geyifeng
  */
+@SuppressWarnings("deprecation")
 final class BarVisibilityObserver {
 
     private final ImmersionBar mImmersionBar;
@@ -48,7 +49,6 @@ final class BarVisibilityObserver {
     BarVisibilityObserver(ImmersionBar immersionBar) {
         mImmersionBar = immersionBar;
         Window window = immersionBar.getWindow();
-        //DecorView恒为FrameLayout子类，可安全转为ViewGroup以addView锚点
         mDecorView = (ViewGroup) window.getDecorView();
     }
 
@@ -126,7 +126,10 @@ final class BarVisibilityObserver {
     }
 
     private void dispatchFromSystemUiFlags(int visibility) {
-        boolean statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
+        boolean statusVisible = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
+        }
         boolean navigationVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
         dispatch(statusVisible, navigationVisible);
     }

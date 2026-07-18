@@ -43,11 +43,11 @@ public class BarProperties {
      */
     private boolean gestureNavigation;
     /**
-     * 状态栏当前是否可见（运行时显隐会实时刷新并通过OnBarListener回调）
+     * 状态栏当前是否可见（运行时显隐会实时刷新并通过OnBarPropertiesChangedListener回调）
      */
     private boolean statusBarVisible = true;
     /**
-     * 导航栏当前是否可见（运行时显隐会实时刷新并通过OnBarListener回调）
+     * 导航栏当前是否可见（运行时显隐会实时刷新并通过OnBarPropertiesChangedListener回调）
      */
     private boolean navigationBarVisible = true;
     /**
