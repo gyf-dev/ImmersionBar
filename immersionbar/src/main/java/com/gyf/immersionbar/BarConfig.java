@@ -277,14 +277,14 @@ class BarConfig {
      */
     @RequiresApi(Version.R)
     private static Insets getNavigationBarInsets(Window window) {
-        WindowManager windowManager = window.getWindowManager();
-        if (windowManager != null) {
-            WindowInsets insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
-            return insets.getInsets(WindowInsets.Type.navigationBars());
-        }
         View decorView = window.getDecorView();
         WindowInsets insets = decorView.getRootWindowInsets();
         if (insets != null) {
+            return insets.getInsets(WindowInsets.Type.navigationBars());
+        }
+        WindowManager windowManager = window.getWindowManager();
+        if (windowManager != null) {
+            insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
             return insets.getInsets(WindowInsets.Type.navigationBars());
         }
         return null;
@@ -299,15 +299,14 @@ class BarConfig {
      */
     @RequiresApi(Version.R)
     private static Insets getStatusBarInsetsIgnoringVisibility(Window window) {
-        WindowManager windowManager = window.getWindowManager();
-        if (windowManager != null) {
-            WindowInsets insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
-            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars());
-        }
-        //回退：视图已attach时decorView也能拿到
         View decorView = window.getDecorView();
         WindowInsets insets = decorView.getRootWindowInsets();
         if (insets != null) {
+            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars());
+        }
+        WindowManager windowManager = window.getWindowManager();
+        if (windowManager != null) {
+            insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
             return insets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars());
         }
         return null;
