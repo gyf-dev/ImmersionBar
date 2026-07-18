@@ -26,7 +26,7 @@ public class ParamsActivity extends BaseActivity {
     private ActivityParamsBinding binding;
     private boolean mIsHideStatusBar = false;
     /**
-     * Bar最新快照，由{@link ImmersionBar#setOnBarListener}回调下发
+     * Bar最新快照，由OnBarPropertiesChangedListener回调下发
      */
     private BarProperties mBarProperties;
 
@@ -43,8 +43,8 @@ public class ParamsActivity extends BaseActivity {
                 .setOnNavigationBarListener((show, type) -> {
                     Toast.makeText(this, "导航栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                 })
-                .setOnBarListener(barProperties -> {
-                    Log.d(mTag, "onBarChange: " + barProperties.toString());
+                .addOnBarPropertiesChangedListener(barProperties -> {
+                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties.toString());
                     mBarProperties = barProperties;
                     initView();
                 })
@@ -61,7 +61,7 @@ public class ParamsActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        // 等待setOnBarListener回调下发Bar快照后再刷新UI
+        // 等待OnBarPropertiesChangedListener回调下发Bar快照后再刷新UI
         if (mBarProperties == null) {
             return;
         }

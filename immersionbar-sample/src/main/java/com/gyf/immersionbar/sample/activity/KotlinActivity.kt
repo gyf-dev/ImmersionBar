@@ -30,7 +30,7 @@ class KotlinActivity : BaseKotlinActivity() {
     private var mIsHideStatusBar = false
 
     /**
-     * Bar最新快照，由setOnBarListener回调下发
+     * Bar最新快照，由OnBarPropertiesChangedListener回调下发
      */
     private var mBarProperties: BarProperties? = null
 
@@ -64,8 +64,8 @@ class KotlinActivity : BaseKotlinActivity() {
                 }"
                 Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
             }
-            setOnBarListener {
-                Log.d("KotlinActivity", "onBarChange: $it")
+            addOnBarPropertiesChangedListener {
+                Log.d("KotlinActivity", "onBarPropertiesChanged: $it")
                 mBarProperties = it
                 initView()
             }
@@ -79,7 +79,7 @@ class KotlinActivity : BaseKotlinActivity() {
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
-        // 等待setOnBarListener回调下发Bar快照后再刷新UI
+        // 等待OnBarPropertiesChangedListener回调下发Bar快照后再刷新UI
         val p = mBarProperties ?: return
         viewBinding.apply {
             tvPortrait.text = "${tvPortrait.title}${p.isPortrait}".content()

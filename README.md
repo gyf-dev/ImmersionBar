@@ -116,7 +116,7 @@
                   })
                  .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听
                  .setOnStatusBarListener(onStatusBarListener) //状态栏显示隐藏监听
-                 .setOnBarListener(OnBarListener) //第一次调用、横竖屏切换、状态栏/导航栏显隐变化都会触发，可以用来获取BarProperties快照
+                 .addOnBarPropertiesChangedListener(OnBarPropertiesChangedListener) //第一次调用、横竖屏切换、状态栏/导航栏显隐变化都会触发，可以用来获取BarProperties快照
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数

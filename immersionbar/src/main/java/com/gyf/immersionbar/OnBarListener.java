@@ -5,7 +5,9 @@ package com.gyf.immersionbar;
  *
  * @author geyifeng
  * @date 2019 -05-10 18:22
+ * @deprecated Use {@link OnBarPropertiesChangedListener} instead.
  */
+@Deprecated
 public interface OnBarListener {
 
     /**

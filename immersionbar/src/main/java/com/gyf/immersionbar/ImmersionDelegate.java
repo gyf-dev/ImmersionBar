@@ -83,7 +83,7 @@ class ImmersionDelegate implements Runnable {
     }
 
     /**
-     * 运行时系统栏显隐/导航模式变化时，投递{@link #run()}重建BarProperties快照并按去重规则回调OnBarListener。
+     * 运行时系统栏显隐/导航模式变化时，投递{@link #run()}重建BarProperties快照并按去重规则回调监听器。
      *
      * <p>凡是会改变insets的运行时事件（hideBar/showBar、手势临时显隐、三键⇄手势切换）
      * 都能通过{@link #run()}重新读取完整快照，让BarProperties保持实时。
@@ -101,6 +101,7 @@ class ImmersionDelegate implements Runnable {
     }
 
 
+    @SuppressWarnings("deprecation")
     @Override
     public void run() {
         ImmersionBar immersionBar = mImmersionBar;
@@ -108,13 +109,16 @@ class ImmersionDelegate implements Runnable {
             return;
         }
         OnBarListener onBarListener = immersionBar.getBarParams().onBarListener;
-        if (onBarListener == null) {
+        if (onBarListener == null && !immersionBar.hasOnBarPropertiesChangedListeners()) {
             return;
         }
         BarProperties barProperties = BarPropertiesUtils.getBarProperties(immersionBar.getWindow());
         if (mLastBarProperties == null || !mLastBarProperties.equals(barProperties)) {
             mLastBarProperties = new BarProperties(barProperties);
-            onBarListener.onBarChange(barProperties);
+            if (onBarListener != null) {
+                onBarListener.onBarChange(barProperties);
+            }
+            immersionBar.dispatchOnBarPropertiesChanged(barProperties);
         }
     }
 }

@@ -46,6 +46,7 @@ import androidx.fragment.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * android 4.4以上沉浸式以及bar的管理
@@ -117,6 +118,11 @@ public final class ImmersionBar implements ImmersionCallback {
      * 仅Activity/Fragment场景下由{@link ImmersionDelegate}回传，可能为null。
      */
     private ImmersionDelegate mImmersionDelegate = null;
+    /**
+     * Bar属性变化监听器集合。使用CopyOnWriteArraySet支持监听器在回调期间安全地添加或移除。
+     */
+    private final Set<OnBarPropertiesChangedListener> mOnBarPropertiesChangedListeners =
+            new CopyOnWriteArraySet<>();
     /**
      * 记录上一次导航栏的真实可见性，用于在翻转时回调OnNavigationBarListener。
      * null表示尚未播种（首次同步只播种状态、不回调，避免init误报）。
@@ -456,6 +462,7 @@ public final class ImmersionBar implements ImmersionCallback {
     }
 
     private void clearRuntimeReferences() {
+        mOnBarPropertiesChangedListeners.clear();
         mImmersionDelegate = null;
         mNavigationBarVisible = null;
         mStatusBarVisible = null;
@@ -4165,12 +4172,53 @@ public final class ImmersionBar implements ImmersionCallback {
 
 
     /**
+     * 添加Bar属性变化监听器。首次初始化以及Bar属性发生变化时会触发回调。
+     *
+     * @param listener the bar properties changed listener
+     * @return the immersion bar
+     */
+    public ImmersionBar addOnBarPropertiesChangedListener(
+            @NonNull OnBarPropertiesChangedListener listener) {
+        if (listener != null) {
+            mOnBarPropertiesChangedListeners.add(listener);
+        }
+        return this;
+    }
+
+    /**
+     * 移除Bar属性变化监听器。
+     *
+     * @param listener the bar properties changed listener
+     * @return the immersion bar
+     */
+    public ImmersionBar removeOnBarPropertiesChangedListener(
+            @Nullable OnBarPropertiesChangedListener listener) {
+        if (listener != null) {
+            mOnBarPropertiesChangedListeners.remove(listener);
+        }
+        return this;
+    }
+
+    boolean hasOnBarPropertiesChangedListeners() {
+        return !mOnBarPropertiesChangedListeners.isEmpty();
+    }
+
+    void dispatchOnBarPropertiesChanged(BarProperties barProperties) {
+        for (OnBarPropertiesChangedListener listener : mOnBarPropertiesChangedListeners) {
+            listener.onBarPropertiesChanged(barProperties);
+        }
+    }
+
+    /**
      * Bar监听，第一次调用和横竖屏切换都会触发此方法，比如可以解决横竖屏切换，横屏情况下，刘海屏遮挡布局的问题
      * Sets on bar listener.
      *
      * @param onBarListener the on bar listener
      * @return the on bar listener
+     * @deprecated Use {@link #addOnBarPropertiesChangedListener(OnBarPropertiesChangedListener)}
+     * and {@link #removeOnBarPropertiesChangedListener(OnBarPropertiesChangedListener)} instead.
      */
+    @Deprecated
     public ImmersionBar setOnBarListener(OnBarListener onBarListener) {
         if (onBarListener != null) {
             if (mBarParams.onBarListener == null) {

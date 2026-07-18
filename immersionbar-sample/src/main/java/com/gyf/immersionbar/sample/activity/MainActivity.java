@@ -95,8 +95,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         super.initImmersionBar();
         ImmersionBar.with(this)
                 .titleBar(R.id.toolbar)
-                .setOnBarListener(barProperties -> {
-                    Log.d(mTag, "onBarChange: " + barProperties.toString());
+                .addOnBarPropertiesChangedListener(barProperties -> {
+                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties.toString());
                     adjustView(barProperties);
                 })
                 .setOnStatusBarListener(show -> Log.d(mTag, "onStatusBarChange: " + show))
@@ -381,7 +381,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * 适配刘海屏遮挡数据问题
      * Adjust view.
      *
-     * @param barProperties the bar properties,ImmersionBar#setOnBarListener
+     * @param barProperties the bar properties from OnBarPropertiesChangedListener
      */
     private void adjustView(BarProperties barProperties) {
         if (barProperties.isNotchScreen()) {

@@ -56,7 +56,7 @@ class ComposeActivity : ComponentActivity() {
             transparentStatusBar()
             navigationBarColor(R.color.btn13)
             statusBarDarkFont(mIsDarkFont)
-            setOnBarListener {
+            addOnBarPropertiesChangedListener {
                 mBarProperties.value = it
             }
             setOnStatusBarListener {
