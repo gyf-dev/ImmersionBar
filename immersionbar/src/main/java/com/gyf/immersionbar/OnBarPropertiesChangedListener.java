@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.NonNull;
+
 /**
  * Listener for changes to status and navigation bar properties.
  *
@@ -13,5 +15,5 @@ public interface OnBarPropertiesChangedListener {
      *
      * @param barProperties the bar info
      */
-    void onBarPropertiesChanged(BarProperties barProperties);
+    void onBarPropertiesChanged(@NonNull BarProperties barProperties);
 }

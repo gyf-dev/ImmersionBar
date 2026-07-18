@@ -4203,7 +4203,7 @@ public final class ImmersionBar implements ImmersionCallback {
         return !mOnBarPropertiesChangedListeners.isEmpty();
     }
 
-    void dispatchOnBarPropertiesChanged(BarProperties barProperties) {
+    void dispatchOnBarPropertiesChanged(@NonNull BarProperties barProperties) {
         for (OnBarPropertiesChangedListener listener : mOnBarPropertiesChangedListeners) {
             listener.onBarPropertiesChanged(barProperties);
         }
