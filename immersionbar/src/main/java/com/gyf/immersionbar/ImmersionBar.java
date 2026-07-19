@@ -89,14 +89,6 @@ public final class ImmersionBar implements Runnable {
      */
     private BarConfig mBarConfig;
     /**
-     * 导航栏的高度，适配Emui3系统有用
-     */
-    private int mNavigationBarHeight = 0;
-    /**
-     * 导航栏的宽度，适配Emui3系统有用
-     */
-    private int mNavigationBarWidth = 0;
-    /**
      * ActionBar的高度
      */
     private int mActionBarHeight = 0;
@@ -126,21 +118,33 @@ public final class ImmersionBar implements Runnable {
     /**
      * 状态栏变化监听器集合。使用CopyOnWriteArraySet支持监听器在回调期间安全地添加或移除。
      */
-    private final Set<OnStatusBarChangedListener> mOnStatusBarChangedListeners =
-            new CopyOnWriteArraySet<>();
+    private final Set<OnStatusBarChangedListener> mOnStatusBarChangedListeners = new CopyOnWriteArraySet<>();
     /**
      * 导航栏变化监听器集合。使用CopyOnWriteArraySet支持监听器在回调期间安全地添加或移除。
      */
-    private final Set<OnNavigationBarChangedListener> mOnNavigationBarChangedListeners =
-            new CopyOnWriteArraySet<>();
+    private final Set<OnNavigationBarChangedListener> mOnNavigationBarChangedListeners = new CopyOnWriteArraySet<>();
+    /**
+     * 内部默认的状态栏变化回调，注册到mOnStatusBarChangedListeners。
+     * 同步一切依赖状态栏的view：假状态栏视图显隐与高度，以及titleBar/titleBarMarginTop/statusBarView
+     * 设置的重叠适配view（状态栏高度可变，如旋转后需按当前高度重新适配，三个静态方法按tag差量应用，重放幂等）。
+     */
+    private final OnStatusBarChangedListener mStatusBarSync = statusBar -> {
+        //先刷新BarConfig，假状态栏与重叠适配view才能拿到当前状态栏高度
+        mBarConfig = new BarConfig(mActivity);
+        syncStatusBarView(statusBar.isVisible());
+        fitsLayoutOverlap();
+    };
+    /**
+     * 内部默认的导航栏变化回调，注册到mOnNavigationBarChangedListeners，
+     * 用于同步假导航栏视图（隐藏时GONE，显示时重新按mBarParams上色）。
+     */
+    private final OnNavigationBarChangedListener mFakeNavigationBarSync =
+            navigationBar -> syncNavigationBarView(navigationBar.isVisible());
     /**
      * 内部导航模式切换监听（三键⇄手势等设置项变化），注册到NavigationBarObserver。
      * 只负责触发BarProperties快照刷新，由快照统一分发，不直接回调任何用户监听器。
      */
-    @SuppressWarnings("deprecation")
-    final OnNavigationBarListener mNavigationModeChangeListener = (show, type) -> {
-        ImmersionBar.this.OnNavigationBarListener(show, type);
-    };
+    final OnNavigationBarListener mNavigationModeChangeListener = ImmersionBar.this::onNavigationBarListener;
 
     /**
      * 用户使用tag增加的bar参数的集合
@@ -779,12 +783,6 @@ public final class ImmersionBar implements Runnable {
             } else {
                 mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             }
-            if (mNavigationBarHeight == 0) {
-                mNavigationBarHeight = mBarConfig.getNavigationBarHeight();
-            }
-            if (mNavigationBarWidth == 0) {
-                mNavigationBarWidth = mBarConfig.getNavigationBarWidth();
-            }
             //创建一个假的导航栏
             setupNavBarView();
         }
@@ -797,13 +795,14 @@ public final class ImmersionBar implements Runnable {
         View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
         if (statusBarView == null) {
             statusBarView = new View(mActivity);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                    mBarConfig.getStatusBarHeight());
-            params.gravity = Gravity.TOP;
-            statusBarView.setLayoutParams(params);
             statusBarView.setId(IMMERSION_STATUS_BAR_VIEW_ID);
             mDecorView.addView(statusBarView);
         }
+        //状态栏高度可能随旋转等变化（如刘海屏横竖屏高度不同），每次都按当前mBarConfig重设
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                mBarConfig.getStatusBarHeight());
+        params.gravity = Gravity.TOP;
+        statusBarView.setLayoutParams(params);
         if (mBarParams.statusBarColorEnabled) {
             statusBarView.setBackgroundColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     mBarParams.statusBarColorTransform, mBarParams.statusBarAlpha));
@@ -1233,22 +1232,18 @@ public final class ImmersionBar implements Runnable {
 
     /**
      * 系统栏（状态栏/导航栏）真实可见性变化时的统一回调，由{@link BarVisibilityObserver}按版本监听后调用。
-     * 做两件事：
-     * 1）edge-to-edge下同步假栏视图显隐（隐藏时GONE，显示时重新按mBarParams上色）；
-     * 2）刷新BarProperties快照，快照去重后统一分发给OnBarPropertiesChangedListener；
-     * 废弃的OnStatusBarListener/OnNavigationBarListener由内部适配器随快照分发回调。
-     * observer已按翻转去重，这里直接刷新即可，快照层会再次去重。
+     * 只负责刷新BarProperties快照：observer已按翻转去重，快照层再次去重后统一分发；
+     * 假栏视图与重叠适配view的同步由注册在监听器集合里的内部默认回调（mStatusBarSync/mFakeNavigationBarSync）随分发处理，
+     * 各类监听器（含废弃监听器）也随同一分发回调。
      *
      * @param statusVisible     状态栏当前是否可见
      * @param navigationVisible 导航栏当前是否可见
      */
     void onBarVisibilityChange(boolean statusVisible, boolean navigationVisible) {
         refreshBarProperties();
-        handleStatusBarViewVisibility(statusVisible);
-        handleNavigationBarViewVisibility(navigationVisible);
     }
 
-    void OnNavigationBarListener(boolean navigationVisible, NavigationBarType type) {
+    void onNavigationBarListener(boolean navigationVisible, NavigationBarType type) {
         refreshBarProperties();
     }
 
@@ -1268,7 +1263,7 @@ public final class ImmersionBar implements Runnable {
         mImmersionDelegate = delegate;
     }
 
-    private void handleStatusBarViewVisibility(boolean statusVisible) {
+    private void syncStatusBarView(boolean statusVisible) {
         View statusBarView = mDecorView.findViewById(IMMERSION_STATUS_BAR_VIEW_ID);
         if (statusBarView == null) return;
         if (statusVisible) {
@@ -1278,7 +1273,7 @@ public final class ImmersionBar implements Runnable {
         }
     }
 
-    private void handleNavigationBarViewVisibility(boolean show) {
+    private void syncNavigationBarView(boolean show) {
         View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (navigationBarView == null) return;
         mBarConfig = new BarConfig(mActivity);
@@ -1299,24 +1294,19 @@ public final class ImmersionBar implements Runnable {
                 bottom = 0;
                 right = 0;
             } else {
-                if (mNavigationBarHeight == 0) {
-                    mNavigationBarHeight = mBarConfig.getNavigationBarHeight();
-                }
-                if (mNavigationBarWidth == 0) {
-                    mNavigationBarWidth = mBarConfig.getNavigationBarWidth();
-                }
                 if (!mBarParams.hideNavigationBar) {
                     FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) navigationBarView.getLayoutParams();
+                    //导航栏高度/宽度可能随旋转、导航模式切换变化，按上面刚刷新的mBarConfig取当前值
                     if (mBarConfig.isNavigationAtBottom()) {
                         params.gravity = Gravity.BOTTOM;
-                        params.height = mNavigationBarHeight;
-                        bottom = !mBarParams.fullScreen ? mNavigationBarHeight : 0;
+                        params.height = mBarConfig.getNavigationBarHeight();
+                        bottom = !mBarParams.fullScreen ? mBarConfig.getNavigationBarHeight() : 0;
                         right = 0;
                     } else {
                         params.gravity = Gravity.END;
-                        params.width = mNavigationBarWidth;
+                        params.width = mBarConfig.getNavigationBarWidth();
                         bottom = 0;
-                        right = !mBarParams.fullScreen ? mNavigationBarWidth : 0;
+                        right = !mBarParams.fullScreen ? mBarConfig.getNavigationBarWidth() : 0;
                     }
                     navigationBarView.setLayoutParams(params);
                 }
@@ -2850,6 +2840,9 @@ public final class ImmersionBar implements Runnable {
         mBarParams = new BarParams();
         mDecorView = (ViewGroup) mWindow.getDecorView();
         mContentView = mDecorView.findViewById(android.R.id.content);
+        //注册内部默认回调：同步假状态栏/假导航栏视图及重叠适配view，随监听器集合参与统一分发
+        mOnStatusBarChangedListeners.add(mStatusBarSync);
+        mOnNavigationBarChangedListeners.add(mFakeNavigationBarSync);
     }
 
     /**
@@ -4124,7 +4117,7 @@ public final class ImmersionBar implements Runnable {
      * @return the on navigation bar listener
      * @deprecated 使用{@link #addOnNavigationBarChangedListener(OnNavigationBarChangedListener)}代替。
      * 为兼容旧代码，此处设置的监听器内部仍会通过BarProperties快照统一分发，
-     * 在首次初始化以及导航栏可见性或导航类型翻转时回调。
+     * 在首次初始化以及导航栏可见性、高度或导航类型变化时回调。
      */
     @Deprecated
     public ImmersionBar setOnNavigationBarListener(OnNavigationBarListener onNavigationBarListener) {
@@ -4148,7 +4141,7 @@ public final class ImmersionBar implements Runnable {
      * @return the immersion bar
      * @deprecated 使用{@link #addOnStatusBarChangedListener(OnStatusBarChangedListener)}代替。
      * 为兼容旧代码，此处设置的监听器内部仍会通过BarProperties快照统一分发，
-     * 在首次初始化以及状态栏可见性翻转时回调。
+     * 在首次初始化以及状态栏可见性、高度变化时回调。
      */
     @Deprecated
     public ImmersionBar setOnStatusBarListener(@Nullable OnStatusBarListener onStatusBarListener) {
@@ -4188,7 +4181,7 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 添加状态栏变化监听器。首次初始化以及状态栏可见性变化时会触发回调。
+     * 添加状态栏变化监听器。首次初始化以及状态栏可见性、高度变化时会触发回调。
      *
      * @param listener the status bar changed listener
      * @return the immersion bar
@@ -4210,7 +4203,7 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 添加导航栏变化监听器。首次初始化以及导航栏可见性、导航类型变化时会触发回调。
+     * 添加导航栏变化监听器。首次初始化以及导航栏可见性、高度、导航类型变化时会触发回调。
      *
      * @param listener the navigation bar changed listener
      * @return the immersion bar
@@ -4246,8 +4239,8 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 分发状态栏变化：先回调OnStatusBarChangedListener集合，再回调废弃的OnStatusBarListener。
-     * 是否发生变化由ImmersionDelegate对比连续快照后判定，这里纯粹执行回调，不做任何翻转判断。
+     * 分发状态栏变化：先回调OnStatusBarChangedListener集合（含内部默认的假状态栏同步回调），再回调废弃的OnStatusBarListener。
+     * 是否回调由ImmersionDelegate对比连续快照后判定（可见性或高度变化），这里纯粹执行回调。
      */
     void dispatchOnStatusBarChanged(@NonNull StatusBar statusBar) {
         for (OnStatusBarChangedListener listener : mOnStatusBarChangedListeners) {
@@ -4264,8 +4257,8 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 分发导航栏变化：先回调OnNavigationBarChangedListener集合，再回调废弃的OnNavigationBarListener。
-     * 是否发生变化由ImmersionDelegate对比连续快照后判定，这里纯粹执行回调，不做任何翻转判断。
+     * 分发导航栏变化：先回调OnNavigationBarChangedListener集合（含内部默认的假导航栏同步回调），再回调废弃的OnNavigationBarListener。
+     * 是否回调由ImmersionDelegate对比连续快照后判定（可见性、高度或导航类型变化），这里纯粹执行回调。
      */
     void dispatchOnNavigationBarChanged(@NonNull NavigationBar navigationBar) {
         for (OnNavigationBarChangedListener listener : mOnNavigationBarChangedListeners) {

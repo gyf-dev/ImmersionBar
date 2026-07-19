@@ -130,19 +130,23 @@ class ImmersionDelegate {
     }
 
     /**
-     * 是否需要回调废弃的OnStatusBarListener：首次快照（无上次快照）或状态栏可见性翻转时为true。
+     * 是否需要分发状态栏变化（OnStatusBarChangedListener集合及废弃的OnStatusBarListener）：
+     * 首次快照（无上次快照）或状态栏可见性、高度变化时为true。
      */
     private boolean shouldDispatchStatusBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
         return lastBarProperties == null
-                || lastBarProperties.isStatusBarVisible() != barProperties.isStatusBarVisible();
+                || lastBarProperties.isStatusBarVisible() != barProperties.isStatusBarVisible()
+                || lastBarProperties.getStatusBarHeight() != barProperties.getStatusBarHeight();
     }
 
     /**
-     * 是否需要回调废弃的OnNavigationBarListener：首次快照（无上次快照）或导航栏可见性/导航类型变化时为true。
+     * 是否需要分发导航栏变化（OnNavigationBarChangedListener集合及废弃的OnNavigationBarListener）：
+     * 首次快照（无上次快照）或导航栏可见性、高度、导航类型变化时为true。
      */
     private boolean shouldDispatchNavigationBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
         return lastBarProperties == null
                 || lastBarProperties.isNavigationBarVisible() != barProperties.isNavigationBarVisible()
+                || lastBarProperties.getNavigationBarHeight() != barProperties.getNavigationBarHeight()
                 || lastBarProperties.getNavigationBarType() != barProperties.getNavigationBarType();
     }
 }
