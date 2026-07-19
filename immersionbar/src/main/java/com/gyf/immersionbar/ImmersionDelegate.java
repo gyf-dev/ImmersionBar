@@ -106,10 +106,43 @@ class ImmersionDelegate {
         if (immersionBar == null || !immersionBar.initialized() || Build.VERSION.SDK_INT < Version.KITKAT) {
             return;
         }
+        BarProperties lastBarProperties = mLastBarProperties;
         BarProperties barProperties = BarPropertiesUtils.getBarProperties(immersionBar.getWindow());
-        if (mLastBarProperties == null || !mLastBarProperties.equals(barProperties)) {
+        if (isBarPropertiesChanged(lastBarProperties, barProperties)) {
             mLastBarProperties = new BarProperties(barProperties);
             immersionBar.dispatchOnBarPropertiesChanged(barProperties);
         }
+        if (shouldDispatchStatusBarChanged(lastBarProperties, barProperties)) {
+            immersionBar.dispatchOnStatusBarChanged(barProperties.isStatusBarVisible(),
+                    barProperties.getStatusBarHeight());
+        }
+        if (shouldDispatchNavigationBarChanged(lastBarProperties, barProperties)) {
+            immersionBar.dispatchOnNavigationBarChanged(barProperties.isNavigationBarVisible(),
+                    barProperties.getNavigationBarHeight(), barProperties.getNavigationBarType());
+        }
+    }
+
+    /**
+     * BarProperties快照是否相对上次分发发生变化：首次快照（无上次快照）视为变化。
+     */
+    private boolean isBarPropertiesChanged(BarProperties lastBarProperties, BarProperties barProperties) {
+        return lastBarProperties == null || !lastBarProperties.equals(barProperties);
+    }
+
+    /**
+     * 是否需要回调废弃的OnStatusBarListener：首次快照（无上次快照）或状态栏可见性翻转时为true。
+     */
+    private boolean shouldDispatchStatusBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
+        return lastBarProperties == null
+                || lastBarProperties.isStatusBarVisible() != barProperties.isStatusBarVisible();
+    }
+
+    /**
+     * 是否需要回调废弃的OnNavigationBarListener：首次快照（无上次快照）或导航栏可见性/导航类型变化时为true。
+     */
+    private boolean shouldDispatchNavigationBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
+        return lastBarProperties == null
+                || lastBarProperties.isNavigationBarVisible() != barProperties.isNavigationBarVisible()
+                || lastBarProperties.getNavigationBarType() != barProperties.getNavigationBarType();
     }
 }

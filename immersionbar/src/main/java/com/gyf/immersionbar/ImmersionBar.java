@@ -134,15 +134,6 @@ public final class ImmersionBar implements ImmersionCallback {
         }
     };
     /**
-     * 废弃的OnNavigationBarListener的内部分发器。作为OnBarPropertiesChangedListener注册，
-     * 通过对比连续BarProperties快照中导航栏可见性/导航类型的翻转回调废弃监听器。
-     */
-    private OnBarPropertiesChangedListener mDeprecatedNavigationBarDispatcher = null;
-    /**
-     * 废弃的OnStatusBarListener的内部分发器，机制同{@link #mDeprecatedNavigationBarDispatcher}。
-     */
-    private OnBarPropertiesChangedListener mDeprecatedStatusBarDispatcher = null;
-    /**
      * 用户使用tag增加的bar参数的集合
      */
     private final Map<String, BarParams> mTagMap = new HashMap<>();
@@ -473,8 +464,6 @@ public final class ImmersionBar implements ImmersionCallback {
     private void clearRuntimeReferences() {
         mOnBarPropertiesChangedListeners.clear();
         mImmersionDelegate = null;
-        mDeprecatedNavigationBarDispatcher = null;
-        mDeprecatedStatusBarDispatcher = null;
     }
 
     void onResume() {
@@ -4130,38 +4119,18 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the on navigation bar listener
      * @deprecated 使用{@link #addOnBarPropertiesChangedListener(OnBarPropertiesChangedListener)}代替，
      * 通过{@link BarProperties#isNavigationBarVisible()}和{@link BarProperties#getNavigationBarType()}
-     * 可获得同等信息。为兼容旧代码，此处设置的监听器会被包装成内部的OnBarPropertiesChangedListener，
-     * 在导航栏可见性或导航类型翻转时按旧语义回调（初始化时不回调）。
+     * 可获得同等信息。为兼容旧代码，此处设置的监听器内部仍会通过BarProperties快照统一分发，
+     * 在首次初始化以及导航栏可见性或导航类型翻转时回调。
      */
     @Deprecated
-    public ImmersionBar setOnNavigationBarListener(final OnNavigationBarListener onNavigationBarListener) {
+    public ImmersionBar setOnNavigationBarListener(OnNavigationBarListener onNavigationBarListener) {
         if (onNavigationBarListener != null) {
             if (mBarParams.onNavigationBarListener == null) {
                 mBarParams.onNavigationBarListener = onNavigationBarListener;
-                mDeprecatedNavigationBarDispatcher = new OnBarPropertiesChangedListener() {
-                    private Boolean mLastShow = null;
-                    private NavigationBarType mLastType = null;
-
-                    @Override
-                    public void onBarPropertiesChanged(@NonNull BarProperties barProperties) {
-                        boolean show = barProperties.isNavigationBarVisible();
-                        NavigationBarType type = barProperties.getNavigationBarType();
-                        //首次快照只播种不回调，保持旧语义（init时不回调）；可见性或导航类型翻转时回调
-                        boolean changed = mLastShow != null && (mLastShow != show || mLastType != type);
-                        mLastShow = show;
-                        mLastType = type;
-                        if (changed) {
-                            onNavigationBarListener.onNavigationBarChange(show, type);
-                        }
-                    }
-                };
-                addOnBarPropertiesChangedListener(mDeprecatedNavigationBarDispatcher);
             }
         } else {
             if (mBarParams.onNavigationBarListener != null) {
                 mBarParams.onNavigationBarListener = null;
-                removeOnBarPropertiesChangedListener(mDeprecatedNavigationBarDispatcher);
-                mDeprecatedNavigationBarDispatcher = null;
             }
         }
         return this;
@@ -4175,34 +4144,17 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the immersion bar
      * @deprecated 使用{@link #addOnBarPropertiesChangedListener(OnBarPropertiesChangedListener)}代替，
      * 通过{@link BarProperties#isStatusBarVisible()}可获得同等信息。为兼容旧代码，此处设置的监听器
-     * 会被包装成内部的OnBarPropertiesChangedListener，在状态栏可见性翻转时按旧语义回调（初始化时不回调）。
+     * 内部仍会通过BarProperties快照统一分发，在首次初始化以及状态栏可见性翻转时回调。
      */
     @Deprecated
-    public ImmersionBar setOnStatusBarListener(@Nullable final OnStatusBarListener onStatusBarListener) {
+    public ImmersionBar setOnStatusBarListener(@Nullable OnStatusBarListener onStatusBarListener) {
         if (onStatusBarListener != null) {
             if (mBarParams.onStatusBarListener == null) {
                 mBarParams.onStatusBarListener = onStatusBarListener;
-                mDeprecatedStatusBarDispatcher = new OnBarPropertiesChangedListener() {
-                    private Boolean mLastShow = null;
-
-                    @Override
-                    public void onBarPropertiesChanged(@NonNull BarProperties barProperties) {
-                        boolean show = barProperties.isStatusBarVisible();
-                        //首次快照只播种不回调，保持旧语义（init时不回调）；可见性翻转时回调
-                        boolean changed = mLastShow != null && mLastShow != show;
-                        mLastShow = show;
-                        if (changed) {
-                            onStatusBarListener.onStatusBarChange(show);
-                        }
-                    }
-                };
-                addOnBarPropertiesChangedListener(mDeprecatedStatusBarDispatcher);
             }
         } else {
             if (mBarParams.onStatusBarListener != null) {
                 mBarParams.onStatusBarListener = null;
-                removeOnBarPropertiesChangedListener(mDeprecatedStatusBarDispatcher);
-                mDeprecatedStatusBarDispatcher = null;
             }
         }
         return this;
@@ -4235,6 +4187,7 @@ public final class ImmersionBar implements ImmersionCallback {
         return !mOnBarPropertiesChangedListeners.isEmpty();
     }
 
+    @SuppressWarnings("deprecation")
     void dispatchOnBarPropertiesChanged(@NonNull BarProperties barProperties) {
         if (hasOnBarPropertiesChangedListeners()) {
             for (OnBarPropertiesChangedListener listener : mOnBarPropertiesChangedListeners) {
@@ -4244,6 +4197,36 @@ public final class ImmersionBar implements ImmersionCallback {
         OnBarListener onBarListener = mBarParams.onBarListener;
         if (onBarListener != null) {
             onBarListener.onBarChange(barProperties);
+        }
+    }
+
+    /**
+     * 回调废弃的OnStatusBarListener。是否发生变化由ImmersionDelegate对比连续快照后判定，
+     * 这里纯粹执行回调，不做任何翻转判断。
+     */
+    void dispatchOnStatusBarChanged(boolean isVisible, int statusBarHeight) {
+        BarParams barParams = mBarParams;
+        if (barParams == null) {
+            return;
+        }
+        OnStatusBarListener onStatusBarListener = barParams.onStatusBarListener;
+        if (onStatusBarListener != null) {
+            onStatusBarListener.onStatusBarChange(isVisible);
+        }
+    }
+
+    /**
+     * 回调废弃的OnNavigationBarListener。是否发生变化由ImmersionDelegate对比连续快照后判定，
+     * 这里纯粹执行回调，不做任何翻转判断。
+     */
+    void dispatchOnNavigationBarChanged(boolean isVisible, int navigationBarHeight, NavigationBarType type) {
+        BarParams barParams = mBarParams;
+        if (barParams == null) {
+            return;
+        }
+        OnNavigationBarListener onNavigationBarListener = barParams.onNavigationBarListener;
+        if (onNavigationBarListener != null) {
+            onNavigationBarListener.onNavigationBarChange(isVisible, type);
         }
     }
 
