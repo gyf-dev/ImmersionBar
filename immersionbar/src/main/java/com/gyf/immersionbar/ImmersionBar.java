@@ -57,7 +57,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @SuppressWarnings({"deprecation", "SameParameterValue"})
 @SuppressLint("UseRequiresApi")
 @TargetApi(Version.KITKAT)
-public final class ImmersionBar implements ImmersionCallback {
+public final class ImmersionBar implements Runnable {
 
     private Activity mActivity;
     private Fragment mSupportFragment;
@@ -138,11 +138,10 @@ public final class ImmersionBar implements ImmersionCallback {
      * 只负责触发BarProperties快照刷新，由快照统一分发，不直接回调任何用户监听器。
      */
     @SuppressWarnings("deprecation")
-    private final OnNavigationBarListener mNavigationModeChangeListener = (show, type) -> {
-        if (mImmersionDelegate != null) {
-            mImmersionDelegate.refreshBarProperties();
-        }
+    final OnNavigationBarListener mNavigationModeChangeListener = (show, type) -> {
+        ImmersionBar.this.OnNavigationBarListener(show, type);
     };
+
     /**
      * 用户使用tag增加的bar参数的集合
      */
@@ -1213,11 +1212,11 @@ public final class ImmersionBar implements ImmersionCallback {
         View navigationBarView = mDecorView.findViewById(IMMERSION_NAVIGATION_BAR_VIEW_ID);
         if (mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
             if (navigationBarView != null) {
-                EMUI3NavigationBarObserver.getInstance().addOnNavigationBarListener(this);
+                EMUI3NavigationBarObserver.getInstance().addOnNavigationBarListener(mNavigationModeChangeListener);
                 EMUI3NavigationBarObserver.getInstance().register(mActivity.getApplication());
             }
         } else {
-            EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
+            EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(mNavigationModeChangeListener);
             navigationBarView.setVisibility(View.GONE);
         }
     }
@@ -1244,26 +1243,20 @@ public final class ImmersionBar implements ImmersionCallback {
      * @param navigationVisible 导航栏当前是否可见
      */
     void onBarVisibilityChange(boolean statusVisible, boolean navigationVisible) {
-        if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null) {
-            return;
-        }
+        refreshBarProperties();
         handleStatusBarViewVisibility(statusVisible);
         handleNavigationBarViewVisibility(navigationVisible);
-        if (mImmersionDelegate != null) {
-            mImmersionDelegate.refreshBarProperties();
-        }
     }
 
-    @Override
-    public void onNavigationBarChange(boolean show, NavigationBarType type) {
-        if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null) {
+    void OnNavigationBarListener(boolean navigationVisible, NavigationBarType type) {
+        refreshBarProperties();
+    }
+
+    private void refreshBarProperties() {
+        if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null || mImmersionDelegate == null) {
             return;
         }
-        handleNavigationBarViewVisibility(show);
-        //导航模式切换（三键⇄手势）会改变导航类型/是否手势/高度等，刷新BarProperties快照并按去重分发OnBarPropertiesChangedListener
-        if (mImmersionDelegate != null) {
-            mImmersionDelegate.refreshBarProperties();
-        }
+        mImmersionDelegate.refreshBarProperties();
     }
 
     /**
@@ -1512,7 +1505,7 @@ public final class ImmersionBar implements ImmersionCallback {
             }
         }
         mFakeBarLayoutListener = null;
-        EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(this);
+        EMUI3NavigationBarObserver.getInstance().removeOnNavigationBarListener(mNavigationModeChangeListener);
         NavigationBarObserver.getInstance().removeOnNavigationBarListener(mNavigationModeChangeListener);
     }
 
@@ -4256,9 +4249,9 @@ public final class ImmersionBar implements ImmersionCallback {
      * 分发状态栏变化：先回调OnStatusBarChangedListener集合，再回调废弃的OnStatusBarListener。
      * 是否发生变化由ImmersionDelegate对比连续快照后判定，这里纯粹执行回调，不做任何翻转判断。
      */
-    void dispatchOnStatusBarChanged(boolean isVisible, int statusBarHeight) {
+    void dispatchOnStatusBarChanged(@NonNull StatusBar statusBar) {
         for (OnStatusBarChangedListener listener : mOnStatusBarChangedListeners) {
-            listener.onStatusBarChanged(isVisible, statusBarHeight);
+            listener.onStatusBarChanged(statusBar);
         }
         BarParams barParams = mBarParams;
         if (barParams == null) {
@@ -4266,7 +4259,7 @@ public final class ImmersionBar implements ImmersionCallback {
         }
         OnStatusBarListener onStatusBarListener = barParams.onStatusBarListener;
         if (onStatusBarListener != null) {
-            onStatusBarListener.onStatusBarChange(isVisible);
+            onStatusBarListener.onStatusBarChange(statusBar.isVisible());
         }
     }
 
@@ -4274,9 +4267,9 @@ public final class ImmersionBar implements ImmersionCallback {
      * 分发导航栏变化：先回调OnNavigationBarChangedListener集合，再回调废弃的OnNavigationBarListener。
      * 是否发生变化由ImmersionDelegate对比连续快照后判定，这里纯粹执行回调，不做任何翻转判断。
      */
-    void dispatchOnNavigationBarChanged(boolean isVisible, int navigationBarHeight, NavigationBarType type) {
+    void dispatchOnNavigationBarChanged(@NonNull NavigationBar navigationBar) {
         for (OnNavigationBarChangedListener listener : mOnNavigationBarChangedListeners) {
-            listener.onNavigationBarChanged(isVisible, navigationBarHeight, type);
+            listener.onNavigationBarChanged(navigationBar);
         }
         BarParams barParams = mBarParams;
         if (barParams == null) {
@@ -4284,7 +4277,7 @@ public final class ImmersionBar implements ImmersionCallback {
         }
         OnNavigationBarListener onNavigationBarListener = barParams.onNavigationBarListener;
         if (onNavigationBarListener != null) {
-            onNavigationBarListener.onNavigationBarChange(isVisible, type);
+            onNavigationBarListener.onNavigationBarChange(navigationBar.isVisible(), navigationBar.getType());
         }
     }
 

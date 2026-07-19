@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.NonNull;
+
 /**
  * The interface On status bar listener.
  *
@@ -10,8 +12,7 @@ public interface OnStatusBarChangedListener {
     /**
      * On status bar changed.
      *
-     * @param isVisible       是否显示
-     * @param statusBarHeight 状态栏高度
+     * @param statusBar the status bar
      */
-    void onStatusBarChanged(boolean isVisible, int statusBarHeight);
+    void onStatusBarChanged(@NonNull StatusBar statusBar);
 }

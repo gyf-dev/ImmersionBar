@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
  * @author geyifeng
  * @date 2017 /5/11
  */
+@SuppressWarnings("deprecation")
 class BarConfig {
 
     private final int mStatusBarHeight;

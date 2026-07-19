@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+
 import android.app.Application;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -11,8 +13,6 @@ import android.provider.Settings;
 
 import java.util.ArrayList;
 
-import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
-
 /**
  * 华为Emui3状态栏监听器
  *
@@ -21,7 +21,7 @@ import static com.gyf.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
  */
 final class EMUI3NavigationBarObserver extends ContentObserver {
 
-    private ArrayList<ImmersionCallback> mCallbacks;
+    private ArrayList<OnNavigationBarListener> mCallbacks;
     private Application mApplication;
     private Boolean mIsRegister = false;
 
@@ -52,7 +52,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
                 && mCallbacks != null && !mCallbacks.isEmpty()) {
             boolean show = !isNavigationBarHidden(mApplication);
             NavigationBarType navigationBarType = show ? NavigationBarType.CLASSIC : NavigationBarType.GESTURES;
-            for (ImmersionCallback callback : mCallbacks) {
+            for (OnNavigationBarListener callback : mCallbacks) {
                 callback.onNavigationBarChange(show, navigationBarType);
             }
         }
@@ -63,7 +63,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
                 && Settings.System.getInt(context.getContentResolver(), IMMERSION_NAVIGATION_BAR_MODE_EMUI, 0) == 1;
     }
 
-    void addOnNavigationBarListener(ImmersionCallback callback) {
+    void addOnNavigationBarListener(OnNavigationBarListener callback) {
         if (callback == null) {
             return;
         }
@@ -75,7 +75,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
         }
     }
 
-    void removeOnNavigationBarListener(ImmersionCallback callback) {
+    void removeOnNavigationBarListener(OnNavigationBarListener callback) {
         if (callback == null || mCallbacks == null) {
             return;
         }

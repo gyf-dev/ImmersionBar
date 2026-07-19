@@ -5,9 +5,7 @@ package com.gyf.immersionbar;
  *
  * @author geyifeng
  * @date 2019 /4/10 6:12 PM
- * @deprecated 使用{@link OnNavigationBarChangedListener}代替。
  */
-@Deprecated
 public interface OnNavigationBarListener {
     /**
      * On navigation bar change.

@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.NonNull;
+
 /**
  * The interface On navigation bar listener.
  *
@@ -10,9 +12,7 @@ public interface OnNavigationBarChangedListener {
     /**
      * On navigation bar changed.
      *
-     * @param isVisible           是否显示
-     * @param navigationBarHeight 导航栏高度
-     * @param type                导航栏类型
+     * @param navigationBar the navigation bar
      */
-    void onNavigationBarChanged(boolean isVisible, int navigationBarHeight, NavigationBarType type);
+    void onNavigationBarChanged(@NonNull NavigationBar navigationBar);
 }

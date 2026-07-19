@@ -113,12 +113,12 @@ class ImmersionDelegate {
             immersionBar.dispatchOnBarPropertiesChanged(barProperties);
         }
         if (shouldDispatchStatusBarChanged(lastBarProperties, barProperties)) {
-            immersionBar.dispatchOnStatusBarChanged(barProperties.isStatusBarVisible(),
-                    barProperties.getStatusBarHeight());
+            immersionBar.dispatchOnStatusBarChanged(new StatusBar(barProperties.isStatusBarVisible(),
+                    barProperties.getStatusBarHeight()));
         }
         if (shouldDispatchNavigationBarChanged(lastBarProperties, barProperties)) {
-            immersionBar.dispatchOnNavigationBarChanged(barProperties.isNavigationBarVisible(),
-                    barProperties.getNavigationBarHeight(), barProperties.getNavigationBarType());
+            immersionBar.dispatchOnNavigationBarChanged(new NavigationBar(barProperties.isNavigationBarVisible(),
+                    barProperties.getNavigationBarHeight(), barProperties.getNavigationBarType()));
         }
     }
 

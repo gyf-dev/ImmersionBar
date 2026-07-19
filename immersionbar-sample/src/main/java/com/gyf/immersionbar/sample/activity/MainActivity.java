@@ -24,6 +24,10 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.NavigationBar;
+import com.gyf.immersionbar.OnNavigationBarChangedListener;
+import com.gyf.immersionbar.OnStatusBarChangedListener;
+import com.gyf.immersionbar.StatusBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.BuildConfig;
 import com.gyf.immersionbar.sample.R;
@@ -96,12 +100,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         ImmersionBar.with(this)
                 .titleBar(R.id.toolbar)
                 .addOnBarPropertiesChangedListener(barProperties -> {
-                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties.toString());
+                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties);
                     adjustView(barProperties);
                 })
-                .setOnStatusBarListener(show -> Log.d(mTag, "onStatusBarChange: " + show))
-                .setOnNavigationBarListener((show, type) -> {
-                    Log.d(mTag, "onNavigationBarChange: " + show + " type: " + type);
+                .addOnStatusBarChangedListener(new OnStatusBarChangedListener() {
+                    @Override
+                    public void onStatusBarChanged(@NonNull StatusBar statusBar) {
+                        Log.d(mTag, "onStatusBarChanged: " + statusBar);
+                    }
+                })
+                .addOnNavigationBarChangedListener(new OnNavigationBarChangedListener() {
+                    @Override
+                    public void onNavigationBarChanged(@NonNull NavigationBar navigationBar) {
+                        Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
+                    }
                 })
                 .init();
     }
