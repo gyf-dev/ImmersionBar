@@ -1,5 +1,7 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.NonNull;
+
 /**
  * 状态栏信息
  *
@@ -38,5 +40,14 @@ public class StatusBar {
      */
     public int getHeight() {
         return height;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "StatusBar{" +
+                "visible=" + visible +
+                ", height=" + height +
+                '}';
     }
 }

@@ -39,12 +39,12 @@ public class ParamsActivity extends BaseActivity {
     protected void initImmersionBar() {
         super.initImmersionBar();
         ImmersionBar.with(this).titleBar(binding.toolbar)
-                .setOnStatusBarListener(show -> Toast.makeText(ParamsActivity.this, "状态栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show())
-                .setOnNavigationBarListener((show, type) -> {
-                    Toast.makeText(this, "导航栏" + (show ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                .addOnStatusBarChangedListener(statusBar -> Toast.makeText(ParamsActivity.this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show())
+                .addOnNavigationBarChangedListener(navigationBar -> {
+                    Toast.makeText(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                 })
                 .addOnBarPropertiesChangedListener(barProperties -> {
-                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties.toString());
+                    Log.d(mTag, "onBarPropertiesChanged: " + barProperties);
                     mBarProperties = barProperties;
                     initView();
                 })

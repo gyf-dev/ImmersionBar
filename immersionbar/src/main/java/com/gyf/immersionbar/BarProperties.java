@@ -59,6 +59,10 @@ public class BarProperties {
      */
     private int navigationBarHeight;
     /**
+     * 忽略可见性的导航栏高度（隐藏时也返回其实际尺寸）
+     */
+    private int navigationBarHeightIgnoringVisibility;
+    /**
      * 导航栏宽度
      */
     private int navigationBarWidth;
@@ -92,6 +96,7 @@ public class BarProperties {
         this.navigationBarVisible = other.navigationBarVisible;
         this.statusBarHeight = other.statusBarHeight;
         this.navigationBarHeight = other.navigationBarHeight;
+        this.navigationBarHeightIgnoringVisibility = other.navigationBarHeightIgnoringVisibility;
         this.navigationBarWidth = other.navigationBarWidth;
         this.notchHeight = other.notchHeight;
         this.actionBarHeight = other.actionBarHeight;
@@ -193,6 +198,14 @@ public class BarProperties {
         this.navigationBarHeight = navigationBarHeight;
     }
 
+    public int getNavigationBarHeightIgnoringVisibility() {
+        return navigationBarHeightIgnoringVisibility;
+    }
+
+    void setNavigationBarHeightIgnoringVisibility(int navigationBarHeightIgnoringVisibility) {
+        this.navigationBarHeightIgnoringVisibility = navigationBarHeightIgnoringVisibility;
+    }
+
     public int getNavigationBarWidth() {
         return navigationBarWidth;
     }
@@ -233,6 +246,7 @@ public class BarProperties {
                 ", navigationBarVisible=" + navigationBarVisible +
                 ", statusBarHeight=" + statusBarHeight +
                 ", navigationBarHeight=" + navigationBarHeight +
+                ", navigationBarHeightIgnoringVisibility=" + navigationBarHeightIgnoringVisibility +
                 ", navigationBarWidth=" + navigationBarWidth +
                 ", notchHeight=" + notchHeight +
                 ", actionBarHeight=" + actionBarHeight +
@@ -259,6 +273,7 @@ public class BarProperties {
                 && navigationBarVisible == that.navigationBarVisible
                 && statusBarHeight == that.statusBarHeight
                 && navigationBarHeight == that.navigationBarHeight
+                && navigationBarHeightIgnoringVisibility == that.navigationBarHeightIgnoringVisibility
                 && navigationBarWidth == that.navigationBarWidth
                 && notchHeight == that.notchHeight
                 && actionBarHeight == that.actionBarHeight
@@ -279,6 +294,7 @@ public class BarProperties {
         result = 31 * result + (navigationBarType != null ? navigationBarType.hashCode() : 0);
         result = 31 * result + statusBarHeight;
         result = 31 * result + navigationBarHeight;
+        result = 31 * result + navigationBarHeightIgnoringVisibility;
         result = 31 * result + navigationBarWidth;
         result = 31 * result + notchHeight;
         result = 31 * result + actionBarHeight;

@@ -59,17 +59,17 @@ class ComposeActivity : ComponentActivity() {
             addOnBarPropertiesChangedListener {
                 mBarProperties.value = it
             }
-            setOnStatusBarListener {
+            addOnStatusBarChangedListener {
                 Toast.makeText(
                     this@ComposeActivity,
-                    "状态栏${if (it) "显示了" else "隐藏了"}",
+                    "状态栏${if (it.isVisible) "显示了" else "隐藏了"}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            setOnNavigationBarListener { show, _ ->
+            addOnNavigationBarChangedListener {
                 Toast.makeText(
                     this@ComposeActivity,
-                    "导航栏${if (show) "显示了" else "隐藏了"}",
+                    "导航栏${if (it.isVisible) "显示了" else "隐藏了"}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -44,9 +44,9 @@ class KotlinActivity : BaseKotlinActivity() {
         immersionBar {
             titleBar(viewBinding.toolbar)
             navigationBarColor(R.color.btn13)
-            setOnStatusBarListener {
+            addOnStatusBarChangedListener {
                 val text = "状态栏${
-                    if (it) {
+                    if (it.isVisible) {
                         "显示了"
                     } else {
                         "隐藏了"
@@ -54,9 +54,9 @@ class KotlinActivity : BaseKotlinActivity() {
                 }"
                 Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
             }
-            setOnNavigationBarListener { show, _ ->
+            addOnNavigationBarChangedListener {
                 val text = "导航栏${
-                    if (show) {
+                    if (it.isVisible) {
                         "显示了"
                     } else {
                         "隐藏了"

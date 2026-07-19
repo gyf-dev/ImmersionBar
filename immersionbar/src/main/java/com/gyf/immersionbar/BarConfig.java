@@ -39,6 +39,7 @@ class BarConfig {
     private final int mActionBarHeight;
     private final boolean mHasNavigationBar;
     private final int mNavigationBarHeight;
+    private final int mNavigationBarHeightIgnoringVisibility;
     private final boolean mNavigationBarVisible;
     private final int mNavigationBarWidth;
     private final boolean mInPortrait;
@@ -96,6 +97,7 @@ class BarConfig {
         mStatusBarVisible = isStatusBarVisible(window);
         mActionBarHeight = getActionBarHeight(window);
         mNavigationBarHeight = getNavigationBarHeight(window);
+        mNavigationBarHeightIgnoringVisibility = getNavigationBarHeightIgnoringVisibility(window);
         mNavigationBarVisible = isNavigationBarVisible(window);
         mNavigationBarWidth = getNavigationBarWidth(window);
         mHasNavigationBar = (mNavigationBarHeight > 0);
@@ -201,6 +203,29 @@ class BarConfig {
         return result;
     }
 
+    /**
+     * 获取导航栏高度，忽略运行时可见性（隐藏时也返回其实际尺寸）。
+     * 手势导航（且厂商不可检测导航栏存在性）与hasNavBar一致视为无导航栏返回0；
+     * API 30+用getInsetsIgnoringVisibility，低版本用与可见性无关的静态资源高度。
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
+    private int getNavigationBarHeightIgnoringVisibility(Window window) {
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1) {
+            GestureUtils.GestureBean gestureBean = GestureUtils.getGestureBean(window.getContext());
+            if (!gestureBean.checkNavigation && gestureBean.isGesture) {
+                return 0;
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            Insets navInsets = getNavigationBarInsetsIgnoringVisibility(window);
+            if (navInsets != null) {
+                return navInsets.bottom;
+            }
+        }
+        return getNavigationBarHeightInternal(window.getContext());
+    }
+
     @SuppressLint("ObsoleteSdkInt")
     @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
     private int getNavigationBarWidth(Window window) {
@@ -287,6 +312,27 @@ class BarConfig {
         if (windowManager != null) {
             insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
             return insets.getInsets(WindowInsets.Type.navigationBars());
+        }
+        return null;
+    }
+
+    /**
+     * 获取系统导航栏的WindowInsets（忽略可见性，隐藏时也返回其实际尺寸）。获取途径同{@link #getNavigationBarInsets}。
+     *
+     * @param window window
+     * @return 导航栏insets，不可用时返回null
+     */
+    @RequiresApi(Version.R)
+    private static Insets getNavigationBarInsetsIgnoringVisibility(Window window) {
+        View decorView = window.getDecorView();
+        WindowInsets insets = decorView.getRootWindowInsets();
+        if (insets != null) {
+            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars());
+        }
+        WindowManager windowManager = window.getWindowManager();
+        if (windowManager != null) {
+            insets = windowManager.getCurrentWindowMetrics().getWindowInsets();
+            return insets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars());
         }
         return null;
     }
@@ -405,6 +451,15 @@ class BarConfig {
      */
     int getNavigationBarHeight() {
         return mNavigationBarHeight;
+    }
+
+    /**
+     * 获取导航栏高度，忽略运行时可见性（隐藏时也返回其实际尺寸）。
+     *
+     * @return The height of the navigation bar (in pixels), regardless of its current visibility.
+     */
+    int getNavigationBarHeightIgnoringVisibility() {
+        return mNavigationBarHeightIgnoringVisibility;
     }
 
     /**

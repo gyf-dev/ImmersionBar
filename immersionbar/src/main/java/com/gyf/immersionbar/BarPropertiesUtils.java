@@ -139,6 +139,7 @@ class BarPropertiesUtils {
         barProperties.setNavigationBarType(gestureBean.type);
         barProperties.setGestureNavigation(gestureBean.isGesture);
         barProperties.setNavigationBarHeight(barConfig.getNavigationBarHeight());
+        barProperties.setNavigationBarHeightIgnoringVisibility(barConfig.getNavigationBarHeightIgnoringVisibility());
         barProperties.setNavigationBarVisible(barConfig.isNavigationBarVisible());
         barProperties.setNavigationBarWidth(barConfig.getNavigationBarWidth());
         barProperties.setActionBarHeight(barConfig.getActionBarHeight());

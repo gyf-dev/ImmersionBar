@@ -4117,7 +4117,7 @@ public final class ImmersionBar implements Runnable {
      * @return the on navigation bar listener
      * @deprecated 使用{@link #addOnNavigationBarChangedListener(OnNavigationBarChangedListener)}代替。
      * 为兼容旧代码，此处设置的监听器内部仍会通过BarProperties快照统一分发，
-     * 在首次初始化以及导航栏可见性、高度或导航类型变化时回调。
+     * 在首次初始化以及导航栏可见性、高度、宽度或导航类型变化时回调。
      */
     @Deprecated
     public ImmersionBar setOnNavigationBarListener(OnNavigationBarListener onNavigationBarListener) {
@@ -4203,7 +4203,7 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 添加导航栏变化监听器。首次初始化以及导航栏可见性、高度、导航类型变化时会触发回调。
+     * 添加导航栏变化监听器。首次初始化以及导航栏可见性、高度、宽度、导航类型变化时会触发回调。
      *
      * @param listener the navigation bar changed listener
      * @return the immersion bar
@@ -4258,7 +4258,7 @@ public final class ImmersionBar implements Runnable {
 
     /**
      * 分发导航栏变化：先回调OnNavigationBarChangedListener集合（含内部默认的假导航栏同步回调），再回调废弃的OnNavigationBarListener。
-     * 是否回调由ImmersionDelegate对比连续快照后判定（可见性、高度或导航类型变化），这里纯粹执行回调。
+     * 是否回调由ImmersionDelegate对比连续快照后判定（可见性、高度、宽度或导航类型变化），这里纯粹执行回调。
      */
     void dispatchOnNavigationBarChanged(@NonNull NavigationBar navigationBar) {
         for (OnNavigationBarChangedListener listener : mOnNavigationBarChangedListeners) {

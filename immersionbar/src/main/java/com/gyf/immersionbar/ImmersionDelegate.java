@@ -118,7 +118,8 @@ class ImmersionDelegate {
         }
         if (shouldDispatchNavigationBarChanged(lastBarProperties, barProperties)) {
             immersionBar.dispatchOnNavigationBarChanged(new NavigationBar(barProperties.isNavigationBarVisible(),
-                    barProperties.getNavigationBarHeight(), barProperties.getNavigationBarType()));
+                    barProperties.getNavigationBarHeight(), barProperties.getNavigationBarHeightIgnoringVisibility(),
+                    barProperties.getNavigationBarWidth(), barProperties.getNavigationBarType()));
         }
     }
 
@@ -141,12 +142,14 @@ class ImmersionDelegate {
 
     /**
      * 是否需要分发导航栏变化（OnNavigationBarChangedListener集合及废弃的OnNavigationBarListener）：
-     * 首次快照（无上次快照）或导航栏可见性、高度、导航类型变化时为true。
+     * 首次快照（无上次快照）或导航栏可见性、高度（含忽略可见性高度）、宽度、导航类型变化时为true。
      */
     private boolean shouldDispatchNavigationBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
         return lastBarProperties == null
                 || lastBarProperties.isNavigationBarVisible() != barProperties.isNavigationBarVisible()
                 || lastBarProperties.getNavigationBarHeight() != barProperties.getNavigationBarHeight()
+                || lastBarProperties.getNavigationBarHeightIgnoringVisibility() != barProperties.getNavigationBarHeightIgnoringVisibility()
+                || lastBarProperties.getNavigationBarWidth() != barProperties.getNavigationBarWidth()
                 || lastBarProperties.getNavigationBarType() != barProperties.getNavigationBarType();
     }
 }
