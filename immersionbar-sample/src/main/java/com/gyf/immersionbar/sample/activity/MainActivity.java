@@ -24,10 +24,6 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
-import com.gyf.immersionbar.NavigationBar;
-import com.gyf.immersionbar.OnNavigationBarChangedListener;
-import com.gyf.immersionbar.OnStatusBarChangedListener;
-import com.gyf.immersionbar.StatusBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.BuildConfig;
 import com.gyf.immersionbar.sample.R;
@@ -103,16 +99,16 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     Log.d(mTag, "onBarPropertiesChanged: " + barProperties);
                     adjustView(barProperties);
                 })
-                .addOnStatusBarChangedListener(new OnStatusBarChangedListener() {
-                    @Override
-                    public void onStatusBarChanged(@NonNull StatusBar statusBar) {
-                        Log.d(mTag, "onStatusBarChanged: " + statusBar);
+                .addOnStatusBarChangedListener(statusBar -> {
+                    Log.d(mTag, "onStatusBarChanged: " + statusBar);
+                    if (!statusBar.isFirstCallback()) {
+                        Toast.makeText(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnNavigationBarChangedListener(new OnNavigationBarChangedListener() {
-                    @Override
-                    public void onNavigationBarChanged(@NonNull NavigationBar navigationBar) {
-                        Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
+                .addOnNavigationBarChangedListener(navigationBar -> {
+                    Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
+                    if (!navigationBar.isFirstCallback()) {
+                        Toast.makeText(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .init();
@@ -396,26 +392,30 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * @param barProperties the bar properties from OnBarPropertiesChangedListener
      */
     private void adjustView(BarProperties barProperties) {
-        if (barProperties.isNotchScreen()) {
-            if (mMainData != null) {
-                for (FunBean funBean : mMainData) {
-                    if (barProperties.isPortrait()) {
-                        funBean.setMarginStart(DensityUtil.dip2px(this, 8));
-                        funBean.setMarginEnd(DensityUtil.dip2px(this, 8));
-                    } else {
-                        if (barProperties.isLandscapeLeft()) {
-                            funBean.setMarginStart(DensityUtil.dip2px(this, 8) + barProperties.getNotchHeight());
-                            funBean.setMarginEnd(DensityUtil.dip2px(this, 8));
-                        } else {
-                            funBean.setMarginStart(DensityUtil.dip2px(this, 8));
-                            funBean.setMarginEnd(DensityUtil.dip2px(this, 8) + barProperties.getNotchHeight());
-                        }
-                    }
-                }
+        if (!barProperties.isNotchScreen() || mMainData == null || mMainData.isEmpty()) {
+            return;
+        }
+        int margin = DensityUtil.dip2px(this, 8);
+        int marginStart = margin;
+        int marginEnd = margin;
+        if (!barProperties.isPortrait()) {
+            if (barProperties.isLandscapeLeft()) {
+                marginStart += barProperties.getNotchHeight();
+            } else {
+                marginEnd += barProperties.getNotchHeight();
             }
-            if (mMainAdapter != null) {
-                mMainAdapter.notifyDataSetChanged();
-            }
+        }
+        //所有item的边距一致，用首项对比：边距未变化时直接返回，避免notifyDataSetChanged触发无效item动画
+        FunBean first = mMainData.get(0);
+        if (first.getMarginStart() == marginStart && first.getMarginEnd() == marginEnd) {
+            return;
+        }
+        for (FunBean funBean : mMainData) {
+            funBean.setMarginStart(marginStart);
+            funBean.setMarginEnd(marginEnd);
+        }
+        if (mMainAdapter != null) {
+            mMainAdapter.notifyDataSetChanged();
         }
     }
 

@@ -150,12 +150,16 @@ class BarConfig {
             if (insets != null) {
                 return insets.isVisible(WindowInsets.Type.statusBars());
             }
-        } else if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
-            View decorView = window.getDecorView();
-            int visibility = decorView.getSystemUiVisibility();
-            return (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
         }
-        return true;
+        boolean fullscreenByWindowFlag = (window.getAttributes().flags
+                & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
+            int visibility = window.getDecorView().getSystemUiVisibility();
+            boolean fullscreenBySystemUiFlag =
+                    (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0;
+            return !fullscreenByWindowFlag && !fullscreenBySystemUiFlag;
+        }
+        return !fullscreenByWindowFlag;
     }
 
     @SuppressLint("ObsoleteSdkInt")

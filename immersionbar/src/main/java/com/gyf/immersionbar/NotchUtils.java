@@ -552,12 +552,9 @@ public class NotchUtils {
             }
             return;
         }
-        window.getDecorView().post(new Runnable() {
-            @Override
-            public void run() {
-                if (callback != null) {
-                    callback.onNotchHeight(getNotchHeight(window));
-                }
+        window.getDecorView().post(() -> {
+            if (callback != null) {
+                callback.onNotchHeight(getNotchHeight(window));
             }
         });
     }

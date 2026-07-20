@@ -74,12 +74,18 @@ public class BarProperties {
      * ActionBar高度
      */
     private int actionBarHeight;
+    /**
+     * 是否为首次回调（首次快照派发时为true）。属于派发元数据而非窗口状态：
+     * 不参与equals/hashCode去重比较，也不随拷贝构造复制
+     */
+    private boolean firstCallback;
 
     BarProperties() {
     }
 
     /**
      * 拷贝构造，用于留存上一次派发的快照以做去重比较。
+     * 仅复制窗口状态字段；firstCallback是每次派发的元数据，不复制。
      *
      * @param other 源对象
      */
@@ -230,6 +236,19 @@ public class BarProperties {
         this.actionBarHeight = actionBarHeight;
     }
 
+    /**
+     * 是否为首次回调（首次快照派发）
+     *
+     * @return true表示这是监听器收到的首次回调
+     */
+    public boolean isFirstCallback() {
+        return firstCallback;
+    }
+
+    void setFirstCallback(boolean firstCallback) {
+        this.firstCallback = firstCallback;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -250,6 +269,7 @@ public class BarProperties {
                 ", navigationBarWidth=" + navigationBarWidth +
                 ", notchHeight=" + notchHeight +
                 ", actionBarHeight=" + actionBarHeight +
+                ", firstCallback=" + firstCallback +
                 '}';
     }
 

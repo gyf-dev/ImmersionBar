@@ -60,18 +60,22 @@ class ComposeActivity : ComponentActivity() {
                 mBarProperties.value = it
             }
             addOnStatusBarChangedListener {
-                Toast.makeText(
-                    this@ComposeActivity,
-                    "状态栏${if (it.isVisible) "显示了" else "隐藏了"}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if (it.isFirstCallback.not()) {
+                    Toast.makeText(
+                        this@ComposeActivity,
+                        "状态栏${if (it.isVisible) "显示了" else "隐藏了"}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             addOnNavigationBarChangedListener {
-                Toast.makeText(
-                    this@ComposeActivity,
-                    "导航栏${if (it.isVisible) "显示了" else "隐藏了"}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if (it.isFirstCallback.not()) {
+                    Toast.makeText(
+                        this@ComposeActivity,
+                        "导航栏${if (it.isVisible) "显示了" else "隐藏了"}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
         setContent {

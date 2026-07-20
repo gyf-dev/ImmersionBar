@@ -18,10 +18,15 @@ public class StatusBar {
      * 状态栏高度
      */
     private final int height;
+    /**
+     * 是否为首次回调（首次快照派发时为true）
+     */
+    private final boolean firstCallback;
 
-    StatusBar(boolean visible, int height) {
+    StatusBar(boolean visible, int height, boolean firstCallback) {
         this.visible = visible;
         this.height = height;
+        this.firstCallback = firstCallback;
     }
 
     /**
@@ -42,12 +47,22 @@ public class StatusBar {
         return height;
     }
 
+    /**
+     * 是否为首次回调（首次快照派发）
+     *
+     * @return true表示这是监听器收到的首次回调
+     */
+    public boolean isFirstCallback() {
+        return firstCallback;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "StatusBar{" +
                 "visible=" + visible +
                 ", height=" + height +
+                ", firstCallback=" + firstCallback +
                 '}';
     }
 }

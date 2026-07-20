@@ -108,18 +108,21 @@ class ImmersionDelegate {
         }
         BarProperties lastBarProperties = mLastBarProperties;
         BarProperties barProperties = BarPropertiesUtils.getBarProperties(immersionBar.getWindow());
+        //首次快照（无上次快照）时下面三个分发会同时触发，统一打上首次回调标记
+        boolean firstCallback = lastBarProperties == null;
+        barProperties.setFirstCallback(firstCallback);
         if (isBarPropertiesChanged(lastBarProperties, barProperties)) {
             mLastBarProperties = new BarProperties(barProperties);
             immersionBar.dispatchOnBarPropertiesChanged(barProperties);
         }
         if (shouldDispatchStatusBarChanged(lastBarProperties, barProperties)) {
             immersionBar.dispatchOnStatusBarChanged(new StatusBar(barProperties.isStatusBarVisible(),
-                    barProperties.getStatusBarHeight()));
+                    barProperties.getStatusBarHeight(), firstCallback));
         }
         if (shouldDispatchNavigationBarChanged(lastBarProperties, barProperties)) {
             immersionBar.dispatchOnNavigationBarChanged(new NavigationBar(barProperties.isNavigationBarVisible(),
                     barProperties.getNavigationBarHeight(), barProperties.getNavigationBarHeightIgnoringVisibility(),
-                    barProperties.getNavigationBarWidth(), barProperties.getNavigationBarType()));
+                    barProperties.getNavigationBarWidth(), barProperties.getNavigationBarType(), firstCallback));
         }
     }
 

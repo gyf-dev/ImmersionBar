@@ -123,6 +123,10 @@ class GestureUtils {
                     navigationBarType = NavigationBarType.GESTURES;
                     isGesture = true;
                     checkNavigation = true;
+                } else if (Build.VERSION.SDK_INT < Version.Q) {
+                    // Android 10 之前不存在手势导航，读不到 navigation_mode 时按经典导航键处理
+                    navigationBarType = NavigationBarType.CLASSIC;
+                    isGesture = false;
                 }
             }
             gestureBean.isGesture = isGesture;

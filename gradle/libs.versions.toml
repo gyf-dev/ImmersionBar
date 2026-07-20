@@ -1,7 +1,7 @@
 [versions]
 agp = "8.6.1"
 kotlin = "1.9.24"
-immersionbar = "3.3.1"
+immersionbar = "3.3.2"
 appcompat = "1.4.1"
 constraintlayout = "2.1.3"
 espressoCore = "3.1.0"

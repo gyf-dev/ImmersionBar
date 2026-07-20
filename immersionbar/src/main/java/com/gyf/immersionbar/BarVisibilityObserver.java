@@ -126,10 +126,11 @@ final class BarVisibilityObserver {
     }
 
     private void dispatchFromSystemUiFlags(int visibility) {
-        boolean statusVisible = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
-        }
+        boolean fullscreenBySystemUiFlag =
+                (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0;
+        boolean fullscreenByWindowFlag = (mImmersionBar.getWindow().getAttributes().flags
+                & android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+        boolean statusVisible = !fullscreenBySystemUiFlag && !fullscreenByWindowFlag;
         boolean navigationVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
         dispatch(statusVisible, navigationVisible);
     }

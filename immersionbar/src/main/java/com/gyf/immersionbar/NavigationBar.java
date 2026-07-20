@@ -30,13 +30,19 @@ public class NavigationBar {
      * 导航栏类型（经典三键/手势/三段式手势/两键/未知）
      */
     private final NavigationBarType type;
+    /**
+     * 是否为首次回调（首次快照派发时为true）
+     */
+    private final boolean firstCallback;
 
-    NavigationBar(boolean visible, int height, int heightIgnoringVisibility, int width, NavigationBarType type) {
+    NavigationBar(boolean visible, int height, int heightIgnoringVisibility, int width, NavigationBarType type,
+            boolean firstCallback) {
         this.visible = visible;
         this.height = height;
         this.heightIgnoringVisibility = heightIgnoringVisibility;
         this.width = width;
         this.type = type;
+        this.firstCallback = firstCallback;
     }
 
     /**
@@ -85,6 +91,15 @@ public class NavigationBar {
         return type;
     }
 
+    /**
+     * 是否为首次回调（首次快照派发）
+     *
+     * @return true表示这是监听器收到的首次回调
+     */
+    public boolean isFirstCallback() {
+        return firstCallback;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -94,6 +109,7 @@ public class NavigationBar {
                 ", heightIgnoringVisibility=" + heightIgnoringVisibility +
                 ", width=" + width +
                 ", type=" + type +
+                ", firstCallback=" + firstCallback +
                 '}';
     }
 }

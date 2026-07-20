@@ -45,24 +45,30 @@ class KotlinActivity : BaseKotlinActivity() {
             titleBar(viewBinding.toolbar)
             navigationBarColor(R.color.btn13)
             addOnStatusBarChangedListener {
-                val text = "状态栏${
-                    if (it.isVisible) {
-                        "显示了"
-                    } else {
-                        "隐藏了"
-                    }
-                }"
-                Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
+                if (it.isFirstCallback.not()) {
+                    Toast.makeText(
+                        this@KotlinActivity, "状态栏${
+                            if (it.isVisible) {
+                                "显示了"
+                            } else {
+                                "隐藏了"
+                            }
+                        }", Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             addOnNavigationBarChangedListener {
-                val text = "导航栏${
-                    if (it.isVisible) {
-                        "显示了"
-                    } else {
-                        "隐藏了"
-                    }
-                }"
-                Toast.makeText(this@KotlinActivity, text, Toast.LENGTH_SHORT).show()
+                if (it.isFirstCallback.not()) {
+                    Toast.makeText(
+                        this@KotlinActivity, "导航栏${
+                            if (it.isVisible) {
+                                "显示了"
+                            } else {
+                                "隐藏了"
+                            }
+                        }", Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             addOnBarPropertiesChangedListener {
                 Log.d("KotlinActivity", "onBarPropertiesChanged: $it")

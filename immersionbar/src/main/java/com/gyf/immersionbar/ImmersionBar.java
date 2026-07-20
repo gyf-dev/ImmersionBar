@@ -2599,9 +2599,26 @@ public final class ImmersionBar implements Runnable {
         hideStatusBar(window);
     }
 
+    /**
+     * 隐藏状态栏，通过窗口标志{@link WindowManager.LayoutParams#FLAG_FULLSCREEN}实现；
+     * API 16~29上同时同步{@link View#SYSTEM_UI_FLAG_FULLSCREEN}位，
+     * 使{@link OnStatusBarChangedListener}等显隐回调能正常触发。
+     * Hide status bar.
+     *
+     * @param window the window
+     */
     public static void hideStatusBar(@NonNull Window window) {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN && Build.VERSION.SDK_INT < Version.R) {
+            // API 16~29的显隐监听观察systemUiVisibility；同步该位才能触发运行时回调。
+            View decorView = window.getDecorView();
+            int oldVisibility = decorView.getSystemUiVisibility();
+            int newVisibility = oldVisibility | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            if (newVisibility != oldVisibility) {
+                decorView.setSystemUiVisibility(newVisibility);
+            }
+        }
     }
 
     public static void hideStatusBar(@NonNull View view) {
@@ -2655,8 +2672,25 @@ public final class ImmersionBar implements Runnable {
         showStatusBar(window);
     }
 
+    /**
+     * 显示状态栏，清除窗口标志{@link WindowManager.LayoutParams#FLAG_FULLSCREEN}；
+     * API 16~29上同时清除{@link View#SYSTEM_UI_FLAG_FULLSCREEN}位（保留其他位），
+     * 与{@link #hideStatusBar(Window)}对称，使显隐回调能正常触发。
+     * Show status bar.
+     *
+     * @param window the window
+     */
     public static void showStatusBar(@NonNull Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN && Build.VERSION.SDK_INT < Version.R) {
+            // 与hideStatusBar对称，保留调用方设置的其他systemUiVisibility位。
+            View decorView = window.getDecorView();
+            int oldVisibility = decorView.getSystemUiVisibility();
+            int newVisibility = oldVisibility & ~View.SYSTEM_UI_FLAG_FULLSCREEN;
+            if (newVisibility != oldVisibility) {
+                decorView.setSystemUiVisibility(newVisibility);
+            }
+        }
     }
 
     public static void showStatusBar(@NonNull View view) {
