@@ -1055,16 +1055,35 @@ public final class ImmersionBar implements Runnable {
             return uiFlags;
         }
         if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN) {
+            int currentUiFlags = mDecorView.getSystemUiVisibility();
+            boolean statusBarHidden =
+                    (mWindow.getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0 ||
+                            (currentUiFlags & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0;
+            boolean navigationBarHidden =
+                    (currentUiFlags & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
             switch (mBarParams.barHide) {
                 case FLAG_HIDE_BAR:
                     uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.INVISIBLE;
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN;
                     break;
                 case FLAG_HIDE_STATUS_BAR:
-                    uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.INVISIBLE;
+                    // 目标栏由显示变为隐藏时，保留导航栏当前的原生隐藏状态；
+                    // 目标栏已隐藏时则维持原有“仅隐藏状态栏”的切换语义。
+                    if (!statusBarHidden && navigationBarHidden) {
+                        uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+                    }
+                    uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN;
                     break;
                 case FLAG_HIDE_NAVIGATION_BAR:
+                    // 目标栏由显示变为隐藏时，保留状态栏当前的原生隐藏状态；
+                    // 目标栏已隐藏时则维持原有“仅隐藏导航栏”的切换语义。
+                    if (!navigationBarHidden && statusBarHidden) {
+                        uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                    }
                     uiFlags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                     break;
@@ -1388,17 +1407,26 @@ public final class ImmersionBar implements Runnable {
         if (Build.VERSION.SDK_INT >= Version.R) {
             WindowInsetsController controller = mContentView.getWindowInsetsController();
             if (controller != null) {
+                WindowInsets insets = mDecorView.getRootWindowInsets();
+                boolean statusBarHidden = insets == null ||
+                        !insets.isVisible(WindowInsets.Type.statusBars());
+                boolean navigationBarHidden = insets == null ||
+                        !insets.isVisible(WindowInsets.Type.navigationBars());
                 switch (mBarParams.barHide) {
                     case FLAG_HIDE_BAR:
                         controller.hide(WindowInsets.Type.statusBars());
                         controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_HIDE_STATUS_BAR:
-                        controller.show(WindowInsets.Type.navigationBars());
+                        if (statusBarHidden) {
+                            controller.show(WindowInsets.Type.navigationBars());
+                        }
                         controller.hide(WindowInsets.Type.statusBars());
                         break;
                     case FLAG_HIDE_NAVIGATION_BAR:
-                        controller.show(WindowInsets.Type.statusBars());
+                        if (navigationBarHidden) {
+                            controller.show(WindowInsets.Type.statusBars());
+                        }
                         controller.hide(WindowInsets.Type.navigationBars());
                         break;
                     case FLAG_SHOW_BAR:
