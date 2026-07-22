@@ -52,7 +52,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
-                android:text="StatusBar Height:"
+                android:text="StatusBar Height（当前高度）:"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvStatusIgnoringVisibility"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="StatusBar Height（忽略可见性）:"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -100,7 +108,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:gravity="center"
-                android:text="NavigationBar Height:"
+                android:text="NavigationBar Height（当前高度）:"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvNavIgnoringVisibility"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:gravity="center"
+                android:text="NavigationBar Height（忽略可见性）:"
                 android:textColor="@android:color/black" />
 
             <TextView

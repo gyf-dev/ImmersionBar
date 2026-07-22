@@ -131,8 +131,11 @@ class BarPropertiesUtils {
             barProperties.setLandscapeRight(false);
         }
         BarConfig barConfig = new BarConfig(window);
-        barProperties.setStatusBarHeight(barConfig.getStatusBarHeight());
-        barProperties.setStatusBarVisible(barConfig.isStatusBarVisible());
+        int statusBarHeightIgnoringVisibility = barConfig.getStatusBarHeight();
+        boolean statusBarVisible = barConfig.isStatusBarVisible();
+        barProperties.setStatusBarHeight(statusBarVisible ? statusBarHeightIgnoringVisibility : 0);
+        barProperties.setStatusBarHeightIgnoringVisibility(statusBarHeightIgnoringVisibility);
+        barProperties.setStatusBarVisible(statusBarVisible);
         barProperties.setNavigationBar(barConfig.hasNavigationBar());
         barProperties.setNavigationAtBottom(barConfig.isNavigationAtBottom());
         GestureUtils.GestureBean gestureBean = GestureUtils.getGestureBean(context);

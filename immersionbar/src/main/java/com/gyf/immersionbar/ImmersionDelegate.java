@@ -117,7 +117,8 @@ class ImmersionDelegate {
         }
         if (shouldDispatchStatusBarChanged(lastBarProperties, barProperties)) {
             immersionBar.dispatchOnStatusBarChanged(new StatusBar(barProperties.isStatusBarVisible(),
-                    barProperties.getStatusBarHeight(), firstCallback));
+                    barProperties.getStatusBarHeight(), barProperties.getStatusBarHeightIgnoringVisibility(),
+                    firstCallback));
         }
         if (shouldDispatchNavigationBarChanged(lastBarProperties, barProperties)) {
             immersionBar.dispatchOnNavigationBarChanged(new NavigationBar(barProperties.isNavigationBarVisible(),
@@ -135,12 +136,14 @@ class ImmersionDelegate {
 
     /**
      * 是否需要分发状态栏变化（OnStatusBarChangedListener集合及废弃的OnStatusBarListener）：
-     * 首次快照（无上次快照）或状态栏可见性、高度变化时为true。
+     * 首次快照（无上次快照）或状态栏可见性、高度（含忽略可见性高度）变化时为true。
      */
     private boolean shouldDispatchStatusBarChanged(BarProperties lastBarProperties, BarProperties barProperties) {
         return lastBarProperties == null
                 || lastBarProperties.isStatusBarVisible() != barProperties.isStatusBarVisible()
-                || lastBarProperties.getStatusBarHeight() != barProperties.getStatusBarHeight();
+                || lastBarProperties.getStatusBarHeight() != barProperties.getStatusBarHeight()
+                || lastBarProperties.getStatusBarHeightIgnoringVisibility()
+                != barProperties.getStatusBarHeightIgnoringVisibility();
     }
 
     /**

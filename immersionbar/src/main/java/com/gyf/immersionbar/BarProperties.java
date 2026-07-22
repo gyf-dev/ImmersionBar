@@ -51,9 +51,13 @@ public class BarProperties {
      */
     private boolean navigationBarVisible = true;
     /**
-     * 状态栏高度，刘海屏横竖屏有可能状态栏高度不一样
+     * 状态栏当前高度，隐藏时为0；刘海屏横竖屏有可能状态栏高度不一样
      */
     private int statusBarHeight;
+    /**
+     * 忽略可见性的状态栏高度（隐藏时也返回其实际尺寸）
+     */
+    private int statusBarHeightIgnoringVisibility;
     /**
      * 导航栏高度
      */
@@ -101,6 +105,7 @@ public class BarProperties {
         this.statusBarVisible = other.statusBarVisible;
         this.navigationBarVisible = other.navigationBarVisible;
         this.statusBarHeight = other.statusBarHeight;
+        this.statusBarHeightIgnoringVisibility = other.statusBarHeightIgnoringVisibility;
         this.navigationBarHeight = other.navigationBarHeight;
         this.navigationBarHeightIgnoringVisibility = other.navigationBarHeightIgnoringVisibility;
         this.navigationBarWidth = other.navigationBarWidth;
@@ -188,12 +193,30 @@ public class BarProperties {
         this.navigationBarVisible = navigationBarVisible;
     }
 
+    /**
+     * 状态栏当前高度，隐藏时为0，单位为px
+     *
+     * @return the current status bar height
+     */
     public int getStatusBarHeight() {
         return statusBarHeight;
     }
 
     void setStatusBarHeight(int statusBarHeight) {
         this.statusBarHeight = statusBarHeight;
+    }
+
+    /**
+     * 状态栏高度（忽略可见性，隐藏时也返回其实际尺寸），单位为px
+     *
+     * @return the status bar height ignoring visibility
+     */
+    public int getStatusBarHeightIgnoringVisibility() {
+        return statusBarHeightIgnoringVisibility;
+    }
+
+    void setStatusBarHeightIgnoringVisibility(int statusBarHeightIgnoringVisibility) {
+        this.statusBarHeightIgnoringVisibility = statusBarHeightIgnoringVisibility;
     }
 
     public int getNavigationBarHeight() {
@@ -264,6 +287,7 @@ public class BarProperties {
                 ", statusBarVisible=" + statusBarVisible +
                 ", navigationBarVisible=" + navigationBarVisible +
                 ", statusBarHeight=" + statusBarHeight +
+                ", statusBarHeightIgnoringVisibility=" + statusBarHeightIgnoringVisibility +
                 ", navigationBarHeight=" + navigationBarHeight +
                 ", navigationBarHeightIgnoringVisibility=" + navigationBarHeightIgnoringVisibility +
                 ", navigationBarWidth=" + navigationBarWidth +
@@ -292,6 +316,7 @@ public class BarProperties {
                 && statusBarVisible == that.statusBarVisible
                 && navigationBarVisible == that.navigationBarVisible
                 && statusBarHeight == that.statusBarHeight
+                && statusBarHeightIgnoringVisibility == that.statusBarHeightIgnoringVisibility
                 && navigationBarHeight == that.navigationBarHeight
                 && navigationBarHeightIgnoringVisibility == that.navigationBarHeightIgnoringVisibility
                 && navigationBarWidth == that.navigationBarWidth
@@ -313,6 +338,7 @@ public class BarProperties {
         result = 31 * result + (navigationBarVisible ? 1 : 0);
         result = 31 * result + (navigationBarType != null ? navigationBarType.hashCode() : 0);
         result = 31 * result + statusBarHeight;
+        result = 31 * result + statusBarHeightIgnoringVisibility;
         result = 31 * result + navigationBarHeight;
         result = 31 * result + navigationBarHeightIgnoringVisibility;
         result = 31 * result + navigationBarWidth;

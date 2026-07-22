@@ -92,12 +92,16 @@ class KotlinActivity : BaseKotlinActivity() {
             tvLandscapeLeft.text = "${tvLandscapeLeft.title}${p.isLandscapeLeft}".content()
             tvLandscapeRight.text = "${tvLandscapeRight.title}${p.isLandscapeRight}".content()
             tvStatus.text = "${tvStatus.title}${p.statusBarHeight}".content()
+            tvStatusIgnoringVisibility.text =
+                "${tvStatusIgnoringVisibility.title}${p.statusBarHeightIgnoringVisibility}".content()
             tvStatusVisible.text = "${tvStatusVisible.title}${p.isStatusBarVisible}".content()
             tvHasNav.text = "${tvHasNav.title}${p.hasNavigationBar()}".content()
             tvNavVisible.text = "${tvNavVisible.title}${p.isNavigationBarVisible}".content()
             tvNavAtBottom.text = "${tvNavAtBottom.title}${p.isNavigationAtBottom}".content()
             tvNavType.text = "${tvNavType.title}${p.navigationBarType}".content()
             tvNav.text = "${tvNav.title}${p.navigationBarHeight}".content()
+            tvNavIgnoringVisibility.text =
+                "${tvNavIgnoringVisibility.title}${p.navigationBarHeightIgnoringVisibility}".content()
             tvNavWidth.text = "${tvNavWidth.title}${p.navigationBarWidth}".content()
             tvGesture.text = "${tvGesture.title}${p.isGestureNavigation}".content()
             tvHasNotch.text = "${tvHasNotch.title}${p.isNotchScreen}".content()

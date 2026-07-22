@@ -1,6 +1,6 @@
 ![logo](https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/readme_head.png)
 # ImmersionBar -- android 4.4以上沉浸式实现 
-[![version](https://img.shields.io/badge/version-3.3.1-brightgreen.svg)](https://central.sonatype.com/artifact/com.geyifeng.immersionbar/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
+[![version](https://img.shields.io/badge/version-3.3.2-brightgreen.svg)](https://central.sonatype.com/artifact/com.geyifeng.immersionbar/immersionbar) [![author](https://img.shields.io/badge/author-gyf--dev-orange.svg)](https://github.com/gyf-dev) [![简书](https://img.shields.io/badge/%E7%AE%80%E4%B9%A6-HeLe%E5%B0%8F%E5%AD%90%E6%8B%BD-blue.svg)](https://www.jianshu.com/p/2a884e211a62) [![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-314360549-red.svg)]()
 
 ## 直接看效果图，建议下载demo体验，最下面有各个版本的效果图
 <img width="300"  src="https://github.com/gyf-dev/Screenshots/blob/master/ImmersionBar/Screenshot_6.0.gif"/>
@@ -9,11 +9,11 @@
 > 3.1.1以上版本(mavenCentral)
    ```groovy
    // 基础依赖包，必须要依赖
-   implementation 'com.geyifeng.immersionbar:immersionbar:3.3.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar:3.3.2'
    // kotlin扩展（可选）
-   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.3.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.3.2'
    // fragment快速实现（可选）已废弃
-   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.3.1'
+   implementation 'com.geyifeng.immersionbar:immersionbar-components:3.3.2'
    ```
 > 3.0.0版本(jcenter)
    ```groovy
@@ -29,7 +29,7 @@
 #### [点我查看版本说明](https://github.com/gyf-dev/ImmersionBar/wiki)
 
 ## 下载demo 
-#### [点我下载immersionBar-3.3.1.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.3.1.apk)
+#### [点我下载immersionBar-3.3.2.apk](https://github.com/gyf-dev/ImmersionBar/blob/master/apk/immersionbar-3.3.2.apk)
 
 ## 关于全面屏与刘海
 #### 关于全面屏
@@ -114,9 +114,11 @@
                            LogUtils.e(isPopup);  //isPopup为true，软键盘弹出，为false，软键盘关闭
                        }
                   })
-                 .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，已废弃，请使用addOnBarPropertiesChangedListener
-                 .setOnStatusBarListener(onStatusBarListener) //状态栏显示隐藏监听，已废弃，请使用addOnBarPropertiesChangedListener
-                 .addOnBarPropertiesChangedListener(OnBarPropertiesChangedListener) //第一次调用、横竖屏切换、状态栏/导航栏显隐变化都会触发，可以用来获取BarProperties快照
+                 .setOnNavigationBarListener(onNavigationBarListener) //导航栏显示隐藏监听，已废弃，请使用addOnNavigationBarChangedListener
+                 .setOnStatusBarListener(onStatusBarListener) //状态栏显示隐藏监听，已废弃，请使用addOnStatusBarChangedListener
+                 .addOnBarPropertiesChangedListener(onBarPropertiesChangedListener) //第一次调用、横竖屏切换、状态栏/导航栏显隐变化都会触发，可以用来获取BarProperties快照
+                 .addOnStatusBarChangedListener(onStatusBarChangedListener) //状态栏变化监听，首次初始化以及状态栏可见性、高度变化时触发，回调StatusBar（是否可见、当前高度、忽略可见性的高度）
+                 .addOnNavigationBarChangedListener(onNavigationBarChangedListener) //导航栏变化监听，首次初始化以及导航栏可见性、高度、宽度、导航类型变化时触发，回调NavigationBar（是否可见、高度、忽略可见性高度、宽度、导航类型）
                  .addTag("tag")  //给以上设置的参数打标记
                  .getTag("tag")  //根据tag获得沉浸式参数
                  .reset()  //重置所以沉浸式参数
@@ -317,7 +319,7 @@
 	
 - public static BarProperties getBarProperties(Activity activity)
  
-    获取当前系统栏信息快照，包含状态栏/导航栏高度、宽度、是否可见、是否手势导航、导航栏位置、导航栏类型、刘海屏信息、ActionBar高度等。
+    获取当前系统栏信息快照，包含状态栏/导航栏当前高度、忽略可见性的状态栏/导航栏高度、导航栏宽度、是否可见、是否手势导航、导航栏位置、导航栏类型、刘海屏信息、ActionBar高度等。
     
 - public static boolean hasNavigationBar(Activity activity)
  
@@ -337,7 +339,7 @@
     
 - public static int getStatusBarHeight(Activity activity)
  
-    获得状态栏的高度
+    获得状态栏的实际高度。为兼容历史行为，无论状态栏当前是否隐藏都会返回其实际尺寸。
     
 - public static int getActionBarHeight(Activity activity)
  

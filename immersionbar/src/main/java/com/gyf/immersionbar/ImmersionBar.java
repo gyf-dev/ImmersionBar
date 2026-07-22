@@ -2303,8 +2303,8 @@ public final class ImmersionBar implements Runnable {
 
 
     /**
-     * Gets status bar height.
-     * 或得状态栏的高度
+     * Gets status bar height, regardless of its current visibility.
+     * 获得状态栏的实际高度（忽略当前可见性，隐藏时也返回其实际尺寸）
      *
      * @param activity the activity
      * @return the status bar height
@@ -2312,43 +2312,43 @@ public final class ImmersionBar implements Runnable {
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Activity activity) {
-        return getBarProperties(activity).getStatusBarHeight();
+        return getBarProperties(activity).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Window window) {
-        return getBarProperties(window).getStatusBarHeight();
+        return getBarProperties(window).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull View view) {
-        return getBarProperties(view).getStatusBarHeight();
+        return getBarProperties(view).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Dialog dialog) {
-        return getBarProperties(dialog).getStatusBarHeight();
+        return getBarProperties(dialog).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Fragment fragment) {
-        return getBarProperties(fragment).getStatusBarHeight();
+        return getBarProperties(fragment).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull android.app.Fragment fragment) {
-        return getBarProperties(fragment).getStatusBarHeight();
+        return getBarProperties(fragment).getStatusBarHeightIgnoringVisibility();
     }
 
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Version.ICE_CREAM_SANDWICH)
     public static int getStatusBarHeight(@NonNull Context context) {
-        return getBarProperties(context).getStatusBarHeight();
+        return getBarProperties(context).getStatusBarHeightIgnoringVisibility();
     }
 
     /**

@@ -78,12 +78,16 @@ public class ParamsActivity extends BaseActivity {
         binding.tvLandscapeLeft.setText(getText(getTitle(binding.tvLandscapeLeft) + p.isLandscapeLeft()));
         binding.tvLandscapeRight.setText(getText(getTitle(binding.tvLandscapeRight) + p.isLandscapeRight()));
         binding.tvStatus.setText(getText(getTitle(binding.tvStatus) + p.getStatusBarHeight()));
+        binding.tvStatusIgnoringVisibility.setText(getText(getTitle(binding.tvStatusIgnoringVisibility)
+                + p.getStatusBarHeightIgnoringVisibility()));
         binding.tvStatusVisible.setText(getText(getTitle(binding.tvStatusVisible) + p.isStatusBarVisible()));
         binding.tvHasNav.setText(getText(getTitle(binding.tvHasNav) + p.hasNavigationBar()));
         binding.tvNavVisible.setText(getText(getTitle(binding.tvNavVisible) + p.isNavigationBarVisible()));
         binding.tvNavAtBottom.setText(getText(getTitle(binding.tvNavAtBottom) + p.isNavigationAtBottom()));
         binding.tvNavType.setText(getText(getTitle(binding.tvNavType) + p.getNavigationBarType()));
         binding.tvNav.setText(getText(getTitle(binding.tvNav) + p.getNavigationBarHeight()));
+        binding.tvNavIgnoringVisibility.setText(getText(getTitle(binding.tvNavIgnoringVisibility)
+                + p.getNavigationBarHeightIgnoringVisibility()));
         binding.tvNavWidth.setText(getText(getTitle(binding.tvNavWidth) + p.getNavigationBarWidth()));
         binding.tvGesture.setText(getText(getTitle(binding.tvGesture) + p.isGestureNavigation()));
         binding.tvHasNotch.setText(getText(getTitle(binding.tvHasNotch) + p.isNotchScreen()));
