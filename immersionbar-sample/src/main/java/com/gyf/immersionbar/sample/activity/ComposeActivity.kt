@@ -140,7 +140,7 @@ class ComposeActivity : ComponentActivity() {
         onToggleNavigationBar: () -> Unit,
         onToggleStatusFont: () -> Unit
     ) {
-        val statusBarHeight = barProperties.statusBarHeight
+        val statusBarHeight = barProperties.statusBarHeightIgnoringVisibility
         val navigationBarHeight = barProperties.navigationBarHeight
         val statusBarHeightDp = with(LocalDensity.current) { statusBarHeight.toDp() }
 

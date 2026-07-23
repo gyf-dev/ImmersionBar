@@ -2301,6 +2301,159 @@ public final class ImmersionBar implements Runnable {
         return BarPropertiesUtils.getBarProperties(window);
     }
 
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param activity the activity
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull Activity activity) {
+        return StatusBar.from(getBarProperties(activity), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param fragment the fragment
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull Fragment fragment) {
+        return StatusBar.from(getBarProperties(fragment), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param fragment the fragment
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull android.app.Fragment fragment) {
+        return StatusBar.from(getBarProperties(fragment), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param dialog the dialog
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull Dialog dialog) {
+        return StatusBar.from(getBarProperties(dialog), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param view the view
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull View view) {
+        return StatusBar.from(getBarProperties(view), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param context the context
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull Context context) {
+        return StatusBar.from(getBarProperties(context), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前状态栏信息快照。
+     *
+     * @param window the window
+     * @return StatusBar快照
+     */
+    @NonNull
+    public static StatusBar getStatusBar(@NonNull Window window) {
+        return StatusBar.from(getBarProperties(window), false, StatusBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param activity the activity
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull Activity activity) {
+        return NavigationBar.from(getBarProperties(activity), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param fragment the fragment
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull Fragment fragment) {
+        return NavigationBar.from(getBarProperties(fragment), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param fragment the fragment
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull android.app.Fragment fragment) {
+        return NavigationBar.from(getBarProperties(fragment), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param dialog the dialog
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull Dialog dialog) {
+        return NavigationBar.from(getBarProperties(dialog), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param view the view
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull View view) {
+        return NavigationBar.from(getBarProperties(view), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param context the context
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull Context context) {
+        return NavigationBar.from(getBarProperties(context), false, NavigationBar.CHANGE_NONE);
+    }
+
+    /**
+     * 获取当前导航栏信息快照。
+     *
+     * @param window the window
+     * @return NavigationBar快照
+     */
+    @NonNull
+    public static NavigationBar getNavigationBar(@NonNull Window window) {
+        return NavigationBar.from(getBarProperties(window), false, NavigationBar.CHANGE_NONE);
+    }
 
     /**
      * Gets status bar height, regardless of its current visibility.

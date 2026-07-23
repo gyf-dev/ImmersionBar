@@ -143,6 +143,24 @@ val Window.barProperties get() = ImmersionBar.getBarProperties(this)
 val View.barProperties get() = ImmersionBar.getBarProperties(this)
 val Dialog.barProperties get() = ImmersionBar.getBarProperties(this)
 
+// 状态栏信息扩展
+val Activity.statusBar get() = ImmersionBar.getStatusBar(this)
+val Fragment.statusBar get() = ImmersionBar.getStatusBar(this)
+val android.app.Fragment.statusBar get() = ImmersionBar.getStatusBar(this)
+val Context.statusBar get() = ImmersionBar.getStatusBar(this)
+val Window.statusBar get() = ImmersionBar.getStatusBar(this)
+val View.statusBar get() = ImmersionBar.getStatusBar(this)
+val Dialog.statusBar get() = ImmersionBar.getStatusBar(this)
+
+// 导航栏信息扩展
+val Activity.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val Fragment.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val android.app.Fragment.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val Context.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val Window.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val View.navigationBar get() = ImmersionBar.getNavigationBar(this)
+val Dialog.navigationBar get() = ImmersionBar.getNavigationBar(this)
+
 // 状态栏扩展
 val Activity.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
 val Fragment.statusBarHeight get() = ImmersionBar.getStatusBarHeight(this)
