@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.res.Configuration;
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
 
 /**
  * @author geyifeng
@@ -20,6 +17,9 @@ public final class RequestBarManagerFragment extends Fragment {
     public ImmersionBar get(Object o) {
         if (mDelegate == null) {
             mDelegate = new ImmersionDelegate(o);
+            if (isResumed()) {
+                mDelegate.onResume();
+            }
         }
         return mDelegate.get();
     }
@@ -27,16 +27,11 @@ public final class RequestBarManagerFragment extends Fragment {
     public ImmersionBar get(Activity activity, Dialog dialog) {
         if (mDelegate == null) {
             mDelegate = new ImmersionDelegate(activity, dialog);
+            if (isResumed()) {
+                mDelegate.onResume();
+            }
         }
         return mDelegate.get();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mDelegate != null) {
-            mDelegate.onActivityCreated(getResources().getConfiguration());
-        }
     }
 
     @Override
@@ -44,6 +39,14 @@ public final class RequestBarManagerFragment extends Fragment {
         super.onResume();
         if (mDelegate != null) {
             mDelegate.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mDelegate != null) {
+            mDelegate.onPause();
         }
     }
 

@@ -24,6 +24,8 @@ import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarParams;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.NavigationBar;
+import com.gyf.immersionbar.StatusBar;
 import com.gyf.immersionbar.sample.AppManager;
 import com.gyf.immersionbar.sample.BuildConfig;
 import com.gyf.immersionbar.sample.R;
@@ -101,13 +103,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 })
                 .addOnStatusBarChangedListener(statusBar -> {
                     Log.d(mTag, "onStatusBarChanged: " + statusBar);
-                    if (!statusBar.isFirstCallback()) {
+                    if (!statusBar.isFirstCallback()
+                            && statusBar.hasChanged(StatusBar.CHANGE_VISIBILITY)) {
                         Toast.makeText(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnNavigationBarChangedListener(navigationBar -> {
                     Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
-                    if (!navigationBar.isFirstCallback()) {
+                    if (!navigationBar.isFirstCallback()
+                            && navigationBar.hasChanged(NavigationBar.CHANGE_VISIBILITY)) {
                         Toast.makeText(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
                     }
                 })

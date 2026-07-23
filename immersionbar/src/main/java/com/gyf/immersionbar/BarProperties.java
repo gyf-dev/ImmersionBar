@@ -1,6 +1,10 @@
 package com.gyf.immersionbar;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Bar相关信息
@@ -9,6 +13,51 @@ import androidx.annotation.NonNull;
  * @date 2019-05-10 18:43
  */
 public class BarProperties {
+
+    public static final int CHANGE_NONE = 0;
+    public static final int CHANGE_PORTRAIT = 1;
+    public static final int CHANGE_LANDSCAPE_LEFT = 1 << 1;
+    public static final int CHANGE_LANDSCAPE_RIGHT = 1 << 2;
+    public static final int CHANGE_NOTCH_SCREEN = 1 << 3;
+    public static final int CHANGE_HAS_NAVIGATION_BAR = 1 << 4;
+    public static final int CHANGE_NAVIGATION_AT_BOTTOM = 1 << 5;
+    public static final int CHANGE_NAVIGATION_BAR_TYPE = 1 << 6;
+    public static final int CHANGE_GESTURE_NAVIGATION = 1 << 7;
+    public static final int CHANGE_STATUS_BAR_VISIBILITY = 1 << 8;
+    public static final int CHANGE_NAVIGATION_BAR_VISIBILITY = 1 << 9;
+    public static final int CHANGE_STATUS_BAR_HEIGHT = 1 << 10;
+    public static final int CHANGE_STATUS_BAR_HEIGHT_IGNORING_VISIBILITY = 1 << 11;
+    public static final int CHANGE_NAVIGATION_BAR_HEIGHT = 1 << 12;
+    public static final int CHANGE_NAVIGATION_BAR_HEIGHT_IGNORING_VISIBILITY = 1 << 13;
+    public static final int CHANGE_NAVIGATION_BAR_WIDTH = 1 << 14;
+    public static final int CHANGE_NOTCH_HEIGHT = 1 << 15;
+    public static final int CHANGE_ACTION_BAR_HEIGHT = 1 << 16;
+    public static final int CHANGE_ALL = (1 << 17) - 1;
+
+    @IntDef(flag = true, value = {
+            CHANGE_NONE,
+            CHANGE_PORTRAIT,
+            CHANGE_LANDSCAPE_LEFT,
+            CHANGE_LANDSCAPE_RIGHT,
+            CHANGE_NOTCH_SCREEN,
+            CHANGE_HAS_NAVIGATION_BAR,
+            CHANGE_NAVIGATION_AT_BOTTOM,
+            CHANGE_NAVIGATION_BAR_TYPE,
+            CHANGE_GESTURE_NAVIGATION,
+            CHANGE_STATUS_BAR_VISIBILITY,
+            CHANGE_NAVIGATION_BAR_VISIBILITY,
+            CHANGE_STATUS_BAR_HEIGHT,
+            CHANGE_STATUS_BAR_HEIGHT_IGNORING_VISIBILITY,
+            CHANGE_NAVIGATION_BAR_HEIGHT,
+            CHANGE_NAVIGATION_BAR_HEIGHT_IGNORING_VISIBILITY,
+            CHANGE_NAVIGATION_BAR_WIDTH,
+            CHANGE_NOTCH_HEIGHT,
+            CHANGE_ACTION_BAR_HEIGHT,
+            CHANGE_ALL
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Change {
+    }
 
     /**
      * 是否是竖屏
@@ -83,6 +132,11 @@ public class BarProperties {
      * 不参与equals/hashCode去重比较，也不随拷贝构造复制
      */
     private boolean firstCallback;
+    /**
+     * 相对上一次已分发快照发生变化的属性位。属于派发元数据，不参与equals/hashCode或快照复制。
+     */
+    @Change
+    private int changedFlags = CHANGE_NONE;
 
     BarProperties() {
     }
@@ -272,6 +326,87 @@ public class BarProperties {
         this.firstCallback = firstCallback;
     }
 
+    /**
+     * 判断指定属性是否相对上一次已分发快照发生变化。传入多个常量按位或时，任一属性变化即返回true。
+     * 首次回调没有历史快照，所有属性均视为变化。
+     *
+     * @param change 一个或多个CHANGE_*常量
+     * @return true表示指定属性中至少有一个发生变化
+     */
+    public boolean hasChanged(@Change int change) {
+        return (changedFlags & change) != 0;
+    }
+
+    void setChangedFlags(@Change int changedFlags) {
+        this.changedFlags = changedFlags;
+    }
+
+    /**
+     * 计算当前快照相对上一次已分发快照发生变化的属性位。
+     *
+     * @param last 上一次已分发快照，null表示首次快照
+     * @return 一个或多个CHANGE_*常量
+     */
+    @Change
+    int calculateChanges(BarProperties last) {
+        if (last == null) {
+            return CHANGE_ALL;
+        }
+        int changes = CHANGE_NONE;
+        if (last.portrait != portrait) {
+            changes |= CHANGE_PORTRAIT;
+        }
+        if (last.landscapeLeft != landscapeLeft) {
+            changes |= CHANGE_LANDSCAPE_LEFT;
+        }
+        if (last.landscapeRight != landscapeRight) {
+            changes |= CHANGE_LANDSCAPE_RIGHT;
+        }
+        if (last.notchScreen != notchScreen) {
+            changes |= CHANGE_NOTCH_SCREEN;
+        }
+        if (last.hasNavigationBar != hasNavigationBar) {
+            changes |= CHANGE_HAS_NAVIGATION_BAR;
+        }
+        if (last.navigationAtBottom != navigationAtBottom) {
+            changes |= CHANGE_NAVIGATION_AT_BOTTOM;
+        }
+        if (last.navigationBarType != navigationBarType) {
+            changes |= CHANGE_NAVIGATION_BAR_TYPE;
+        }
+        if (last.gestureNavigation != gestureNavigation) {
+            changes |= CHANGE_GESTURE_NAVIGATION;
+        }
+        if (last.statusBarVisible != statusBarVisible) {
+            changes |= CHANGE_STATUS_BAR_VISIBILITY;
+        }
+        if (last.navigationBarVisible != navigationBarVisible) {
+            changes |= CHANGE_NAVIGATION_BAR_VISIBILITY;
+        }
+        if (last.statusBarHeight != statusBarHeight) {
+            changes |= CHANGE_STATUS_BAR_HEIGHT;
+        }
+        if (last.statusBarHeightIgnoringVisibility != statusBarHeightIgnoringVisibility) {
+            changes |= CHANGE_STATUS_BAR_HEIGHT_IGNORING_VISIBILITY;
+        }
+        if (last.navigationBarHeight != navigationBarHeight) {
+            changes |= CHANGE_NAVIGATION_BAR_HEIGHT;
+        }
+        if (last.navigationBarHeightIgnoringVisibility != navigationBarHeightIgnoringVisibility) {
+            changes |= CHANGE_NAVIGATION_BAR_HEIGHT_IGNORING_VISIBILITY;
+        }
+        if (last.navigationBarWidth != navigationBarWidth) {
+            changes |= CHANGE_NAVIGATION_BAR_WIDTH;
+        }
+        if (last.notchHeight != notchHeight) {
+            changes |= CHANGE_NOTCH_HEIGHT;
+        }
+        if (last.actionBarHeight != actionBarHeight) {
+            changes |= CHANGE_ACTION_BAR_HEIGHT;
+        }
+        return changes;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -294,6 +429,7 @@ public class BarProperties {
                 ", notchHeight=" + notchHeight +
                 ", actionBarHeight=" + actionBarHeight +
                 ", firstCallback=" + firstCallback +
+                ", changedFlags=" + changedFlags +
                 '}';
     }
 
