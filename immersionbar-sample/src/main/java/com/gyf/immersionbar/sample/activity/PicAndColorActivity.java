@@ -4,13 +4,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.databinding.ActivityPicColorBinding;
+import com.gyf.immersionbar.sample.utils.ToastUtils;
 import com.gyf.immersionbar.sample.utils.Utils;
 
 
@@ -60,7 +60,7 @@ public class PicAndColorActivity extends BaseActivity implements SeekBar.OnSeekB
                 if (ImmersionBar.hasNavigationBar(this)) {
                     ImmersionBar.with(this).navigationBarColor(R.color.colorAccent).init();
                 } else {
-                    Toast.makeText(this, "当前设备没有导航栏", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(this, "当前设备没有导航栏");
                 }
                 break;
             case R.id.btn_color:

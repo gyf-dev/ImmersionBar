@@ -8,7 +8,6 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.gyf.immersionbar.BarProperties
@@ -20,6 +19,7 @@ import com.gyf.immersionbar.ktx.isSupportStatusBarDarkFont
 import com.gyf.immersionbar.ktx.showStatusBar
 import com.gyf.immersionbar.sample.R
 import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding
+import com.gyf.immersionbar.sample.utils.ToastUtils
 
 /**
  * @author geyifeng
@@ -46,28 +46,28 @@ class KotlinActivity : BaseKotlinActivity() {
             navigationBarColor(R.color.btn13)
             addOnStatusBarChangedListener {
                 if (it.isFirstCallback.not()) {
-                    Toast.makeText(
+                    ToastUtils.show(
                         this@KotlinActivity, "状态栏${
                             if (it.isVisible) {
                                 "显示了"
                             } else {
                                 "隐藏了"
                             }
-                        }", Toast.LENGTH_SHORT
-                    ).show()
+                        }"
+                    )
                 }
             }
             addOnNavigationBarChangedListener {
                 if (it.isFirstCallback.not()) {
-                    Toast.makeText(
+                    ToastUtils.show(
                         this@KotlinActivity, "导航栏${
                             if (it.isVisible) {
                                 "显示了"
                             } else {
                                 "隐藏了"
                             }
-                        }", Toast.LENGTH_SHORT
-                    ).show()
+                        }"
+                    )
                 }
             }
             addOnBarPropertiesChangedListener {

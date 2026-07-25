@@ -4,7 +4,9 @@
     android:id="@+id/line"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darker_gray"
+    android:background="@color/orange"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -16,17 +18,153 @@
         app:title="解决EditText和软键盘的问题"
         app:titleTextColor="@android:color/white" />
 
-    <ListView
-        android:id="@+id/list_view"
+    <ScrollView
+        android:id="@+id/scroll_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:fillViewport="true">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <EditText
-        android:id="@+id/edit"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="验证环境"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_environment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/cornsilk"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_keyboard_enable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:checked="true"
+                android:text="启用 ImmersionBar keyboardEnable" />
+
+            <TextView
+                android:id="@+id/tv_keyboard_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="keyboardEnable(true)：库接管键盘适配"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="验证步骤：\n1. 分别切换手势导航和三键导航。\n2. 点击顶部、中部和底部输入框。\n3. 键盘弹出后，底部白色面板应紧贴键盘。\n4. 如果中间露出橙色横条，说明底部 padding 被重复计算。"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="顶部输入框：检查页面滚动"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/darker_gray"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="滚动内容占位区\n\n保持键盘打开后上下滚动，检查布局是否跳动。"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edit_middle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="中部输入框：检查自动滚动"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="可关闭 keyboardEnable 对比系统默认行为；重新开启后继续验证库的处理。"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottom_panel"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="我是输入框" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_keyboard_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cornsilk"
+            android:padding="8dp"
+            android:text="键盘状态：已关闭"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="底部输入框：重点检查是否紧贴键盘"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_show_keyboard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="打开键盘" />
+
+            <Button
+                android:id="@+id/btn_hide_keyboard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="关闭键盘" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

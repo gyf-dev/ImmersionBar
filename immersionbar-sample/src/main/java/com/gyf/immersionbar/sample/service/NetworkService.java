@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -21,15 +22,26 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class NetworkService extends JobIntentService {
 
-    private final static int JOB_ID = 1;
-    private NetworkEvent mNetworkEvent;
-    private NetworkBroadCastReceiver mReceiver;
+    private static final int JOB_ID = 1;
+    private static final Object NETWORK_LOCK = new Object();
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterNetwork(this);
-    }
+    private static boolean sNetworkCallbackRegistered;
+    private static NetworkBroadCastReceiver sReceiver;
+
+    private static final ConnectivityManager.NetworkCallback NETWORK_CALLBACK =
+            new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+                    super.onAvailable(network);
+                    postNetworkEvent(true);
+                }
+
+                @Override
+                public void onLost(Network network) {
+                    super.onLost(network);
+                    postNetworkEvent(false);
+                }
+            };
 
     public static void enqueueWork(Context context) {
         enqueueWork(context, NetworkService.class, JOB_ID, new Intent());
@@ -37,53 +49,34 @@ public class NetworkService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        registerNetwork(this);
+        registerNetwork(getApplicationContext());
     }
 
-    private void registerNetwork(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
+    private static void registerNetwork(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) {
+            postNetworkEvent(false);
+            return;
+        }
+        synchronized (NETWORK_LOCK) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
-                    @Override
-                    public void onAvailable(Network network) {
-                        super.onAvailable(network);
-                        getNetworkEvent().setAvailable(true);
-                        EventBus.getDefault().post(mNetworkEvent);
-                    }
-
-                    @Override
-                    public void onLost(Network network) {
-                        super.onLost(network);
-                        getNetworkEvent().setAvailable(false);
-                        EventBus.getDefault().post(mNetworkEvent);
-                    }
-                });
-            } else {
+                if (!sNetworkCallbackRegistered) {
+                    connectivityManager.registerDefaultNetworkCallback(NETWORK_CALLBACK);
+                    sNetworkCallbackRegistered = true;
+                }
+            } else if (sReceiver == null) {
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-                mReceiver = new NetworkBroadCastReceiver();
-                LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, filter);
+                sReceiver = new NetworkBroadCastReceiver();
+                LocalBroadcastManager.getInstance(context).registerReceiver(sReceiver, filter);
             }
-        } else {
-            getNetworkEvent().setAvailable(false);
-            EventBus.getDefault().post(mNetworkEvent);
         }
     }
 
-    private void unregisterNetwork(Context context) {
-        if (mNetworkEvent != null) {
-            mNetworkEvent = null;
-        }
-        if (mReceiver != null) {
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(mReceiver);
-        }
-    }
-
-    private NetworkEvent getNetworkEvent() {
-        if (mNetworkEvent == null) {
-            mNetworkEvent = new NetworkEvent();
-        }
-        return mNetworkEvent;
+    private static void postNetworkEvent(boolean available) {
+        NetworkEvent networkEvent = new NetworkEvent();
+        networkEvent.setAvailable(available);
+        EventBus.getDefault().post(networkEvent);
     }
 }

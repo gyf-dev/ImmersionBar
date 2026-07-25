@@ -7,7 +7,6 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
@@ -18,6 +17,7 @@ import com.gyf.immersionbar.NavigationBar;
 import com.gyf.immersionbar.StatusBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.databinding.ActivityParamsBinding;
+import com.gyf.immersionbar.sample.utils.ToastUtils;
 
 
 /**
@@ -50,14 +50,14 @@ public class ParamsActivity extends BaseActivity {
                     Log.d(mTag, "onStatusBarChanged: " + statusBar);
                     if (!statusBar.isFirstCallback()
                             && statusBar.hasChanged(StatusBar.CHANGE_VISIBILITY)) {
-                        Toast.makeText(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"));
                     }
                 })
                 .addOnNavigationBarChangedListener(navigationBar -> {
                     Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
                     if (!navigationBar.isFirstCallback()
                             && navigationBar.hasChanged(NavigationBar.CHANGE_VISIBILITY)) {
-                        Toast.makeText(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"));
                     }
                 })
                 .navigationBarColor(R.color.btn13).init();

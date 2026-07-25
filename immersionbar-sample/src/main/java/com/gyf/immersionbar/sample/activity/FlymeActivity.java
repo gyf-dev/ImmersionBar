@@ -2,11 +2,11 @@ package com.gyf.immersionbar.sample.activity;
 
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.databinding.ActivityFlymeBinding;
+import com.gyf.immersionbar.sample.utils.ToastUtils;
 
 
 /**
@@ -34,7 +34,7 @@ public class FlymeActivity extends BaseActivity {
             if (s.length() == 7) {
                 ImmersionBar.with(this).flymeOSStatusBarFontColor(s).init();
             } else {
-                Toast.makeText(FlymeActivity.this, "请正确输入6位颜色值", Toast.LENGTH_SHORT).show();
+                ToastUtils.show(FlymeActivity.this, "请正确输入6位颜色值");
             }
         });
     }

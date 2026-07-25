@@ -30,6 +30,7 @@ public class DataUtils {
         funBeans.add(new FunBean(context.getString(R.string.text_tab), ContextCompat.getDrawable(context, R.mipmap.icon_13)));
         funBeans.add(new FunBean(context.getString(R.string.text_tab_two), ContextCompat.getDrawable(context, R.mipmap.icon_14)));
         funBeans.add(new FunBean(context.getString(R.string.text_web), ContextCompat.getDrawable(context, R.mipmap.icon_15)));
+        funBeans.add(new FunBean(context.getString(R.string.text_issue_584_web), ContextCompat.getDrawable(context, R.mipmap.icon_19)));
         funBeans.add(new FunBean(context.getString(R.string.text_action_bar), ContextCompat.getDrawable(context, R.mipmap.icon_16)));
         funBeans.add(new FunBean(context.getString(R.string.text_flyme), ContextCompat.getDrawable(context, R.mipmap.icon_17)));
         funBeans.add(new FunBean(context.getString(R.string.text_over), ContextCompat.getDrawable(context, R.mipmap.icon_18)));

@@ -31,4 +31,6 @@
     <string name="text_full">有导航栏的情况，Activity全屏显示(fullScreen方法演示)（仔细看\'我是底部\'四个字）</string>
     <string name="text_bar_font_dark">状态栏字体颜色为深色(android6.0以上或者miuiv6以上或者flymeOS4+)</string>
     <string name="text_bar_font_light">状态栏字体颜色为亮色（默认就是亮色）</string>
+    <string name="text_issue_584_web">结合WebView使用(二)</string>
+    <string name="title_issue_584_web">百度一下</string>
 </resources>

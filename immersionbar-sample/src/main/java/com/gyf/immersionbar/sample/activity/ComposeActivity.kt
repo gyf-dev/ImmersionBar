@@ -1,7 +1,6 @@
 package com.gyf.immersionbar.sample.activity
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -38,6 +37,7 @@ import com.gyf.immersionbar.ktx.barProperties
 import com.gyf.immersionbar.ktx.immersionBar
 import com.gyf.immersionbar.sample.AppManager
 import com.gyf.immersionbar.sample.R
+import com.gyf.immersionbar.sample.utils.ToastUtils
 
 /**
  * 结合 Compose 使用
@@ -61,20 +61,18 @@ class ComposeActivity : ComponentActivity() {
             }
             addOnStatusBarChangedListener {
                 if (it.isFirstCallback.not()) {
-                    Toast.makeText(
+                    ToastUtils.show(
                         this@ComposeActivity,
-                        "状态栏${if (it.isVisible) "显示了" else "隐藏了"}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "状态栏${if (it.isVisible) "显示了" else "隐藏了"}"
+                    )
                 }
             }
             addOnNavigationBarChangedListener {
                 if (it.isFirstCallback.not()) {
-                    Toast.makeText(
+                    ToastUtils.show(
                         this@ComposeActivity,
-                        "导航栏${if (it.isVisible) "显示了" else "隐藏了"}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "导航栏${if (it.isVisible) "显示了" else "隐藏了"}"
+                    )
                 }
             }
         }

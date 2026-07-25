@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +37,7 @@ import com.gyf.immersionbar.sample.fragment.SplashFragment;
 import com.gyf.immersionbar.sample.model.DataUtils;
 import com.gyf.immersionbar.sample.utils.DensityUtil;
 import com.gyf.immersionbar.sample.utils.GlideUtils;
+import com.gyf.immersionbar.sample.utils.ToastUtils;
 import com.gyf.immersionbar.sample.utils.Utils;
 import com.gyf.immersionbar.sample.utils.ViewUtils;
 
@@ -105,14 +105,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     Log.d(mTag, "onStatusBarChanged: " + statusBar);
                     if (!statusBar.isFirstCallback()
                             && statusBar.hasChanged(StatusBar.CHANGE_VISIBILITY)) {
-                        Toast.makeText(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "状态栏" + (statusBar.isVisible() ? "显示了" : "隐藏了"));
                     }
                 })
                 .addOnNavigationBarChangedListener(navigationBar -> {
                     Log.d(mTag, "onNavigationBarChanged: " + navigationBar);
                     if (!navigationBar.isFirstCallback()
                             && navigationBar.hasChanged(NavigationBar.CHANGE_VISIBILITY)) {
-                        Toast.makeText(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"), Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "导航栏" + (navigationBar.isVisible() ? "显示了" : "隐藏了"));
                     }
                 })
                 .init();
@@ -223,46 +223,49 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     intent = new Intent(this, WebActivity.class);
                     break;
                 case 15:
-                    intent = new Intent(this, ActionBarActivity.class);
+                    intent = new Intent(this, Web2Activity.class);
                     break;
                 case 16:
-                    intent = new Intent(this, FlymeActivity.class);
+                    intent = new Intent(this, ActionBarActivity.class);
                     break;
                 case 17:
-                    intent = new Intent(this, OverActivity.class);
+                    intent = new Intent(this, FlymeActivity.class);
                     break;
                 case 18:
-                    intent = new Intent(this, KeyBoardActivity.class);
+                    intent = new Intent(this, OverActivity.class);
                     break;
                 case 19:
-                    intent = new Intent(this, AllEditActivity.class);
+                    intent = new Intent(this, KeyBoardActivity.class);
                     break;
                 case 20:
-                    intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, AllEditActivity.class);
                     break;
                 case 21:
-                    intent = new Intent(this, WhiteBarActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     break;
                 case 22:
-                    intent = new Intent(this, AutoDarkModeActivity.class);
+                    intent = new Intent(this, WhiteBarActivity.class);
                     break;
                 case 23:
-                    ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+                    intent = new Intent(this, AutoDarkModeActivity.class);
                     break;
                 case 24:
+                    ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+                    break;
+                case 25:
                     if (ImmersionBar.hasNavigationBar(this)) {
                         ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
                     } else {
-                        Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统");
                     }
                     break;
-                case 25:
+                case 26:
                     ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
                     break;
-                case 26:
+                case 27:
                     ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
                     break;
-                case 27:
+                case 28:
                     if (ImmersionBar.hasNavigationBar(this)) {
                         BarParams barParams = ImmersionBar.with(this).getBarParams();
                         if (barParams.fullScreen) {
@@ -271,20 +274,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             ImmersionBar.with(this).fullScreen(true).transparentNavigationBar().navigationBarDarkIcon(true).init();
                         }
                     } else {
-                        Toast.makeText(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case 28:
-                    if (ImmersionBar.isSupportStatusBarDarkFont()) {
-                        ImmersionBar.with(this).statusBarDarkFont(true).init();
-                    } else {
-                        Toast.makeText(this, "当前设备不支持状态栏字体变色", Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "当前设备没有导航栏或者导航栏已经被隐藏或者低于4.4系统");
                     }
                     break;
                 case 29:
-                    ImmersionBar.with(this).statusBarDarkFont(false).init();
+                    if (ImmersionBar.isSupportStatusBarDarkFont()) {
+                        ImmersionBar.with(this).statusBarDarkFont(true).init();
+                    } else {
+                        ToastUtils.show(this, "当前设备不支持状态栏字体变色");
+                    }
                     break;
                 case 30:
+                    ImmersionBar.with(this).statusBarDarkFont(false).init();
+                    break;
+                case 31:
                     intent = new Intent(this, ComposeActivity.class);
                     break;
                 default:
@@ -343,6 +346,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 binding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             } else {
                 binding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mSplashFragment = null;
             }
         });
     }
@@ -455,7 +459,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         super.onBackPressed();
                         AppManager.getInstance().removeAllActivity();
                     } else {
-                        Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(this, "再按一次退出");
                         mFirstPressedTime = System.currentTimeMillis();
                     }
                 } else {
