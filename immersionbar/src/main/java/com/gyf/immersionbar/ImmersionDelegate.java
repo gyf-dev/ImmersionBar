@@ -28,6 +28,11 @@ class ImmersionDelegate {
      * 在配置的隐藏状态真正应用前不读取并分发过渡快照。
      */
     private boolean mAwaitingResumeBarState;
+    /**
+     * 下一次BarProperties快照的一次性导航栏可见性提示。
+     * 仅属于当前Delegate/Window，跨异步post保存，并在读取时立即清空，不能作为持久可见性状态。
+     */
+    private Boolean mPendingNavigationBarVisible;
     private final Runnable mDispatchBarPropertiesRunnable = this::dispatchBarProperties;
     private final Runnable mDispatchBarPropertiesAfterFrameRunnable = () -> {
         ImmersionBar immersionBar = mImmersionBar;
@@ -91,12 +96,14 @@ class ImmersionDelegate {
     void onPause() {
         mResumed = false;
         mAwaitingResumeBarState = false;
+        mPendingNavigationBarVisible = null;
         cancelPendingBarPropertiesRefresh();
     }
 
     void onDestroy() {
         mResumed = false;
         mAwaitingResumeBarState = false;
+        mPendingNavigationBarVisible = null;
         cancelPendingBarPropertiesRefresh();
         mLastBarProperties = null;
         if (mImmersionBar != null) {
@@ -121,9 +128,16 @@ class ImmersionDelegate {
      * 页面恢复时由{@link #onResume()}重新读取当前属性并做差量分发。
      */
     void refreshBarProperties() {
+        refreshBarProperties(null);
+    }
+
+    void refreshBarProperties(Boolean navigationBarVisible) {
         ImmersionBar immersionBar = mImmersionBar;
         if (!canDispatchBarProperties(immersionBar)) {
             return;
+        }
+        if (navigationBarVisible != null) {
+            mPendingNavigationBarVisible = navigationBarVisible;
         }
         View decorView = immersionBar.getWindow().getDecorView();
         decorView.removeCallbacks(mDispatchBarPropertiesRunnable);
@@ -184,8 +198,11 @@ class ImmersionDelegate {
         if (!canDispatchBarProperties(immersionBar)) {
             return;
         }
+        Boolean navigationBarVisibleHint = mPendingNavigationBarVisible;
+        mPendingNavigationBarVisible = null;
         BarProperties lastBarProperties = mLastBarProperties;
-        BarProperties barProperties = BarPropertiesUtils.getBarProperties(immersionBar.getWindow());
+        BarProperties barProperties = BarPropertiesUtils.getBarProperties(
+                immersionBar.getWindow(), navigationBarVisibleHint);
         if (mAwaitingResumeBarState) {
             if (!isResumeBarStateApplied(immersionBar, barProperties)) {
                 //仍是Android 15恢复过程中的旧Insets，等待BarVisibilityObserver下一个真实Insets信号。

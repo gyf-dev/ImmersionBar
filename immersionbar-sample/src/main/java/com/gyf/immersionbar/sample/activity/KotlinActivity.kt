@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.BarProperties
 import com.gyf.immersionbar.ktx.checkFitsSystemWindows
 import com.gyf.immersionbar.ktx.hideStatusBar
@@ -28,6 +29,7 @@ import com.gyf.immersionbar.sample.utils.ToastUtils
 class KotlinActivity : BaseKotlinActivity() {
 
     private var mIsHideStatusBar = false
+    private var mIsHideNavigationBar = false
 
     /**
      * Bar最新快照，由OnBarPropertiesChangedListener回调下发
@@ -125,6 +127,19 @@ class KotlinActivity : BaseKotlinActivity() {
             } else {
                 showStatusBar()
                 false
+            }
+        }
+        viewBinding.btnNavigation.setOnClickListener {
+            mIsHideNavigationBar = !mIsHideNavigationBar
+            immersionBar {
+                hideBar(
+                    when {
+                        mIsHideStatusBar && mIsHideNavigationBar -> BarHide.FLAG_HIDE_BAR
+                        mIsHideStatusBar -> BarHide.FLAG_HIDE_STATUS_BAR
+                        mIsHideNavigationBar -> BarHide.FLAG_HIDE_NAVIGATION_BAR
+                        else -> BarHide.FLAG_SHOW_BAR
+                    }
+                )
             }
         }
         ViewCompat.setOnApplyWindowInsetsListener(viewBinding.tvInsets) { _, windowInsetsCompat ->

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
+import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
 import com.gyf.immersionbar.NavigationBar;
@@ -27,6 +28,7 @@ public class ParamsActivity extends BaseActivity {
 
     private ActivityParamsBinding binding;
     private boolean mIsHideStatusBar = false;
+    private boolean mIsHideNavigationBar = false;
     /**
      * Bar最新快照，由OnBarPropertiesChangedListener回调下发
      */
@@ -115,6 +117,20 @@ public class ParamsActivity extends BaseActivity {
                 ImmersionBar.showStatusBar(getWindow());
                 mIsHideStatusBar = false;
             }
+        });
+        binding.btnNavigation.setOnClickListener(v -> {
+            mIsHideNavigationBar = !mIsHideNavigationBar;
+            BarHide barHide;
+            if (mIsHideStatusBar && mIsHideNavigationBar) {
+                barHide = BarHide.FLAG_HIDE_BAR;
+            } else if (mIsHideStatusBar) {
+                barHide = BarHide.FLAG_HIDE_STATUS_BAR;
+            } else if (mIsHideNavigationBar) {
+                barHide = BarHide.FLAG_HIDE_NAVIGATION_BAR;
+            } else {
+                barHide = BarHide.FLAG_SHOW_BAR;
+            }
+            ImmersionBar.with(this).hideBar(barHide).init();
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.tvInsets, (view, windowInsetsCompat) -> {

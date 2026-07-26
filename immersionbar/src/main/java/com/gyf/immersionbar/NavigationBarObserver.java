@@ -93,7 +93,10 @@ final class NavigationBarObserver extends ContentObserver {
         if (mListeners != null && !mListeners.isEmpty()) {
             GestureUtils.GestureBean bean = GestureUtils.getGestureBean(mApplication);
             boolean show;
-            if (bean.isGesture) {
+            if (OSUtils.isEMUI3_x()) {
+                show = !EMUI3NavigationBarObserver.getInstance()
+                        .isNavigationBarHidden(mApplication);
+            } else if (bean.isGesture) {
                 if (bean.checkNavigation) {
                     int navigationBarHeight = BarConfig.getNavigationBarHeightInternal(mApplication);
                     show = navigationBarHeight > 0;

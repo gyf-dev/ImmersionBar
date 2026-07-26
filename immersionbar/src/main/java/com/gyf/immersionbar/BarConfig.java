@@ -89,6 +89,14 @@ class BarConfig {
      * @param window the window
      */
     BarConfig(@NonNull Window window) {
+        this(window, null);
+    }
+
+    /**
+     * 使用运行时监听得到的导航栏可见性创建快照。该提示仅用于当前回调快照，
+     * 避免旧系统重新读取hasNavBar时丢失已经观察到的临时显示状态。
+     */
+    BarConfig(@NonNull Window window, Boolean navigationBarVisibleHint) {
         Context context = window.getContext();
         Resources res = context.getResources();
         mInPortrait = (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
@@ -96,9 +104,10 @@ class BarConfig {
         mStatusBarHeight = getStatusBarHeight(window);
         mStatusBarVisible = isStatusBarVisible(window);
         mActionBarHeight = getActionBarHeight(window);
-        mNavigationBarHeight = getNavigationBarHeight(window);
-        mNavigationBarHeightIgnoringVisibility = getNavigationBarHeightIgnoringVisibility(window);
-        mNavigationBarVisible = isNavigationBarVisible(window);
+        mNavigationBarVisible = navigationBarVisibleHint != null ? navigationBarVisibleHint : isNavigationBarVisible(window);
+        mNavigationBarHeight = getNavigationBarHeight(window, mNavigationBarVisible);
+        int navigationBarHeightIgnoringVisibility = getNavigationBarHeightIgnoringVisibility(window);
+        mNavigationBarHeightIgnoringVisibility = navigationBarHeightIgnoringVisibility > 0 ? navigationBarHeightIgnoringVisibility : (mNavigationBarVisible ? mNavigationBarHeight : 0);
         mNavigationBarWidth = getNavigationBarWidth(window);
         mHasNavigationBar = (mNavigationBarHeight > 0);
         mNavigationAtBottom = computeNavigationAtBottom(window);
@@ -193,18 +202,17 @@ class BarConfig {
 
     @SuppressLint("ObsoleteSdkInt")
     @androidx.annotation.RequiresApi(Version.ICE_CREAM_SANDWICH)
-    private int getNavigationBarHeight(Window window) {
-        int result = 0;
-        if (hasNavBar(window)) {
-            if (Build.VERSION.SDK_INT >= Version.R) {
-                Insets navInsets = getNavigationBarInsets(window);
-                if (navInsets != null) {
-                    return navInsets.bottom;
-                }
-            }
-            return getNavigationBarHeightInternal(window.getContext());
+    private int getNavigationBarHeight(Window window, boolean navigationBarVisible) {
+        if (!navigationBarVisible) {
+            return 0;
         }
-        return result;
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            Insets navInsets = getNavigationBarInsets(window);
+            if (navInsets != null) {
+                return navInsets.bottom;
+            }
+        }
+        return getNavigationBarHeightInternal(window.getContext());
     }
 
     /**
@@ -244,7 +252,7 @@ class BarConfig {
                     }
                 }
             }
-            return getInternalDimensionSize(window.getContext(), IMMERSION_NAVIGATION_BAR_WIDTH);
+            return getNavigationBarWidthInternal(window.getContext());
         }
         return result;
     }
@@ -497,6 +505,7 @@ class BarConfig {
         }
         return getInternalDimensionSize(context, key);
     }
+
 
     static int getNavigationBarWidthInternal(@NonNull Context context) {
         return getInternalDimensionSize(context, IMMERSION_NAVIGATION_BAR_WIDTH);

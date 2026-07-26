@@ -115,6 +115,11 @@ class BarPropertiesUtils {
      */
     @NonNull
     public static BarProperties getBarProperties(@NonNull Window window) {
+        return getBarProperties(window, null);
+    }
+
+    @NonNull
+    static BarProperties getBarProperties(@NonNull Window window, Boolean navigationBarVisibleHint) {
         BarProperties barProperties = new BarProperties();
         Context context = window.getContext();
         Configuration configuration = context.getResources().getConfiguration();
@@ -130,7 +135,7 @@ class BarPropertiesUtils {
             barProperties.setLandscapeLeft(false);
             barProperties.setLandscapeRight(false);
         }
-        BarConfig barConfig = new BarConfig(window);
+        BarConfig barConfig = new BarConfig(window, navigationBarVisibleHint);
         int statusBarHeightIgnoringVisibility = barConfig.getStatusBarHeight();
         boolean statusBarVisible = barConfig.isStatusBarVisible();
         barProperties.setStatusBarHeight(statusBarVisible ? statusBarHeightIgnoringVisibility : 0);

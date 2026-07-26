@@ -1264,18 +1264,18 @@ public final class ImmersionBar implements Runnable {
      * @param navigationVisible 导航栏当前是否可见
      */
     void onBarVisibilityChange(boolean statusVisible, boolean navigationVisible) {
-        refreshBarProperties();
+        refreshBarProperties(navigationVisible);
     }
 
     void onNavigationBarListener(boolean navigationVisible, NavigationBarType type) {
-        refreshBarProperties();
+        refreshBarProperties(navigationVisible);
     }
 
-    private void refreshBarProperties() {
+    private void refreshBarProperties(boolean navigationVisible) {
         if (mActivity == null || mDecorView == null || mContentView == null || mBarParams == null || mImmersionDelegate == null) {
             return;
         }
-        mImmersionDelegate.refreshBarProperties();
+        mImmersionDelegate.refreshBarProperties(navigationVisible);
     }
 
     /**

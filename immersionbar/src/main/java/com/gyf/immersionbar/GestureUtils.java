@@ -39,12 +39,13 @@ class GestureUtils {
             boolean isGesture = false;
             boolean checkNavigation = false;
             if (OSUtils.isHuaWei() || OSUtils.isEMUI()) {
-                if (OSUtils.isEMUI3_x() || Build.VERSION.SDK_INT < Version.LOLLIPOP) {
+                boolean isEMUI3 = OSUtils.isEMUI3_x();
+                if (isEMUI3 || Build.VERSION.SDK_INT < Version.LOLLIPOP) {
                     type = Settings.System.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);
                 } else {
                     type = Settings.Global.getInt(contentResolver, IMMERSION_NAVIGATION_BAR_MODE_EMUI, -1);
                 }
-                if (type == 0) {
+                if (type == 0 || (isEMUI3 && type == 1)) {
                     navigationBarType = NavigationBarType.CLASSIC;
                     isGesture = false;
                 } else if (type == 1) {

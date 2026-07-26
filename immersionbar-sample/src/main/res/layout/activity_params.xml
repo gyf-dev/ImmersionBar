@@ -204,6 +204,18 @@
                 android:paddingEnd="10dp"
                 android:text="使用静态方法动态显示隐藏状态栏"
                 android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnNavigation"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/btn13"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="使用参数方法动态显示隐藏导航栏"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

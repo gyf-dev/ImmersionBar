@@ -103,10 +103,8 @@ final class BarVisibilityObserver {
     }
 
     private void enableSystemUiListener() {
-        mAnchorView.setOnSystemUiVisibilityChangeListener(visibility -> {
-            //SystemUiVisibility是窗口级flag，这里取DecorView的全量flag判定（回调参数仅含部分变化位）
-            dispatchFromSystemUiFlags(mDecorView.getSystemUiVisibility());
-        });
+        // 回调参数就是此次变化后的新visibility；重新读取DecorView在部分旧系统上可能仍是上一帧值。
+        mAnchorView.setOnSystemUiVisibilityChangeListener(this::dispatchFromSystemUiFlags);
     }
 
     /**

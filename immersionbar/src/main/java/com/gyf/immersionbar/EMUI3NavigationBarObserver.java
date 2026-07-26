@@ -51,7 +51,7 @@ final class EMUI3NavigationBarObserver extends ContentObserver {
         if (Build.VERSION.SDK_INT >= Version.JELLY_BEAN_MR1 && mApplication != null && mApplication.getContentResolver() != null
                 && mCallbacks != null && !mCallbacks.isEmpty()) {
             boolean show = !isNavigationBarHidden(mApplication);
-            NavigationBarType navigationBarType = show ? NavigationBarType.CLASSIC : NavigationBarType.GESTURES;
+            NavigationBarType navigationBarType = NavigationBarType.CLASSIC;
             for (OnNavigationBarListener callback : mCallbacks) {
                 callback.onNavigationBarChange(show, navigationBarType);
             }
