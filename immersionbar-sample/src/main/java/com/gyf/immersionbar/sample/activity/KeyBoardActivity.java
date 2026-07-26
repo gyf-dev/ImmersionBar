@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 
 import com.gyf.immersionbar.BarProperties;
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.Keyboard;
 import com.gyf.immersionbar.sample.R;
 import com.gyf.immersionbar.sample.databinding.ActivityKeyBoardBinding;
 
@@ -36,7 +37,7 @@ public class KeyBoardActivity extends BaseActivity {
                 .navigationBarColor(R.color.colorPrimary)
                 .titleBar(binding.toolbar)
                 .keyboardEnable(true)
-                .setOnKeyboardListener(this::renderKeyboardState)
+                .addOnKeyboardChangedListener(this::renderKeyboardState)
                 .addOnBarPropertiesChangedListener(this::renderEnvironment)
                 .init();
     }
@@ -71,6 +72,10 @@ public class KeyBoardActivity extends BaseActivity {
     @Override
     protected void initViewBinding() {
         binding = ActivityKeyBoardBinding.bind(getContentView());
+    }
+
+    private void renderKeyboardState(Keyboard keyboard) {
+        renderKeyboardState(keyboard.isPopup(), keyboard.getHeight());
     }
 
     private void renderKeyboardState(boolean isPopup, int keyboardHeight) {

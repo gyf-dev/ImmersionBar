@@ -1,11 +1,13 @@
 package com.gyf.immersionbar;
 
 /**
- * 软键盘监听
+ * 软键盘监听。
  *
  * @author geyifeng
  * @date 2017/8/28
+ * @deprecated 使用{@link OnKeyboardChangedListener}代替。
  */
+@Deprecated
 public interface OnKeyboardListener {
     /**
      * On keyboard change.

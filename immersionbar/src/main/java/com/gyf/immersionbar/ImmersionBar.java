@@ -116,6 +116,10 @@ public final class ImmersionBar implements Runnable {
     private final Set<OnBarPropertiesChangedListener> mOnBarPropertiesChangedListeners =
             new CopyOnWriteArraySet<>();
     /**
+     * 软键盘变化监听器集合。使用CopyOnWriteArraySet支持监听器在回调期间安全地添加或移除。
+     */
+    private final Set<OnKeyboardChangedListener> mOnKeyboardChangedListeners = new CopyOnWriteArraySet<>();
+    /**
      * 状态栏变化监听器集合。使用CopyOnWriteArraySet支持监听器在回调期间安全地添加或移除。
      */
     private final Set<OnStatusBarChangedListener> mOnStatusBarChangedListeners = new CopyOnWriteArraySet<>();
@@ -476,6 +480,7 @@ public final class ImmersionBar implements Runnable {
 
     private void clearRuntimeReferences() {
         mOnBarPropertiesChangedListeners.clear();
+        mOnKeyboardChangedListeners.clear();
         mOnStatusBarChangedListeners.clear();
         mOnNavigationBarChangedListeners.clear();
         mImmersionDelegate = null;
@@ -4316,7 +4321,9 @@ public final class ImmersionBar implements Runnable {
      *
      * @param onKeyboardListener the on keyboard listener
      * @return the on keyboard listener
+     * @deprecated 使用{@link #addOnKeyboardChangedListener(OnKeyboardChangedListener)}代替。
      */
+    @Deprecated
     public ImmersionBar setOnKeyboardListener(@Nullable OnKeyboardListener onKeyboardListener) {
         if (mBarParams.onKeyboardListener == null) {
             mBarParams.onKeyboardListener = onKeyboardListener;
@@ -4396,6 +4403,28 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
+     * 添加软键盘变化监听器。软键盘弹出状态或高度发生变化时会触发回调。
+     *
+     * @param listener the keyboard changed listener
+     * @return the immersion bar
+     */
+    public ImmersionBar addOnKeyboardChangedListener(@NonNull OnKeyboardChangedListener listener) {
+        mOnKeyboardChangedListeners.add(listener);
+        return this;
+    }
+
+    /**
+     * 移除软键盘变化监听器。
+     *
+     * @param listener the keyboard changed listener
+     * @return the immersion bar
+     */
+    public ImmersionBar removeOnKeyboardChangedListener(@NonNull OnKeyboardChangedListener listener) {
+        mOnKeyboardChangedListeners.remove(listener);
+        return this;
+    }
+
+    /**
      * 添加状态栏变化监听器。首次初始化以及状态栏可见性、高度变化时会触发回调。
      *
      * @param listener the status bar changed listener
@@ -4437,6 +4466,22 @@ public final class ImmersionBar implements Runnable {
     public ImmersionBar removeOnNavigationBarChangedListener(@NonNull OnNavigationBarChangedListener listener) {
         mOnNavigationBarChangedListeners.remove(listener);
         return this;
+    }
+
+    @SuppressWarnings("deprecation")
+    void dispatchOnKeyboardChanged(boolean isPopup, int keyboardHeight) {
+        Keyboard keyboard = new Keyboard(isPopup, keyboardHeight);
+        for (OnKeyboardChangedListener listener : mOnKeyboardChangedListeners) {
+            listener.onKeyboardChanged(keyboard);
+        }
+        BarParams barParams = mBarParams;
+        if (barParams == null) {
+            return;
+        }
+        OnKeyboardListener onKeyboardListener = barParams.onKeyboardListener;
+        if (onKeyboardListener != null) {
+            onKeyboardListener.onKeyboardChange(isPopup, keyboardHeight);
+        }
     }
 
     void dispatchOnBarPropertiesChanged(@NonNull BarProperties barProperties) {
