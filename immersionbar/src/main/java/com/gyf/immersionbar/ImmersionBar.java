@@ -132,7 +132,7 @@ public final class ImmersionBar implements Runnable {
         //先刷新BarConfig，假状态栏与重叠适配view才能拿到当前状态栏高度
         mBarConfig = new BarConfig(mActivity);
         syncStatusBarView(statusBar.isVisible());
-        fitsLayoutOverlap();
+        fitsWindows();
     };
     /**
      * 内部默认的导航栏变化回调，注册到mOnNavigationBarChangedListeners，
