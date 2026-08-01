@@ -30,6 +30,10 @@ public class BarParams implements Cloneable {
      */
     @ColorInt
     public int navigationBarColor = Color.BLACK;
+    /**
+     * 用户是否主动设置过导航栏颜色，仅供ImmersionBar内部区分默认样式与显式配置。
+     */
+    boolean navigationBarColorSpecified = false;
 
     /**
      * The Default navigation bar color.
@@ -78,6 +82,10 @@ public class BarParams implements Cloneable {
      * The Navigation bar dark icon.
      */
     public boolean navigationBarDarkIcon = false;
+    /**
+     * 用户是否主动设置过导航栏图标模式，仅供ImmersionBar内部区分默认样式与显式配置。
+     */
+    boolean navigationBarDarkIconSpecified = false;
     /**
      * 是否启用 自动根据StatusBar颜色调整深色模式与亮色模式
      * The Auto status bar dark mode enable.

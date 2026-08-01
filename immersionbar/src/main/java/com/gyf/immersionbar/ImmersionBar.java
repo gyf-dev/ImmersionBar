@@ -43,6 +43,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +85,20 @@ public final class ImmersionBar implements Runnable {
      * 用户配置的bar参数
      */
     private BarParams mBarParams;
+    /**
+     * 当前Window在ImmersionBar接管前的导航栏颜色。
+     */
+    private int mDefaultNavigationBarColor = Color.BLACK;
+    /**
+     * 当前Window在ImmersionBar接管前是否使用深色导航栏图标。
+     */
+    private boolean mDefaultNavigationBarDarkIcon = false;
+    /**
+     * 最近一次通过getBarParams暴露给调用方的参数对象，用于兼容直接修改公开字段的用法。
+     */
+    private WeakReference<BarParams> mExposedBarParams;
+    private int mExposedNavigationBarColor;
+    private boolean mExposedNavigationBarDarkIcon;
     /**
      * 系统bar相关信息
      */
@@ -527,6 +542,7 @@ public final class ImmersionBar implements Runnable {
      */
     @SuppressLint("ObsoleteSdkInt")
     private void updateBarParams() {
+        applyDefaultNavigationBarStyle();
         adjustDarkModeParams();
         if (Build.VERSION.SDK_INT >= Version.KITKAT) {
             //获得Bar相关信息
@@ -546,6 +562,7 @@ public final class ImmersionBar implements Runnable {
                 }
             }
         }
+        syncExposedNavigationBarStyle();
     }
 
     /**
@@ -1030,6 +1047,78 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
+     * 用户未显式配置导航栏时，在支持深色图标的系统上统一使用与主题匹配的默认外观：
+     * 浅色主题为白底深色图标，深色主题为黑底浅色图标；旧系统保留Window原始外观。
+     * 用户显式设置颜色时保持历史行为；只显式设置图标模式时自动选择对比色背景。
+     */
+    private void applyDefaultNavigationBarStyle() {
+        detectExposedNavigationBarStyleChanges();
+        boolean navigationIconDarkSupported = isSupportNavigationIconDark();
+        boolean lightTheme = isLightTheme();
+        boolean explicitNavigationIcon = mBarParams.navigationBarDarkIconSpecified
+                && !mBarParams.autoNavigationBarDarkModeEnable;
+        if (!mBarParams.navigationBarColorSpecified) {
+            if (explicitNavigationIcon && navigationIconDarkSupported) {
+                //只指定图标模式时同步选择对比色，避免白底白图标或黑底黑图标。
+                mBarParams.navigationBarColor = mBarParams.navigationBarDarkIcon
+                        ? Color.WHITE : Color.BLACK;
+            } else if (navigationIconDarkSupported) {
+                mBarParams.navigationBarColor = lightTheme ? Color.WHITE : Color.BLACK;
+            } else {
+                mBarParams.navigationBarColor = mDefaultNavigationBarColor;
+            }
+        }
+        if (!mBarParams.navigationBarDarkIconSpecified
+                && !mBarParams.autoNavigationBarDarkModeEnable) {
+            if (!mBarParams.navigationBarColorSpecified && navigationIconDarkSupported) {
+                mBarParams.navigationBarDarkIcon = lightTheme;
+            } else if (!mBarParams.navigationBarColorSpecified) {
+                mBarParams.navigationBarDarkIcon = mDefaultNavigationBarDarkIcon;
+            } else {
+                mBarParams.navigationBarDarkIcon = false;
+            }
+        }
+    }
+
+    /**
+     * 识别调用方通过getBarParams()直接修改导航栏颜色或图标模式的兼容用法。
+     */
+    private void detectExposedNavigationBarStyleChanges() {
+        if (mExposedBarParams == null || mExposedBarParams.get() != mBarParams) {
+            return;
+        }
+        if (!mBarParams.navigationBarColorSpecified
+                && mBarParams.navigationBarColor != mExposedNavigationBarColor) {
+            mBarParams.navigationBarColorSpecified = true;
+        }
+        if (!mBarParams.navigationBarDarkIconSpecified
+                && mBarParams.navigationBarDarkIcon != mExposedNavigationBarDarkIcon) {
+            mBarParams.navigationBarDarkIconSpecified = true;
+        }
+    }
+
+    /**
+     * 更新已暴露参数的内部快照，避免把ImmersionBar自身的默认值或自动模式更新误判为用户修改。
+     */
+    private void syncExposedNavigationBarStyle() {
+        if (mExposedBarParams != null && mExposedBarParams.get() == mBarParams) {
+            mExposedNavigationBarColor = mBarParams.navigationBarColor;
+            mExposedNavigationBarDarkIcon = mBarParams.navigationBarDarkIcon;
+        }
+    }
+
+    private boolean isLightTheme() {
+        TypedValue typedValue = new TypedValue();
+        if (mWindow.getContext().getTheme()
+                .resolveAttribute(android.R.attr.isLightTheme, typedValue, true)) {
+            return typedValue.data != 0;
+        }
+        int nightMode = mActivity.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        return nightMode != Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    /**
      * 调整深色亮色模式参数
      */
     private void adjustDarkModeParams() {
@@ -1043,7 +1132,8 @@ public final class ImmersionBar implements Runnable {
                 mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha);
         if (mBarParams.autoNavigationBarDarkModeEnable && navigationBarColor != Color.TRANSPARENT) {
             boolean navigationBarDarkIcon = navigationBarColor > IMMERSION_BOUNDARY_COLOR;
-            navigationBarDarkIcon(navigationBarDarkIcon, mBarParams.autoNavigationBarDarkModeAlpha);
+            setNavigationBarDarkIconInternal(
+                    navigationBarDarkIcon, mBarParams.autoNavigationBarDarkModeAlpha);
         }
     }
 
@@ -1580,6 +1670,13 @@ public final class ImmersionBar implements Runnable {
      * @return the bar params
      */
     public BarParams getBarParams() {
+        if (mBarParams == null) {
+            return null;
+        }
+        if (mExposedBarParams == null || mExposedBarParams.get() != mBarParams) {
+            mExposedBarParams = new WeakReference<>(mBarParams);
+            syncExposedNavigationBarStyle();
+        }
         return mBarParams;
     }
 
@@ -3057,12 +3154,47 @@ public final class ImmersionBar implements Runnable {
      */
     private void initCommonParameter(Window window) {
         mWindow = window;
-        mBarParams = new BarParams();
         mDecorView = (ViewGroup) mWindow.getDecorView();
         mContentView = mDecorView.findViewById(android.R.id.content);
+        captureDefaultNavigationBarStyle();
+        mBarParams = createDefaultBarParams();
         //注册内部默认回调：同步假状态栏/假导航栏视图及重叠适配view，随监听器集合参与统一分发
         mOnStatusBarChangedListeners.add(mStatusBarSync);
         mOnNavigationBarChangedListeners.add(mFakeNavigationBarSync);
+    }
+
+    /**
+     * 保存当前Window在ImmersionBar接管前的导航栏外观。
+     * 用户未主动配置导航栏颜色或图标模式时沿用该外观，避免被BarParams中的兼容性黑色默认值覆盖。
+     */
+    @SuppressLint("ObsoleteSdkInt")
+    private void captureDefaultNavigationBarStyle() {
+        if (Build.VERSION.SDK_INT >= Version.LOLLIPOP) {
+            mDefaultNavigationBarColor = mWindow.getNavigationBarColor();
+        }
+        if (Build.VERSION.SDK_INT < Version.O) {
+            return;
+        }
+        mDefaultNavigationBarDarkIcon =
+                (mDecorView.getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) != 0;
+        if (Build.VERSION.SDK_INT >= Version.R) {
+            WindowInsetsController controller = mDecorView.getWindowInsetsController();
+            if (controller != null) {
+                mDefaultNavigationBarDarkIcon = (controller.getSystemBarsAppearance()
+                        & WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS) != 0;
+            }
+        }
+    }
+
+    /**
+     * 创建一份继承当前Window原始导航栏外观的默认参数。
+     */
+    private BarParams createDefaultBarParams() {
+        BarParams barParams = new BarParams();
+        barParams.navigationBarColor = mDefaultNavigationBarColor;
+        barParams.defaultNavigationBarColor = mDefaultNavigationBarColor;
+        barParams.navigationBarDarkIcon = mDefaultNavigationBarDarkIcon;
+        return barParams;
     }
 
     /**
@@ -3076,11 +3208,12 @@ public final class ImmersionBar implements Runnable {
     }
 
     /**
-     * 透明导航栏，默认黑色
+     * 透明导航栏；未配置导航栏时，支持深色图标的浅色主题默认使用白底深色图标
      *
      * @return the immersion bar
      */
     public ImmersionBar transparentNavigationBar() {
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = Color.TRANSPARENT;
         mBarParams.fullScreen = true;
         return this;
@@ -3093,6 +3226,7 @@ public final class ImmersionBar implements Runnable {
      */
     public ImmersionBar transparentBar() {
         mBarParams.statusBarColor = Color.TRANSPARENT;
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = Color.TRANSPARENT;
         mBarParams.fullScreen = true;
         return this;
@@ -3298,6 +3432,7 @@ public final class ImmersionBar implements Runnable {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor) {
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = navigationBarColor;
         return this;
     }
@@ -3311,6 +3446,7 @@ public final class ImmersionBar implements Runnable {
      */
     public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor,
                                               @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = navigationBarColor;
         mBarParams.navigationBarAlpha = navigationAlpha;
         return this;
@@ -3327,6 +3463,7 @@ public final class ImmersionBar implements Runnable {
     public ImmersionBar navigationBarColorInt(@ColorInt int navigationBarColor,
                                               @ColorInt int navigationBarColorTransform,
                                               @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = navigationBarColor;
         mBarParams.navigationBarColorTransform = navigationBarColorTransform;
         mBarParams.navigationBarAlpha = navigationAlpha;
@@ -3412,6 +3549,7 @@ public final class ImmersionBar implements Runnable {
      */
     public ImmersionBar barColorInt(@ColorInt int barColor) {
         mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = barColor;
         return this;
     }
@@ -3425,6 +3563,7 @@ public final class ImmersionBar implements Runnable {
      */
     public ImmersionBar barColorInt(@ColorInt int barColor, @FloatRange(from = 0f, to = 1f) float barAlpha) {
         mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = barColor;
         mBarParams.statusBarAlpha = barAlpha;
         mBarParams.navigationBarAlpha = barAlpha;
@@ -3443,6 +3582,7 @@ public final class ImmersionBar implements Runnable {
                                     @ColorInt int barColorTransform,
                                     @FloatRange(from = 0f, to = 1f) float barAlpha) {
         mBarParams.statusBarColor = barColor;
+        mBarParams.navigationBarColorSpecified = true;
         mBarParams.navigationBarColor = barColor;
 
         mBarParams.statusBarColorTransform = barColorTransform;
@@ -3861,13 +4001,19 @@ public final class ImmersionBar implements Runnable {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarDarkIcon(boolean isDarkIcon, @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
+        mBarParams.navigationBarDarkIconSpecified = true;
+        setNavigationBarDarkIconInternal(isDarkIcon, navigationAlpha);
+        return this;
+    }
+
+    private void setNavigationBarDarkIconInternal(boolean isDarkIcon,
+                                                  @FloatRange(from = 0f, to = 1f) float navigationAlpha) {
         mBarParams.navigationBarDarkIcon = isDarkIcon;
         if (isDarkIcon && !isSupportNavigationIconDark()) {
             mBarParams.navigationBarAlpha = navigationAlpha;
         } else {
             mBarParams.navigationBarAlpha = mBarParams.navigationBarTempAlpha;
         }
-        return this;
     }
 
     /**
@@ -4239,7 +4385,7 @@ public final class ImmersionBar implements Runnable {
      * @return the immersion bar
      */
     public ImmersionBar reset() {
-        mBarParams = new BarParams();
+        mBarParams = createDefaultBarParams();
         mFitsStatusBarType = FLAG_FITS_DEFAULT;
         return this;
     }
